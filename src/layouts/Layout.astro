@@ -17,6 +17,24 @@ interface Props {
 	description?: string;
 }
 const { title, description } = Astro.props;
+
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "SportsActivityLocation",
+	name: "Ronchiverdi Sport Club",
+	description:
+		"Club sportivo a Torino: tennis, padel, nuoto, fitness, running e triathlon in 35.000 mq tra indoor e outdoor, con Young School per famiglie.",
+	url: Astro.site ? new URL(url("/"), Astro.site).toString() : undefined,
+	telephone: "+39 011 6612146",
+	email: "info@ronchiverdi.it",
+	address: {
+		"@type": "PostalAddress",
+		streetAddress: "Corso Moncalieri 466",
+		addressLocality: "Torino",
+		addressRegion: "TO",
+		addressCountry: "IT",
+	},
+};
 ---
 
 <html lang="it">
@@ -29,6 +47,7 @@ const { title, description } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
 		<title>{title}</title>
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 	</head>
 	<body>
 		<Nav />
