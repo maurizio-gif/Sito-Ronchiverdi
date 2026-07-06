@@ -1,26 +1,28 @@
 ---
+import { url } from "../lib/paths";
+
 const sportLinks = [
-	{ href: "/tennis", label: "Tennis" },
-	{ href: "/padel", label: "Padel" },
-	{ href: "/nuoto", label: "Nuoto" },
-	{ href: "/fitness", label: "Fitness" },
-	{ href: "/running", label: "Running" },
-	{ href: "/triathlon", label: "Triathlon" },
+	{ href: url("/tennis"), label: "Tennis" },
+	{ href: url("/padel"), label: "Padel" },
+	{ href: url("/nuoto"), label: "Nuoto" },
+	{ href: url("/fitness"), label: "Fitness" },
+	{ href: url("/running"), label: "Running" },
+	{ href: url("/triathlon"), label: "Triathlon" },
 ];
 const clubLinks = [
-	{ href: "/il-club", label: "Il Club" },
-	{ href: "/young-school", label: "Young School" },
-	{ href: "/abbonamenti", label: "Abbonamenti" },
-	{ href: "/blog", label: "Blog" },
-	{ href: "/orari", label: "Orari" },
-	{ href: "/faq", label: "FAQ Soci" },
+	{ href: url("/il-club"), label: "Il Club" },
+	{ href: url("/young-school"), label: "Young School" },
+	{ href: url("/abbonamenti"), label: "Abbonamenti" },
+	{ href: url("/blog"), label: "Blog" },
+	{ href: url("/orari"), label: "Orari" },
+	{ href: url("/faq"), label: "FAQ Soci" },
 ];
 ---
 
 <footer class="footer">
 	<div class="footer-grid">
 		<div class="footer-brand">
-			<img src="/logo-ronchiverdi-sport.png" alt="Ronchiverdi Sport Club" height="40" />
+			<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="40" />
 			<p class="muted footer-blurb">
 				Club sportivo a Torino: tennis, padel, nuoto, fitness e young
 				school, in 35.000 mq tra indoor e outdoor.
@@ -54,8 +56,8 @@ const clubLinks = [
 	<div class="footer-bottom">
 		<p class="muted">© {new Date().getFullYear()} Ronchiverdi Sport Club</p>
 		<div class="footer-legal">
-			<a href="/termini-e-condizioni">Termini e Condizioni</a>
-			<a href="/privacy">Privacy</a>
+			<a href={url("/termini-e-condizioni")}>Termini e Condizioni</a>
+			<a href={url("/privacy")}>Privacy</a>
 		</div>
 	</div>
 </footer>

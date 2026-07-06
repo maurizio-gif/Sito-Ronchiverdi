@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import { url } from "../lib/paths";
 
 const allActivities = await getCollection("activities");
 const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
@@ -17,8 +18,8 @@ const posts = (await getCollection("posts")).slice(0, 3);
 	<header class="hero">
 		<video
 			class="hero-bg"
-			src="/videos/hero.mp4"
-			poster="/images/hero-poster.jpg"
+			src={url("videos/hero.mp4")}
+			poster={url("images/hero-poster.jpg")}
 			autoplay
 			muted
 			loop
@@ -32,7 +33,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				Tennis, padel, nuoto, fitness e young school. Un club sportivo nel
 				verde di Torino.
 			</p>
-			<a class="btn" href="/prenota-un-tour">Prenota un tour</a>
+			<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
 		</div>
 	</header>
 
@@ -65,7 +66,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				<div class="act-carousel__track" data-carousel-id="adulti">
 					{activitiesAdulti.map((a, i) => (
 						<a class="act-card" href="#">
-							<div class="act-card__img" style={`background-image:url(${a.data.image})`} />
+							<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
 							<div class="act-card__body">
 								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
 								<strong class="act-card__name">{a.data.title}</strong>
@@ -99,7 +100,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				<div class="act-carousel__track" data-carousel-id="junior">
 					{activitiesJunior.map((a, i) => (
 						<a class="act-card" href="#">
-							<div class="act-card__img" style={`background-image:url(${a.data.image})`} />
+							<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
 							<div class="act-card__body">
 								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
 								<strong class="act-card__name">{a.data.title}</strong>
@@ -134,11 +135,11 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			Palestra attrezzata, quattro piscine, nove campi da tennis, campi da
 			padel e beach volley, area wellness e fisioterapica.
 		</p>
-		<a class="btn btn-on-dark" href="/il-club">Scopri il club</a>
+		<a class="btn btn-on-dark" href={url("/il-club")}>Scopri il club</a>
 	</section>
 
 	<section class="young-school">
-		<img class="young-school-photo" src="/images/young-school-teaser.jpg" alt="Young School Ronchiverdi" />
+		<img class="young-school-photo" src={url("images/young-school-teaser.jpg")} alt="Young School Ronchiverdi" />
 		<div class="young-school-content">
 			<p class="eyebrow">Famiglie</p>
 			<h2>Young School</h2>
@@ -147,7 +148,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				Summer Sport Camp. Un percorso sportivo ed educativo pensato per
 				ogni età.
 			</p>
-			<a class="btn" href="/young-school">Scopri Young School</a>
+			<a class="btn" href={url("/young-school")}>Scopri Young School</a>
 		</div>
 	</section>
 
@@ -156,7 +157,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			<h2>Dal blog</h2>
 			<div class="blog-grid">
 				{posts.map((p) => (
-					<a class="blog-card" href={`/blog/${p.id}`}>
+					<a class="blog-card" href={url(`/blog/${p.id}`)}>
 						<h3>{p.data.title}</h3>
 						{p.data.description && <p class="muted">{p.data.description}</p>}
 					</a>
@@ -171,7 +172,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			Prenota un tour gratuito e visita gli spazi con uno dei nostri
 			responsabili.
 		</p>
-		<a class="btn" href="/prenota-un-tour">Prenota un tour</a>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
 	</section>
 
 	<style>

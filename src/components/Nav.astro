@@ -1,16 +1,18 @@
 ---
+import { url } from "../lib/paths";
+
 const links = [
-	{ href: "/#attivita", label: "Sport" },
-	{ href: "/young-school", label: "Young School" },
-	{ href: "/il-club", label: "Il Club" },
-	{ href: "/abbonamenti", label: "Abbonamenti" },
-	{ href: "/blog", label: "Blog" },
+	{ href: url("/#attivita"), label: "Sport" },
+	{ href: url("/young-school"), label: "Young School" },
+	{ href: url("/il-club"), label: "Il Club" },
+	{ href: url("/abbonamenti"), label: "Abbonamenti" },
+	{ href: url("/blog"), label: "Blog" },
 ];
 ---
 
 <nav class="nav">
-	<a href="/" class="nav-logo">
-		<img src="/logo-ronchiverdi-sport.png" alt="Ronchiverdi Sport Club" height="36" />
+	<a href={url("/")} class="nav-logo">
+		<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="36" />
 	</a>
 
 	<ul class="nav-links">
@@ -18,7 +20,7 @@ const links = [
 			<li><a href={l.href}>{l.label}</a></li>
 		))}
 	</ul>
-	<a class="btn nav-cta" href="/prenota-un-tour">Prenota un tour</a>
+	<a class="btn nav-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
 
 	<button class="nav-hamburger" id="nav-hamburger" aria-label="Apri il menu" aria-expanded="false" aria-controls="nav-mobile">
 		<span></span>
@@ -34,7 +36,7 @@ const links = [
 			<li><a class="nav-mobile-link" href={l.href}>{l.label}</a></li>
 		))}
 	</ul>
-	<a class="btn nav-mobile-cta" href="/prenota-un-tour">Prenota un tour</a>
+	<a class="btn nav-mobile-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
 </div>
 
 <script>
