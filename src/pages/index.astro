@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+
+const pages = await getCollection("pages");
+const posts = await getCollection("posts");
+---
+
+<html lang="it">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Ronchiverdi Sport</title>
+	</head>
+	<body>
+		<h1>Ronchiverdi Sport</h1>
+		<p>
+			Base del progetto Astro + Tina CMS. La struttura definitiva delle
+			pagine (verticali sport, young school, corsi, blog, ecc.) sarà
+			definita in un secondo momento.
+		</p>
+
+		<h2>Collection &quot;pages&quot; ({pages.length})</h2>
+		<ul>
+			{pages.map((p) => <li>{p.data.title}</li>)}
+		</ul>
+
+		<h2>Collection &quot;posts&quot; ({posts.length})</h2>
+		<ul>
+			{posts.map((p) => <li>{p.data.title}</li>)}
+		</ul>
+	</body>
+</html>
