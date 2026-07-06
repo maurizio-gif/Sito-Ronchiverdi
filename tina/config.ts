@@ -55,6 +55,33 @@ export default defineConfig({
           { type: "rich-text", name: "body", label: "Contenuto", isBody: true },
         ],
       },
+      {
+        name: "activity",
+        label: "Attività (card home)",
+        path: "src/content/activities",
+        format: "md",
+        fields: [
+          { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          { type: "image", name: "image", label: "Foto", required: true },
+          {
+            type: "string",
+            name: "summary",
+            label: "Descrizione breve",
+            ui: { component: "textarea" },
+          },
+          {
+            type: "string",
+            name: "audience",
+            label: "Pubblico",
+            options: [
+              { value: "adulti", label: "Adulti" },
+              { value: "junior", label: "Junior / Young School" },
+            ],
+            required: true,
+          },
+          { type: "number", name: "order", label: "Ordine" },
+        ],
+      },
     ],
   },
 });

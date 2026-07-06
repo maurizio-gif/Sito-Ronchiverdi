@@ -1,35 +1,456 @@
 ---
+import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const pages = await getCollection("pages");
-const posts = await getCollection("posts");
+const allActivities = await getCollection("activities");
+const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
+const activitiesAdulti = allActivities.filter((a) => a.data.audience === "adulti").sort(byOrder);
+const activitiesJunior = allActivities.filter((a) => a.data.audience === "junior").sort(byOrder);
+
+const posts = (await getCollection("posts")).slice(0, 3);
 ---
 
-<html lang="it">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Ronchiverdi Sport</title>
-	</head>
-	<body>
-		<h1>Ronchiverdi Sport</h1>
-		<p>
-			Base del progetto Astro + Tina CMS. La struttura definitiva delle
-			pagine (verticali sport, young school, corsi, blog, ecc.) sarà
-			definita in un secondo momento.
+<Layout
+	title="Ronchiverdi Sport Club — Torino"
+	description="Club sportivo a Torino: tennis, padel, nuoto, fitness e young school in 35.000 mq tra indoor e outdoor."
+>
+	<header class="hero">
+		<video
+			class="hero-bg"
+			src="/videos/hero.mp4"
+			poster="/images/hero-poster.jpg"
+			autoplay
+			muted
+			loop
+			playsinline
+		></video>
+		<div class="hero-scrim"></div>
+		<div class="hero-content">
+			<p class="eyebrow eyebrow-dark">Club sportivo · Torino</p>
+			<h1 class="hero-title-dark">Sport, <em class="accent accent-dark">radicato</em> nel verde</h1>
+			<p class="lede lede-dark">
+				Tennis, padel, nuoto, fitness e young school. Un club sportivo nel
+				verde di Torino.
+			</p>
+			<a class="btn" href="/prenota-un-tour">Prenota un tour</a>
+		</div>
+	</header>
+
+	<section class="section-about" id="attivita">
+		<h2>Le nostre attività</h2>
+		<p class="muted">
+			Foto d'archivio come segnaposto, gestite da Tina CMS — verranno
+			sostituite dai nuovi scatti professionali degli spazi.
 		</p>
+	</section>
 
-		<h2>Collection &quot;pages&quot; ({pages.length})</h2>
-		<ul>
-			{pages.map((p) => <li>{p.data.title}</li>)}
-		</ul>
+	<section class="attivita">
+		<div class="panel">
+			<span class="panel__watermark" aria-hidden="true">Adulti</span>
+			<div class="panel__head">
+				<div class="panel__head-text">
+					<span class="eyebrow">Le nostre discipline</span>
+					<h3 class="panel__title">Adulti</h3>
+				</div>
+				<div class="carousel-nav" aria-label="Naviga attività adulti">
+					<button class="carousel-btn" data-dir="-1" data-track="adulti" aria-label="Precedente">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</button>
+					<button class="carousel-btn" data-dir="1" data-track="adulti" aria-label="Successivo">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</button>
+				</div>
+			</div>
+			<div class="act-carousel">
+				<div class="act-carousel__track" data-carousel-id="adulti">
+					{activitiesAdulti.map((a, i) => (
+						<a class="act-card" href="#">
+							<div class="act-card__img" style={`background-image:url(${a.data.image})`} />
+							<div class="act-card__body">
+								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
+								<strong class="act-card__name">{a.data.title}</strong>
+								{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+							</div>
+						</a>
+					))}
+				</div>
+			</div>
+		</div>
 
-		<h2>Collection &quot;posts&quot; ({posts.length})</h2>
-		<ul>
-			{posts.map((p) => <li>{p.data.title}</li>)}
-		</ul>
-	</body>
-</html>
+		<div class="panel__divider"></div>
+
+		<div class="panel">
+			<span class="panel__watermark" aria-hidden="true">Junior</span>
+			<div class="panel__head">
+				<div class="panel__head-text">
+					<span class="eyebrow">Per i più giovani</span>
+					<h3 class="panel__title">Young School</h3>
+				</div>
+				<div class="carousel-nav" aria-label="Naviga attività junior">
+					<button class="carousel-btn" data-dir="-1" data-track="junior" aria-label="Precedente">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</button>
+					<button class="carousel-btn" data-dir="1" data-track="junior" aria-label="Successivo">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</button>
+				</div>
+			</div>
+			<div class="act-carousel">
+				<div class="act-carousel__track" data-carousel-id="junior">
+					{activitiesJunior.map((a, i) => (
+						<a class="act-card" href="#">
+							<div class="act-card__img" style={`background-image:url(${a.data.image})`} />
+							<div class="act-card__body">
+								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
+								<strong class="act-card__name">{a.data.title}</strong>
+								{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+							</div>
+						</a>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		document.querySelectorAll(".carousel-btn").forEach((btn) => {
+			btn.addEventListener("click", () => {
+				const dir = Number(btn.getAttribute("data-dir"));
+				const trackId = btn.getAttribute("data-track");
+				const track = document.querySelector(`[data-carousel-id="${trackId}"]`);
+				if (!track) return;
+				const card = track.querySelector(".act-card");
+				if (!card) return;
+				const amount = card.getBoundingClientRect().width + 20;
+				track.scrollBy({ left: dir * amount, behavior: "smooth" });
+			});
+		});
+	</script>
+
+	<section class="section-dark">
+		<p class="eyebrow eyebrow-dark">Il club</p>
+		<h2>35.000 mq <em class="accent accent-dark">tra indoor e outdoor</em></h2>
+		<p class="lede-dark">
+			Palestra attrezzata, quattro piscine, nove campi da tennis, campi da
+			padel e beach volley, area wellness e fisioterapica.
+		</p>
+		<a class="btn btn-on-dark" href="/il-club">Scopri il club</a>
+	</section>
+
+	<section class="young-school">
+		<img class="young-school-photo" src="/images/young-school-teaser.jpg" alt="Young School Ronchiverdi" />
+		<div class="young-school-content">
+			<p class="eyebrow">Famiglie</p>
+			<h2>Young School</h2>
+			<p class="lede" style="margin-inline:0">
+				Tennis, nuoto, padel e triathlon per bambini e ragazzi, più il
+				Summer Sport Camp. Un percorso sportivo ed educativo pensato per
+				ogni età.
+			</p>
+			<a class="btn" href="/young-school">Scopri Young School</a>
+		</div>
+	</section>
+
+	{posts.length > 0 && (
+		<section class="blog-preview">
+			<h2>Dal blog</h2>
+			<div class="blog-grid">
+				{posts.map((p) => (
+					<a class="blog-card" href={`/blog/${p.id}`}>
+						<h3>{p.data.title}</h3>
+						{p.data.description && <p class="muted">{p.data.description}</p>}
+					</a>
+				))}
+			</div>
+		</section>
+	)}
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un tour gratuito e visita gli spazi con uno dei nostri
+			responsabili.
+		</p>
+		<a class="btn" href="/prenota-un-tour">Prenota un tour</a>
+	</section>
+
+	<style>
+		.hero {
+			position: relative;
+			text-align: center;
+			min-height: 82vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--bg-dark);
+			overflow: hidden;
+		}
+		.hero-bg {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.hero-scrim {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				180deg,
+				rgba(28, 28, 24, 0.5) 0%,
+				rgba(28, 28, 24, 0.3) 45%,
+				rgba(28, 28, 24, 0.7) 100%
+			);
+		}
+		.hero-content {
+			position: relative;
+			z-index: 1;
+			padding: 4rem 1.5rem;
+		}
+		.hero-title-dark {
+			color: var(--text-on-dark);
+			margin: 0 0 1rem;
+		}
+
+		.section-about {
+			padding: 4rem 1.5rem 3rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		.attivita {
+			--pad-x: 1.5rem;
+			padding-bottom: 2rem;
+		}
+		.panel {
+			position: relative;
+			padding: 3vh var(--pad-x) 4vh;
+			overflow: hidden;
+		}
+		.panel__watermark {
+			position: absolute;
+			top: -0.08em;
+			left: var(--pad-x);
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-size: clamp(6rem, 13vw, 14rem);
+			line-height: 0.85;
+			color: rgba(28, 28, 24, 0.045);
+			white-space: nowrap;
+			pointer-events: none;
+			user-select: none;
+			z-index: 0;
+		}
+		.panel__divider {
+			max-width: 88rem;
+			margin: 0 auto;
+			height: 1px;
+			background: var(--border);
+		}
+		.panel__head {
+			position: relative;
+			z-index: 1;
+			max-width: 88rem;
+			margin: 0 auto 2rem;
+			display: flex;
+			align-items: flex-end;
+			justify-content: space-between;
+			gap: 12px;
+			padding-bottom: 1.25rem;
+			border-bottom: 1px solid var(--border);
+		}
+		.panel__title {
+			margin-top: 0.3rem;
+		}
+		.carousel-nav {
+			display: flex;
+			gap: 8px;
+			flex-shrink: 0;
+			padding-bottom: 2px;
+		}
+		.carousel-btn {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: 1px solid var(--border-strong);
+			background: transparent;
+			color: var(--text);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			flex-shrink: 0;
+			transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+		}
+		.carousel-btn:hover {
+			background: var(--accent);
+			border-color: var(--accent);
+			color: var(--text-on-dark);
+		}
+
+		.act-carousel {
+			position: relative;
+			z-index: 1;
+			max-width: 88rem;
+			margin: 0 auto;
+			overflow: hidden;
+		}
+		.act-carousel__track {
+			display: flex;
+			gap: 1.25rem;
+			overflow-x: scroll;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			scrollbar-width: none;
+			padding: 0.25rem 0 0.5rem;
+		}
+		.act-carousel__track::-webkit-scrollbar {
+			display: none;
+		}
+		.act-card {
+			flex: 0 0 calc((100% - 2 * 1.25rem) / 3);
+			scroll-snap-align: start;
+			display: block;
+			border-radius: 20px;
+			overflow: hidden;
+			text-decoration: none;
+			color: inherit;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+		}
+		.act-card__img {
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			background-size: cover;
+			background-position: center;
+		}
+		.act-card__body {
+			padding: 1.25rem 1.4rem 1.5rem;
+		}
+		.act-card__num {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.12em;
+			color: var(--accent);
+			margin-bottom: 6px;
+		}
+		.act-card__name {
+			display: block;
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: 1.4rem;
+			color: var(--text);
+			margin-bottom: 6px;
+		}
+		.act-card__desc {
+			font-family: var(--font-sans);
+			font-size: 0.9rem;
+			color: var(--text-muted);
+			line-height: 1.5;
+			margin: 0;
+		}
+		@media (max-width: 860px) {
+			.act-card {
+				flex: 0 0 calc((100% - 1.25rem) / 2);
+			}
+		}
+		@media (max-width: 640px) {
+			.act-card {
+				flex: 0 0 78vw;
+			}
+			.panel__watermark {
+				font-size: clamp(4rem, 22vw, 7rem);
+			}
+		}
+
+		.section-dark {
+			background: var(--bg-dark);
+			color: var(--text-on-dark);
+			text-align: center;
+			padding: 5rem 1.5rem;
+		}
+		.section-dark h2 {
+			margin: 0 0 1rem;
+			max-width: 36rem;
+			margin-inline: auto;
+		}
+		.section-dark .lede-dark {
+			margin: 0 auto 2rem;
+		}
+		.btn-on-dark {
+			background: var(--accent-on-dark);
+			color: var(--bg-dark);
+		}
+		.btn-on-dark:hover {
+			background: #e0b53a;
+		}
+
+		.young-school {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: stretch;
+		}
+		.young-school-photo {
+			width: 100%;
+			height: 100%;
+			min-height: 26rem;
+			object-fit: cover;
+		}
+		.young-school-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: flex-start;
+			padding: 4rem 4rem;
+			text-align: left;
+		}
+		.young-school-content .lede {
+			margin-left: 0;
+		}
+		@media (max-width: 760px) {
+			.young-school {
+				grid-template-columns: 1fr;
+			}
+			.young-school-content {
+				padding: 3rem 1.5rem;
+			}
+		}
+
+		.blog-preview {
+			padding: 5rem 1.5rem;
+			max-width: 76rem;
+			margin: 0 auto;
+			text-align: center;
+		}
+		.blog-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 1.5rem;
+			margin-top: 2.5rem;
+			text-align: left;
+		}
+		.blog-card {
+			display: block;
+			text-decoration: none;
+			color: var(--text);
+			background: var(--bg-alt);
+			border-radius: var(--radius);
+			padding: 1.75rem;
+		}
+		.blog-card h3 {
+			margin: 0 0 0.5rem;
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>

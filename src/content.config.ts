@@ -18,4 +18,15 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { pages, posts };
+const activities = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/activities" }),
+  schema: z.object({
+    title: z.string(),
+    image: z.string(),
+    summary: z.string().optional(),
+    audience: z.enum(["adulti", "junior"]),
+    order: z.number().optional(),
+  }),
+});
+
+export const collections = { pages, posts, activities };
