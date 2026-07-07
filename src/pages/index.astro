@@ -57,13 +57,64 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				e triathlon.
 			</p>
 		</div>
+	</section>
+
+	<section class="stats-band">
 		<dl class="stats">
-			<div class="stat"><dt>35.000</dt><dd>mq indoor e outdoor</dd></div>
-			<div class="stat"><dt>9</dt><dd>campi da tennis</dd></div>
-			<div class="stat"><dt>4</dt><dd>piscine</dd></div>
-			<div class="stat"><dt>3</dt><dd>campi da padel</dd></div>
+			<div class="stat">
+				<dt><span class="stat-num" data-target="35000">0</span></dt>
+				<dd>mq indoor e outdoor</dd>
+			</div>
+			<div class="stat">
+				<dt><span class="stat-num" data-target="9">0</span></dt>
+				<dd>campi da tennis</dd>
+			</div>
+			<div class="stat">
+				<dt><span class="stat-num" data-target="4">0</span></dt>
+				<dd>piscine</dd>
+			</div>
+			<div class="stat">
+				<dt><span class="stat-num" data-target="3">0</span></dt>
+				<dd>campi da padel</dd>
+			</div>
 		</dl>
 	</section>
+
+	<script>
+		const formatNumber = (n) => n.toLocaleString("it-IT");
+
+		function animateStat(el) {
+			const target = Number(el.dataset.target);
+			const duration = 1400;
+			const start = performance.now();
+
+			function step(now) {
+				const progress = Math.min((now - start) / duration, 1);
+				const eased = 1 - Math.pow(1 - progress, 3);
+				el.textContent = formatNumber(Math.round(target * eased));
+				if (progress < 1) requestAnimationFrame(step);
+			}
+			requestAnimationFrame(step);
+		}
+
+		const statEls = document.querySelectorAll(".stat-num");
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			statEls.forEach((el) => (el.textContent = formatNumber(Number(el.dataset.target))));
+		} else {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							animateStat(entry.target);
+							observer.unobserve(entry.target);
+						}
+					});
+				},
+				{ threshold: 0.4 }
+			);
+			statEls.forEach((el) => observer.observe(el));
+		}
+	</script>
 
 	<section class="section-about" id="attivita">
 		<h2>Le nostre attività</h2>
@@ -307,44 +358,67 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 
 		.chi-siamo {
-			display: grid;
-			grid-template-columns: 1.4fr 1fr;
-			gap: 3rem;
-			max-width: 76rem;
+			max-width: 48rem;
 			margin: 0 auto;
-			padding: 5rem 1.5rem 2rem;
-			align-items: start;
+			padding: 5rem 1.5rem 3.5rem;
+			text-align: center;
 		}
 		.chi-siamo-text .lede {
 			font-size: 1.05rem;
-			margin-bottom: 1.25rem;
+			margin: 0 auto 1.25rem;
+			max-width: 44rem;
+		}
+
+		.stats-band {
+			background: var(--bg-alt);
+			border-top: 1px solid var(--border);
+			border-bottom: 1px solid var(--border);
+			padding: 3.5rem 1.5rem;
 		}
 		.stats {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 1.5rem 2rem;
-			margin: 0;
-			padding: 2rem;
-			background: var(--bg-alt);
-			border-radius: 12px;
+			grid-template-columns: repeat(4, 1fr);
+			max-width: 76rem;
+			margin: 0 auto;
+			padding: 0;
+		}
+		.stat {
+			position: relative;
+			text-align: center;
+			padding: 0 1rem;
+		}
+		.stat + .stat::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.3em;
+			bottom: 0.3em;
+			width: 1px;
+			background: var(--border-strong);
 		}
 		.stat dt {
 			font-family: var(--font-serif);
-			font-size: 2.4rem;
+			font-size: clamp(2.6rem, 5vw, 3.6rem);
+			font-weight: 500;
 			color: var(--accent);
 			line-height: 1;
-			margin: 0 0 0.35rem;
+			margin: 0 0 0.5rem;
+			font-variant-numeric: tabular-nums;
 		}
 		.stat dd {
 			font-family: var(--font-sans);
-			font-size: 0.85rem;
+			font-size: 0.8rem;
+			letter-spacing: 0.03em;
 			color: var(--text-muted);
 			margin: 0;
 		}
-		@media (max-width: 860px) {
-			.chi-siamo {
-				grid-template-columns: 1fr;
-				padding: 3.5rem 1.5rem 1.5rem;
+		@media (max-width: 760px) {
+			.stats {
+				grid-template-columns: 1fr 1fr;
+				row-gap: 2.5rem;
+			}
+			.stat:nth-child(3)::before {
+				display: none;
 			}
 		}
 
