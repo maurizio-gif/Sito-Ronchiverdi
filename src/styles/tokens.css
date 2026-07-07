@@ -1,18 +1,18 @@
 :root {
-  /* Sfondi — stessi valori usati in maurizio-gif.github.io/RONCHIVERDI-DIGITAL */
-  --bg: #f7f6f2; /* crema, sfondo principale */
-  --bg-alt: #e8e5dc; /* sabbia, card e sezioni alternate */
+  /* Sfondi */
+  --bg: #f4ecd8; /* bianco caldo/crema dorata, sfondo principale (no bianco puro) */
+  --bg-alt: #ecdfc0; /* sabbia dorata, card e sezioni alternate */
   --bg-dark: #1c1c18; /* nero caldo, solo sezioni editoriali (poche) */
 
   /* Testo */
   --text: #1c1c18; /* quasi-nero, su sfondi chiari */
-  --text-on-dark: #f7f6f2; /* crema, su sfondi neri */
+  --text-on-dark: #f4ecd8; /* crema dorata, su sfondi neri */
   --text-muted: #4a4a42; /* grigio caldo, testo secondario */
 
   /* Bordi (semi-trasparenti, come nel riferimento) */
   --border: rgba(28, 28, 24, 0.08);
   --border-strong: rgba(28, 28, 24, 0.12);
-  --border-dark: rgba(247, 246, 242, 0.14);
+  --border-dark: rgba(244, 236, 216, 0.14);
 
   /* Accento (oro/bronzo) */
   --accent: #8b6c14; /* su sfondi chiari */
