@@ -150,17 +150,64 @@ const posts = (await getCollection("posts")).slice(0, 3);
 	</section>
 
 	<script>
-		document.querySelectorAll(".carousel-btn").forEach((btn) => {
-			btn.addEventListener("click", () => {
-				const dir = Number(btn.getAttribute("data-dir"));
-				const trackId = btn.getAttribute("data-track");
-				const track = document.querySelector(`[data-carousel-id="${trackId}"]`);
-				if (!track) return;
+		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		document.querySelectorAll(".act-carousel__track").forEach((track) => {
+			const id = track.getAttribute("data-carousel-id");
+			let dir = 1;
+			let autoTimer;
+
+			const cardStep = () => {
 				const card = track.querySelector(".act-card");
-				if (!card) return;
-				const amount = card.getBoundingClientRect().width + 20;
-				track.scrollBy({ left: dir * amount, behavior: "smooth" });
+				return card ? card.getBoundingClientRect().width + 20 : 0;
+			};
+
+			const advance = (amount) => {
+				track.scrollBy({ left: amount, behavior: "smooth" });
+			};
+
+			const stopAuto = () => clearInterval(autoTimer);
+
+			const startAuto = () => {
+				if (prefersReducedMotion) return;
+				stopAuto();
+				autoTimer = setInterval(() => {
+					const max = track.scrollWidth - track.clientWidth;
+					if (max <= 2) return;
+					if (track.scrollLeft >= max - 2) dir = -1;
+					else if (track.scrollLeft <= 2) dir = 1;
+					advance(dir * cardStep());
+				}, 3500);
+			};
+
+			let resumeTimer;
+			const pauseAuto = () => {
+				stopAuto();
+				clearTimeout(resumeTimer);
+			};
+			const resumeAutoLater = () => {
+				clearTimeout(resumeTimer);
+				resumeTimer = setTimeout(startAuto, 2500);
+			};
+
+			document.querySelectorAll(`.carousel-btn[data-track="${id}"]`).forEach((btn) => {
+				btn.addEventListener("click", () => {
+					pauseAuto();
+					const btnDir = Number(btn.getAttribute("data-dir"));
+					advance(btnDir * cardStep());
+					resumeAutoLater();
+				});
 			});
+
+			track.addEventListener("mouseenter", pauseAuto);
+			track.addEventListener("mouseleave", resumeAutoLater);
+			track.addEventListener("pointerdown", pauseAuto);
+			track.addEventListener("pointerup", resumeAutoLater);
+			track.addEventListener("touchstart", pauseAuto, { passive: true });
+			track.addEventListener("touchend", resumeAutoLater);
+			track.addEventListener("wheel", () => { pauseAuto(); resumeAutoLater(); }, { passive: true });
+
+			startAuto();
 		});
 	</script>
 
