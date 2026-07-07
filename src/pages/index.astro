@@ -99,7 +99,10 @@ const posts = (await getCollection("posts")).slice(0, 3);
 							<div class="act-card__body">
 								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
 								<strong class="act-card__name">{a.data.title}</strong>
-								{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+								<div class="act-card__hover">
+									{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+									<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+								</div>
 							</div>
 						</a>
 					))}
@@ -134,7 +137,10 @@ const posts = (await getCollection("posts")).slice(0, 3);
 							<div class="act-card__body">
 								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
 								<strong class="act-card__name">{a.data.title}</strong>
-								{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+								<div class="act-card__hover">
+									{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+									<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+								</div>
 							</div>
 						</a>
 					))}
@@ -412,14 +418,17 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			inset: 0;
 			background: linear-gradient(
 				180deg,
-				rgba(28, 28, 24, 0.05) 0%,
-				rgba(28, 28, 24, 0.75) 100%
+				rgba(28, 28, 24, 0) 45%,
+				rgba(28, 28, 24, 0.85) 100%
 			);
-			opacity: 0;
-			transition: opacity 0.35s ease;
+			transition: background 0.35s ease;
 		}
 		.act-card:hover .act-card__scrim {
-			opacity: 1;
+			background: linear-gradient(
+				180deg,
+				rgba(28, 28, 24, 0.15) 0%,
+				rgba(28, 28, 24, 0.92) 100%
+			);
 		}
 		.act-card__body {
 			position: absolute;
@@ -428,13 +437,6 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			flex-direction: column;
 			justify-content: flex-end;
 			padding: 1.5rem;
-			opacity: 0;
-			transform: translateY(12px);
-			transition: opacity 0.35s ease, transform 0.35s ease;
-		}
-		.act-card:hover .act-card__body {
-			opacity: 1;
-			transform: translateY(0);
 		}
 		.act-card__num {
 			display: block;
@@ -451,14 +453,40 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			font-weight: 500;
 			font-size: 1.5rem;
 			color: var(--text-on-dark);
-			margin-bottom: 6px;
+		}
+		.act-card__hover {
+			max-height: 0;
+			opacity: 0;
+			transform: translateY(10px);
+			transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.35s ease;
+			overflow: hidden;
+		}
+		.act-card:hover .act-card__hover {
+			max-height: 10rem;
+			opacity: 1;
+			transform: translateY(0);
+			margin-top: 8px;
 		}
 		.act-card__desc {
 			font-family: var(--font-sans);
 			font-size: 0.88rem;
 			color: rgba(247, 246, 242, 0.8);
 			line-height: 1.5;
-			margin: 0;
+			margin: 0 0 12px;
+		}
+		.act-card__more {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-family: var(--font-sans);
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--bg-dark);
+			background: var(--accent-on-dark);
+			padding: 0.55rem 1rem;
+			border-radius: var(--radius);
 		}
 		@media (max-width: 860px) {
 			.act-card {
