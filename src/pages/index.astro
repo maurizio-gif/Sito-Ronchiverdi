@@ -171,14 +171,16 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				<div class="act-carousel__track" data-carousel-id="adulti">
 					{activitiesAdulti.map((a, i) => (
 						<a class="act-card" href="#">
-							<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
-							<div class="act-card__scrim"></div>
-							<div class="act-card__body">
-								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
-								<strong class="act-card__name">{a.data.title}</strong>
-								<div class="act-card__hover">
-									{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
-									<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+							<div class="act-card__clip">
+								<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
+								<div class="act-card__scrim"></div>
+								<div class="act-card__body">
+									<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
+									<strong class="act-card__name">{a.data.title}</strong>
+									<div class="act-card__hover">
+										{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+										<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+									</div>
 								</div>
 							</div>
 						</a>
@@ -209,14 +211,16 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				<div class="act-carousel__track" data-carousel-id="junior">
 					{activitiesJunior.map((a, i) => (
 						<a class="act-card" href="#">
-							<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
-							<div class="act-card__scrim"></div>
-							<div class="act-card__body">
-								<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
-								<strong class="act-card__name">{a.data.title}</strong>
-								<div class="act-card__hover">
-									{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
-									<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+							<div class="act-card__clip">
+								<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
+								<div class="act-card__scrim"></div>
+								<div class="act-card__body">
+									<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
+									<strong class="act-card__name">{a.data.title}</strong>
+									<div class="act-card__hover">
+										{a.data.summary && <p class="act-card__desc">{a.data.summary}</p>}
+										<span class="act-card__more">Scopri di più <span aria-hidden="true">&rarr;</span></span>
+									</div>
 								</div>
 							</div>
 						</a>
@@ -601,23 +605,22 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			scroll-snap-align: start;
 			display: block;
 			border-radius: 20px;
-			overflow: hidden;
+			background: var(--bg-dark);
 			text-decoration: none;
 			color: inherit;
-			box-shadow:
-				0 2px 4px rgba(28, 28, 24, 0.18),
-				0 14px 28px -10px rgba(28, 28, 24, 0.4),
-				0 28px 48px -20px rgba(28, 28, 24, 0.35);
+			box-shadow: 0 18px 34px rgba(28, 28, 24, 0.22);
 			transform: translateY(0) scale(1);
 			transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-			will-change: transform;
 		}
 		.act-card:hover {
 			transform: translateY(-10px) scale(1.015);
-			box-shadow:
-				0 4px 8px rgba(28, 28, 24, 0.22),
-				0 26px 40px -12px rgba(28, 28, 24, 0.48),
-				0 40px 64px -20px rgba(28, 28, 24, 0.4);
+			box-shadow: 0 30px 50px rgba(28, 28, 24, 0.3);
+		}
+		.act-card__clip {
+			position: absolute;
+			inset: 0;
+			border-radius: 20px;
+			overflow: hidden;
 		}
 		.act-card__img {
 			position: absolute;
@@ -637,7 +640,8 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			background: linear-gradient(
 				180deg,
 				rgba(28, 28, 24, 0) 45%,
-				rgba(28, 28, 24, 0.85) 100%
+				rgba(28, 28, 24, 0.85) 82%,
+				rgba(28, 28, 24, 1) 92%
 			);
 			transition: background 0.35s ease;
 		}
@@ -645,7 +649,8 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			background: linear-gradient(
 				180deg,
 				rgba(28, 28, 24, 0.15) 0%,
-				rgba(28, 28, 24, 0.92) 100%
+				rgba(28, 28, 24, 0.92) 82%,
+				rgba(28, 28, 24, 1) 92%
 			);
 		}
 		.act-card__body {
@@ -793,19 +798,13 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			background: var(--bg-alt);
 			border-radius: var(--radius);
 			padding: 1.75rem;
-			box-shadow:
-				0 1px 2px rgba(28, 28, 24, 0.1),
-				0 10px 20px -8px rgba(28, 28, 24, 0.25),
-				0 20px 32px -16px rgba(28, 28, 24, 0.2);
+			box-shadow: 0 14px 26px rgba(28, 28, 24, 0.16);
 			transform: translateY(0);
 			transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 		}
 		.blog-card:hover {
 			transform: translateY(-6px);
-			box-shadow:
-				0 2px 4px rgba(28, 28, 24, 0.14),
-				0 18px 28px -10px rgba(28, 28, 24, 0.32),
-				0 28px 44px -18px rgba(28, 28, 24, 0.25);
+			box-shadow: 0 22px 38px rgba(28, 28, 24, 0.22);
 		}
 		.blog-card h3 {
 			margin: 0 0 0.5rem;
