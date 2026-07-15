@@ -44,8 +44,8 @@ const { text } = Astro.props;
 	.info-tip__bubble {
 		position: absolute;
 		bottom: calc(100% + 9px);
-		left: 50%;
-		transform: translate(-50%, 4px);
+		left: -10px;
+		transform: translateY(4px);
 		background: var(--bg-dark);
 		color: var(--text-on-dark);
 		font-family: var(--font-sans);
@@ -55,7 +55,7 @@ const { text } = Astro.props;
 		padding: 0.5rem 0.7rem;
 		border-radius: 6px;
 		width: max-content;
-		max-width: 13rem;
+		max-width: min(13rem, 70vw);
 		text-align: left;
 		opacity: 0;
 		pointer-events: none;
@@ -67,15 +67,14 @@ const { text } = Astro.props;
 		content: "";
 		position: absolute;
 		top: 100%;
-		left: 50%;
-		transform: translateX(-50%);
+		left: 14px;
 		border: 5px solid transparent;
 		border-top-color: var(--bg-dark);
 	}
 	.info-tip:hover .info-tip__bubble,
 	.info-tip__icon:focus-visible + .info-tip__bubble {
 		opacity: 1;
-		transform: translate(-50%, 0);
+		transform: translateY(0);
 		pointer-events: auto;
 	}
 </style>

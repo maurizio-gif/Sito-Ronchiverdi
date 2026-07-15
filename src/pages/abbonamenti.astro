@@ -15,20 +15,20 @@ interface Feature {
 
 const features: Feature[] = [
 	{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
-	{ label: "Corsi Fitness", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
-	{ label: "Acqua Fitness", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Corsi Fitness", note: "Corsi di gruppo per tutti i livelli", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Acqua Fitness", note: "AquaStep, hydrobike e allenamento in acqua", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
 	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
-	{ label: "Padel", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
-	{ label: "Tennis", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
+	{ label: "Padel", note: "3 campi, coperti e scoperti", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
+	{ label: "Tennis", note: "9 campi in terra rossa", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
 ];
 
 const plans = [
-	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti", badge: "Tutto incluso", featured: true },
-	{ key: "silver", name: "Silver", tagline: "Le attività essenziali, tennis escluso" },
-	{ key: "gym", name: "Gym", tagline: "Sala pesi, corsi fitness e spa" },
-	{ key: "swim", name: "Swim", tagline: "Acqua fitness, nuoto libero e spa", duration: "11 mesi · agosto escluso" },
+	{ key: "gold", name: "Gold", badge: "Tutto incluso", featured: true },
+	{ key: "silver", name: "Silver" },
+	{ key: "gym", name: "Gym" },
+	{ key: "swim", name: "Swim", duration: "11 mesi · agosto escluso" },
 ] as const;
 ---
 
@@ -54,7 +54,6 @@ const plans = [
 						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="columnheader">
 							{"badge" in p && <span class="plan-badge">{p.badge}</span>}
 							<strong class="plan-name">{p.name}</strong>
-							<span class="plan-tagline">{p.tagline}</span>
 							{"duration" in p && <span class="plan-duration">{p.duration}</span>}
 						</div>
 					))}
@@ -75,6 +74,15 @@ const plans = [
 						))}
 					</div>
 				))}
+
+				<div class="compare-row compare-row--cta" role="row">
+					<div class="compare-cell compare-cell--label" role="cell"></div>
+					{plans.map((p) => (
+						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="cell">
+							<a class="plan-cta" href={url("/prenota-un-tour")}>Scopri di più</a>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 
@@ -189,12 +197,6 @@ const plans = [
 			font-size: 1.6rem;
 			font-weight: 500;
 		}
-		.plan-tagline {
-			font-family: var(--font-sans);
-			font-size: 0.78rem;
-			color: var(--text-muted);
-			margin-top: 0.3rem;
-		}
 		.plan-duration {
 			font-family: var(--font-sans);
 			font-size: 0.7rem;
@@ -203,12 +205,36 @@ const plans = [
 			margin-top: 0.5rem;
 			font-weight: 600;
 		}
-		.compare-row--head .compare-cell--featured .plan-tagline {
-			color: rgba(246, 239, 222, 0.75);
+		.compare-row--head .compare-cell--featured .plan-duration {
+			color: var(--accent-on-dark);
 		}
 
 		.compare-cell--featured {
 			background: rgba(28, 28, 24, 0.03);
+		}
+
+		.compare-row--cta .compare-cell {
+			padding-top: 0.75rem;
+			padding-bottom: 1.75rem;
+		}
+		.plan-cta {
+			display: inline-block;
+			font-family: var(--font-sans);
+			font-weight: 600;
+			font-size: 0.7rem;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--text);
+			border: 1px solid var(--border-strong);
+			padding: 0.55rem 1rem;
+			border-radius: var(--radius);
+			transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+		}
+		.plan-cta:hover {
+			background: var(--accent);
+			border-color: var(--accent);
+			color: var(--text-on-dark);
 		}
 
 		.compare-legend {
