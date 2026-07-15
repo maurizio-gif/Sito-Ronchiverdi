@@ -30,8 +30,8 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			<p class="eyebrow eyebrow-dark">Club sportivo · Torino</p>
 			<h1 class="hero-title-dark">Sport, <em class="accent accent-dark">radicato</em> nel verde</h1>
 			<p class="lede lede-dark">
-				Tennis, padel, nuoto, fitness e young school. Un club sportivo nel
-				verde di Torino.
+				<strong>Tennis, padel, nuoto, fitness e young school</strong>. Un
+				club sportivo nel verde di Torino.
 			</p>
 			<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
 		</div>
@@ -43,19 +43,10 @@ const posts = (await getCollection("posts")).slice(0, 3);
 				<p class="eyebrow reveal">Chi siamo</p>
 				<h2 class="reveal" style="transition-delay:0.08s">Un club sportivo <em class="accent">radicato</em> nel territorio</h2>
 				<p class="lede reveal" style="margin-inline:0; transition-delay:0.16s">
-					Ronchiverdi è il club sportivo di riferimento a Torino: 35.000 mq tra
-					spazi indoor e outdoor pensati per chi cerca il massimo livello
-					sportivo senza rinunciare a un ambiente accogliente, su misura per
-					ogni età. Tennis, padel, nuoto, fitness, running, triathlon e
-					un'area benessere completa convivono in un unico luogo, radicato nel
-					verde della città e nella sua comunità.
+					Ronchiverdi è il club sportivo di riferimento a Torino: <strong>35.000 mq</strong> tra spazi indoor e outdoor pensati per chi cerca <strong>il massimo livello sportivo</strong> senza rinunciare a un ambiente accogliente, su misura per ogni età. Tennis, padel, nuoto, fitness, running, triathlon e un'area benessere completa convivono in un unico luogo, radicato nel verde della città e nella sua comunità.
 				</p>
 				<p class="lede reveal" style="margin-inline:0; transition-delay:0.24s">
-					Non è un club per pochi: è un club esclusivo perché cura ogni
-					dettaglio — dagli istruttori certificati agli spazi pensati per le
-					famiglie — ma accessibile a chiunque voglia vivere lo sport con
-					continuità, dai più piccoli della Young School agli atleti di Hyrox
-					e triathlon.
+					Non è un club per pochi: è <strong>un club esclusivo</strong> perché cura ogni dettaglio — dagli istruttori certificati agli spazi pensati per le famiglie — ma <strong>accessibile a chiunque</strong> voglia vivere lo sport con continuità, dai più piccoli della Young School agli atleti di Hyrox e triathlon.
 				</p>
 			</div>
 			<div class="chi-siamo-media">
@@ -296,10 +287,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		<p class="eyebrow eyebrow-dark">Il club</p>
 		<h2>35.000 mq <em class="accent accent-dark">tra indoor e outdoor</em></h2>
 		<p class="lede lede-dark">
-			Palestra attrezzata con Gym Floor Technogym e area funzionale
-			Lacertosus, quattro piscine coperte e scoperte, nove campi da tennis,
-			campi da padel e beach volley, oltre a un'area benessere con Chinesis
-			Postural Lab e Relax Zone per il recupero e la cura della persona.
+			Palestra attrezzata con Gym Floor Technogym e area funzionale Lacertosus, <strong>quattro piscine</strong> coperte e scoperte, <strong>nove campi da tennis</strong>, campi da padel e beach volley, oltre a un'area benessere con Chinesis Postural Lab e Relax Zone per il recupero e la cura della persona.
 		</p>
 		<a class="btn btn-on-dark" href={url("/il-club")}>Scopri il club</a>
 	</section>
@@ -310,10 +298,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			<p class="eyebrow">Famiglie</p>
 			<h2>Young School</h2>
 			<p class="lede" style="margin-inline:0">
-				Da Ronchiverdi lo sport si impara in famiglia. Tennis, nuoto,
-				padel e triathlon per bambini e ragazzi, il Summer Sport Camp per
-				l'estate, e un ambiente pensato perché genitori e figli possano
-				vivere il club insieme, ogni giorno.
+				Da Ronchiverdi lo sport si impara <strong>in famiglia</strong>. Tennis, nuoto, padel e triathlon per bambini e ragazzi, il <strong>Summer Sport Camp</strong> per l'estate, e un ambiente pensato perché genitori e figli possano vivere il club insieme, ogni giorno.
 			</p>
 			<a class="btn" href={url("/young-school")}>Scopri Young School</a>
 		</div>
@@ -336,8 +321,8 @@ const posts = (await getCollection("posts")).slice(0, 3);
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>
 		<p class="lede" style="margin-inline:auto">
-			Prenota un tour gratuito e visita gli spazi con uno dei nostri
-			responsabili.
+			Prenota un <strong>tour gratuito</strong> e visita gli spazi con uno
+			dei nostri responsabili.
 		</p>
 		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
 	</section>
@@ -413,7 +398,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			text-align: left;
 		}
 		.chi-siamo-text .lede {
-			font-size: 1.05rem;
+			font-size: var(--text-md);
 			margin: 0 0 1.25rem;
 			max-width: none;
 		}
@@ -486,7 +471,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.stat dt {
 			font-family: var(--font-serif);
-			font-size: clamp(2.6rem, 5vw, 3.6rem);
+			font-size: var(--text-3xl);
 			font-weight: 500;
 			color: var(--accent);
 			line-height: 1;
@@ -495,7 +480,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.stat dd {
 			font-family: var(--font-sans);
-			font-size: 0.8rem;
+			font-size: var(--text-xs);
 			letter-spacing: 0.03em;
 			color: var(--text-muted);
 			margin: 0;
@@ -665,7 +650,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		.act-card__num {
 			display: block;
 			font-family: var(--font-sans);
-			font-size: 11px;
+			font-size: var(--text-2xs);
 			font-weight: 600;
 			letter-spacing: 0.12em;
 			color: var(--accent-on-dark);
@@ -675,7 +660,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			display: block;
 			font-family: var(--font-serif);
 			font-weight: 500;
-			font-size: 1.5rem;
+			font-size: var(--text-xl);
 			color: var(--text-on-dark);
 		}
 		.act-card__hover {
@@ -693,7 +678,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.act-card__desc {
 			font-family: var(--font-sans);
-			font-size: 0.88rem;
+			font-size: var(--text-sm);
 			color: rgba(246, 239, 222, 0.8);
 			line-height: 1.5;
 			margin: 0 0 12px;
@@ -703,7 +688,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			align-items: center;
 			gap: 6px;
 			font-family: var(--font-sans);
-			font-size: 0.72rem;
+			font-size: var(--text-2xs);
 			font-weight: 600;
 			letter-spacing: 0.08em;
 			text-transform: uppercase;

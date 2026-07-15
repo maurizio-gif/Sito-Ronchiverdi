@@ -21,8 +21,22 @@
   --accent-tint: rgba(139, 108, 20, 0.1); /* badge, sfondo leggero su chiaro */
 
   /* Tipografia */
-  --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif; /* titoli hero, con corsivo oro per gli accenti */
+  --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif; /* corpo del testo, UI, titoli secondari */
+  --font-serif: "Cormorant Garamond", Georgia, serif; /* solo titolo hero e componenti decorativi (nomi piano, card) */
+
+  /* Scala dimensioni testo — usare sempre questi token nelle pagine,
+     mai valori hardcoded. Aggiungere un nuovo step qui se serve una
+     dimensione diversa, non introdurre un rem/px isolato altrove. */
+  --text-2xs: 0.72rem; /* micro: badge, bottoni piccoli, note */
+  --text-xs: 0.8rem; /* eyebrow, bottoni, legenda */
+  --text-sm: 0.9rem; /* testo secondario: nav, footer, descrizioni card */
+  --text-base: 0.95rem; /* corpo UI compatto: etichette tabelle */
+  --text-md: 1.1rem; /* paragrafi principali (lede) */
+  --text-lg: 1.375rem; /* h3 */
+  --text-xl: 1.6rem; /* titoli di componente: nome piano, nome card */
+  --text-2xl: clamp(1.75rem, 3.5vw, 2.5rem); /* h2 */
+  --text-3xl: clamp(2.6rem, 5vw, 3.6rem); /* numeri statistica */
+  --text-4xl: clamp(2.5rem, 6vw, 4.5rem); /* h1 / hero */
 
   --radius: 8px;
 }
