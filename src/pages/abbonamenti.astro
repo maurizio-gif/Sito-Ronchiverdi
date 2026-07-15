@@ -3,70 +3,76 @@ import Layout from "../layouts/Layout.astro";
 import PlanMark from "../components/PlanMark.astro";
 import { url } from "../lib/paths";
 
+type PlanKey = "gold" | "silver" | "gym" | "swim";
+type Access = "full" | "none";
+
 interface Feature {
 	label: string;
 	note?: string;
-	gold: "full" | "none";
-	silver: "full" | "none";
+	access: Record<PlanKey, Access>;
 }
 
 const features: Feature[] = [
-	{ label: "Sala Pesi", note: "Gym Floor Technogym", gold: "full", silver: "full" },
-	{ label: "Corsi Fitness", gold: "full", silver: "full" },
-	{ label: "Acqua Fitness", gold: "full", silver: "full" },
-	{ label: "Nuoto Libero", note: "assistito", gold: "full", silver: "full" },
-	{ label: "Piscina Estiva", note: "outdoor", gold: "full", silver: "full" },
-	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", gold: "full", silver: "full" },
-	{ label: "Padel", note: "tariffe agevolate", gold: "full", silver: "full" },
-	{ label: "Tennis", note: "tariffe agevolate", gold: "full", silver: "none" },
+	{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Corsi Fitness", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Acqua Fitness", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
+	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
+	{ label: "Padel", note: "tariffe agevolate", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
+	{ label: "Tennis", note: "tariffe agevolate", access: { gold: "full", silver: "none", gym: "none", swim: "none" } },
 ];
 
 const plans = [
-	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti" },
+	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti", featured: true },
 	{ key: "silver", name: "Silver", tagline: "Le attività essenziali, tennis escluso" },
+	{ key: "gym", name: "Gym", tagline: "Sala pesi, corsi fitness e spa", duration: "11 mesi · agosto chiuso" },
+	{ key: "swim", name: "Swim", tagline: "Acqua fitness, nuoto libero e spa", duration: "11 mesi · agosto chiuso" },
 ] as const;
 ---
 
 <Layout
 	title="Abbonamenti — Ronchiverdi Sport Club"
-	description="Confronta gli abbonamenti Gold e Silver di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
+	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
 >
 	<header class="page-header">
 		<p class="eyebrow">Abbonamenti</p>
 		<h1>Scegli il tuo <em class="accent">abbonamento</em></h1>
 		<p class="lede">
-			Due formule pensate per ogni esigenza: la stessa base sportiva e
-			benessere, con il tennis riservato agli abbonati Gold.
+			Quattro formule pensate per ogni esigenza: dal club completo Gold
+			agli abbonamenti Gym e Swim dedicati a un'unica area.
 		</p>
 	</header>
 
 	<section class="compare">
-		<div class="compare-table" role="table" aria-label="Confronto abbonamenti Gold e Silver">
-			<div class="compare-row compare-row--head" role="row">
-				<div class="compare-cell compare-cell--label" role="columnheader"></div>
-				{plans.map((p) => (
-					<div class={`compare-cell compare-cell--plan-${p.key}`} role="columnheader">
-						{p.key === "gold" && <span class="plan-badge">Tutto incluso</span>}
-						<strong class="plan-name">{p.name}</strong>
-						<span class="plan-tagline">{p.tagline}</span>
+		<div class="compare-scroll">
+			<div class="compare-table" role="table" aria-label="Confronto abbonamenti Gold, Silver, Gym e Swim">
+				<div class="compare-row compare-row--head" role="row">
+					<div class="compare-cell compare-cell--label" role="columnheader"></div>
+					{plans.map((p) => (
+						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key}`} role="columnheader">
+							{p.featured && <span class="plan-badge">Tutto incluso</span>}
+							<strong class="plan-name">{p.name}</strong>
+							<span class="plan-tagline">{p.tagline}</span>
+							{"duration" in p && <span class="plan-duration">{p.duration}</span>}
+						</div>
+					))}
+				</div>
+
+				{features.map((f) => (
+					<div class="compare-row" role="row">
+						<div class="compare-cell compare-cell--label" role="rowheader">
+							<span class="feature-label">{f.label}</span>
+							{f.note && <span class="feature-note">{f.note}</span>}
+						</div>
+						{plans.map((p) => (
+							<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key}`} role="cell">
+								<PlanMark status={f.access[p.key]} />
+							</div>
+						))}
 					</div>
 				))}
 			</div>
-
-			{features.map((f) => (
-				<div class="compare-row" role="row">
-					<div class="compare-cell compare-cell--label" role="rowheader">
-						<span class="feature-label">{f.label}</span>
-						{f.note && <span class="feature-note">{f.note}</span>}
-					</div>
-					<div class="compare-cell compare-cell--plan-gold" role="cell">
-						<PlanMark status={f.gold} />
-					</div>
-					<div class="compare-cell compare-cell--plan-silver" role="cell">
-						<PlanMark status={f.silver} />
-					</div>
-				</div>
-			))}
 		</div>
 
 		<p class="compare-legend">
@@ -93,16 +99,21 @@ const plans = [
 		}
 
 		.compare {
-			max-width: 64rem;
+			max-width: 76rem;
 			margin: 0 auto;
 			padding: 3rem 1.5rem 5rem;
 		}
 
-		.compare-table {
-			display: grid;
-			grid-template-columns: 1.4fr 1fr 1fr;
+		.compare-scroll {
+			overflow-x: auto;
 			border: 1px solid var(--border);
 			border-radius: var(--radius);
+		}
+
+		.compare-table {
+			display: grid;
+			grid-template-columns: minmax(160px, 1.3fr) repeat(4, minmax(140px, 1fr));
+			min-width: 44rem;
 			overflow: hidden;
 			background: var(--bg-alt);
 		}
@@ -126,6 +137,10 @@ const plans = [
 
 		.compare-cell--label {
 			text-align: left;
+			position: sticky;
+			left: 0;
+			z-index: 1;
+			background: var(--bg-alt);
 		}
 		.feature-label {
 			font-family: var(--font-sans);
@@ -139,8 +154,7 @@ const plans = [
 			margin-top: 0.15rem;
 		}
 
-		.compare-cell--plan-gold,
-		.compare-cell--plan-silver {
+		.compare-cell--plan {
 			align-items: center;
 			text-align: center;
 		}
@@ -178,6 +192,14 @@ const plans = [
 			color: var(--text-muted);
 			margin-top: 0.3rem;
 		}
+		.plan-duration {
+			font-family: var(--font-sans);
+			font-size: 0.7rem;
+			letter-spacing: 0.02em;
+			color: var(--accent);
+			margin-top: 0.5rem;
+			font-weight: 600;
+		}
 		.compare-row--head .compare-cell--plan-gold .plan-tagline {
 			color: rgba(246, 239, 222, 0.75);
 		}
@@ -201,17 +223,6 @@ const plans = [
 			display: inline-flex;
 			align-items: center;
 			gap: 0.5rem;
-		}
-
-		@media (max-width: 640px) {
-			.compare-table {
-				grid-template-columns: 1fr 1fr;
-			}
-			.compare-cell--label {
-				grid-column: 1 / -1;
-				padding-bottom: 0.25rem;
-				background: transparent !important;
-			}
 		}
 
 		.final-cta {
