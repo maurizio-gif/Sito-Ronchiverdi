@@ -1,11 +1,12 @@
 ---
 interface Props {
 	text: string;
+	align?: "start" | "end";
 }
-const { text } = Astro.props;
+const { text, align = "start" } = Astro.props;
 ---
 
-<span class="info-tip">
+<span class={`info-tip info-tip--${align}`}>
 	<button type="button" class="info-tip__icon" aria-label={text}>i</button>
 	<span class="info-tip__bubble" role="tooltip">{text}</span>
 </span>
@@ -44,8 +45,6 @@ const { text } = Astro.props;
 	.info-tip__bubble {
 		position: absolute;
 		bottom: calc(100% + 9px);
-		left: -10px;
-		transform: translateY(4px);
 		background: var(--bg-dark);
 		color: var(--text-on-dark);
 		font-family: var(--font-sans);
@@ -63,13 +62,26 @@ const { text } = Astro.props;
 		z-index: 5;
 		box-shadow: 0 8px 20px rgba(28, 28, 24, 0.25);
 	}
+	.info-tip--start .info-tip__bubble {
+		left: -10px;
+		transform: translateY(4px);
+	}
+	.info-tip--end .info-tip__bubble {
+		right: -10px;
+		transform: translateY(4px);
+	}
 	.info-tip__bubble::after {
 		content: "";
 		position: absolute;
 		top: 100%;
-		left: 14px;
 		border: 5px solid transparent;
 		border-top-color: var(--bg-dark);
+	}
+	.info-tip--start .info-tip__bubble::after {
+		left: 14px;
+	}
+	.info-tip--end .info-tip__bubble::after {
+		right: 14px;
 	}
 	.info-tip:hover .info-tip__bubble,
 	.info-tip__icon:focus-visible + .info-tip__bubble {
