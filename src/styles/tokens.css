@@ -22,7 +22,7 @@
 
   /* Tipografia */
   --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif; /* titoli, con corsivo oro per gli accenti */
+  --font-serif: "Montserrat", "Helvetica Neue", Arial, sans-serif; /* titoli, con corsivo oro per gli accenti */
 
   --radius: 8px;
 }
