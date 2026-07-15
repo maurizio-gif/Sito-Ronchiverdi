@@ -15,21 +15,23 @@ interface Feature {
 
 const features: Feature[] = [
 	{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
-	{ label: "Corsi Fitness", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
-	{ label: "Acqua Fitness", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Corsi Fitness", note: "Corsi di gruppo per tutti i livelli", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Acqua Fitness", note: "AquaStep, hydrobike e allenamento in acqua", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
 	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
-	{ label: "Padel", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
-	{ label: "Tennis", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
+	{ label: "Padel", note: "3 campi, coperti e scoperti", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
+	{ label: "Tennis", note: "9 campi in terra rossa", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
 ];
 
 const plans = [
-	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti", badge: "Tutto incluso", featured: true },
-	{ key: "silver", name: "Silver", tagline: "Le attività essenziali, tennis escluso" },
-	{ key: "gym", name: "Gym", tagline: "Sala pesi, corsi fitness e spa" },
-	{ key: "swim", name: "Swim", tagline: "Acqua fitness, nuoto libero e spa", duration: "11 mesi · agosto escluso" },
+	{ key: "gold", name: "Gold", badge: "Tutto incluso", featured: true, price: "170€" },
+	{ key: "silver", name: "Silver", price: "158€" },
+	{ key: "gym", name: "Gym", price: "99€" },
+	{ key: "swim", name: "Swim", duration: "11 mesi · agosto escluso", price: "99€" },
 ] as const;
+
+const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, per maggiori info clicca su Scopri di più.";
 ---
 
 <Layout
@@ -54,7 +56,6 @@ const plans = [
 						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="columnheader">
 							{"badge" in p && <span class="plan-badge">{p.badge}</span>}
 							<strong class="plan-name">{p.name}</strong>
-							<span class="plan-tagline">{p.tagline}</span>
 							{"duration" in p && <span class="plan-duration">{p.duration}</span>}
 						</div>
 					))}
@@ -75,6 +76,19 @@ const plans = [
 						))}
 					</div>
 				))}
+
+				<div class="compare-row compare-row--cta" role="row">
+					<div class="compare-cell compare-cell--label" role="cell"></div>
+					{plans.map((p, i) => (
+						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="cell">
+							<span class="plan-price">
+								{p.price}<span class="plan-price-unit">/mese</span>
+								<InfoTip text={priceTooltip} align={i === plans.length - 1 ? "end" : "start"} />
+							</span>
+							<a class="plan-cta" href={url("/prenota-un-tour")}>Scopri di più</a>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 
@@ -189,12 +203,6 @@ const plans = [
 			font-size: 1.6rem;
 			font-weight: 500;
 		}
-		.plan-tagline {
-			font-family: var(--font-sans);
-			font-size: 0.78rem;
-			color: var(--text-muted);
-			margin-top: 0.3rem;
-		}
 		.plan-duration {
 			font-family: var(--font-sans);
 			font-size: 0.7rem;
@@ -203,12 +211,71 @@ const plans = [
 			margin-top: 0.5rem;
 			font-weight: 600;
 		}
-		.compare-row--head .compare-cell--featured .plan-tagline {
-			color: rgba(246, 239, 222, 0.75);
+		.compare-row--head .compare-cell--featured .plan-duration {
+			color: var(--accent-on-dark);
 		}
 
 		.compare-cell--featured {
 			background: rgba(28, 28, 24, 0.03);
+		}
+
+		.compare-row--cta .compare-cell {
+			padding-top: 1rem;
+			padding-bottom: 1.75rem;
+			gap: 0.75rem;
+		}
+		.plan-price {
+			display: inline-flex;
+			align-items: baseline;
+			justify-content: center;
+			gap: 0.2rem;
+			font-family: var(--font-serif);
+			font-size: 1.7rem;
+			font-weight: 600;
+			color: var(--text);
+		}
+		.plan-price-unit {
+			font-family: var(--font-sans);
+			font-size: 0.72rem;
+			font-weight: 500;
+			color: var(--text-muted);
+			margin-right: 0.1rem;
+		}
+		.plan-cta {
+			display: inline-block;
+			font-family: var(--font-sans);
+			font-weight: 700;
+			font-size: 0.75rem;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: var(--text-on-dark);
+			background: var(--accent);
+			padding: 0.75rem 1.35rem;
+			border-radius: var(--radius);
+			box-shadow: 0 0 0 0 rgba(139, 108, 20, 0.4);
+			animation: plan-cta-pulse 2.6s ease-in-out infinite;
+			transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, background 0.2s ease;
+		}
+		.plan-cta:hover {
+			background: var(--accent-hover);
+			transform: translateY(-3px) scale(1.04);
+			box-shadow: 0 12px 24px -8px rgba(28, 28, 24, 0.4);
+			animation-play-state: paused;
+		}
+		@keyframes plan-cta-pulse {
+			0%,
+			100% {
+				box-shadow: 0 0 0 0 rgba(139, 108, 20, 0.4);
+			}
+			50% {
+				box-shadow: 0 0 0 9px rgba(139, 108, 20, 0);
+			}
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.plan-cta {
+				animation: none;
+			}
 		}
 
 		.compare-legend {
