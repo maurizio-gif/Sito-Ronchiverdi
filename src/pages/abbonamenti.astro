@@ -4,8 +4,8 @@ import PlanMark from "../components/PlanMark.astro";
 import InfoTip from "../components/InfoTip.astro";
 import { url } from "../lib/paths";
 
-type PlanKey = "exclusive" | "gold" | "silver" | "gym" | "swim";
-type Access = "full" | "none";
+type PlanKey = "gold" | "silver" | "gym" | "swim";
+type Access = "full" | "rate" | "none";
 
 interface Feature {
 	label: string;
@@ -13,78 +13,41 @@ interface Feature {
 	access: Record<PlanKey, Access>;
 }
 
-interface FeatureGroup {
-	title: string;
-	items: Feature[];
-}
-
-const featureGroups: FeatureGroup[] = [
-	{
-		title: "Attività del club",
-		items: [
-			{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { exclusive: "full", gold: "full", silver: "full", gym: "full", swim: "none" } },
-			{ label: "Corsi Fitness", access: { exclusive: "full", gold: "full", silver: "full", gym: "full", swim: "none" } },
-			{ label: "Acqua Fitness", access: { exclusive: "full", gold: "full", silver: "full", gym: "none", swim: "full" } },
-			{ label: "Nuoto Libero", note: "assistito", access: { exclusive: "full", gold: "full", silver: "full", gym: "none", swim: "full" } },
-			{ label: "Piscina Estiva", note: "outdoor", access: { exclusive: "full", gold: "full", silver: "full", gym: "none", swim: "none" } },
-			{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { exclusive: "full", gold: "full", silver: "full", gym: "full", swim: "full" } },
-			{ label: "Padel", note: "tariffe agevolate", access: { exclusive: "full", gold: "full", silver: "full", gym: "none", swim: "none" } },
-			{ label: "Tennis", note: "tariffe agevolate", access: { exclusive: "full", gold: "full", silver: "none", gym: "none", swim: "none" } },
-		],
-	},
-	{
-		title: "Privilegi Exclusive",
-		items: [
-			{
-				label: "Spogliatoio Dedicato",
-				note: "Armadietto personalizzato, riservato per tutta la durata dell'abbonamento",
-				access: { exclusive: "full", gold: "none", silver: "none", gym: "none", swim: "none" },
-			},
-			{
-				label: "Servizio Telo",
-				note: "Telo sempre a disposizione, senza dover portare il proprio",
-				access: { exclusive: "full", gold: "none", silver: "none", gym: "none", swim: "none" },
-			},
-			{
-				label: "Servizio Acqua",
-				note: "Acqua a disposizione durante gli allenamenti",
-				access: { exclusive: "full", gold: "none", silver: "none", gym: "none", swim: "none" },
-			},
-			{
-				label: "Stampa Online",
-				note: "Quotidiani e riviste in versione digitale",
-				access: { exclusive: "full", gold: "none", silver: "none", gym: "none", swim: "none" },
-			},
-		],
-	},
+const features: Feature[] = [
+	{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Corsi Fitness", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Acqua Fitness", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
+	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
+	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
+	{ label: "Padel", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
+	{ label: "Tennis", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
 ];
 
 const plans = [
-	{ key: "exclusive", name: "Exclusive", tagline: "Il Gold, con privilegi riservati", badge: "Esperienza Esclusiva", featured: true },
-	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti", badge: "Tutto incluso" },
+	{ key: "gold", name: "Gold", tagline: "Tutte le attività del club, senza limiti", badge: "Tutto incluso", featured: true },
 	{ key: "silver", name: "Silver", tagline: "Le attività essenziali, tennis escluso" },
-	{ key: "gym", name: "Gym", tagline: "Sala pesi, corsi fitness e spa", duration: "11 mesi · agosto chiuso" },
-	{ key: "swim", name: "Swim", tagline: "Acqua fitness, nuoto libero e spa" },
+	{ key: "gym", name: "Gym", tagline: "Sala pesi, corsi fitness e spa" },
+	{ key: "swim", name: "Swim", tagline: "Acqua fitness, nuoto libero e spa", duration: "11 mesi · agosto escluso" },
 ] as const;
 ---
 
 <Layout
 	title="Abbonamenti — Ronchiverdi Sport Club"
-	description="Confronta gli abbonamenti Exclusive, Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel, tennis e i privilegi riservati Exclusive."
+	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
 >
 	<header class="page-header">
 		<p class="eyebrow">Abbonamenti</p>
 		<h1>Scegli il tuo <em class="accent">abbonamento</em></h1>
 		<p class="lede">
-			Cinque formule pensate per ogni esigenza: dall'esperienza su misura
-			Exclusive al club completo Gold, fino agli abbonamenti Gym e Swim
-			dedicati a un'unica area.
+			Quattro formule pensate per ogni esigenza: dal club completo Gold
+			agli abbonamenti Gym e Swim dedicati a un'unica area.
 		</p>
 	</header>
 
 	<section class="compare">
 		<div class="compare-scroll">
-			<div class="compare-table" role="table" aria-label="Confronto abbonamenti Exclusive, Gold, Silver, Gym e Swim">
+			<div class="compare-table" role="table" aria-label="Confronto abbonamenti Gold, Silver, Gym e Swim">
 				<div class="compare-row compare-row--head" role="row">
 					<div class="compare-cell compare-cell--label" role="columnheader"></div>
 					{plans.map((p) => (
@@ -97,35 +60,27 @@ const plans = [
 					))}
 				</div>
 
-				{featureGroups.map((group) => (
-					<>
-						<div class="compare-row compare-row--section" role="row">
-							<div class="compare-cell compare-cell--section" role="rowheader" style={`grid-column: 1 / -1`}>
-								{group.title}
-							</div>
+				{features.map((f) => (
+					<div class="compare-row" role="row">
+						<div class="compare-cell compare-cell--label" role="rowheader">
+							<span class="feature-label">
+								{f.label}
+								{f.note && <InfoTip text={f.note} />}
+							</span>
 						</div>
-						{group.items.map((f) => (
-							<div class="compare-row" role="row">
-								<div class="compare-cell compare-cell--label" role="rowheader">
-									<span class="feature-label">
-										{f.label}
-										{f.note && <InfoTip text={f.note} />}
-									</span>
-								</div>
-								{plans.map((p) => (
-									<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="cell">
-										<PlanMark status={f.access[p.key]} />
-									</div>
-								))}
+						{plans.map((p) => (
+							<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="cell">
+								<PlanMark status={f.access[p.key]} />
 							</div>
 						))}
-					</>
+					</div>
 				))}
 			</div>
 		</div>
 
 		<p class="compare-legend">
 			<span class="legend-item"><PlanMark status="full" /> incluso</span>
+			<span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>
 			<span class="legend-item"><PlanMark status="none" /> non incluso</span>
 		</p>
 	</section>
@@ -141,14 +96,14 @@ const plans = [
 
 	<style>
 		.page-header {
-			max-width: 46rem;
+			max-width: 44rem;
 			margin: 0 auto;
 			padding: 5rem 1.5rem 1rem;
 			text-align: center;
 		}
 
 		.compare {
-			max-width: 82rem;
+			max-width: 64rem;
 			margin: 0 auto;
 			padding: 3rem 1.5rem 5rem;
 		}
@@ -161,9 +116,8 @@ const plans = [
 
 		.compare-table {
 			display: grid;
-			grid-template-columns: minmax(180px, 1.3fr) repeat(5, minmax(128px, 1fr));
-			min-width: 58rem;
-			overflow: hidden;
+			grid-template-columns: minmax(160px, 1.3fr) repeat(4, minmax(130px, 1fr));
+			min-width: 44rem;
 			background: var(--bg-alt);
 		}
 
@@ -177,19 +131,6 @@ const plans = [
 			border-top: none;
 		}
 
-		.compare-row--section .compare-cell--section {
-			padding: 0.7rem 1.25rem;
-			background: var(--bg);
-			font-family: var(--font-sans);
-			font-size: 0.72rem;
-			font-weight: 600;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--accent);
-			position: sticky;
-			left: 0;
-		}
-
 		.compare-cell {
 			padding: 1.1rem 1.25rem;
 			display: flex;
@@ -201,8 +142,9 @@ const plans = [
 			text-align: left;
 			position: sticky;
 			left: 0;
-			z-index: 1;
+			z-index: 2;
 			background: var(--bg-alt);
+			box-shadow: 2px 0 6px rgba(28, 28, 24, 0.08);
 		}
 		.feature-label {
 			display: inline-flex;
@@ -222,6 +164,9 @@ const plans = [
 			padding-bottom: 1.5rem;
 			background: var(--bg);
 		}
+		.compare-row--head .compare-cell--label {
+			background: var(--bg);
+		}
 		.compare-row--head .compare-cell--featured {
 			background: var(--bg-dark);
 			color: var(--text-on-dark);
@@ -229,16 +174,15 @@ const plans = [
 
 		.plan-badge {
 			font-family: var(--font-sans);
-			font-size: 0.66rem;
+			font-size: 0.68rem;
 			font-weight: 600;
-			letter-spacing: 0.08em;
+			letter-spacing: 0.1em;
 			text-transform: uppercase;
 			color: var(--bg-dark);
 			background: var(--accent-on-dark);
 			padding: 0.3rem 0.7rem;
 			border-radius: 999px;
 			margin-bottom: 0.6rem;
-			text-align: center;
 		}
 		.plan-name {
 			font-family: var(--font-serif);
