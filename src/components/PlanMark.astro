@@ -1,0 +1,39 @@
+---
+interface Props {
+	status: "full" | "none";
+}
+const { status } = Astro.props;
+const included = status === "full";
+---
+
+<span class={`mark ${included ? "mark--yes" : "mark--no"}`} aria-label={included ? "Incluso" : "Non incluso"}>
+	{included ? (
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+		</svg>
+	) : (
+		<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+		</svg>
+	)}
+</span>
+
+<style>
+	.mark {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+	.mark--yes {
+		background: var(--accent-tint);
+		color: var(--accent);
+	}
+	.mark--no {
+		color: var(--text-muted);
+		opacity: 0.5;
+	}
+</style>
