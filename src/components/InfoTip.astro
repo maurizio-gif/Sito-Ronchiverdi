@@ -1,0 +1,81 @@
+---
+interface Props {
+	text: string;
+}
+const { text } = Astro.props;
+---
+
+<span class="info-tip">
+	<button type="button" class="info-tip__icon" aria-label={text}>i</button>
+	<span class="info-tip__bubble" role="tooltip">{text}</span>
+</span>
+
+<style>
+	.info-tip {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		margin-left: 0.35rem;
+		vertical-align: middle;
+	}
+	.info-tip__icon {
+		width: 15px;
+		height: 15px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		border: 1px solid var(--border-strong);
+		background: transparent;
+		color: var(--text-muted);
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: 10px;
+		line-height: 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		cursor: help;
+	}
+	.info-tip__icon:hover,
+	.info-tip__icon:focus-visible {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.info-tip__bubble {
+		position: absolute;
+		bottom: calc(100% + 9px);
+		left: 50%;
+		transform: translate(-50%, 4px);
+		background: var(--bg-dark);
+		color: var(--text-on-dark);
+		font-family: var(--font-sans);
+		font-size: 0.72rem;
+		font-weight: 500;
+		line-height: 1.4;
+		padding: 0.5rem 0.7rem;
+		border-radius: 6px;
+		width: max-content;
+		max-width: 13rem;
+		text-align: left;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.15s ease, transform 0.15s ease;
+		z-index: 5;
+		box-shadow: 0 8px 20px rgba(28, 28, 24, 0.25);
+	}
+	.info-tip__bubble::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		border: 5px solid transparent;
+		border-top-color: var(--bg-dark);
+	}
+	.info-tip:hover .info-tip__bubble,
+	.info-tip__icon:focus-visible + .info-tip__bubble {
+		opacity: 1;
+		transform: translate(-50%, 0);
+		pointer-events: auto;
+	}
+</style>
