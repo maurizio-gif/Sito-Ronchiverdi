@@ -28,6 +28,11 @@ h3 {
   font-size: 22px;
 }
 
+strong,
+b {
+  font-weight: 700;
+}
+
 a {
   color: inherit;
 }
