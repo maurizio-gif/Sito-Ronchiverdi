@@ -5,7 +5,7 @@ import InfoTip from "../components/InfoTip.astro";
 import { url } from "../lib/paths";
 
 type PlanKey = "gold" | "silver" | "gym" | "swim";
-type Access = "full" | "none";
+type Access = "full" | "rate" | "none";
 
 interface Feature {
 	label: string;
@@ -20,8 +20,8 @@ const features: Feature[] = [
 	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
 	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
-	{ label: "Padel", note: "tariffe agevolate", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
-	{ label: "Tennis", note: "tariffe agevolate", access: { gold: "full", silver: "none", gym: "none", swim: "none" } },
+	{ label: "Padel", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
+	{ label: "Tennis", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
 ];
 
 const plans = [
@@ -80,6 +80,7 @@ const plans = [
 
 		<p class="compare-legend">
 			<span class="legend-item"><PlanMark status="full" /> incluso</span>
+			<span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>
 			<span class="legend-item"><PlanMark status="none" /> non incluso</span>
 		</p>
 	</section>
