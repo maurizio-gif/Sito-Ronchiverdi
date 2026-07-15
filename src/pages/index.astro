@@ -40,18 +40,18 @@ const posts = (await getCollection("posts")).slice(0, 3);
 	<section class="chi-siamo">
 		<div class="chi-siamo-grid">
 			<div class="chi-siamo-text">
-				<p class="eyebrow reveal">Chi siamo</p>
-				<h2 class="reveal" style="transition-delay:0.08s">Un club sportivo <em class="accent">radicato</em> nel territorio</h2>
-				<p class="lede reveal" style="margin-inline:0; transition-delay:0.16s">
+				<p class="eyebrow">Chi siamo</p>
+				<h2>Un club sportivo <em class="accent">radicato</em> nel territorio</h2>
+				<p class="lede" style="margin-inline:0">
 					Ronchiverdi è il club sportivo di riferimento a Torino: <strong>35.000 mq</strong> tra spazi indoor e outdoor pensati per chi cerca <strong>il massimo livello sportivo</strong> senza rinunciare a un ambiente accogliente, su misura per ogni età. Tennis, padel, nuoto, fitness, running, triathlon e un'area benessere completa convivono in un unico luogo, radicato nel verde della città e nella sua comunità.
 				</p>
-				<p class="lede reveal" style="margin-inline:0; transition-delay:0.24s">
+				<p class="lede" style="margin-inline:0">
 					Non è un club per pochi: è <strong>un club esclusivo</strong> perché cura ogni dettaglio — dagli istruttori certificati agli spazi pensati per le famiglie — ma <strong>accessibile a chiunque</strong> voglia vivere lo sport con continuità, dai più piccoli della Young School agli atleti di Hyrox e triathlon.
 				</p>
 			</div>
 			<div class="chi-siamo-media">
-				<img class="chi-siamo-img chi-siamo-img--main reveal" src={url("images/chi-siamo-1.jpg")} alt="Area funzionale Ronchiverdi" />
-				<img class="chi-siamo-img chi-siamo-img--accent reveal" style="transition-delay:0.15s" src={url("images/chi-siamo-2.jpg")} alt="Allenamento funzionale Ronchiverdi" />
+				<img class="chi-siamo-img chi-siamo-img--main" src={url("images/chi-siamo-1.jpg")} alt="Area funzionale Ronchiverdi" />
+				<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="Allenamento funzionale Ronchiverdi" />
 			</div>
 		</div>
 	</section>
@@ -79,24 +79,6 @@ const posts = (await getCollection("posts")).slice(0, 3);
 
 	<script>
 		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-		const revealEls = document.querySelectorAll(".reveal");
-		if (reduceMotion) {
-			revealEls.forEach((el) => el.classList.add("is-visible"));
-		} else {
-			const revealObserver = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							entry.target.classList.add("is-visible");
-							revealObserver.unobserve(entry.target);
-						}
-					});
-				},
-				{ threshold: 0.2 }
-			);
-			revealEls.forEach((el) => revealObserver.observe(el));
-		}
 
 		const formatNumber = (n) => n.toLocaleString("it-IT");
 
@@ -371,16 +353,6 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			max-width: 64rem;
 			margin: 0 auto;
 			text-align: center;
-		}
-
-		.reveal {
-			opacity: 0;
-			transform: translateY(22px);
-			transition: opacity 0.7s ease, transform 0.7s ease;
-		}
-		.reveal.is-visible {
-			opacity: 1;
-			transform: translateY(0);
 		}
 
 		.chi-siamo {

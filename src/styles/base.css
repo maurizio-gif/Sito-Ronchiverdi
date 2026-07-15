@@ -102,3 +102,102 @@ a {
   background: var(--text);
   color: var(--bg);
 }
+
+/* Animazioni allo scroll — attivate da Layout.astro via [data-anim] +
+   IntersectionObserver. Non impostare data-anim manualmente nei markup:
+   la funzione register() lo assegna via JS in base al selettore. */
+[data-anim] {
+  opacity: 0;
+  transform: translateY(34px);
+  filter: blur(4px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s ease;
+  will-change: opacity, transform, filter;
+}
+[data-anim].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+[data-anim="reveal"] {
+  opacity: 0;
+  transform: translateX(-32px) translateY(6px);
+  filter: blur(3px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.2, 0.85, 0.25, 1.05),
+    filter 0.6s ease;
+  will-change: opacity, transform, filter;
+}
+[data-anim="reveal"].is-visible {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+[data-anim="from-left"] {
+  opacity: 0;
+  transform: translateX(-38px);
+  filter: blur(3px);
+  transition: opacity 0.72s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s ease;
+  will-change: opacity, transform, filter;
+}
+[data-anim="from-left"].is-visible {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+[data-anim="scale"] {
+  opacity: 0;
+  transform: scale(0.92) translateY(20px);
+  filter: blur(5px);
+  transition: opacity 0.78s ease,
+    transform 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.65s ease;
+  will-change: opacity, transform, filter;
+}
+[data-anim="scale"].is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+[data-anim="pop"] {
+  opacity: 0;
+  transform: translateY(16px) scale(0.92);
+  transition: opacity 0.5s ease,
+    transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+  will-change: opacity, transform;
+}
+[data-anim="pop"].is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+[data-anim="fade"] {
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.8s ease;
+}
+[data-anim="fade"].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anim],
+  [data-anim="reveal"],
+  [data-anim="from-left"],
+  [data-anim="scale"],
+  [data-anim="pop"],
+  [data-anim="fade"] {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

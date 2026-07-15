@@ -55,5 +55,54 @@ const structuredData = {
 		<Nav />
 		<slot />
 		<Footer />
+		<script>
+			const obs = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						const el = entry.target;
+						const delay = el.dataset.animDelay ? parseInt(el.dataset.animDelay, 10) : 0;
+						setTimeout(() => el.classList.add("is-visible"), delay);
+						obs.unobserve(el);
+					});
+				},
+				{ threshold: 0.05, rootMargin: "0px" }
+			);
+
+			function register(selector, type, baseDelay = 0, stagger = 0) {
+				document.querySelectorAll(selector).forEach((el, i) => {
+					if (el.closest(".hero")) return;
+					if (!el.hasAttribute("data-anim")) el.setAttribute("data-anim", type);
+					if (!el.dataset.animDelay && baseDelay + stagger * i > 0) {
+						el.dataset.animDelay = String(baseDelay + stagger * i);
+					}
+					obs.observe(el);
+				});
+			}
+
+			// Etichette e titoli
+			register(".panel__head .eyebrow", "fade", 0, 0);
+			register(".eyebrow", "from-left", 0, 0);
+			register(".panel__title", "from-left", 60, 0);
+			register(".page-header h1", "reveal", 0, 0);
+			register("h2", "reveal", 0, 0);
+			register(".lede", "from-left", 80, 80);
+
+			// Immagini
+			register(".chi-siamo-img--main", "scale", 0, 0);
+			register(".chi-siamo-img--accent", "scale", 150, 0);
+			register(".young-school-photo", "scale", 0, 0);
+
+			// Numeri e card
+			register(".stat", "scale", 100, 80);
+			register(".act-card", "true", 0, 90);
+			register(".blog-card", "true", 0, 100);
+			register(".compare-scroll", "scale", 0, 0);
+
+			// Bottoni fuori dall'hero
+			register(".final-cta .btn", "pop", 140, 0);
+			register(".section-dark .btn", "pop", 140, 0);
+			register(".young-school-content .btn", "pop", 140, 0);
+		</script>
 	</body>
 </html>
