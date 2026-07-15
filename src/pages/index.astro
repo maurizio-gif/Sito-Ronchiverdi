@@ -398,7 +398,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			text-align: left;
 		}
 		.chi-siamo-text .lede {
-			font-size: 1.05rem;
+			font-size: var(--text-md);
 			margin: 0 0 1.25rem;
 			max-width: none;
 		}
@@ -471,7 +471,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.stat dt {
 			font-family: var(--font-serif);
-			font-size: clamp(2.6rem, 5vw, 3.6rem);
+			font-size: var(--text-3xl);
 			font-weight: 500;
 			color: var(--accent);
 			line-height: 1;
@@ -480,7 +480,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.stat dd {
 			font-family: var(--font-sans);
-			font-size: 0.8rem;
+			font-size: var(--text-xs);
 			letter-spacing: 0.03em;
 			color: var(--text-muted);
 			margin: 0;
@@ -650,7 +650,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		.act-card__num {
 			display: block;
 			font-family: var(--font-sans);
-			font-size: 11px;
+			font-size: var(--text-2xs);
 			font-weight: 600;
 			letter-spacing: 0.12em;
 			color: var(--accent-on-dark);
@@ -660,7 +660,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			display: block;
 			font-family: var(--font-serif);
 			font-weight: 500;
-			font-size: 1.5rem;
+			font-size: var(--text-xl);
 			color: var(--text-on-dark);
 		}
 		.act-card__hover {
@@ -678,7 +678,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 		}
 		.act-card__desc {
 			font-family: var(--font-sans);
-			font-size: 0.88rem;
+			font-size: var(--text-sm);
 			color: rgba(246, 239, 222, 0.8);
 			line-height: 1.5;
 			margin: 0 0 12px;
@@ -688,7 +688,7 @@ const posts = (await getCollection("posts")).slice(0, 3);
 			align-items: center;
 			gap: 6px;
 			font-family: var(--font-sans);
-			font-size: 0.72rem;
+			font-size: var(--text-2xs);
 			font-weight: 600;
 			letter-spacing: 0.08em;
 			text-transform: uppercase;
