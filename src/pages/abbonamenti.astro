@@ -135,6 +135,13 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 			background: var(--bg-alt);
 		}
 
+		@media (max-width: 640px) {
+			.compare-table {
+				grid-template-columns: minmax(128px, 1fr) repeat(4, minmax(130px, 1fr));
+				min-width: 40rem;
+			}
+		}
+
 		.compare-row {
 			display: grid;
 			grid-template-columns: subgrid;
