@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { url } from "../../lib/paths";
+
+const services = [
+	{ title: "Sauna", desc: "Ambiente in legno e pietra che ricrea l'atmosfera tradizionale di montagna." },
+	{ title: "Bagno di vapore", desc: "Unisce la tradizione degli hammam arabi, le terme romane e i benefici del bagno turco." },
+	{ title: "Cascata di ghiaccio", desc: "Il contrasto freddo-caldo che completa il percorso benessere iniziato tra vapore e calore." },
+	{ title: "Kneipp verticale", desc: "Un percorso sensoriale che alterna docce calde e fredde, tra colore e design." },
+];
+---
+
+<Layout
+	title="SPA — Ronchiverdi Sport Club"
+	description="La Relax Zone di Ronchiverdi: sauna, bagno di vapore, cascata di ghiaccio e percorso Kneipp per ritrovare il proprio benessere."
+>
+	<header class="page-header">
+		<p class="eyebrow">Servizi</p>
+		<h1>SPA, <em class="accent">Relax Zone</em></h1>
+		<p class="lede">
+			Il calore del legno, le nuance dell'abete e gli elementi in pietra accolgono l'ospite in un percorso benessere pensato per ritrovare energia ed equilibrio.
+		</p>
+	</header>
+
+	<div class="page-hero-wrap">
+		<img class="page-hero" src={url("images/services/spa-hero.jpg")} alt="Relax Zone Ronchiverdi" />
+	</div>
+
+	<section class="services-grid">
+		{services.map((s) => (
+			<div class="service-item">
+				<h2>{s.title}</h2>
+				<p class="lede" style="margin-inline:0">{s.desc}</p>
+			</div>
+		))}
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e scopri la Relax Zone.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<style>
+		.page-header {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.page-hero-wrap {
+			max-width: 64rem;
+			margin: 2rem auto 0;
+			padding: 0 1.5rem;
+		}
+		.page-hero {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.services-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2.5rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 5rem;
+		}
+		.service-item h2 {
+			font-size: var(--text-lg);
+			margin: 0 0 0.5rem;
+		}
+		@media (max-width: 640px) {
+			.services-grid {
+				grid-template-columns: 1fr;
+				text-align: center;
+			}
+		}
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>

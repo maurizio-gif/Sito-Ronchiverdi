@@ -1,10 +1,19 @@
 ---
+import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
 
+const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
+const allActivities = (await getCollection("activities")).filter((a) => a.data.visible !== false);
+const activitiesAdulti = allActivities.filter((a) => a.data.audience === "adulti").sort(byOrder);
+const activitiesJunior = allActivities.filter((a) => a.data.audience === "junior").sort(byOrder);
+const activityHref = (a) => (a.data.href ? url(a.data.href) : url("/#attivita"));
+
+const services = (await getCollection("services")).sort(byOrder);
+const serviceHref = (s) => (s.data.external ? s.data.href : url(s.data.href));
+
 const links = [
-	{ href: url("/#attivita"), label: "Sport" },
-	{ href: url("/young-school"), label: "Young School" },
 	{ href: url("/il-club"), label: "Il Club" },
+	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/blog"), label: "Blog" },
 ];
@@ -16,10 +25,47 @@ const links = [
 	</a>
 
 	<ul class="nav-links">
+		<li class="nav-item has-dropdown">
+			<button class="nav-link-trigger" aria-haspopup="true" aria-expanded="false">
+				Attività Sportive
+				<svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</button>
+			<div class="nav-dropdown nav-dropdown--activities">
+				<div class="nav-dropdown-col">
+					<span class="nav-dropdown-heading">Adulti</span>
+					<ul>
+						{activitiesAdulti.map((a) => <li><a href={activityHref(a)}>{a.data.title}</a></li>)}
+					</ul>
+				</div>
+				<div class="nav-dropdown-col">
+					<span class="nav-dropdown-heading">Bambini</span>
+					<ul>
+						{activitiesJunior.map((a) => <li><a href={activityHref(a)}>{a.data.title}</a></li>)}
+					</ul>
+				</div>
+			</div>
+		</li>
+		<li class="nav-item has-dropdown">
+			<button class="nav-link-trigger" aria-haspopup="true" aria-expanded="false">
+				Servizi
+				<svg width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</button>
+			<div class="nav-dropdown nav-dropdown--services">
+				<ul>
+					{services.map((s) => (
+						<li><a href={serviceHref(s)} target={s.data.external ? "_blank" : undefined} rel={s.data.external ? "noopener" : undefined}>{s.data.title}</a></li>
+					))}
+				</ul>
+			</div>
+		</li>
 		{links.map((l) => (
 			<li><a href={l.href}>{l.label}</a></li>
 		))}
 	</ul>
+	<div class="nav-business">
+		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
+		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
+	</div>
 	<a class="btn nav-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
 
 	<button class="nav-hamburger" id="nav-hamburger" aria-label="Apri il menu" aria-expanded="false" aria-controls="nav-mobile">
@@ -32,10 +78,43 @@ const links = [
 <div class="nav-mobile" id="nav-mobile">
 	<span class="nav-mobile-eyebrow">Menu</span>
 	<ul class="nav-mobile-list">
+		<li class="nav-mobile-group">
+			<button class="nav-mobile-link nav-mobile-group-trigger" aria-expanded="false">
+				Attività Sportive
+				<svg width="13" height="8" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</button>
+			<div class="nav-mobile-submenu">
+				<span class="nav-mobile-sublabel">Adulti</span>
+				<ul>
+					{activitiesAdulti.map((a) => <li><a class="nav-mobile-sublink" href={activityHref(a)}>{a.data.title}</a></li>)}
+				</ul>
+				<span class="nav-mobile-sublabel">Bambini</span>
+				<ul>
+					{activitiesJunior.map((a) => <li><a class="nav-mobile-sublink" href={activityHref(a)}>{a.data.title}</a></li>)}
+				</ul>
+			</div>
+		</li>
+		<li class="nav-mobile-group">
+			<button class="nav-mobile-link nav-mobile-group-trigger" aria-expanded="false">
+				Servizi
+				<svg width="13" height="8" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</button>
+			<div class="nav-mobile-submenu">
+				<ul>
+					{services.map((s) => (
+						<li><a class="nav-mobile-sublink" href={serviceHref(s)} target={s.data.external ? "_blank" : undefined} rel={s.data.external ? "noopener" : undefined}>{s.data.title}</a></li>
+					))}
+				</ul>
+			</div>
+		</li>
 		{links.map((l) => (
 			<li><a class="nav-mobile-link" href={l.href}>{l.label}</a></li>
 		))}
 	</ul>
+	<div class="nav-mobile-business">
+		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
+		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
+	</div>
 	<a class="btn nav-mobile-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
 </div>
 
@@ -58,13 +137,43 @@ const links = [
 	});
 
 	mobileMenu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+
+	document.querySelectorAll(".nav-item.has-dropdown > .nav-link-trigger").forEach((trigger) => {
+		trigger.addEventListener("click", (e) => {
+			e.stopPropagation();
+			const item = trigger.closest(".nav-item");
+			const isOpen = item.classList.toggle("open");
+			trigger.setAttribute("aria-expanded", String(isOpen));
+			document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {
+				if (other !== item) {
+					other.classList.remove("open");
+					other.querySelector(".nav-link-trigger")?.setAttribute("aria-expanded", "false");
+				}
+			});
+		});
+	});
+
+	document.addEventListener("click", () => {
+		document.querySelectorAll(".nav-item.has-dropdown.open").forEach((item) => {
+			item.classList.remove("open");
+			item.querySelector(".nav-link-trigger")?.setAttribute("aria-expanded", "false");
+		});
+	});
+
+	document.querySelectorAll(".nav-mobile-group-trigger").forEach((trigger) => {
+		trigger.addEventListener("click", () => {
+			const group = trigger.closest(".nav-mobile-group");
+			const isOpen = group.classList.toggle("open");
+			trigger.setAttribute("aria-expanded", String(isOpen));
+		});
+	});
 </script>
 
 <style>
 	.nav {
 		position: sticky;
 		top: 0;
-		z-index: 50;
+		z-index: 150;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -98,6 +207,101 @@ const links = [
 		padding: 0.6rem 1.4rem;
 		font-size: var(--text-xs);
 		flex-shrink: 0;
+	}
+
+	.nav-business {
+		display: flex;
+		gap: 0.6rem;
+		flex-shrink: 0;
+	}
+	.nav-business-btn {
+		padding: 0.55rem 1rem;
+		font-size: var(--text-2xs);
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.nav-item {
+		position: relative;
+	}
+	.nav-link-trigger {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font: inherit;
+		background: none;
+		border: none;
+		padding: 0;
+		color: var(--text);
+		cursor: pointer;
+		transition: color 0.15s ease;
+	}
+	.nav-link-trigger:hover {
+		color: var(--accent);
+	}
+	.nav-link-trigger svg {
+		transition: transform 0.25s ease;
+		flex-shrink: 0;
+	}
+	.nav-item.open .nav-link-trigger svg,
+	.nav-item:hover .nav-link-trigger svg,
+	.nav-item:focus-within .nav-link-trigger svg {
+		transform: rotate(180deg);
+	}
+	.nav-dropdown {
+		position: absolute;
+		top: calc(100% + 1.1rem);
+		left: 0;
+		transform: translateY(8px);
+		opacity: 0;
+		pointer-events: none;
+		display: flex;
+		gap: 2.5rem;
+		background: var(--bg);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		box-shadow: 0 18px 40px -12px rgba(28, 28, 24, 0.25);
+		padding: 1.25rem 1.5rem;
+		z-index: 60;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+	}
+	.nav-item.open .nav-dropdown,
+	.nav-item:hover .nav-dropdown,
+	.nav-item:focus-within .nav-dropdown {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+	}
+	.nav-dropdown-col {
+		min-width: 11rem;
+	}
+	.nav-dropdown-heading {
+		display: block;
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin-bottom: 0.6rem;
+	}
+	.nav-dropdown ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		white-space: nowrap;
+	}
+	.nav-dropdown li + li {
+		margin-top: 0.45rem;
+	}
+	.nav-dropdown a {
+		color: var(--text);
+		text-decoration: none;
+	}
+	.nav-dropdown a:hover {
+		color: var(--accent);
+	}
+	.nav-dropdown--services {
+		min-width: 13rem;
 	}
 
 	.nav-hamburger {
@@ -188,8 +392,95 @@ const links = [
 		opacity: 1;
 		transform: translateY(0);
 	}
-	.nav-mobile-cta {
+	.nav-mobile-group {
+		border-bottom: 1px solid var(--border);
+	}
+	.nav-mobile-group-trigger {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		gap: 0.75rem;
+		background: none;
+		border: none;
+		border-bottom: none;
+		cursor: pointer;
+		text-align: left;
+	}
+	.nav-mobile-group-trigger svg {
+		flex-shrink: 0;
+		transition: transform 0.3s ease;
+		color: var(--text-muted);
+	}
+	.nav-mobile-group.open .nav-mobile-group-trigger svg {
+		transform: rotate(180deg);
+	}
+	.nav-mobile-submenu {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.35s ease;
+	}
+	.nav-mobile-group.open .nav-mobile-submenu {
+		max-height: 50rem;
+	}
+	.nav-mobile-sublabel {
+		display: block;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		margin: 0.85rem 0 0.55rem;
+	}
+	.nav-mobile-sublabel:first-child {
+		margin-top: 0.6rem;
+	}
+	.nav-mobile-submenu ul {
+		list-style: none;
+		margin: 0;
+		padding: 0 0 0.6rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.nav-mobile-sublink {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.5rem 0.9rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		line-height: 1.1;
+		color: var(--text);
+		text-decoration: none;
+		transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	}
+	.nav-mobile-sublink:hover,
+	.nav-mobile-sublink:active {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--text-on-dark);
+	}
+	.nav-mobile-business {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
 		margin-top: 1.5rem;
+		opacity: 0;
+		transform: translateY(10px);
+		transition: opacity 0.35s ease 0.14s, transform 0.35s ease 0.14s;
+	}
+	.nav-mobile.open .nav-mobile-business {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	.nav-mobile-business-btn {
+		text-align: center;
+	}
+	.nav-mobile-cta {
+		margin-top: 0.75rem;
 		text-align: center;
 		opacity: 0;
 		transform: translateY(10px);
@@ -205,6 +496,9 @@ const links = [
 			display: none;
 		}
 		.nav-cta {
+			display: none;
+		}
+		.nav-business {
 			display: none;
 		}
 		.nav-hamburger {
