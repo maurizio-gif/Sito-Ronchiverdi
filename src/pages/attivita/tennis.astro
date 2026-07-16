@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
 ---
 
@@ -7,17 +8,10 @@ import { url } from "../../lib/paths";
 	title="Tennis — Ronchiverdi Sport Club"
 	description="Tennis a Ronchiverdi: 9 campi in terra rossa per adulti e la scuola tennis Young per bambini e ragazzi."
 >
-	<header class="page-header">
-		<p class="eyebrow">Attività sportive</p>
-		<h1>Tennis, per <em class="accent">adulti e ragazzi</em></h1>
-		<p class="lede">
-			Nove campi in terra rossa, coperti e scoperti: lezioni individuali, corsi di gruppo e la scuola tennis Young per i più giovani.
-		</p>
-	</header>
-
-	<div class="page-hero-wrap">
-		<img class="page-hero" src={url("images/attivita/tennis-hero.jpg")} alt="Campo da tennis in terra rossa a Ronchiverdi" />
-	</div>
+	<PageHero image="images/attivita/tennis-hero.jpg" imageAlt="Campo da tennis in terra rossa a Ronchiverdi" eyebrow="Attività sportive">
+		<Fragment slot="title">Tennis, per <em class="accent accent-dark">adulti e ragazzi</em></Fragment>
+		<Fragment slot="lede">Nove campi in terra rossa, coperti e scoperti: lezioni individuali, corsi di gruppo e la scuola tennis Young per i più giovani.</Fragment>
+	</PageHero>
 
 	<section class="intro-grid">
 		<div class="intro-col">
@@ -41,25 +35,6 @@ import { url } from "../../lib/paths";
 	</section>
 
 	<style>
-		.page-header {
-			max-width: 44rem;
-			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
-			text-align: center;
-		}
-		.page-hero-wrap {
-			max-width: 64rem;
-			margin: 2rem auto 0;
-			padding: 0 1.5rem;
-		}
-		.page-hero {
-			display: block;
-			width: 100%;
-			aspect-ratio: 16 / 9;
-			object-fit: cover;
-			border-radius: 16px;
-			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
-		}
 		.intro-grid {
 			display: grid;
 			grid-template-columns: 1fr 1fr;

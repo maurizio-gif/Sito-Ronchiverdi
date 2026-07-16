@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
 ---
 
@@ -7,17 +8,10 @@ import { url } from "../../lib/paths";
 	title="Piscina Esterna — Ronchiverdi Sport Club"
 	description="La piscina esterna di Ronchiverdi: nuoto libero e relax all'aperto nel verde del club, nella stagione estiva."
 >
-	<header class="page-header">
-		<p class="eyebrow">Servizi</p>
-		<h1>Piscina <em class="accent">Esterna</em></h1>
-		<p class="lede">
-			Una piscina scoperta immersa nel verde del club, aperta nella stagione estiva per nuotare, fare acqua fitness o semplicemente rilassarsi all'aria aperta.
-		</p>
-	</header>
-
-	<div class="page-hero-wrap">
-		<img class="page-hero" src={url("images/services/piscina-esterna-hero.jpg")} alt="Piscina esterna Ronchiverdi" />
-	</div>
+	<PageHero image="images/services/piscina-esterna-hero.jpg" imageAlt="Piscina esterna Ronchiverdi" eyebrow="Servizi">
+		<Fragment slot="title">Piscina <em class="accent accent-dark">Esterna</em></Fragment>
+		<Fragment slot="lede">Una piscina scoperta immersa nel verde del club, aperta nella stagione estiva per nuotare, fare acqua fitness o semplicemente rilassarsi all'aria aperta.</Fragment>
+	</PageHero>
 
 	<section class="body-copy">
 		<p class="lede" style="margin-inline:0">
@@ -34,25 +28,6 @@ import { url } from "../../lib/paths";
 	</section>
 
 	<style>
-		.page-header {
-			max-width: 44rem;
-			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
-			text-align: center;
-		}
-		.page-hero-wrap {
-			max-width: 64rem;
-			margin: 2rem auto 0;
-			padding: 0 1.5rem;
-		}
-		.page-hero {
-			display: block;
-			width: 100%;
-			aspect-ratio: 16 / 9;
-			object-fit: cover;
-			border-radius: 16px;
-			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
-		}
 		.body-copy {
 			max-width: 44rem;
 			margin: 0 auto;

@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
 
 const services = [
@@ -14,17 +15,10 @@ const services = [
 	title="SPA — Ronchiverdi Sport Club"
 	description="La Relax Zone di Ronchiverdi: sauna, bagno di vapore, cascata di ghiaccio e percorso Kneipp per ritrovare il proprio benessere."
 >
-	<header class="page-header">
-		<p class="eyebrow">Servizi</p>
-		<h1>SPA, <em class="accent">Relax Zone</em></h1>
-		<p class="lede">
-			Il calore del legno, le nuance dell'abete e gli elementi in pietra accolgono l'ospite in un percorso benessere pensato per ritrovare energia ed equilibrio.
-		</p>
-	</header>
-
-	<div class="page-hero-wrap">
-		<img class="page-hero" src={url("images/services/spa-hero.jpg")} alt="Relax Zone Ronchiverdi" />
-	</div>
+	<PageHero image="images/services/spa-hero.jpg" imageAlt="Relax Zone Ronchiverdi" eyebrow="Servizi">
+		<Fragment slot="title">SPA, <em class="accent accent-dark">Relax Zone</em></Fragment>
+		<Fragment slot="lede">Il calore del legno, le nuance dell'abete e gli elementi in pietra accolgono l'ospite in un percorso benessere pensato per ritrovare energia ed equilibrio.</Fragment>
+	</PageHero>
 
 	<section class="services-grid">
 		{services.map((s) => (
@@ -44,25 +38,6 @@ const services = [
 	</section>
 
 	<style>
-		.page-header {
-			max-width: 44rem;
-			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
-			text-align: center;
-		}
-		.page-hero-wrap {
-			max-width: 64rem;
-			margin: 2rem auto 0;
-			padding: 0 1.5rem;
-		}
-		.page-hero {
-			display: block;
-			width: 100%;
-			aspect-ratio: 16 / 9;
-			object-fit: cover;
-			border-radius: 16px;
-			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
-		}
 		.services-grid {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);

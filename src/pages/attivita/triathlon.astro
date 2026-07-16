@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
 ---
 
@@ -7,13 +8,10 @@ import { url } from "../../lib/paths";
 	title="Triathlon — Ronchiverdi Sport Club"
 	description="Triathlon a Ronchiverdi: nuoto, ciclismo e corsa con supporto tecnico qualificato, per adulti e ragazzi."
 >
-	<header class="page-header">
-		<p class="eyebrow">Attività sportive</p>
-		<h1>Triathlon, <em class="accent">nuoto, bici e corsa</em></h1>
-		<p class="lede">
-			Un percorso tecnico completo tra nuoto, ciclismo e corsa, con il supporto di istruttori qualificati, per adulti e ragazzi.
-		</p>
-	</header>
+	<PageHero image="images/activities/triathlon.jpg" imageAlt="Allenamento triathlon Ronchiverdi" eyebrow="Attività sportive">
+		<Fragment slot="title">Triathlon, <em class="accent accent-dark">nuoto, bici e corsa</em></Fragment>
+		<Fragment slot="lede">Un percorso tecnico completo tra nuoto, ciclismo e corsa, con il supporto di istruttori qualificati, per adulti e ragazzi.</Fragment>
+	</PageHero>
 
 	<section class="intro-grid">
 		<div class="intro-col">
@@ -37,12 +35,6 @@ import { url } from "../../lib/paths";
 	</section>
 
 	<style>
-		.page-header {
-			max-width: 44rem;
-			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
-			text-align: center;
-		}
 		.intro-grid {
 			display: grid;
 			grid-template-columns: 1fr 1fr;

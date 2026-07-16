@@ -1,0 +1,250 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ContactModal from "../../components/ContactModal.astro";
+import PageHero from "../../components/PageHero.astro";
+import { url } from "../../lib/paths";
+
+const courses = [
+	{
+		title: "Acqua Trekking",
+		durata: "45 minuti",
+		descrizione: "Camminata in acqua a ritmo sostenuto: lavora su resistenza e tonificazione con il minimo impatto sulle articolazioni.",
+		image: "images/services/piscina-esterna.jpg",
+	},
+	{
+		title: "Hydrobike",
+		durata: "45 minuti",
+		descrizione: "Pedalata su bike subacquea a ritmo di musica: un allenamento cardio intenso, divertente e a bassissimo impatto.",
+		image: "images/club/piscina-esterna-alt.jpg",
+	},
+	{
+		title: "Step Acqua",
+		durata: "45 minuti",
+		descrizione: "Il classico step rivisitato in acqua, su base rialzata: coordinazione, resistenza cardiovascolare e tonificazione.",
+		image: "images/services/piscina-esterna-hero.jpg",
+	},
+	{
+		title: "Acquagym",
+		durata: "45 minuti",
+		descrizione: "Ginnastica a corpo libero in acqua, a ritmo di musica: un allenamento completo per tonificare tutto il corpo.",
+		image: "images/activities/nuoto.jpg",
+	},
+	{
+		title: "Swim Training",
+		durata: "60 minuti",
+		descrizione: "Allenamento di nuoto strutturato, per chi vuole migliorare tecnica e resistenza nelle quattro nuotate.",
+		image: "images/attivita/scuola-nuoto-hero.jpg",
+	},
+	{
+		title: "Total Body Acqua",
+		durata: "45 minuti",
+		descrizione: "Circuito a corpo libero in acqua che alterna forza, resistenza e mobilità per un allenamento a 360°.",
+		image: "images/activities/scuola-nuoto-adulti.jpg",
+	},
+];
+---
+
+<Layout
+	title="Acqua Fitness — Ronchiverdi Sport Club"
+	description="Acqua Fitness a Ronchiverdi: allenamento in acqua tutto l'anno, in piscina interna ed esterna, con corsi per ogni livello."
+>
+	<PageHero image="images/activities/acqua-fitness.jpg" imageAlt="Corso di acqua fitness in piscina Ronchiverdi" eyebrow="Attività sportive">
+		<Fragment slot="title">Acqua Fitness, <em class="accent accent-dark">allenati in acqua</em></Fragment>
+		<Fragment slot="lede">Un palinsesto di corsi in acqua per tutto l'anno, tra piscina interna ed esterna, per allenare tonicità, resistenza e benessere.</Fragment>
+	</PageHero>
+
+	<section class="facts-grid">
+		<div class="fact-card">
+			<span class="fact-card__label">Dove</span>
+			<p>Sempre in <strong>vasca grande</strong>: in piscina interna da autunno a fine maggio, in piscina esterna da giugno ad agosto.</p>
+		</div>
+		<div class="fact-card">
+			<span class="fact-card__label">Estate</span>
+			<p>L'accesso alla piscina esterna, e quindi ai corsi estivi, è riservato agli abbonamenti <strong>Gold</strong> e <strong>Silver</strong> (non incluso nell'abbonamento Swim).</p>
+		</div>
+		<div class="fact-card">
+			<span class="fact-card__label">Livello</span>
+			<p>Corsi adatti a tutti i livelli: gli istruttori propongono sempre varianti su misura per ogni partecipante.</p>
+		</div>
+	</section>
+
+	<section class="courses-section">
+		<div class="courses-section__head">
+			<span class="eyebrow">Il palinsesto</span>
+			<h2>I nostri corsi</h2>
+			<p class="lede" style="margin-inline:auto">
+				Un'anteprima delle tipologie di corso in programma. Calendario, orari e descrizioni ufficiali sono in fase di aggiornamento.
+			</p>
+		</div>
+		<div class="course-grid">
+			{courses.map((c) => (
+				<article class="course-card">
+					<div class="course-card__media">
+						<img src={url(c.image)} alt={c.title} loading="lazy" />
+					</div>
+					<div class="course-card__body">
+						<div class="course-card__head">
+							<h3>{c.title}</h3>
+							<span class="course-card__durata">{c.durata}</span>
+						</div>
+						<p>{c.descrizione}</p>
+					</div>
+				</article>
+			))}
+		</div>
+		<div class="courses-section__cta">
+			<button type="button" class="btn" data-open-contact data-interest="Acqua Fitness">Contattaci per il programma della settimana</button>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<ContactModal />
+
+	<style>
+
+		.facts-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.5rem;
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 4rem 1.5rem;
+		}
+		.fact-card {
+			text-align: left;
+			padding: 1.5rem;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+		}
+		.fact-card__label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+			margin-bottom: 0.6rem;
+		}
+		.fact-card p {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.6;
+			margin: 0;
+		}
+		@media (max-width: 760px) {
+			.facts-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.courses-section {
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 4rem;
+			border-top: 1px solid var(--border);
+			padding-top: 3rem;
+		}
+		.courses-section__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto;
+		}
+		.course-grid {
+			margin-top: 2.5rem;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.75rem;
+		}
+		.course-card {
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			overflow: hidden;
+			background: var(--bg-alt);
+			transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+		}
+		.course-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 16px 32px -12px rgba(28, 28, 24, 0.25);
+		}
+		.course-card__media {
+			position: relative;
+			aspect-ratio: 4 / 3;
+		}
+		.course-card__media img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 0.5s ease;
+		}
+		.course-card:hover .course-card__media img {
+			transform: scale(1.06);
+		}
+		.course-card__body {
+			padding: 1.5rem;
+		}
+		.course-card__head {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 0.75rem;
+			margin-bottom: 0.6rem;
+		}
+		.course-card__head h3 {
+			margin: 0;
+			font-size: var(--text-lg);
+		}
+		.course-card__durata {
+			flex-shrink: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			color: var(--accent);
+			white-space: nowrap;
+		}
+		.course-card__body p {
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.6;
+		}
+		.courses-section__cta {
+			text-align: center;
+			margin-top: 2.5rem;
+		}
+		.courses-section__cta .btn {
+			border: none;
+			cursor: pointer;
+		}
+		@media (max-width: 960px) {
+			.course-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		@media (max-width: 640px) {
+			.course-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>
