@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { url } from "../../lib/paths";
+
+const services = [
+	{ title: "Valutazioni posturali", desc: "Analisi approfondita della postura e della funzionalità corporea per percorsi personalizzati." },
+	{ title: "Trattamenti osteopatici", desc: "Tecniche manuali per migliorare la mobilità, alleviare le tensioni e favorire il benessere dell'organismo." },
+	{ title: "Massaggi terapeutici e sportivi", desc: "Trattamenti specifici per il recupero muscolare e la prevenzione degli infortuni." },
+	{ title: "Pilates Reformer", desc: "Allenamento su macchina Reformer per rinforzo muscolare e controllo posturale." },
+	{ title: "Panca posturale", desc: "Uno strumento per allungamento, riequilibrio e rilassamento muscolare." },
+	{ title: "Rieducazione funzionale", desc: "Percorsi individuali per recuperare il movimento corretto, migliorando mobilità e coordinazione." },
+];
+---
+
+<Layout
+	title="Chinesis — Ronchiverdi Sport Club"
+	description="Chinesis Postural Lab: valutazioni posturali, trattamenti osteopatici, massaggi terapeutici e rieducazione funzionale a Ronchiverdi."
+>
+	<header class="page-header">
+		<p class="eyebrow">Servizi</p>
+		<h1>Chinesis, <em class="accent">Postural Lab</em></h1>
+		<p class="lede">
+			Lo spazio Ronchiverdi dedicato alla postura, al recupero funzionale e al controllo del movimento.
+		</p>
+	</header>
+
+	<div class="page-hero-wrap">
+		<img class="page-hero" src={url("images/services/chinesis-hero.jpg")} alt="Chinesis Postural Lab Ronchiverdi" />
+	</div>
+
+	<section class="services-grid">
+		{services.map((s) => (
+			<div class="service-item">
+				<h2>{s.title}</h2>
+				<p class="lede" style="margin-inline:0">{s.desc}</p>
+			</div>
+		))}
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e scopri il Postural Lab.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<style>
+		.page-header {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.page-hero-wrap {
+			max-width: 64rem;
+			margin: 2rem auto 0;
+			padding: 0 1.5rem;
+		}
+		.page-hero {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.services-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2.5rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 5rem;
+		}
+		.service-item h2 {
+			font-size: var(--text-lg);
+			margin: 0 0 0.5rem;
+		}
+		@media (max-width: 640px) {
+			.services-grid {
+				grid-template-columns: 1fr;
+				text-align: center;
+			}
+		}
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>

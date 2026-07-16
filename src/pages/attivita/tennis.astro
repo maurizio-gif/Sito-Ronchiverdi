@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { url } from "../../lib/paths";
+---
+
+<Layout
+	title="Tennis — Ronchiverdi Sport Club"
+	description="Tennis a Ronchiverdi: 9 campi in terra rossa per adulti e la scuola tennis Young per bambini e ragazzi."
+>
+	<header class="page-header">
+		<p class="eyebrow">Attività sportive</p>
+		<h1>Tennis, per <em class="accent">adulti e ragazzi</em></h1>
+		<p class="lede">
+			Nove campi in terra rossa, coperti e scoperti: lezioni individuali, corsi di gruppo e la scuola tennis Young per i più giovani.
+		</p>
+	</header>
+
+	<div class="page-hero-wrap">
+		<img class="page-hero" src={url("images/attivita/tennis-hero.jpg")} alt="Campo da tennis in terra rossa a Ronchiverdi" />
+	</div>
+
+	<section class="intro-grid">
+		<div class="intro-col">
+			<span class="eyebrow">Adulti</span>
+			<h2>Tennis Adulti</h2>
+			<p class="lede" style="margin-inline:0">9 campi in terra rossa, coperti e scoperti, per lezioni individuali, corsi di gruppo e partite libere a ogni livello.</p>
+		</div>
+		<div class="intro-col">
+			<span class="eyebrow">Bambini</span>
+			<h2>Tennis Young</h2>
+			<p class="lede" style="margin-inline:0">Scuola tennis per bambini e ragazzi, dal primo approccio alla racchetta fino ai percorsi agonistici.</p>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e visita i nostri campi da tennis.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<style>
+		.page-header {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.page-hero-wrap {
+			max-width: 64rem;
+			margin: 2rem auto 0;
+			padding: 0 1.5rem;
+		}
+		.page-hero {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.intro-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 5rem;
+		}
+		.intro-col h2 {
+			margin: 0.4rem 0 0.75rem;
+		}
+		@media (max-width: 760px) {
+			.intro-grid {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+				text-align: center;
+			}
+			.intro-col .lede {
+				margin-inline: auto;
+			}
+		}
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>

@@ -1,0 +1,76 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { url } from "../../lib/paths";
+---
+
+<Layout
+	title="Triathlon — Ronchiverdi Sport Club"
+	description="Triathlon a Ronchiverdi: nuoto, ciclismo e corsa con supporto tecnico qualificato, per adulti e ragazzi."
+>
+	<header class="page-header">
+		<p class="eyebrow">Attività sportive</p>
+		<h1>Triathlon, <em class="accent">nuoto, bici e corsa</em></h1>
+		<p class="lede">
+			Un percorso tecnico completo tra nuoto, ciclismo e corsa, con il supporto di istruttori qualificati, per adulti e ragazzi.
+		</p>
+	</header>
+
+	<section class="intro-grid">
+		<div class="intro-col">
+			<span class="eyebrow">Adulti</span>
+			<h2>Triathlon Adulti</h2>
+			<p class="lede" style="margin-inline:0">Nuoto, ciclismo e corsa con supporto tecnico qualificato, per chi vuole allenarsi o prepararsi a una gara.</p>
+		</div>
+		<div class="intro-col">
+			<span class="eyebrow">Bambini</span>
+			<h2>Triathlon Young</h2>
+			<p class="lede" style="margin-inline:0">Nuoto, ciclismo e corsa per ragazzi, con supporto tecnico qualificato pensato per le prime esperienze multisport.</p>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e scopri il programma triathlon.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<style>
+		.page-header {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.intro-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 5rem;
+		}
+		.intro-col h2 {
+			margin: 0.4rem 0 0.75rem;
+		}
+		@media (max-width: 760px) {
+			.intro-grid {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+				text-align: center;
+			}
+			.intro-col .lede {
+				margin-inline: auto;
+			}
+		}
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>

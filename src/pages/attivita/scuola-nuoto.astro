@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { url } from "../../lib/paths";
+---
+
+<Layout
+	title="Scuola Nuoto — Ronchiverdi Sport Club"
+	description="Scuola nuoto Ronchiverdi: corsi per adulti e bambini in 4 piscine coperte e scoperte, dal primo approccio all'acqua al perfezionamento."
+>
+	<header class="page-header">
+		<p class="eyebrow">Attività sportive</p>
+		<h1>Scuola Nuoto, per <em class="accent">tutte le età</em></h1>
+		<p class="lede">
+			Quattro piscine coperte e scoperte e istruttori qualificati per corsi di nuoto pensati per adulti e per i più piccoli.
+		</p>
+	</header>
+
+	<div class="page-hero-wrap">
+		<img class="page-hero" src={url("images/attivita/scuola-nuoto-hero.jpg")} alt="Piscina interna Ronchiverdi" />
+	</div>
+
+	<section class="intro-grid">
+		<div class="intro-col">
+			<span class="eyebrow">Adulti</span>
+			<h2>Scuola Nuoto Adulti</h2>
+			<p class="lede" style="margin-inline:0">Corsi di nuoto per adulti, dal primo approccio in acqua fino al perfezionamento della tecnica.</p>
+		</div>
+		<div class="intro-col">
+			<span class="eyebrow">Bambini</span>
+			<h2>Scuola Nuoto Young</h2>
+			<p class="lede" style="margin-inline:0">Scuola nuoto per bambini e ragazzi di tutte le età, in un ambiente sicuro e curato.</p>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<style>
+		.page-header {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.page-hero-wrap {
+			max-width: 64rem;
+			margin: 2rem auto 0;
+			padding: 0 1.5rem;
+		}
+		.page-hero {
+			display: block;
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.intro-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem;
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 5rem;
+		}
+		.intro-col h2 {
+			margin: 0.4rem 0 0.75rem;
+		}
+		@media (max-width: 760px) {
+			.intro-grid {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+				text-align: center;
+			}
+			.intro-col .lede {
+				margin-inline: auto;
+			}
+		}
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>
