@@ -1,0 +1,69 @@
+---
+import { url } from "../lib/paths";
+
+interface Props {
+	image: string;
+	imageAlt: string;
+	eyebrow: string;
+}
+
+const { image, imageAlt, eyebrow } = Astro.props;
+---
+
+<header class="page-hero-full">
+	<img class="page-hero-full__bg" src={url(image)} alt={imageAlt} />
+	<div class="page-hero-full__scrim"></div>
+	<div class="page-hero-full__content">
+		<p class="eyebrow eyebrow-dark">{eyebrow}</p>
+		<h1 class="page-hero-full__title"><slot name="title" /></h1>
+		<p class="lede lede-dark"><slot name="lede" /></p>
+		<slot />
+	</div>
+</header>
+
+<style>
+	.page-hero-full {
+		position: relative;
+		min-height: 46vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		overflow: hidden;
+		background: var(--bg-dark);
+	}
+	.page-hero-full__bg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.page-hero-full__scrim {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			180deg,
+			rgba(28, 28, 24, 0.55) 0%,
+			rgba(28, 28, 24, 0.35) 45%,
+			rgba(28, 28, 24, 0.78) 100%
+		);
+	}
+	.page-hero-full__content {
+		position: relative;
+		z-index: 1;
+		max-width: 46rem;
+		padding: 6rem 1.5rem 3.5rem;
+	}
+	.page-hero-full__title {
+		font-family: var(--font-serif);
+		color: var(--text-on-dark);
+		margin: 0 0 1rem;
+		text-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+	}
+	@media (max-width: 640px) {
+		.page-hero-full {
+			min-height: 38vh;
+		}
+	}
+</style>

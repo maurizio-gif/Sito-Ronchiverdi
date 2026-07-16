@@ -1,0 +1,297 @@
+---
+const interests = [
+	"Scuola Nuoto",
+	"Acqua Fitness",
+	"Nuoto Libero",
+	"Tennis",
+	"Padel",
+	"Fitness e Sala Pesi",
+	"Altro",
+];
+---
+
+<div class="contact-modal" id="contact-modal" aria-hidden="true">
+	<div class="contact-modal__backdrop" data-contact-close></div>
+	<div class="contact-modal__panel" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+		<button type="button" class="contact-modal__close" data-contact-close aria-label="Chiudi">&times;</button>
+
+		<div class="contact-modal__body" data-contact-form-view>
+			<p class="eyebrow">Contattaci</p>
+			<h3 id="contact-modal-title">Lasciaci i tuoi dati</h3>
+			<p class="contact-modal__intro">Ti risponderemo il prima possibile per aiutarti a scegliere il percorso più adatto.</p>
+
+			<form id="contact-form" novalidate>
+				<label class="contact-field">
+					<span>Nome e cognome*</span>
+					<input type="text" name="nome" required autocomplete="name" />
+				</label>
+				<label class="contact-field">
+					<span>Email*</span>
+					<input type="email" name="email" required autocomplete="email" />
+				</label>
+				<label class="contact-field">
+					<span>Telefono</span>
+					<input type="tel" name="telefono" autocomplete="tel" />
+				</label>
+				<label class="contact-field">
+					<span>Attività di interesse*</span>
+					<select name="interesse" id="contact-interesse" required>
+						<option value="" disabled selected>Seleziona...</option>
+						{interests.map((i) => <option value={i}>{i}</option>)}
+					</select>
+				</label>
+
+				<div class="contact-conditional" id="contact-conditional-nuoto" hidden>
+					<p class="contact-conditional__label">Un paio di domande in più per la scuola nuoto:</p>
+					<fieldset class="contact-radio-group">
+						<legend>Il bambino/a sa già stare in acqua senza braccioli?</legend>
+						<label><input type="radio" name="braccioli" value="si" /> Sì</label>
+						<label><input type="radio" name="braccioli" value="no" /> No</label>
+					</fieldset>
+					<fieldset class="contact-radio-group">
+						<legend>Vasca preferita</legend>
+						<label><input type="radio" name="vasca" value="piccola" /> Vasca piccola (più piccoli)</label>
+						<label><input type="radio" name="vasca" value="grande" /> Vasca grande</label>
+					</fieldset>
+				</div>
+
+				<label class="contact-field">
+					<span>Messaggio</span>
+					<textarea name="messaggio" rows="3"></textarea>
+				</label>
+
+				<button type="submit" class="btn contact-modal__submit">Invia richiesta</button>
+			</form>
+		</div>
+
+		<div class="contact-modal__body contact-modal__success" data-contact-success-view hidden>
+			<p class="eyebrow">Richiesta inviata</p>
+			<h3>Grazie!</h3>
+			<p class="contact-modal__intro">Ti contatteremo il prima possibile per aiutarti con la tua richiesta.</p>
+			<button type="button" class="btn btn-outline" data-contact-close>Chiudi</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	const modal = document.getElementById("contact-modal");
+	const formView = document.querySelector("[data-contact-form-view]");
+	const successView = document.querySelector("[data-contact-success-view]");
+	const form = document.getElementById("contact-form") as HTMLFormElement | null;
+	const interesseSelect = document.getElementById("contact-interesse") as HTMLSelectElement | null;
+	const nuotoConditional = document.getElementById("contact-conditional-nuoto");
+	let lastFocused: HTMLElement | null = null;
+
+	function toggleNuotoConditional() {
+		if (!interesseSelect || !nuotoConditional) return;
+		nuotoConditional.hidden = interesseSelect.value !== "Scuola Nuoto";
+	}
+
+	function resetModal() {
+		form?.reset();
+		toggleNuotoConditional();
+		if (formView) (formView as HTMLElement).hidden = false;
+		if (successView) (successView as HTMLElement).hidden = true;
+	}
+
+	function openModal(presetInterest?: string) {
+		resetModal();
+		if (presetInterest && interesseSelect) {
+			interesseSelect.value = presetInterest;
+			toggleNuotoConditional();
+		}
+		lastFocused = document.activeElement as HTMLElement;
+		modal?.classList.add("open");
+		modal?.setAttribute("aria-hidden", "false");
+		document.body.classList.add("contact-modal-locked");
+	}
+
+	function closeModal() {
+		modal?.classList.remove("open");
+		modal?.setAttribute("aria-hidden", "true");
+		document.body.classList.remove("contact-modal-locked");
+		lastFocused?.focus();
+	}
+
+	document.querySelectorAll("[data-open-contact]").forEach((btn) => {
+		btn.addEventListener("click", () => openModal((btn as HTMLElement).dataset.interest));
+	});
+
+	document.querySelectorAll("[data-contact-close]").forEach((el) => {
+		el.addEventListener("click", closeModal);
+	});
+
+	interesseSelect?.addEventListener("change", toggleNuotoConditional);
+
+	form?.addEventListener("submit", (e) => {
+		e.preventDefault();
+		if (!form.checkValidity()) {
+			form.reportValidity();
+			return;
+		}
+		if (formView) (formView as HTMLElement).hidden = true;
+		if (successView) (successView as HTMLElement).hidden = false;
+	});
+
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && modal?.classList.contains("open")) closeModal();
+	});
+</script>
+
+<style>
+	.contact-modal {
+		position: fixed;
+		inset: 0;
+		z-index: 210;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1.5rem;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.25s ease;
+	}
+	.contact-modal.open {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	.contact-modal__backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(28, 28, 24, 0.55);
+		backdrop-filter: blur(2px);
+	}
+	.contact-modal__panel {
+		position: relative;
+		max-width: 30rem;
+		width: 100%;
+		max-height: 88vh;
+		overflow-y: auto;
+		background: var(--bg);
+		border-radius: 16px;
+		padding: 2.5rem 2.25rem;
+		box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.4);
+		transform: translateY(12px);
+		transition: transform 0.25s ease;
+	}
+	.contact-modal.open .contact-modal__panel {
+		transform: translateY(0);
+	}
+	.contact-modal__close {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: none;
+		background: var(--bg-alt);
+		color: var(--text);
+		font-size: 1.25rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+	.contact-modal__body h3 {
+		margin: 0 0 0.6rem;
+		font-size: var(--text-xl);
+	}
+	.contact-modal__intro {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		line-height: 1.5;
+	}
+	#contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.contact-field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--text);
+	}
+	.contact-field input,
+	.contact-field select,
+	.contact-field textarea {
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		font-weight: 400;
+		color: var(--text);
+		background: var(--bg-alt);
+		border: 1px solid var(--border-strong);
+		border-radius: 8px;
+		padding: 0.65rem 0.75rem;
+		resize: vertical;
+	}
+	.contact-field input:focus,
+	.contact-field select:focus,
+	.contact-field textarea:focus {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	.contact-conditional {
+		background: var(--bg-alt);
+		border-radius: 10px;
+		padding: 0.9rem 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.contact-conditional__label {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--accent);
+	}
+	.contact-radio-group {
+		border: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.contact-radio-group legend {
+		padding: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		color: var(--text);
+		margin-bottom: 0.15rem;
+	}
+	.contact-radio-group label {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		font-weight: 400;
+		color: var(--text-muted);
+	}
+	.contact-modal__submit {
+		margin-top: 0.5rem;
+		width: 100%;
+		text-align: center;
+		border: none;
+		cursor: pointer;
+	}
+	.contact-modal__success {
+		text-align: center;
+	}
+	.contact-modal__success .btn {
+		margin-top: 0.5rem;
+	}
+</style>
+
+<style is:global>
+	body.contact-modal-locked {
+		overflow: hidden;
+	}
+</style>

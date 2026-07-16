@@ -1,86 +1,362 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ContactModal from "../../components/ContactModal.astro";
+import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
+
+const programs = [
+	{
+		ageLabel: "3–18 mesi · 19–36 mesi",
+		title: "Acquaticità Neonatale e Avanzata",
+		percorso: "Percorso in acqua accompagnato da un genitore, in vasca calda a 32°C.",
+		obiettivi: ["Sviluppo psicomotorio precoce", "Ambientamento acquatico", "Gestione della respirazione e del galleggiamento"],
+		durata: "40 minuti",
+		image: "images/attivita/scuola-nuoto-hero.jpg",
+	},
+	{
+		ageLabel: "3–5 anni",
+		title: "Baby",
+		percorso: "Corsi mirati all'autonomia acquatica e alla scoperta ludica dei movimenti base, per introdurre in forma ludica i primi elementi dei quattro stili.",
+		obiettivi: ["Autonomia acquatica", "Scoperta ludica dei movimenti base", "Primi elementi dei quattro stili"],
+		durata: "40 minuti",
+		image: "images/activities/scuola-nuoto-young.jpg",
+	},
+	{
+		ageLabel: "5–8 anni",
+		title: "Open",
+		percorso: "Corsi strutturati in livelli (1 e 2) per consolidare le capacità natatorie e proseguire nell'apprendimento tecnico dei quattro stili.",
+		obiettivi: ["Livello 1 e Livello 2", "Consolidamento delle capacità natatorie", "Apprendimento tecnico dei quattro stili"],
+		durata: "40 minuti, in vasca grande",
+		image: "images/activities/nuoto.jpg",
+	},
+	{
+		ageLabel: "8–14 anni",
+		title: "Propaganda",
+		percorso: "Corso avanzato con obiettivi tecnici specifici, per chi vuole affinare la tecnica e avvicinarsi al mondo agonistico.",
+		obiettivi: ["Perfezionamento dei quattro stili", "Esercitazioni su partenze e tecniche di gara", "Introduzione alla preparazione pre-agonistica"],
+		durata: "60 minuti",
+		image: "images/activities/scuola-nuoto-adulti.jpg",
+	},
+];
+
+const sospensioni = [
+	{ nome: "Ponte dell'Immacolata", periodo: "da lunedì 7 a martedì 8 dicembre 2026" },
+	{ nome: "Vacanze di Natale", periodo: "da mercoledì 23 dicembre 2026 a mercoledì 6 gennaio 2027" },
+	{ nome: "Vacanze di Carnevale", periodo: "da sabato 6 a mercoledì 10 febbraio 2027" },
+	{ nome: "Vacanze di Pasqua", periodo: "da giovedì 25 a martedì 30 marzo 2027" },
+	{ nome: "Festa dei Lavoratori", periodo: "sabato 1° maggio 2027" },
+	{ nome: "Festa della Repubblica", periodo: "mercoledì 2 giugno 2027" },
+];
+
+const faq = [
+	{
+		q: "Primo giorno di corso",
+		a: "Si consiglia di arrivare con 20 minuti di anticipo rispetto all'orario di inizio della lezione.",
+	},
+	{
+		q: "Festività e sospensioni",
+		a: null,
+	},
+	{
+		q: "Recuperi",
+		a: "È possibile recuperare fino a 4 lezioni per i corsi stagionali e fino a 2 lezioni per i corsi quadrimestrali, contattando il numero WhatsApp 380 752 2285 per concordare giorno e ora.",
+	},
+];
 ---
 
 <Layout
 	title="Scuola Nuoto — Ronchiverdi Sport Club"
-	description="Scuola nuoto Ronchiverdi: corsi per adulti e bambini in 4 piscine coperte e scoperte, dal primo approccio all'acqua al perfezionamento."
+	description="Scuola Nuoto Ronchiverdi: corsi per bambini dai 3 mesi ai 14 anni suddivisi per fascia d'età, e lezioni individuali di nuoto per adulti."
 >
-	<header class="page-header">
-		<p class="eyebrow">Attività sportive</p>
-		<h1>Scuola Nuoto, per <em class="accent">tutte le età</em></h1>
-		<p class="lede">
-			Quattro piscine coperte e scoperte e istruttori qualificati per corsi di nuoto pensati per adulti e per i più piccoli.
-		</p>
-	</header>
+	<PageHero image="images/attivita/scuola-nuoto-hero.jpg" imageAlt="Piscina interna Ronchiverdi" eyebrow="Attività sportive">
+		<Fragment slot="title">Scuola Nuoto, per <em class="accent accent-dark">tutte le età</em></Fragment>
+		<Fragment slot="lede">Corsi in acqua pensati per ogni fase di crescita, dai primi mesi di vita fino all'adolescenza, e lezioni individuali per gli adulti.</Fragment>
+		<p class="dates-banner">Inizio corsi: <strong>21 settembre 2026</strong> — Fine corsi: <strong>5 giugno 2027</strong></p>
+	</PageHero>
 
-	<div class="page-hero-wrap">
-		<img class="page-hero" src={url("images/attivita/scuola-nuoto-hero.jpg")} alt="Piscina interna Ronchiverdi" />
-	</div>
-
-	<section class="intro-grid">
-		<div class="intro-col">
-			<span class="eyebrow">Adulti</span>
-			<h2>Scuola Nuoto Adulti</h2>
-			<p class="lede" style="margin-inline:0">Corsi di nuoto per adulti, dal primo approccio in acqua fino al perfezionamento della tecnica.</p>
+	<section class="programs">
+		<div class="programs__head">
+			<span class="eyebrow">Bambini e ragazzi</span>
+			<h2>Un percorso per ogni età</h2>
 		</div>
-		<div class="intro-col">
-			<span class="eyebrow">Bambini</span>
-			<h2>Scuola Nuoto Young</h2>
-			<p class="lede" style="margin-inline:0">Scuola nuoto per bambini e ragazzi di tutte le età, in un ambiente sicuro e curato.</p>
+
+		<div class="program-cards">
+			{programs.map((p) => (
+				<article class="program-card">
+					<div class="program-card__media">
+						<img src={url(p.image)} alt={p.title} loading="lazy" />
+					</div>
+					<div class="program-card__content">
+						<div class="program-card__head">
+							<span class="program-card__age">{p.ageLabel}</span>
+							<h3>{p.title}</h3>
+						</div>
+						<p class="program-card__percorso">{p.percorso}</p>
+						<ul class="program-card__obiettivi">
+							{p.obiettivi.map((o) => <li>{o}</li>)}
+						</ul>
+						<span class="program-card__durata">Durata: {p.durata}</span>
+						<div class="program-card__cta">
+							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Iscriviti</a>
+							<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="adults">
+		<span class="eyebrow">Adulti</span>
+		<h2>Lezioni individuali di nuoto</h2>
+		<p class="lede" style="margin-inline:auto">
+			Non esiste una scuola nuoto strutturata per adulti: chi desidera lezioni di nuoto acquista un <strong>carnet da 5 lezioni</strong> in reception e si organizza direttamente con l'istruttore di riferimento in base ai propri obiettivi. Ogni lezione dura <strong>40 o 60 minuti</strong>, a seconda del carnet scelto.
+		</p>
+		<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+	</section>
+
+	<section class="faq-section">
+		<h2>Domande frequenti</h2>
+		<div class="faq-list">
+			{faq.map((item, i) => (
+				<div class="faq-item">
+					<button type="button" class="faq-item__trigger" aria-expanded="false">
+						{item.q}
+						<svg width="13" height="8" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</button>
+					<div class="faq-item__panel">
+						{item.a && <p>{item.a}</p>}
+						{i === 1 && (
+							<ul class="faq-sospensioni">
+								{sospensioni.map((s) => <li><strong>{s.nome}:</strong> {s.periodo}</li>)}
+							</ul>
+						)}
+					</div>
+				</div>
+			))}
 		</div>
 	</section>
 
 	<section class="final-cta">
-		<h2>Vieni a scoprire il club</h2>
+		<h2>Pronto a iscrivere il tuo bambino?</h2>
 		<p class="lede" style="margin-inline:auto">
-			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
+			Se sai già a quale corso iscriverti, vai alla pagina modalità di iscrizione. Altrimenti, contattaci: ti aiutiamo a scegliere il percorso più adatto.
 		</p>
-		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+		<div class="final-cta__buttons">
+			<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+		</div>
 	</section>
 
+	<ContactModal />
+
+	<script>
+		document.querySelectorAll(".faq-item__trigger").forEach((trigger) => {
+			trigger.addEventListener("click", () => {
+				const item = trigger.closest(".faq-item");
+				item?.classList.toggle("open");
+				trigger.setAttribute("aria-expanded", String(item?.classList.contains("open")));
+			});
+		});
+	</script>
+
 	<style>
-		.page-header {
-			max-width: 44rem;
+		.dates-banner {
+			display: inline-block;
+			margin: 1.5rem auto 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-on-dark);
+			background: rgba(246, 239, 222, 0.12);
+			border: 1px solid rgba(246, 239, 222, 0.3);
+			border-radius: 999px;
+			padding: 0.5rem 1.2rem;
+		}
+
+		.programs {
+			max-width: 78rem;
 			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
+			padding: 4.5rem 1.5rem 2rem;
+		}
+		.programs__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto;
+		}
+		.program-cards {
+			margin-top: 2.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+		.program-card {
+			display: flex;
+			align-items: stretch;
+			text-align: left;
+			border: 1px solid var(--border);
+			border-radius: 20px;
+			overflow: hidden;
+		}
+		.program-card:nth-child(even) {
+			flex-direction: row-reverse;
+		}
+		.program-card__media {
+			position: relative;
+			flex: 0 0 40%;
+			min-height: 20rem;
+		}
+		.program-card__media img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.program-card__content {
+			flex: 1;
+			min-width: 0;
+			padding: 2.25rem 2.5rem;
+		}
+		.program-card__head {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 1rem;
+			flex-wrap: wrap;
+			border-bottom: 1px solid var(--border);
+			padding-bottom: 0.9rem;
+			margin-bottom: 1rem;
+		}
+		.program-card__head h3 {
+			margin: 0;
+		}
+		.program-card__age {
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			color: var(--accent);
+			white-space: nowrap;
+		}
+		.program-card__percorso {
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.6;
+			margin: 0 0 1rem;
+		}
+		.program-card__obiettivi {
+			margin: 0 0 1rem;
+			padding-left: 1.2rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text);
+			line-height: 1.7;
+		}
+		.program-card__durata {
+			display: inline-block;
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			font-weight: 600;
+			color: var(--text);
+			background: var(--bg-alt);
+			border-radius: 999px;
+			padding: 0.35rem 0.9rem;
+			margin-bottom: 1.25rem;
+		}
+		.program-card__cta {
+			display: flex;
+			gap: 0.75rem;
+			flex-wrap: wrap;
+		}
+		.program-card__cta .btn {
+			padding: 0.7rem 1.3rem;
+			font-size: var(--text-2xs);
+		}
+		@media (max-width: 860px) {
+			.program-card,
+			.program-card:nth-child(even) {
+				flex-direction: column;
+			}
+			.program-card__media {
+				flex: none;
+				min-height: 14rem;
+			}
+		}
+
+		.adults {
+			max-width: 68rem;
+			margin: 0 auto;
+			padding: 3rem 1.5rem 4rem;
+			text-align: center;
+			border-top: 1px solid var(--border);
+		}
+		.adults .lede {
+			max-width: 46rem;
+			margin-inline: auto;
+		}
+
+		.faq-section {
+			max-width: 68rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 4rem;
+		}
+		.faq-section h2 {
 			text-align: center;
 		}
-		.page-hero-wrap {
-			max-width: 64rem;
-			margin: 2rem auto 0;
-			padding: 0 1.5rem;
+		.faq-list {
+			margin-top: 2rem;
+			border-top: 1px solid var(--border);
 		}
-		.page-hero {
-			display: block;
+		.faq-item {
+			border-bottom: 1px solid var(--border);
+		}
+		.faq-item__trigger {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 			width: 100%;
-			aspect-ratio: 16 / 9;
-			object-fit: cover;
-			border-radius: 16px;
-			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+			padding: 1.1rem 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			text-align: left;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+			color: var(--text);
 		}
-		.intro-grid {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 3rem;
-			max-width: 64rem;
-			margin: 0 auto;
-			padding: 3rem 1.5rem 5rem;
+		.faq-item__trigger svg {
+			flex-shrink: 0;
+			color: var(--text-muted);
+			transition: transform 0.3s ease;
 		}
-		.intro-col h2 {
-			margin: 0.4rem 0 0.75rem;
+		.faq-item.open .faq-item__trigger svg {
+			transform: rotate(180deg);
 		}
-		@media (max-width: 760px) {
-			.intro-grid {
-				grid-template-columns: 1fr;
-				gap: 2.5rem;
-				text-align: center;
-			}
-			.intro-col .lede {
-				margin-inline: auto;
-			}
+		.faq-item__panel {
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.35s ease;
 		}
+		.faq-item.open .faq-item__panel {
+			max-height: 30rem;
+		}
+		.faq-item__panel p {
+			margin: 0 0 1rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.6;
+		}
+		.faq-sospensioni {
+			margin: 0 0 1.25rem;
+			padding-left: 1.2rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.8;
+		}
+
 		.final-cta {
 			padding: 6rem 1.5rem;
 			text-align: center;
@@ -88,6 +364,28 @@ import { url } from "../../lib/paths";
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.btn-outline {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+
+		@media (max-width: 640px) {
+			.program-card {
+				padding: 1.5rem;
+			}
+			.program-card__head {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 0.4rem;
+			}
 		}
 	</style>
 </Layout>

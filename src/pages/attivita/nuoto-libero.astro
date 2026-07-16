@@ -1,0 +1,366 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
+import { url } from "../../lib/paths";
+
+const corsieEsempio = [
+	{ fascia: "Mattina", orario: "8:00 – 12:00", corsie: "Quasi tutte le corsie disponibili" },
+	{ fascia: "Pranzo", orario: "12:00 – 14:00", corsie: "Corsie condivise con acqua fitness" },
+	{ fascia: "Pomeriggio", orario: "14:00 – 17:00", corsie: "Ampia disponibilità di corsie" },
+	{ fascia: "Sera", orario: "17:00 – chiusura", corsie: "Corsie condivise con corsi bambini e acqua fitness" },
+];
+---
+
+<Layout
+	title="Nuoto Libero — Ronchiverdi Sport Club"
+	description="Nuoto libero a Ronchiverdi: nuota quando vuoi, senza prenotazione, durante tutti gli orari di apertura del club, in piscina interna ed esterna."
+>
+	<PageHero image="images/activities/nuoto.jpg" imageAlt="Piscina interna Ronchiverdi" eyebrow="Attività sportive">
+		<Fragment slot="title">Nuoto Libero, <em class="accent accent-dark">quando vuoi tu</em></Fragment>
+		<Fragment slot="lede">Non c'è una fascia oraria riservata, non serve prenotare: la piscina è tua ogni volta che varchi la soglia del club.</Fragment>
+	</PageHero>
+
+	<section class="intro">
+		<p class="lede">
+			Che tu preferisca una nuotata all'alba prima di andare al lavoro o una sessione serale per staccare la spina, a Ronchiverdi trovi sempre spazio in acqua. Nessuna prenotazione, nessuna fascia oraria dedicata: il nuoto libero è incluso nel tuo abbonamento e ti aspetta durante tutti gli orari di apertura del club, ogni giorno della settimana.
+		</p>
+	</section>
+
+	<section class="stats-band">
+		<dl class="stats">
+			<div class="stat">
+				<dt>Ogni giorno</dt>
+				<dd>Nuota dall'apertura alla chiusura del club, senza fasce orarie dedicate</dd>
+			</div>
+			<div class="stat">
+				<dt>Zero</dt>
+				<dd>Prenotazioni necessarie: entri e nuoti quando vuoi</dd>
+			</div>
+			<div class="stat">
+				<dt>4–5</dt>
+				<dd>Persone al massimo per corsia, anche nelle ore di punta</dd>
+			</div>
+			<div class="stat">
+				<dt>12 mesi</dt>
+				<dd>Piscina interna d'inverno, esterna d'estate: nuoto tutto l'anno</dd>
+			</div>
+		</dl>
+	</section>
+
+	<section class="split">
+		<div class="split__media">
+			<img src={url("images/activities/scuola-nuoto-adulti.jpg")} alt="Piscina interna Ronchiverdi" loading="lazy" />
+		</div>
+		<div class="split__content">
+			<span class="eyebrow">Corsie garantite</span>
+			<h2>Anche quando la piscina è condivisa</h2>
+			<p class="lede" style="margin-inline:0">
+				La vasca grande ospita durante la giornata anche corsi bambini e sessioni di acqua fitness: normale, in un club che vive d'acqua. Ma se hai un abbonamento attivo, una corsia libera per il nuoto è sempre garantita, senza eccezioni — al massimo condivisa con qualche altro socio, mai negata.
+			</p>
+		</div>
+	</section>
+
+	<section class="lanes-cta">
+		<h2>Quante corsie sono disponibili ora?</h2>
+		<p class="lede" style="margin-inline:auto">
+			Consulta la disponibilità di massima per fascia oraria, prima ancora di arrivare in vasca.
+		</p>
+		<button type="button" class="btn" id="open-lanes-modal">Vedi le corsie disponibili</button>
+	</section>
+
+	<section class="summer">
+		<span class="eyebrow eyebrow-dark">In estate</span>
+		<h2>Nuoto libero anche all'aperto</h2>
+		<p class="lede lede-dark">
+			Da giugno ad agosto la vasca esterna si aggiunge a quella interna, con corsie dedicate al nuoto libero sotto il sole. L'accesso alla piscina esterna è riservato agli abbonamenti <strong>Gold</strong> e <strong>Silver</strong> (non incluso nell'abbonamento Swim).
+		</p>
+	</section>
+
+	<section class="final-cta">
+		<h2>Vieni a scoprire il club</h2>
+		<p class="lede" style="margin-inline:auto">
+			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
+		</p>
+		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	</section>
+
+	<div class="lanes-modal" id="lanes-modal" aria-hidden="true">
+		<div class="lanes-modal__backdrop" data-lanes-close></div>
+		<div class="lanes-modal__panel" role="dialog" aria-modal="true" aria-labelledby="lanes-modal-title">
+			<button type="button" class="lanes-modal__close" data-lanes-close aria-label="Chiudi">&times;</button>
+			<p class="eyebrow">Corsie disponibili</p>
+			<h3 id="lanes-modal-title">Disponibilità di massima per fascia oraria</h3>
+			<p class="lanes-modal__disclaimer">Dati indicativi di esempio — verranno aggiornati con la disponibilità reale delle corsie.</p>
+			<ul class="lanes-list">
+				{corsieEsempio.map((c) => (
+					<li>
+						<span class="lanes-list__fascia">{c.fascia} <span class="lanes-list__orario">{c.orario}</span></span>
+						<span class="lanes-list__corsie">{c.corsie}</span>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+
+	<script>
+		const lanesModal = document.getElementById("lanes-modal");
+		const openBtn = document.getElementById("open-lanes-modal");
+		let lastFocused: HTMLElement | null = null;
+
+		function openLanes() {
+			lastFocused = document.activeElement as HTMLElement;
+			lanesModal?.classList.add("open");
+			lanesModal?.setAttribute("aria-hidden", "false");
+			document.body.classList.add("lanes-modal-locked");
+		}
+		function closeLanes() {
+			lanesModal?.classList.remove("open");
+			lanesModal?.setAttribute("aria-hidden", "true");
+			document.body.classList.remove("lanes-modal-locked");
+			lastFocused?.focus();
+		}
+
+		openBtn?.addEventListener("click", openLanes);
+		document.querySelectorAll("[data-lanes-close]").forEach((el) => el.addEventListener("click", closeLanes));
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape" && lanesModal?.classList.contains("open")) closeLanes();
+		});
+	</script>
+
+	<style>
+		.intro {
+			max-width: 52rem;
+			margin: 0 auto;
+			padding: 4rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.intro .lede {
+			max-width: none;
+			font-size: var(--text-md);
+		}
+
+		.stats-band {
+			background: var(--bg-alt);
+			border-top: 1px solid var(--border);
+			border-bottom: 1px solid var(--border);
+			padding: 3.5rem 1.5rem;
+			margin-top: 3rem;
+		}
+		.stats {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 0;
+		}
+		.stat {
+			position: relative;
+			text-align: center;
+			padding: 0 1.25rem;
+		}
+		.stat + .stat::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.3em;
+			bottom: 0.3em;
+			width: 1px;
+			background: var(--border-strong);
+		}
+		.stat dt {
+			font-family: var(--font-serif);
+			font-size: var(--text-2xl);
+			font-weight: 500;
+			color: var(--accent);
+			line-height: 1;
+			margin: 0 0 0.6rem;
+		}
+		.stat dd {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.5;
+			margin: 0;
+		}
+		@media (max-width: 760px) {
+			.stats {
+				grid-template-columns: 1fr 1fr;
+				row-gap: 2.5rem;
+			}
+			.stat:nth-child(3)::before {
+				display: none;
+			}
+		}
+
+		.split {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: center;
+			gap: 3.5rem;
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 5.5rem 1.5rem;
+		}
+		.split__media img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.split__content {
+			text-align: left;
+		}
+		@media (max-width: 860px) {
+			.split {
+				grid-template-columns: 1fr;
+				gap: 2rem;
+				text-align: center;
+			}
+			.split__content {
+				text-align: center;
+			}
+			.split__content .lede {
+				margin-inline: auto;
+			}
+		}
+
+		.lanes-cta {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 5rem;
+			text-align: center;
+		}
+		.lanes-cta .btn {
+			border: none;
+			cursor: pointer;
+		}
+
+		.summer {
+			background: var(--bg-dark);
+			color: var(--text-on-dark);
+			text-align: center;
+			padding: 5rem 1.5rem;
+		}
+		.summer h2 {
+			margin: 0 0 1rem;
+			max-width: 36rem;
+			margin-inline: auto;
+		}
+		.summer .lede-dark {
+			margin-bottom: 0;
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+
+		.lanes-modal {
+			position: fixed;
+			inset: 0;
+			z-index: 210;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 1.5rem;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.25s ease;
+		}
+		.lanes-modal.open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+		.lanes-modal__backdrop {
+			position: absolute;
+			inset: 0;
+			background: rgba(28, 28, 24, 0.55);
+			backdrop-filter: blur(2px);
+		}
+		.lanes-modal__panel {
+			position: relative;
+			max-width: 28rem;
+			width: 100%;
+			background: var(--bg);
+			border-radius: 16px;
+			padding: 2.5rem 2.25rem;
+			box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.4);
+			transform: translateY(12px);
+			transition: transform 0.25s ease;
+		}
+		.lanes-modal.open .lanes-modal__panel {
+			transform: translateY(0);
+		}
+		.lanes-modal__close {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			border: none;
+			background: var(--bg-alt);
+			color: var(--text);
+			font-size: 1.25rem;
+			line-height: 1;
+			cursor: pointer;
+		}
+		.lanes-modal__panel h3 {
+			margin: 0 0 0.6rem;
+			font-size: var(--text-lg);
+		}
+		.lanes-modal__disclaimer {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-style: italic;
+			color: var(--text-muted);
+			margin: 0 0 1.5rem;
+		}
+		.lanes-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.9rem;
+		}
+		.lanes-list li {
+			display: flex;
+			flex-direction: column;
+			gap: 0.15rem;
+			border-bottom: 1px solid var(--border);
+			padding-bottom: 0.75rem;
+		}
+		.lanes-list li:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+		.lanes-list__fascia {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			font-weight: 600;
+			color: var(--text);
+		}
+		.lanes-list__orario {
+			font-weight: 400;
+			color: var(--text-muted);
+		}
+		.lanes-list__corsie {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+		}
+	</style>
+
+	<style is:global>
+		body.lanes-modal-locked {
+			overflow: hidden;
+		}
+	</style>
+</Layout>

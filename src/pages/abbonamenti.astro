@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import PlanMark from "../components/PlanMark.astro";
 import InfoTip from "../components/InfoTip.astro";
+import PageHero from "../components/PageHero.astro";
 import { url } from "../lib/paths";
 
 type PlanKey = "gold" | "silver" | "gym" | "swim";
@@ -38,13 +39,10 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 	title="Abbonamenti — Ronchiverdi Sport Club"
 	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
 >
-	<header class="page-header">
-		<p class="eyebrow">Abbonamenti</p>
-		<h1>Scegli il tuo <em class="accent">abbonamento</em></h1>
-		<p class="lede">
-			Quattro formule pensate per ogni esigenza: dal club completo <strong>Gold</strong> agli abbonamenti <strong>Gym e Swim</strong> dedicati a un'unica area.
-		</p>
-	</header>
+	<PageHero image="images/club/lacertosus.jpg" imageAlt="Area Lacertosus Ronchiverdi" eyebrow="Abbonamenti">
+		<Fragment slot="title">Scegli il tuo <em class="accent accent-dark">abbonamento</em></Fragment>
+		<Fragment slot="lede">Quattro formule pensate per ogni esigenza: dal club completo <strong>Gold</strong> agli abbonamenti <strong>Gym e Swim</strong> dedicati a un'unica area.</Fragment>
+	</PageHero>
 
 	<section class="compare">
 		<div class="compare-scroll">
@@ -108,13 +106,6 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 	</section>
 
 	<style>
-		.page-header {
-			max-width: 44rem;
-			margin: 0 auto;
-			padding: 5rem 1.5rem 1rem;
-			text-align: center;
-		}
-
 		.compare {
 			max-width: 64rem;
 			margin: 0 auto;
