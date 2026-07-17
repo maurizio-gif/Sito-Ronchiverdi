@@ -2,11 +2,12 @@
 interface Props {
 	text: string;
 	align?: "start" | "end";
+	direction?: "up" | "down";
 }
-const { text, align = "start" } = Astro.props;
+const { text, align = "start", direction = "up" } = Astro.props;
 ---
 
-<span class={`info-tip info-tip--${align}`}>
+<span class={`info-tip info-tip--${align} info-tip--${direction}`}>
 	<button type="button" class="info-tip__icon" aria-label={text}>i</button>
 	<span class="info-tip__bubble" role="tooltip">{text}</span>
 </span>
@@ -82,6 +83,17 @@ const { text, align = "start" } = Astro.props;
 	}
 	.info-tip--end .info-tip__bubble::after {
 		right: 14px;
+	}
+	.info-tip--down .info-tip__bubble {
+		bottom: auto;
+		top: calc(100% + 9px);
+		transform: translateY(-4px);
+	}
+	.info-tip--down .info-tip__bubble::after {
+		top: auto;
+		bottom: 100%;
+		border-top-color: transparent;
+		border-bottom-color: var(--bg-dark);
 	}
 	.info-tip:hover .info-tip__bubble,
 	.info-tip__icon:focus-visible + .info-tip__bubble {
