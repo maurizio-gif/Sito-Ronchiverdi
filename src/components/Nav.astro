@@ -142,18 +142,27 @@ const links = [
 
 	mobileMenu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
 
-	document.querySelectorAll(".nav-item.has-dropdown > .nav-link-trigger").forEach((trigger) => {
+	function closeOtherDropdowns(item) {
+		document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {
+			if (other !== item) {
+				other.classList.remove("open");
+				other.querySelector(".nav-link-trigger")?.setAttribute("aria-expanded", "false");
+			}
+		});
+	}
+
+	document.querySelectorAll(".nav-item.has-dropdown").forEach((item) => {
+		const trigger = item.querySelector(".nav-link-trigger");
 		trigger.addEventListener("click", (e) => {
 			e.stopPropagation();
-			const item = trigger.closest(".nav-item");
 			const isOpen = item.classList.toggle("open");
 			trigger.setAttribute("aria-expanded", String(isOpen));
-			document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {
-				if (other !== item) {
-					other.classList.remove("open");
-					other.querySelector(".nav-link-trigger")?.setAttribute("aria-expanded", "false");
-				}
-			});
+			closeOtherDropdowns(item);
+		});
+		item.addEventListener("mouseenter", () => closeOtherDropdowns(item));
+		item.addEventListener("mouseleave", () => {
+			item.classList.remove("open");
+			trigger.setAttribute("aria-expanded", "false");
 		});
 	});
 

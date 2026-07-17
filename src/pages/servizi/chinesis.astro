@@ -1,7 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
+
+const faq = [
+	{
+		q: "Serve una valutazione prima di iniziare un trattamento?",
+		a: "Sì, si parte sempre da una valutazione posturale approfondita, utile a costruire un percorso personalizzato in base alle esigenze di ciascuno.",
+	},
+	{
+		q: "I trattamenti sono adatti anche a chi ha infortuni sportivi?",
+		a: "Sì, massaggi terapeutici e sportivi e la rieducazione funzionale sono pensati anche per il recupero muscolare e la prevenzione degli infortuni.",
+	},
+	{
+		q: "Cos'è il Pilates Reformer?",
+		a: "È un allenamento su una macchina dedicata, il Reformer, che lavora su rinforzo muscolare e controllo posturale.",
+	},
+];
 
 const services = [
 	{ title: "Valutazioni posturali", desc: "Analisi approfondita della postura e della funzionalità corporea per percorsi personalizzati." },
@@ -30,6 +46,8 @@ const services = [
 			</div>
 		))}
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>

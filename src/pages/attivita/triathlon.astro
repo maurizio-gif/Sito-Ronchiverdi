@@ -1,7 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
+
+const faq = [
+	{
+		q: "Il programma triathlon è incluso nell'abbonamento?",
+		a: "Sì, il triathlon è incluso negli abbonamenti Gold e Silver, con supporto tecnico qualificato per nuoto, ciclismo e corsa.",
+	},
+	{
+		q: "È adatto anche a chi non ha mai fatto triathlon?",
+		a: "Sì, il percorso è pensato sia per chi vuole allenarsi con continuità sia per chi si prepara a una gara, con progressioni su misura.",
+	},
+	{
+		q: "C'è un percorso dedicato ai ragazzi?",
+		a: "Sì, Triathlon Young propone nuoto, ciclismo e corsa per ragazzi, con supporto tecnico qualificato pensato per le prime esperienze multisport.",
+	},
+];
 ---
 
 <Layout
@@ -25,6 +41,8 @@ import { url } from "../../lib/paths";
 			<p class="lede" style="margin-inline:0">Nuoto, ciclismo e corsa per ragazzi, con supporto tecnico qualificato pensato per le prime esperienze multisport.</p>
 		</div>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>

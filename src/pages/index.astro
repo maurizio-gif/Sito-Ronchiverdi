@@ -435,18 +435,6 @@ const clubGallery = [
 		});
 	</script>
 
-	<section class="young-school">
-		<img class="young-school-photo" src={url("images/young-school-teaser.jpg")} alt="Young School Ronchiverdi" />
-		<div class="young-school-content">
-			<p class="eyebrow">Famiglie</p>
-			<h2>Young School</h2>
-			<p class="lede" style="margin-inline:0">
-				Da Ronchiverdi lo sport si impara <strong>in famiglia</strong>. Tennis, nuoto, padel e triathlon per bambini e ragazzi, il <strong>Summer Sport Camp</strong> per l'estate, e un ambiente pensato perché genitori e figli possano vivere il club insieme, ogni giorno.
-			</p>
-			<a class="btn" href={url("/young-school")}>Scopri Young School</a>
-		</div>
-	</section>
-
 	{posts.length > 0 && (
 		<section class="blog-preview">
 			<h2>Dal blog</h2>
@@ -860,6 +848,7 @@ const clubGallery = [
 			margin-inline: auto;
 		}
 		.section-dark .lede-dark {
+			max-width: 76rem;
 			margin: 0 auto 2rem;
 		}
 		.btn-on-dark {

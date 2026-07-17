@@ -2,7 +2,44 @@
 import Layout from "../../layouts/Layout.astro";
 import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
+import WeeklySchedule from "../../components/WeeklySchedule.astro";
+import Faq from "../../components/Faq.astro";
+import IconFacts from "../../components/IconFacts.astro";
+import { acquaFitnessLessons, acquaFitnessSchedule } from "../../data/schedules";
 import { url } from "../../lib/paths";
+
+const faq = [
+	{
+		q: "In quale piscina si svolgono i corsi?",
+		a: "Sempre in vasca grande: in piscina interna da autunno a fine maggio, in piscina esterna da giugno ad agosto.",
+	},
+	{
+		q: "Posso partecipare ai corsi estivi in piscina esterna?",
+		a: "L'accesso alla piscina esterna, e quindi ai corsi estivi, è riservato agli abbonamenti Gold e Silver (non incluso nell'abbonamento Swim).",
+	},
+	{
+		q: "I corsi sono adatti anche ai principianti?",
+		a: "Sì, i corsi sono adatti a tutti i livelli: gli istruttori propongono sempre varianti su misura per ogni partecipante.",
+	},
+];
+
+const facts = [
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" /></svg>`,
+		label: "Dove",
+		html: "Sempre in <strong>vasca grande</strong>: in piscina interna da autunno a fine maggio, in piscina esterna da giugno ad agosto.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.5" /><path d="M12 2.5v2.3M12 19.2v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		label: "Estate",
+		html: "L'accesso alla piscina esterna, e quindi ai corsi estivi, è riservato agli abbonamenti <strong>Gold</strong> e <strong>Silver</strong> (non incluso nell'abbonamento Swim).",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 18h3v-4H3v4Zm7.5 0h3V9h-3v9ZM18 18h3V4h-3v14Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Livello",
+		html: "Corsi adatti a tutti i livelli: gli istruttori propongono sempre varianti su misura per ogni partecipante.",
+	},
+];
 
 const courses = [
 	{
@@ -53,20 +90,7 @@ const courses = [
 		<Fragment slot="lede">Un palinsesto di corsi in acqua per tutto l'anno, tra piscina interna ed esterna, per allenare tonicità, resistenza e benessere.</Fragment>
 	</PageHero>
 
-	<section class="facts-grid">
-		<div class="fact-card">
-			<span class="fact-card__label">Dove</span>
-			<p>Sempre in <strong>vasca grande</strong>: in piscina interna da autunno a fine maggio, in piscina esterna da giugno ad agosto.</p>
-		</div>
-		<div class="fact-card">
-			<span class="fact-card__label">Estate</span>
-			<p>L'accesso alla piscina esterna, e quindi ai corsi estivi, è riservato agli abbonamenti <strong>Gold</strong> e <strong>Silver</strong> (non incluso nell'abbonamento Swim).</p>
-		</div>
-		<div class="fact-card">
-			<span class="fact-card__label">Livello</span>
-			<p>Corsi adatti a tutti i livelli: gli istruttori propongono sempre varianti su misura per ogni partecipante.</p>
-		</div>
-	</section>
+	<IconFacts eyebrow="Come funziona" title="Tutto quello che ti serve sapere" items={facts} />
 
 	<section class="courses-section">
 		<div class="courses-section__head">
@@ -92,10 +116,23 @@ const courses = [
 				</article>
 			))}
 		</div>
-		<div class="courses-section__cta">
-			<button type="button" class="btn" data-open-contact data-interest="Acqua Fitness">Contattaci per il programma della settimana</button>
+	</section>
+
+	<section class="planning-section">
+		<div class="planning-section__head">
+			<span class="eyebrow">Planning settimanale</span>
+			<h2>Il palinsesto Acqua Fitness</h2>
+			<p class="lede" style="margin-inline:0">
+				Orari indicativi dei corsi in acqua. <em>Bozza in fase di aggiornamento.</em>
+			</p>
+		</div>
+		<WeeklySchedule id="acqua-fitness" lessons={acquaFitnessLessons} schedule={acquaFitnessSchedule} />
+		<div class="planning-section__cta">
+			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>
@@ -108,43 +145,6 @@ const courses = [
 	<ContactModal />
 
 	<style>
-
-		.facts-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 1.5rem;
-			max-width: 78rem;
-			margin: 0 auto;
-			padding: 4rem 1.5rem;
-		}
-		.fact-card {
-			text-align: left;
-			padding: 1.5rem;
-			border: 1px solid var(--border);
-			border-radius: var(--radius);
-		}
-		.fact-card__label {
-			display: block;
-			font-family: var(--font-sans);
-			font-size: var(--text-xs);
-			font-weight: 600;
-			letter-spacing: 0.06em;
-			text-transform: uppercase;
-			color: var(--accent);
-			margin-bottom: 0.6rem;
-		}
-		.fact-card p {
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-			color: var(--text-muted);
-			line-height: 1.6;
-			margin: 0;
-		}
-		@media (max-width: 760px) {
-			.facts-grid {
-				grid-template-columns: 1fr;
-			}
-		}
 
 		.courses-section {
 			max-width: 78rem;
@@ -219,14 +219,6 @@ const courses = [
 			color: var(--text-muted);
 			line-height: 1.6;
 		}
-		.courses-section__cta {
-			text-align: center;
-			margin-top: 2.5rem;
-		}
-		.courses-section__cta .btn {
-			border: none;
-			cursor: pointer;
-		}
 		@media (max-width: 960px) {
 			.course-grid {
 				grid-template-columns: repeat(2, 1fr);
@@ -236,6 +228,28 @@ const courses = [
 			.course-grid {
 				grid-template-columns: 1fr;
 			}
+		}
+
+		.planning-section {
+			max-width: 88rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 5rem;
+		}
+		.planning-section__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto 2.5rem;
+		}
+		.planning-section__head .lede {
+			margin-top: 0.5rem;
+		}
+		.planning-section__cta {
+			text-align: center;
+			margin-top: 2.5rem;
+		}
+		.planning-section__head em {
+			font-style: italic;
+			color: var(--accent);
 		}
 
 		.final-cta {
