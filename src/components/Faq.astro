@@ -1,0 +1,178 @@
+---
+interface FaqItem {
+	q: string;
+	a?: string;
+	html?: string;
+}
+
+interface Props {
+	items: FaqItem[];
+	eyebrow?: string;
+	title?: string;
+}
+
+const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.props;
+---
+
+<section class="faq-section">
+	<div class="faq-section__head">
+		<span class="eyebrow">{eyebrow}</span>
+		<h2>{title}</h2>
+	</div>
+	<div class="faq-list">
+		{items.map((item, i) => (
+			<div class="faq-item">
+				<span class="faq-item__num">{String(i + 1).padStart(2, "0")}</span>
+				<div class="faq-item__body">
+					<button type="button" class="faq-item__trigger" aria-expanded="false">
+						{item.q}
+						<span class="faq-item__icon" aria-hidden="true">
+							<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+						</span>
+					</button>
+					<div class="faq-item__panel">
+						<div class="faq-item__panel-inner">
+							{item.a && <p>{item.a}</p>}
+							{item.html && <Fragment set:html={item.html} />}
+						</div>
+					</div>
+				</div>
+			</div>
+		))}
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll(".faq-item__trigger").forEach((trigger) => {
+		trigger.addEventListener("click", () => {
+			const item = trigger.closest(".faq-item");
+			item?.classList.toggle("open");
+			trigger.setAttribute("aria-expanded", String(item?.classList.contains("open")));
+		});
+	});
+</script>
+
+<style>
+	.faq-section {
+		background: var(--bg-dark);
+		padding: 6rem 1.5rem;
+	}
+	.faq-section__head {
+		max-width: 68rem;
+		margin: 0 auto 3rem;
+		text-align: center;
+	}
+	.faq-section__head .eyebrow {
+		color: var(--accent-on-dark);
+	}
+	.faq-section h2 {
+		color: var(--text-on-dark);
+		margin: 0.4rem 0 0;
+	}
+	.faq-list {
+		max-width: 52rem;
+		margin: 0 auto;
+		border-top: 1px solid var(--border-dark);
+	}
+	.faq-item {
+		display: flex;
+		gap: 1.5rem;
+		border-bottom: 1px solid var(--border-dark);
+		padding: 0 0.5rem;
+		transition: background 0.25s ease;
+	}
+	.faq-item:hover {
+		background: rgba(246, 239, 222, 0.03);
+	}
+	.faq-item__num {
+		flex-shrink: 0;
+		padding-top: 1.5rem;
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: var(--text-xl);
+		color: var(--accent-on-dark);
+		opacity: 0.7;
+		line-height: 1;
+		transition: opacity 0.25s ease;
+	}
+	.faq-item.open .faq-item__num {
+		opacity: 1;
+	}
+	.faq-item__body {
+		flex: 1;
+		min-width: 0;
+	}
+	.faq-item__trigger {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		width: 100%;
+		padding: 1.5rem 0;
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		font-family: var(--font-sans);
+		font-size: var(--text-lg);
+		font-weight: 500;
+		color: var(--text-on-dark);
+		transition: color 0.25s ease;
+	}
+	.faq-item:hover .faq-item__trigger {
+		color: var(--accent-on-dark);
+	}
+	.faq-item__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 50%;
+		border: 1px solid var(--border-dark);
+		color: var(--accent-on-dark);
+		transition: transform 0.35s ease, background 0.25s ease, border-color 0.25s ease;
+	}
+	.faq-item:hover .faq-item__icon {
+		border-color: var(--accent-on-dark);
+	}
+	.faq-item.open .faq-item__icon {
+		transform: rotate(135deg);
+		background: var(--accent-on-dark);
+		color: var(--bg-dark);
+	}
+	.faq-item__panel {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.4s ease;
+	}
+	.faq-item.open .faq-item__panel {
+		max-height: 30rem;
+	}
+	.faq-item__panel-inner {
+		padding-bottom: 1.75rem;
+	}
+	.faq-item__panel p {
+		margin: 0 0 1rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-on-dark);
+		opacity: 0.72;
+		line-height: 1.7;
+		max-width: 40rem;
+	}
+	.faq-item__panel :global(.faq-sospensioni) {
+		margin: 0 0 1.25rem;
+		padding-left: 1.2rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-on-dark);
+		opacity: 0.72;
+		line-height: 1.9;
+	}
+	.faq-item__panel :global(.faq-sospensioni strong) {
+		color: var(--text-on-dark);
+		opacity: 1;
+	}
+</style>

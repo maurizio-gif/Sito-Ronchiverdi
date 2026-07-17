@@ -3,7 +3,23 @@ import Layout from "../layouts/Layout.astro";
 import PlanMark from "../components/PlanMark.astro";
 import InfoTip from "../components/InfoTip.astro";
 import PageHero from "../components/PageHero.astro";
+import Faq from "../components/Faq.astro";
 import { url } from "../lib/paths";
+
+const faq = [
+	{
+		q: "Il prezzo mostrato è mensile?",
+		a: "Sì, il prezzo indicato è relativo alla rata mensile di un abbonamento annuale. Per maggiori info sulle modalità di pagamento, prenota un tour o contatta la reception.",
+	},
+	{
+		q: "Cosa include l'abbonamento Swim?",
+		a: "L'abbonamento Swim ha una durata di 11 mesi (agosto escluso) e include l'accesso a nuoto libero e acqua fitness, ma non alla piscina estiva né alle altre aree del club.",
+	},
+	{
+		q: "Posso passare da un abbonamento all'altro?",
+		a: "Sì, è possibile aggiornare il proprio abbonamento in corso d'anno. Vieni in reception o contattaci per valutare insieme la formula più adatta.",
+	},
+];
 
 type PlanKey = "gold" | "silver" | "gym" | "swim";
 type Access = "full" | "rate" | "none";
@@ -21,6 +37,7 @@ const features: Feature[] = [
 	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
 	{ label: "Spa", note: "Chinesis Postural Lab, Relax Zone", access: { gold: "full", silver: "full", gym: "full", swim: "full" } },
+	{ label: "Triathlon", note: "Nuoto, ciclismo e corsa con supporto tecnico qualificato", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
 	{ label: "Padel", note: "3 campi, coperti e scoperti", access: { gold: "rate", silver: "rate", gym: "none", swim: "none" } },
 	{ label: "Tennis", note: "9 campi in terra rossa", access: { gold: "rate", silver: "none", gym: "none", swim: "none" } },
 ];
@@ -95,6 +112,8 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 			<span class="legend-item"><PlanMark status="none" /> non incluso</span>
 		</p>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>

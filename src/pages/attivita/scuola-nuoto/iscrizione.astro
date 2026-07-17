@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import ContactModal from "../../../components/ContactModal.astro";
 import PageHero from "../../../components/PageHero.astro";
+import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
 
 const pagamento = [
@@ -14,6 +15,21 @@ const procedura = [
 	"Crea un account a nome del bambino (se il bambino ha già ricevuto in passato le credenziali e sono state smarrite, contatta la segreteria allo 011 6612146)",
 	"Iscrivi il bambino al corso",
 	"Carica il certificato medico e il regolamento firmato",
+];
+
+const faq = [
+	{
+		q: "Ho perso le credenziali del portale, cosa faccio?",
+		a: "Contatta la segreteria allo 011 6612146: se il bambino ha già ricevuto in passato le credenziali, te le recuperiamo noi.",
+	},
+	{
+		q: "Cosa succede se non completo il pagamento?",
+		a: "In assenza di regolare pagamento non sarà possibile partecipare alle lezioni.",
+	},
+	{
+		q: "Il braccialetto badge è obbligatorio?",
+		a: "Sì, va indossato sempre, sin dalla prima lezione. Se lo possiedi già da corsi precedenti va vidimato in reception; altrimenti si acquista al costo di 10,00 €.",
+	},
 ];
 ---
 
@@ -83,6 +99,8 @@ const procedura = [
 		<p class="note">In caso di elevato numero di richieste, i tempi di risposta potrebbero subire dei ritardi.</p>
 		<p class="closing-note">Lo staff della Young School Nuoto sarà lieto di accompagnare i vostri figli in questo entusiasmante percorso.</p>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Hai ancora dubbi?</h2>

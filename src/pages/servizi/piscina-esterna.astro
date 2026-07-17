@@ -1,7 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
+
+const faq = [
+	{
+		q: "Chi può accedere alla piscina esterna?",
+		a: "L'accesso è riservato agli abbonati Gold e Silver (non incluso nell'abbonamento Swim).",
+	},
+	{
+		q: "In che periodo dell'anno è aperta?",
+		a: "La piscina esterna è aperta nella stagione estiva, da giugno ad agosto.",
+	},
+	{
+		q: "Cosa posso fare oltre a nuotare?",
+		a: "Oltre al nuoto libero e ai corsi in acqua, trovi lettini, ombrelloni e un ampio solarium per rilassarti all'aria aperta.",
+	},
+];
 ---
 
 <Layout
@@ -18,6 +34,8 @@ import { url } from "../../lib/paths";
 			Accessibile agli abbonati Gold e Silver, la piscina esterna è il punto di ritrovo del club durante l'estate: lettini, ombrelloni e un ampio solarium accompagnano le vasche dedicate al nuoto libero e ai corsi in acqua.
 		</p>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>

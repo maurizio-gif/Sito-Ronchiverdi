@@ -1,7 +1,7 @@
 :root {
   /* Sfondi */
   --bg: #f6efde; /* bianco caldo/crema dorata, sfondo principale (no bianco puro) */
-  --bg-alt: #efe4c9; /* sabbia dorata, card e sezioni alternate */
+  --bg-alt: #e5e0ca; /* sabbia dorata, card e sezioni alternate */
   --bg-dark: #1c1c18; /* nero caldo, solo sezioni editoriali (poche) */
 
   /* Testo */

@@ -2,7 +2,27 @@
 import Layout from "../../layouts/Layout.astro";
 import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
+import Faq from "../../components/Faq.astro";
+import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+
+const facts = [
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 18h3v-4H3v4Zm7.5 0h3V9h-3v9ZM18 18h3V4h-3v14Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Piscine",
+		html: "<strong>Quattro piscine</strong> coperte e scoperte, pensate per ogni fascia d'età.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" /></svg>`,
+		label: "Età",
+		html: "Un percorso continuo dai <strong>3 mesi ai 14 anni</strong>, dall'acquaticità al perfezionamento tecnico pre-agonistico.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		label: "Esperienza",
+		html: "<strong>Oltre trent'anni</strong> al fianco di bambini e ragazzi, con istruttori qualificati.",
+	},
+];
 
 const programs = [
 	{
@@ -55,7 +75,7 @@ const faq = [
 	},
 	{
 		q: "Festività e sospensioni",
-		a: null,
+		html: `<ul class="faq-sospensioni">${sospensioni.map((s) => `<li><strong>${s.nome}:</strong> ${s.periodo}</li>`).join("")}</ul>`,
 	},
 	{
 		q: "Recuperi",
@@ -73,6 +93,13 @@ const faq = [
 		<Fragment slot="lede">Corsi in acqua pensati per ogni fase di crescita, dai primi mesi di vita fino all'adolescenza, e lezioni individuali per gli adulti.</Fragment>
 		<p class="dates-banner">Inizio corsi: <strong>21 settembre 2026</strong> — Fine corsi: <strong>5 giugno 2027</strong></p>
 	</PageHero>
+
+	<IconFacts
+		eyebrow="Chi siamo"
+		title="L'acqua come primo passo"
+		lede="Da oltre trent'anni accompagnamo bambini e ragazzi in acqua, con un metodo che rispetta i tempi di ciascuno: dall'acquaticità dei primi mesi di vita fino al perfezionamento tecnico pre-agonistico."
+		items={facts}
+	/>
 
 	<section class="programs">
 		<div class="programs__head">
@@ -106,7 +133,7 @@ const faq = [
 							{p.durata}
 						</span>
 						<div class="program-card__cta">
-							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Iscriviti</a>
+							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
 							<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
 						</div>
 					</div>
@@ -124,27 +151,7 @@ const faq = [
 		<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
 	</section>
 
-	<section class="faq-section">
-		<h2>Domande frequenti</h2>
-		<div class="faq-list">
-			{faq.map((item, i) => (
-				<div class="faq-item">
-					<button type="button" class="faq-item__trigger" aria-expanded="false">
-						{item.q}
-						<svg width="13" height="8" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-					</button>
-					<div class="faq-item__panel">
-						{item.a && <p>{item.a}</p>}
-						{i === 1 && (
-							<ul class="faq-sospensioni">
-								{sospensioni.map((s) => <li><strong>{s.nome}:</strong> {s.periodo}</li>)}
-							</ul>
-						)}
-					</div>
-				</div>
-			))}
-		</div>
-	</section>
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Pronto a iscrivere il tuo bambino?</h2>
@@ -158,16 +165,6 @@ const faq = [
 	</section>
 
 	<ContactModal />
-
-	<script>
-		document.querySelectorAll(".faq-item__trigger").forEach((trigger) => {
-			trigger.addEventListener("click", () => {
-				const item = trigger.closest(".faq-item");
-				item?.classList.toggle("open");
-				trigger.setAttribute("aria-expanded", String(item?.classList.contains("open")));
-			});
-		});
-	</script>
 
 	<style>
 		.dates-banner {
@@ -331,68 +328,6 @@ const faq = [
 		.adults .lede {
 			max-width: 46rem;
 			margin-inline: auto;
-		}
-
-		.faq-section {
-			max-width: 68rem;
-			margin: 0 auto;
-			padding: 1rem 1.5rem 4rem;
-		}
-		.faq-section h2 {
-			text-align: center;
-		}
-		.faq-list {
-			margin-top: 2rem;
-			border-top: 1px solid var(--border);
-		}
-		.faq-item {
-			border-bottom: 1px solid var(--border);
-		}
-		.faq-item__trigger {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			width: 100%;
-			padding: 1.1rem 0;
-			background: none;
-			border: none;
-			cursor: pointer;
-			text-align: left;
-			font-family: var(--font-sans);
-			font-size: var(--text-md);
-			font-weight: 600;
-			color: var(--text);
-		}
-		.faq-item__trigger svg {
-			flex-shrink: 0;
-			color: var(--text-muted);
-			transition: transform 0.3s ease;
-		}
-		.faq-item.open .faq-item__trigger svg {
-			transform: rotate(180deg);
-		}
-		.faq-item__panel {
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.35s ease;
-		}
-		.faq-item.open .faq-item__panel {
-			max-height: 30rem;
-		}
-		.faq-item__panel p {
-			margin: 0 0 1rem;
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-			color: var(--text-muted);
-			line-height: 1.6;
-		}
-		.faq-sospensioni {
-			margin: 0 0 1.25rem;
-			padding-left: 1.2rem;
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-			color: var(--text-muted);
-			line-height: 1.8;
 		}
 
 		.final-cta {

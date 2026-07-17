@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import WeeklySchedule from "../../components/WeeklySchedule.astro";
+import Faq from "../../components/Faq.astro";
+import { nuotoLiberoLessons, nuotoLiberoSchedule } from "../../data/schedules";
 import { url } from "../../lib/paths";
 
 const corsieEsempio = [
@@ -8,6 +11,21 @@ const corsieEsempio = [
 	{ fascia: "Pranzo", orario: "12:00 – 14:00", corsie: "Corsie condivise con acqua fitness" },
 	{ fascia: "Pomeriggio", orario: "14:00 – 17:00", corsie: "Ampia disponibilità di corsie" },
 	{ fascia: "Sera", orario: "17:00 – chiusura", corsie: "Corsie condivise con corsi bambini e acqua fitness" },
+];
+
+const faq = [
+	{
+		q: "Serve prenotare per il nuoto libero?",
+		a: "No, nessuna prenotazione: il nuoto libero è incluso nel tuo abbonamento e ti aspetta durante tutti gli orari di apertura del club, ogni giorno della settimana.",
+	},
+	{
+		q: "È garantita sempre una corsia?",
+		a: "Sì. Se hai un abbonamento attivo, una corsia libera per il nuoto è sempre garantita, senza eccezioni — al massimo condivisa con qualche altro socio, mai negata.",
+	},
+	{
+		q: "Il nuoto libero è disponibile anche d'estate?",
+		a: "Sì, da giugno ad agosto la vasca esterna si aggiunge a quella interna. L'accesso alla piscina esterna è riservato agli abbonamenti Gold e Silver (non incluso nell'abbonamento Swim).",
+	},
 ];
 ---
 
@@ -60,12 +78,48 @@ const corsieEsempio = [
 		</div>
 	</section>
 
-	<section class="lanes-cta">
-		<h2>Quante corsie sono disponibili ora?</h2>
-		<p class="lede" style="margin-inline:auto">
-			Consulta la disponibilità di massima per fascia oraria, prima ancora di arrivare in vasca.
-		</p>
-		<button type="button" class="btn" id="open-lanes-modal">Vedi le corsie disponibili</button>
+	<section class="lanes-section">
+		<div class="lanes-section__head">
+			<span class="eyebrow">Corsie disponibili</span>
+			<h2>Quante corsie sono disponibili ora?</h2>
+			<p class="lede" style="margin-inline:0">
+				Disponibilità di massima per fascia oraria, prima ancora di arrivare in vasca. <em>Dati indicativi di esempio.</em>
+			</p>
+		</div>
+		<div class="lanes-table-wrap">
+			<table class="lanes-table">
+				<thead>
+					<tr>
+						<th>Fascia</th>
+						<th>Orario</th>
+						<th>Corsie</th>
+					</tr>
+				</thead>
+				<tbody>
+					{corsieEsempio.map((c) => (
+						<tr>
+							<td class="lanes-table__fascia">{c.fascia}</td>
+							<td class="lanes-table__orario">{c.orario}</td>
+							<td class="lanes-table__corsie">{c.corsie}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<section class="planning-section">
+		<div class="planning-section__head">
+			<span class="eyebrow">Planning settimanale</span>
+			<h2>Le fasce orarie del nuoto libero</h2>
+			<p class="lede" style="margin-inline:0">
+				Orari indicativi di apertura delle corsie. <em>Bozza in fase di aggiornamento.</em>
+			</p>
+		</div>
+		<WeeklySchedule id="nuoto-libero" lessons={nuotoLiberoLessons} schedule={nuotoLiberoSchedule} />
+		<div class="planning-section__cta">
+			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
+		</div>
 	</section>
 
 	<section class="summer">
@@ -76,6 +130,8 @@ const corsieEsempio = [
 		</p>
 	</section>
 
+	<Faq items={faq} />
+
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>
 		<p class="lede" style="margin-inline:auto">
@@ -83,49 +139,6 @@ const corsieEsempio = [
 		</p>
 		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
 	</section>
-
-	<div class="lanes-modal" id="lanes-modal" aria-hidden="true">
-		<div class="lanes-modal__backdrop" data-lanes-close></div>
-		<div class="lanes-modal__panel" role="dialog" aria-modal="true" aria-labelledby="lanes-modal-title">
-			<button type="button" class="lanes-modal__close" data-lanes-close aria-label="Chiudi">&times;</button>
-			<p class="eyebrow">Corsie disponibili</p>
-			<h3 id="lanes-modal-title">Disponibilità di massima per fascia oraria</h3>
-			<p class="lanes-modal__disclaimer">Dati indicativi di esempio — verranno aggiornati con la disponibilità reale delle corsie.</p>
-			<ul class="lanes-list">
-				{corsieEsempio.map((c) => (
-					<li>
-						<span class="lanes-list__fascia">{c.fascia} <span class="lanes-list__orario">{c.orario}</span></span>
-						<span class="lanes-list__corsie">{c.corsie}</span>
-					</li>
-				))}
-			</ul>
-		</div>
-	</div>
-
-	<script>
-		const lanesModal = document.getElementById("lanes-modal");
-		const openBtn = document.getElementById("open-lanes-modal");
-		let lastFocused: HTMLElement | null = null;
-
-		function openLanes() {
-			lastFocused = document.activeElement as HTMLElement;
-			lanesModal?.classList.add("open");
-			lanesModal?.setAttribute("aria-hidden", "false");
-			document.body.classList.add("lanes-modal-locked");
-		}
-		function closeLanes() {
-			lanesModal?.classList.remove("open");
-			lanesModal?.setAttribute("aria-hidden", "true");
-			document.body.classList.remove("lanes-modal-locked");
-			lastFocused?.focus();
-		}
-
-		openBtn?.addEventListener("click", openLanes);
-		document.querySelectorAll("[data-lanes-close]").forEach((el) => el.addEventListener("click", closeLanes));
-		document.addEventListener("keydown", (e) => {
-			if (e.key === "Escape" && lanesModal?.classList.contains("open")) closeLanes();
-		});
-	</script>
 
 	<style>
 		.intro {
@@ -226,15 +239,85 @@ const corsieEsempio = [
 			}
 		}
 
-		.lanes-cta {
-			max-width: 44rem;
+		.lanes-section {
+			max-width: 58rem;
 			margin: 0 auto;
 			padding: 1rem 1.5rem 5rem;
-			text-align: center;
 		}
-		.lanes-cta .btn {
-			border: none;
-			cursor: pointer;
+		.lanes-section__head {
+			text-align: center;
+			margin-bottom: 2.5rem;
+		}
+		.lanes-section__head .lede {
+			max-width: none;
+			margin-top: 0.5rem;
+		}
+		.lanes-section__head em {
+			font-style: italic;
+			color: var(--accent);
+		}
+		.lanes-table-wrap {
+			overflow-x: auto;
+		}
+		.lanes-table {
+			width: 100%;
+			min-width: 30rem;
+			border-collapse: collapse;
+		}
+		.lanes-table th {
+			padding: 0.75rem 1rem;
+			border-bottom: 1px solid var(--border-strong);
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			text-align: left;
+		}
+		.lanes-table td {
+			padding: 1rem;
+			border-bottom: 1px solid var(--border);
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+		}
+		.lanes-table tr:last-child td {
+			border-bottom: none;
+		}
+		.lanes-table__fascia {
+			font-weight: 600;
+			color: var(--text);
+			white-space: nowrap;
+		}
+		.lanes-table__orario {
+			color: var(--text-muted);
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
+		}
+		.lanes-table__corsie {
+			color: var(--text-muted);
+		}
+
+		.planning-section {
+			max-width: 88rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 5rem;
+		}
+		.planning-section__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto 2.5rem;
+		}
+		.planning-section__head .lede {
+			margin-top: 0.5rem;
+		}
+		.planning-section__head em {
+			font-style: italic;
+			color: var(--accent);
+		}
+		.planning-section__cta {
+			text-align: center;
+			margin-top: 2.5rem;
 		}
 
 		.summer {
@@ -261,106 +344,5 @@ const corsieEsempio = [
 			margin-bottom: 2rem;
 		}
 
-		.lanes-modal {
-			position: fixed;
-			inset: 0;
-			z-index: 210;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 1.5rem;
-			opacity: 0;
-			pointer-events: none;
-			transition: opacity 0.25s ease;
-		}
-		.lanes-modal.open {
-			opacity: 1;
-			pointer-events: auto;
-		}
-		.lanes-modal__backdrop {
-			position: absolute;
-			inset: 0;
-			background: rgba(28, 28, 24, 0.55);
-			backdrop-filter: blur(2px);
-		}
-		.lanes-modal__panel {
-			position: relative;
-			max-width: 28rem;
-			width: 100%;
-			background: var(--bg);
-			border-radius: 16px;
-			padding: 2.5rem 2.25rem;
-			box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.4);
-			transform: translateY(12px);
-			transition: transform 0.25s ease;
-		}
-		.lanes-modal.open .lanes-modal__panel {
-			transform: translateY(0);
-		}
-		.lanes-modal__close {
-			position: absolute;
-			top: 1rem;
-			right: 1rem;
-			width: 32px;
-			height: 32px;
-			border-radius: 50%;
-			border: none;
-			background: var(--bg-alt);
-			color: var(--text);
-			font-size: 1.25rem;
-			line-height: 1;
-			cursor: pointer;
-		}
-		.lanes-modal__panel h3 {
-			margin: 0 0 0.6rem;
-			font-size: var(--text-lg);
-		}
-		.lanes-modal__disclaimer {
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-style: italic;
-			color: var(--text-muted);
-			margin: 0 0 1.5rem;
-		}
-		.lanes-list {
-			list-style: none;
-			margin: 0;
-			padding: 0;
-			display: flex;
-			flex-direction: column;
-			gap: 0.9rem;
-		}
-		.lanes-list li {
-			display: flex;
-			flex-direction: column;
-			gap: 0.15rem;
-			border-bottom: 1px solid var(--border);
-			padding-bottom: 0.75rem;
-		}
-		.lanes-list li:last-child {
-			border-bottom: none;
-			padding-bottom: 0;
-		}
-		.lanes-list__fascia {
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-			font-weight: 600;
-			color: var(--text);
-		}
-		.lanes-list__orario {
-			font-weight: 400;
-			color: var(--text-muted);
-		}
-		.lanes-list__corsie {
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-			color: var(--text-muted);
-		}
-	</style>
-
-	<style is:global>
-		body.lanes-modal-locked {
-			overflow: hidden;
-		}
 	</style>
 </Layout>

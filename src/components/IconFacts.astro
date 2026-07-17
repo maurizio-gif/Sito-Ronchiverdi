@@ -1,0 +1,124 @@
+---
+interface FactItem {
+	icon: string;
+	label: string;
+	html: string;
+}
+
+interface Props {
+	eyebrow: string;
+	title: string;
+	lede?: string;
+	items: FactItem[];
+}
+
+const { eyebrow, title, lede, items } = Astro.props;
+---
+
+<section class="facts-band">
+	<div class="facts-band__head">
+		<span class="eyebrow">{eyebrow}</span>
+		<h2>{title}</h2>
+		{lede && <p class="facts-band__lede" set:html={lede} />}
+	</div>
+	<div class="facts-grid">
+		{items.map((item) => (
+			<div class="fact-card">
+				<span class="fact-card__icon" aria-hidden="true" set:html={item.icon} />
+				<h3 class="fact-card__label">{item.label}</h3>
+				<p set:html={item.html} />
+			</div>
+		))}
+	</div>
+</section>
+
+<style>
+	.facts-band {
+		background: var(--bg-dark);
+		padding: 5.5rem 1.5rem;
+	}
+	.facts-band__head {
+		max-width: 84rem;
+		margin: 0 auto 3rem;
+	}
+	.facts-band__head .eyebrow {
+		color: var(--accent-on-dark);
+	}
+	.facts-band__head h2 {
+		color: var(--text-on-dark);
+		margin: 0.4rem 0 0;
+		max-width: 30rem;
+	}
+	.facts-band__head__lede,
+	.facts-band__lede {
+		font-family: var(--font-sans);
+		font-size: var(--text-md);
+		color: var(--text-on-dark);
+		opacity: 0.78;
+		max-width: 62rem;
+		margin: 1.25rem 0 0;
+		line-height: 1.6;
+	}
+	.facts-band__lede :global(strong) {
+		color: var(--text-on-dark);
+		opacity: 1;
+	}
+	.facts-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+		max-width: 84rem;
+		margin: 0 auto;
+	}
+	.fact-card {
+		text-align: left;
+		padding: 2rem 1.75rem;
+		border: 1px solid var(--border-dark);
+		border-radius: 16px;
+		transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, background 0.3s ease;
+	}
+	.fact-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--accent-on-dark);
+		background: rgba(246, 239, 222, 0.04);
+	}
+	.fact-card__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 3rem;
+		height: 3rem;
+		margin-bottom: 1.25rem;
+		border-radius: 50%;
+		background: rgba(200, 153, 31, 0.12);
+		color: var(--accent-on-dark);
+		transition: background 0.3s ease, transform 0.3s ease;
+	}
+	.fact-card:hover .fact-card__icon {
+		background: var(--accent-on-dark);
+		color: var(--bg-dark);
+		transform: scale(1.08);
+	}
+	.fact-card__label {
+		margin: 0 0 0.6rem;
+		font-size: var(--text-lg);
+		color: var(--text-on-dark);
+	}
+	.fact-card p {
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-on-dark);
+		opacity: 0.72;
+		line-height: 1.65;
+		margin: 0;
+	}
+	.fact-card p :global(strong) {
+		color: var(--accent-on-dark);
+		opacity: 1;
+	}
+	@media (max-width: 760px) {
+		.facts-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

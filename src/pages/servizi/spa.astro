@@ -1,7 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
+import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
+
+const faq = [
+	{
+		q: "La Relax Zone è inclusa in tutti gli abbonamenti?",
+		a: "Sì, la Spa con Chinesis Postural Lab e Relax Zone è inclusa in tutte le formule di abbonamento: Gold, Silver, Gym e Swim.",
+	},
+	{
+		q: "Cosa comprende il percorso benessere?",
+		a: "Sauna, bagno di vapore, cascata di ghiaccio e percorso Kneipp verticale, per un'esperienza completa tra caldo e freddo.",
+	},
+	{
+		q: "È adatta anche a chi non si allena in palestra?",
+		a: "Certamente: la Relax Zone è pensata per il recupero e il benessere di tutti i soci, indipendentemente dall'attività sportiva praticata.",
+	},
+];
 
 const services = [
 	{ title: "Sauna", desc: "Ambiente in legno e pietra che ricrea l'atmosfera tradizionale di montagna." },
@@ -28,6 +44,8 @@ const services = [
 			</div>
 		))}
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>
