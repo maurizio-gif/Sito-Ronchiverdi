@@ -31,8 +31,9 @@ interface Feature {
 }
 
 const features: Feature[] = [
-	{ label: "Sala Pesi", note: "Gym Floor Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Gym Floor", note: "Sala pesi con macchinari Technogym", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
 	{ label: "Corsi Fitness", note: "Corsi di gruppo per tutti i livelli", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
+	{ label: "Hyrox Training", note: "Allenamenti specifici per la gara fitness più intensa al mondo", access: { gold: "full", silver: "full", gym: "full", swim: "none" } },
 	{ label: "Acqua Fitness", note: "AquaStep, hydrobike e allenamento in acqua", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Nuoto Libero", note: "assistito", access: { gold: "full", silver: "full", gym: "none", swim: "full" } },
 	{ label: "Piscina Estiva", note: "outdoor", access: { gold: "full", silver: "full", gym: "none", swim: "none" } },
@@ -43,7 +44,7 @@ const features: Feature[] = [
 ];
 
 const plans = [
-	{ key: "gold", name: "Gold", badge: "Tutto incluso", featured: true, price: "170€" },
+	{ key: "gold", name: "Gold", featured: true, price: "170€" },
 	{ key: "silver", name: "Silver", price: "158€" },
 	{ key: "gym", name: "Gym", price: "99€" },
 	{ key: "swim", name: "Swim", duration: "11 mesi · agosto escluso", price: "99€" },
@@ -54,7 +55,7 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 
 <Layout
 	title="Abbonamenti — Ronchiverdi Sport Club"
-	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: sala pesi, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
+	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: gym floor, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
 >
 	<PageHero image="images/club/lacertosus.jpg" imageAlt="Area Lacertosus Ronchiverdi" eyebrow="Abbonamenti">
 		<Fragment slot="title">Scegli il tuo <em class="accent accent-dark">abbonamento</em></Fragment>
@@ -68,9 +69,10 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 					<div class="compare-cell compare-cell--label" role="columnheader"></div>
 					{plans.map((p) => (
 						<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${"featured" in p ? "compare-cell--featured" : ""}`} role="columnheader">
-							{"badge" in p && <span class="plan-badge">{p.badge}</span>}
-							<strong class="plan-name">{p.name}</strong>
-							{"duration" in p && <span class="plan-duration">{p.duration}</span>}
+							<strong class="plan-name">
+								{p.name}
+								{"duration" in p && <InfoTip text={p.duration} align="end" direction="down" />}
+							</strong>
 						</div>
 					))}
 				</div>
@@ -162,7 +164,7 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		}
 
 		.compare-cell {
-			padding: 1.1rem 1.25rem;
+			padding: 0.7rem 1.25rem;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -190,8 +192,8 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		}
 
 		.compare-row--head .compare-cell {
-			padding-top: 1.75rem;
-			padding-bottom: 1.5rem;
+			padding-top: 0.75rem;
+			padding-bottom: 0.7rem;
 			background: var(--bg);
 		}
 		.compare-row--head .compare-cell--label {
@@ -202,33 +204,12 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 			color: var(--text-on-dark);
 		}
 
-		.plan-badge {
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-weight: 600;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--bg-dark);
-			background: var(--accent-on-dark);
-			padding: 0.3rem 0.7rem;
-			border-radius: 999px;
-			margin-bottom: 0.6rem;
-		}
 		.plan-name {
 			font-family: var(--font-serif);
 			font-size: var(--text-xl);
 			font-weight: 500;
-		}
-		.plan-duration {
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			letter-spacing: 0.02em;
-			color: var(--accent);
-			margin-top: 0.5rem;
-			font-weight: 600;
-		}
-		.compare-row--head .compare-cell--featured .plan-duration {
-			color: var(--accent-on-dark);
+			display: inline-flex;
+			align-items: center;
 		}
 
 		.compare-cell--featured {
