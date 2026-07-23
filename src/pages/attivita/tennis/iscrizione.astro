@@ -1,0 +1,187 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ContactModal from "../../../components/ContactModal.astro";
+import PageHero from "../../../components/PageHero.astro";
+import Faq from "../../../components/Faq.astro";
+import { url } from "../../../lib/paths";
+
+const procedura = [
+	"Richiedi una lezione di prova gratuita tramite il modulo di contatto, indicando età e livello (per la Young School) o disponibilità (per gli adulti)",
+	"Vieni inserito nel gruppo o abbinato al maestro più adatto, in base al livello emerso durante la prova",
+	"Perfeziona l'iscrizione in reception: tesseramento FITP e certificato medico sono necessari prima dell'inizio dei corsi",
+];
+
+const documenti = [
+	"Certificato medico di idoneità sportiva non agonistica (agonistica per chi entra nel Settore Agonistico o è già in possesso di tessera atleta)",
+	"Tesseramento FITP non agonistico, incluso nella quota d'iscrizione",
+];
+
+const faq = [
+	{
+		q: "Da dove parto se non ho mai giocato a tennis?",
+		a: "Richiedi una lezione di prova: per i bambini si individua il gruppo Young School adatto all'età e al livello, per gli adulti si valuta se un corso collettivo o una lezione individuale è la scelta più adatta.",
+	},
+	{
+		q: "La lezione di prova è sempre gratuita?",
+		a: "Sì, per Young School e per adulti: è su appuntamento, in base alla disponibilità dei corsi, dal lunedì al venerdì (non disponibile nel weekend).",
+	},
+	{
+		q: "Cosa serve il primo giorno?",
+		a: "Abbigliamento sportivo adeguato: la racchetta, nella fase iniziale della Young School, può essere fornita da Ronchiverdi. Certificato medico e tesseramento FITP vanno perfezionati in reception prima dell'inizio dei corsi.",
+	},
+];
+---
+
+<Layout
+	title="Modalità di iscrizione — Tennis Ronchiverdi"
+	description="Come iscriversi al settore tennis di Ronchiverdi: lezione di prova, documenti necessari, tesseramento FITP e contatti."
+>
+	<PageHero image="images/attivita/tennis-hero.jpg" imageAlt="Campo da tennis in terra rossa a Ronchiverdi" eyebrow="Tennis">
+		<Fragment slot="title">Modalità di <em class="accent accent-dark">iscrizione</em></Fragment>
+		<Fragment slot="lede">Che tu voglia iscrivere tuo figlio alla Young School o riprendere a giocare da adulto, si parte sempre da una lezione di prova.</Fragment>
+		<div class="header-cta">
+			<button type="button" class="btn btn-outline-dark" data-open-contact data-interest="Tennis">Richiedi una prova gratuita</button>
+		</div>
+	</PageHero>
+
+	<section class="info-section">
+		<h2>Come iscriversi</h2>
+		<ol class="steps-list">
+			{procedura.map((step) => <li>{step}</li>)}
+		</ol>
+	</section>
+
+	<section class="info-section">
+		<h2>Documenti necessari</h2>
+		<ul class="plain-list">
+			{documenti.map((d) => <li>{d}</li>)}
+		</ul>
+	</section>
+
+	<section class="info-section">
+		<h2>Calendario Young School</h2>
+		<p>La Young School va dal <strong>14 settembre 2026</strong> al <strong>4 giugno 2027</strong>. In estate continua con il <strong>Summer Tennis</strong>, con iscrizione settimanale.</p>
+	</section>
+
+	<section class="info-section contacts-section">
+		<h2>Contatti</h2>
+		<ul class="contacts-list">
+			<li><strong>Tel:</strong> <a href="tel:+390116612146">011 6612146</a></li>
+			<li><strong>Mail:</strong> <a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></li>
+		</ul>
+		<p class="note">Per organizzare la lezione di prova o avere maggiori informazioni sui percorsi, il modo più rapido è compilare il modulo di contatto.</p>
+	</section>
+
+	<Faq items={faq} />
+
+	<section class="final-cta">
+		<h2>Pronto a iniziare?</h2>
+		<p class="lede" style="margin-inline:auto">Contattaci: ti aiutiamo a organizzare la tua lezione di prova.</p>
+		<button type="button" class="btn" data-open-contact data-interest="Tennis">Contattaci</button>
+	</section>
+
+	<ContactModal />
+
+	<style>
+		.header-cta {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-top: 1.5rem;
+		}
+		.btn-outline-dark {
+			display: inline-block;
+			cursor: pointer;
+			font-family: var(--font-sans);
+			font-weight: 600;
+			font-size: var(--text-xs);
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			background: rgba(246, 239, 222, 0.1);
+			border: 1px solid rgba(246, 239, 222, 0.5);
+			color: var(--text-on-dark);
+			padding: 0.9rem 2rem;
+			border-radius: var(--radius);
+			transition: background 0.15s ease;
+		}
+		.btn-outline-dark:hover {
+			background: rgba(246, 239, 222, 0.2);
+		}
+
+		.info-section {
+			max-width: 68rem;
+			margin: 0 auto;
+			padding: 2.25rem 1.5rem;
+			border-top: 1px solid var(--border);
+		}
+		.info-section h2 {
+			font-size: var(--text-lg);
+			margin-bottom: 1rem;
+		}
+		.info-section p {
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.65;
+			margin: 0 0 0.85rem;
+		}
+		.note {
+			font-size: var(--text-sm);
+			font-style: italic;
+		}
+
+		.steps-list {
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.7;
+			padding-left: 1.3rem;
+		}
+		.steps-list li {
+			margin-bottom: 0.5rem;
+		}
+		.plain-list {
+			list-style: none;
+			margin: 0 0 1rem;
+			padding: 0;
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.7;
+		}
+		.plain-list li {
+			padding-left: 1.1rem;
+			position: relative;
+			margin-bottom: 0.5rem;
+		}
+		.plain-list li::before {
+			content: "—";
+			position: absolute;
+			left: 0;
+			color: var(--accent);
+		}
+
+		.contacts-list {
+			list-style: none;
+			margin: 0 0 1rem;
+			padding: 0;
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.8;
+		}
+		.contacts-list a {
+			color: var(--text);
+			text-decoration: underline;
+		}
+		.contacts-list a:hover {
+			color: var(--accent);
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+	</style>
+</Layout>
