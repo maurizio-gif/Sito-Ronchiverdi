@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Rebuild giornaliero: il sito è statico e l'elenco eventi viene calcolato
+  # in fase di build, quindi senza una ricompilazione periodica un evento
+  # scaduto resterebbe online fino al push successivo.
+  # 03:15 UTC = 04:15 in inverno, 05:15 in estate (ora italiana).
+  schedule:
+    - cron: "15 3 * * *"
   workflow_dispatch:
 
 permissions:

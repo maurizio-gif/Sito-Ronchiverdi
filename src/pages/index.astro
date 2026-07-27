@@ -2,7 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
-import { getUpcomingEvents, badgeDate, formatRange } from "../lib/events";
+import EventExpiryGuard from "../components/EventExpiryGuard.astro";
+import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../lib/events";
 
 const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
 const allActivities = (await getCollection("activities")).filter((a) => a.data.visible !== false);
@@ -456,11 +457,11 @@ const clubGallery = [
 		</div>
 
 		{prossimiEventi.length > 0 && (
-			<div class="eventi-grid">
+			<div class="eventi-grid" data-event-list>
 				{prossimiEventi.map((e) => {
 					const badge = badgeDate(e.data.date);
 					return (
-						<a class="evento-card" href={url(`/eventi#${e.id}`)}>
+						<a class="evento-card" href={url(`/eventi#${e.id}`)} data-event-until={untilAttr(e.data.date, e.data.endDate)}>
 							<span class="evento-card__media">
 								{e.data.image && <img src={url(e.data.image)} alt="" loading="lazy" />}
 								<span class="evento-card__badge" aria-hidden="true">
@@ -482,6 +483,8 @@ const clubGallery = [
 		<div class="eventi-preview__cta">
 			<a class="btn" href={url("/eventi")}>Tutti gli eventi</a>
 		</div>
+
+		<EventExpiryGuard />
 	</section>
 
 	<section class="final-cta">

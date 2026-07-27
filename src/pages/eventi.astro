@@ -4,7 +4,8 @@ import Layout from "../layouts/Layout.astro";
 import ContactModal from "../components/ContactModal.astro";
 import PageHero from "../components/PageHero.astro";
 import IconFacts from "../components/IconFacts.astro";
-import { getUpcomingEvents, badgeDate, formatRange } from "../lib/events";
+import EventExpiryGuard from "../components/EventExpiryGuard.astro";
+import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../lib/events";
 import { url } from "../lib/paths";
 
 const eventi = await getUpcomingEvents();
@@ -62,16 +63,16 @@ const facts = [
 			</p>
 		</div>
 
-		{renderizzati.length === 0 ? (
-			<p class="eventi__empty">
-				Al momento non ci sono eventi in programma. Torna a trovarci tra qualche giorno oppure scrivici: ti avvisiamo appena esce il prossimo appuntamento.
-			</p>
-		) : (
-			<div class="event-list">
+		<p class="eventi__empty" data-event-empty hidden={renderizzati.length > 0}>
+			Al momento non ci sono eventi in programma. Torna a trovarci tra qualche giorno oppure scrivici: ti avvisiamo appena esce il prossimo appuntamento.
+		</p>
+
+		{renderizzati.length > 0 && (
+			<div class="event-list" data-event-list>
 				{renderizzati.map(({ entry, Content }) => {
 					const badge = badgeDate(entry.data.date);
 					return (
-						<article class="event" id={entry.id}>
+						<article class="event" id={entry.id} data-event-until={untilAttr(entry.data.date, entry.data.endDate)}>
 							{entry.data.image && (
 								<div class="event__media">
 									<img src={url(entry.data.image)} alt={entry.data.title} loading="lazy" />
@@ -117,6 +118,8 @@ const facts = [
 			</div>
 		)}
 	</section>
+
+	<EventExpiryGuard />
 
 	<section class="final-cta">
 		<h2>Vuoi far parte della community?</h2>

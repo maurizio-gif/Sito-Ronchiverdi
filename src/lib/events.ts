@@ -26,6 +26,17 @@ const giorno = new Intl.DateTimeFormat("it-IT", { day: "numeric" });
 const meseCorto = new Intl.DateTimeFormat("it-IT", { month: "short" });
 const dataEstesa = new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long", year: "numeric" });
 
+/**
+ * Ultimo giorno dell'evento in formato YYYY-MM-DD, per l'attributo
+ * `data-event-until` letto da EventExpiryGuard nel browser.
+ */
+export function untilAttr(date: Date, endDate?: Date) {
+	const fine = endDate ?? date;
+	const mese = String(fine.getMonth() + 1).padStart(2, "0");
+	const giorno = String(fine.getDate()).padStart(2, "0");
+	return `${fine.getFullYear()}-${mese}-${giorno}`;
+}
+
 /** Etichetta compatta per il badge: "12" + "set". */
 export function badgeDate(date: Date) {
 	return { giorno: giorno.format(date), mese: meseCorto.format(date).replace(".", "") };
