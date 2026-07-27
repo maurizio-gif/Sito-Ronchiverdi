@@ -117,7 +117,7 @@ const faq = [
 	},
 	{
 		q: "È possibile fare una prova gratuita?",
-		a: "Sì, è possibile effettuare una prova gratuita, previa disponibilità dei posti e organizzazione con il coordinatore della scuola nuoto.",
+		html: `<p>Sì, è possibile effettuare una prova gratuita, previa disponibilità dei posti e organizzazione con la scuola nuoto. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Scrivici per prenotarla</button>.</p>`,
 	},
 	{
 		q: "I corsi sono divisi per età e livello?",
@@ -149,7 +149,7 @@ const faq = [
 	},
 	{
 		q: "È possibile recuperare le lezioni perse?",
-		html: `<p>Sì. I recuperi devono essere concordati direttamente con il coordinatore della scuola nuoto, contattando il numero <a href="tel:+393807522285">380 7522285</a>, e sono soggetti alla disponibilità dei gruppi. Sono previsti fino a 2 recuperi per i corsi quadrimestrali e fino a 4 recuperi per i corsi stagionali.</p>`,
+		html: `<p>Sì. I recuperi vanno concordati direttamente con la scuola nuoto e sono soggetti alla disponibilità dei gruppi. Sono previsti fino a 2 recuperi per i corsi quadrimestrali e fino a 4 recuperi per i corsi stagionali. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Contattaci per concordare il recupero</button>.</p>`,
 	},
 	{
 		q: "È disponibile un parcheggio?",
@@ -165,7 +165,7 @@ const faq = [
 	},
 	{
 		q: "Come posso ricevere maggiori informazioni?",
-		html: `<p>Per informazioni su corsi, orari, disponibilità, prove gratuite, recuperi e modalità di iscrizione puoi contattare la segreteria Ronchiverdi o il referente della Young School Nuoto: <a href="tel:+393807522285">380 7522285</a> — <a href="mailto:youngschoolnuoto@ronchiverdi.it">youngschoolnuoto@ronchiverdi.it</a>.</p>`,
+		html: `<p>Per informazioni su corsi, orari, disponibilità, prove gratuite, recuperi e modalità di iscrizione <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">compila il form di contatto</button>: ti risponde lo staff della Young School Nuoto.</p>`,
 	},
 ];
 ---
@@ -271,9 +271,12 @@ const faq = [
 			</div>
 		</div>
 
-		<p class="famiglie__note">
-			Vuoi provare prima di iscriverti? La <strong>prova gratuita</strong> è possibile previa disponibilità dei posti, organizzandosi con il coordinatore della scuola nuoto al <a href="tel:+393807522285">380 7522285</a>.
-		</p>
+		<div class="famiglie__cta">
+			<p class="famiglie__note">
+				Vuoi provare prima di iscriverti? La <strong>prova gratuita</strong> è possibile previa disponibilità dei posti: scrivici e organizziamo insieme il giorno.
+			</p>
+			<button type="button" class="btn" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+		</div>
 	</section>
 
 	<section class="adults">
@@ -570,19 +573,38 @@ const faq = [
 				grid-template-columns: 1fr;
 			}
 		}
+		.famiglie__cta {
+			margin-top: 3rem;
+			text-align: center;
+		}
 		.famiglie__note {
 			max-width: 46rem;
-			margin: 3rem auto 0;
-			text-align: center;
+			margin: 0 auto 1.5rem;
 			font-family: var(--font-sans);
 			font-size: var(--text-sm);
 			color: var(--text-muted);
 			line-height: 1.7;
 		}
-		.famiglie__note a {
-			color: var(--accent);
+		.famiglie__cta .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+
+		/* Pulsante inline dentro una risposta FAQ: il markup passato via
+		   `html` vive nel componente Faq, quindi serve :global(). */
+		:global(.faq-inline-btn) {
+			padding: 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			font: inherit;
+			color: var(--accent-on-dark);
 			text-decoration: underline;
 			text-underline-offset: 0.15em;
+		}
+		:global(.faq-inline-btn:hover) {
+			color: var(--text-on-dark);
 		}
 
 		.adults {
