@@ -471,7 +471,10 @@ const clubGallery = [
 		.hero {
 			position: relative;
 			text-align: center;
-			min-height: 82vh;
+			/* Hero a tutto schermo: svh evita il taglio causato dalle barre
+			   del browser su mobile, vh resta come fallback. */
+			min-height: 100vh;
+			min-height: 100svh;
 			display: flex;
 			align-items: center;
 			justify-content: center;

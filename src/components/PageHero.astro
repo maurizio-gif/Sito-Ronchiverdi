@@ -24,7 +24,10 @@ const { image, imageAlt, eyebrow } = Astro.props;
 <style>
 	.page-hero-full {
 		position: relative;
-		min-height: 46vh;
+		/* Hero a tutto schermo: svh evita il taglio causato dalle barre del
+		   browser su mobile, vh resta come fallback. */
+		min-height: 100vh;
+		min-height: 100svh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -42,10 +45,12 @@ const { image, imageAlt, eyebrow } = Astro.props;
 	.page-hero-full__scrim {
 		position: absolute;
 		inset: 0;
+		/* Su un hero a tutta altezza la fascia centrale copre più foto:
+		   serve un velo un po' più denso per tenere leggibile il testo. */
 		background: linear-gradient(
 			180deg,
 			rgba(28, 28, 24, 0.55) 0%,
-			rgba(28, 28, 24, 0.35) 45%,
+			rgba(28, 28, 24, 0.5) 45%,
 			rgba(28, 28, 24, 0.78) 100%
 		);
 	}
@@ -53,7 +58,7 @@ const { image, imageAlt, eyebrow } = Astro.props;
 		position: relative;
 		z-index: 1;
 		max-width: 62rem;
-		padding: 6rem 1.5rem 3.5rem;
+		padding: 4rem 1.5rem;
 	}
 	.page-hero-full__content .lede {
 		max-width: 46rem;
@@ -66,8 +71,8 @@ const { image, imageAlt, eyebrow } = Astro.props;
 		text-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
 	}
 	@media (max-width: 640px) {
-		.page-hero-full {
-			min-height: 38vh;
+		.page-hero-full__content {
+			padding: 3rem 1.5rem;
 		}
 	}
 </style>
