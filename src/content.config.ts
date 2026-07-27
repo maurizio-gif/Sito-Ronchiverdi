@@ -43,6 +43,23 @@ const services = defineCollection({
   }),
 });
 
+// Eventi del club. Il corpo del file è HTML (o markdown) e viene renderizzato
+// così com'è; il pulsante compare solo se è valorizzato ctaHref.
+const events = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/events" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+    orario: z.string().optional(),
+    luogo: z.string().optional(),
+    image: z.string().optional(),
+    summary: z.string(),
+    ctaLabel: z.string().optional(),
+    ctaHref: z.string().optional(),
+  }),
+});
+
 // Tabella abbonamenti: sorgente unica usata da tutte le pagine che la
 // mostrano (abbonamenti, gym floor, ...). Modificarla qui — o da Tina —
 // la aggiorna ovunque.
@@ -75,4 +92,4 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, posts, activities, services, memberships };
+export const collections = { pages, posts, activities, services, memberships, events };

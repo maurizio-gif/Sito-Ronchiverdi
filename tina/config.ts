@@ -56,6 +56,37 @@ export default defineConfig({
         ],
       },
       {
+        // Gli eventi passati non vanno cancellati: spariscono da soli dal
+        // sito il giorno dopo la data (o dopo la data di fine).
+        name: "event",
+        label: "Eventi",
+        path: "src/content/events",
+        format: "md",
+        fields: [
+          { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          { type: "datetime", name: "date", label: "Data", required: true },
+          { type: "datetime", name: "endDate", label: "Data di fine (se su più giorni)" },
+          { type: "string", name: "orario", label: "Orario" },
+          { type: "string", name: "luogo", label: "Luogo" },
+          { type: "image", name: "image", label: "Foto" },
+          {
+            type: "string",
+            name: "summary",
+            label: "Descrizione breve",
+            required: true,
+            ui: { component: "textarea" },
+          },
+          { type: "string", name: "ctaLabel", label: "Testo del pulsante" },
+          {
+            type: "string",
+            name: "ctaHref",
+            label: "Link del pulsante",
+            description: "Il pulsante compare solo se questo campo è compilato.",
+          },
+          { type: "rich-text", name: "body", label: "Testo dell'evento", isBody: true },
+        ],
+      },
+      {
         // Sorgente unica della tabella abbonamenti: modificandola qui si
         // aggiornano tutte le pagine che la mostrano (abbonamenti, gym
         // floor, ...). Documento singolo, non se ne creano altri.
