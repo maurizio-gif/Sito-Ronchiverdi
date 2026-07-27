@@ -28,9 +28,10 @@ const programs = [
 	{
 		ageLabel: "3–18 mesi · 19–36 mesi",
 		title: "Acquaticità Neonatale e Avanzata",
-		percorso: "Percorso in acqua accompagnato da un genitore, in vasca calda a 32°C.",
+		percorso: "Percorso in acqua accompagnato da un genitore, che entra in vasca insieme al bambino: è l'unico corso in cui è previsto.",
 		obiettivi: ["Sviluppo psicomotorio precoce", "Ambientamento acquatico", "Gestione della respirazione e del galleggiamento"],
 		durata: "40 minuti",
+		vasca: "Vasca di ambientamento · 32°C",
 		image: "images/attivita/scuola-nuoto-hero.jpg",
 	},
 	{
@@ -39,6 +40,7 @@ const programs = [
 		percorso: "Corsi mirati all'autonomia acquatica e alla scoperta ludica dei movimenti base, per introdurre in forma ludica i primi elementi dei quattro stili.",
 		obiettivi: ["Autonomia acquatica", "Scoperta ludica dei movimenti base", "Primi elementi dei quattro stili"],
 		durata: "40 minuti",
+		vasca: "Vasca di ambientamento · 32°C",
 		image: "images/activities/scuola-nuoto-young.jpg",
 	},
 	{
@@ -46,7 +48,8 @@ const programs = [
 		title: "Open",
 		percorso: "Corsi strutturati in livelli (1 e 2) per consolidare le capacità natatorie e proseguire nell'apprendimento tecnico dei quattro stili.",
 		obiettivi: ["Livello 1 e Livello 2", "Consolidamento delle capacità natatorie", "Apprendimento tecnico dei quattro stili"],
-		durata: "40 minuti, in vasca grande",
+		durata: "40 minuti",
+		vasca: "Vasca grande 25 m · 28°C",
 		image: "images/activities/nuoto.jpg",
 	},
 	{
@@ -55,7 +58,42 @@ const programs = [
 		percorso: "Corso avanzato con obiettivi tecnici specifici, per chi vuole affinare la tecnica e avvicinarsi al mondo agonistico.",
 		obiettivi: ["Perfezionamento dei quattro stili", "Esercitazioni su partenze e tecniche di gara", "Introduzione alla preparazione pre-agonistica"],
 		durata: "60 minuti",
+		vasca: "Vasca grande 25 m · 28°C",
 		image: "images/activities/scuola-nuoto-adulti.jpg",
+	},
+];
+
+const famiglie = [
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 21V8.5l7-4.5 7 4.5V21" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M3 21h18M10 21v-4.5h4V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		title: "Assistenza spogliatoio",
+		desc: "Il nostro personale si occupa dei bambini all'arrivo e al termine della lezione, accompagnandoli nelle operazioni di cambio. Per questo i genitori non accedono agli spogliatoi.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3 3 9.5h18L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M5 9.5V21M19 9.5V21M3 21h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		title: "Dove aspettare",
+		desc: "I genitori possono seguire la lezione dall'esterno, dal gazebo dedicato. Per motivi organizzativi e di sicurezza non è previsto l'accesso al bordo vasca.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M9.5 16.5v-9h3a2.5 2.5 0 0 1 0 5h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		title: "Parcheggio gratuito",
+		desc: "Il club dispone di un parcheggio gratuito a disposizione delle famiglie: si arriva, si accompagna il bambino e si aspetta senza pensieri.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3.5h12a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" /><path d="M12 8.5v6M9 11.5h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		title: "Certificato medico",
+		desc: "È obbligatorio per i bambini sopra i 6 anni e si carica sul portale in fase di iscrizione, insieme al regolamento firmato.",
+	},
+];
+
+const corredo = [
+	{
+		title: "Corsi Baby, Open e Propaganda",
+		items: ["Cuffia", "Costume", "Accappatoio", "Ciabatte", "Occhialini (facoltativi per i più piccoli)"],
+	},
+	{
+		title: "Acquaticità neonatale · 3–36 mesi",
+		items: ["Pannolino swimming (obbligatorio)", "Costume contenitivo (obbligatorio)", "Accappatoio", "Ciabatte"],
 	},
 ];
 
@@ -70,6 +108,54 @@ const sospensioni = [
 
 const faq = [
 	{
+		q: "Come posso iscrivere mio figlio?",
+		html: `<p>Le iscrizioni ai corsi della Young School Nuoto Ronchiverdi si effettuano esclusivamente online attraverso il nostro sito. Dal sito è possibile consultare le disponibilità, scegliere il corso più adatto e completare la procedura di iscrizione. Trovi tutti i passaggi nella pagina <a href="${url("/attivita/scuola-nuoto/iscrizione")}">modalità di iscrizione</a>.</p>`,
+	},
+	{
+		q: "Quanto durano le lezioni?",
+		a: "Le lezioni di Acquaticità, Baby e Open durano 40 minuti. Le lezioni del corso Propaganda durano 60 minuti.",
+	},
+	{
+		q: "È possibile fare una prova gratuita?",
+		html: `<p>Sì, è possibile effettuare una prova gratuita, previa disponibilità dei posti e organizzazione con la scuola nuoto. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Scrivici per prenotarla</button>.</p>`,
+	},
+	{
+		q: "I corsi sono divisi per età e livello?",
+		a: "Sì. I gruppi vengono organizzati tenendo conto sia dell'età sia del livello dei bambini, per rendere il percorso più omogeneo, sicuro ed efficace.",
+	},
+	{
+		q: "Dove si svolgono i corsi?",
+		a: "I corsi di Acquaticità e Baby si svolgono nella vasca di ambientamento, con acqua a circa 32°C. I corsi Open e Propaganda si svolgono nella vasca grande da 25 metri, con acqua a circa 28°C.",
+	},
+	{
+		q: "Cosa devo portare per mio figlio/a per svolgere la lezione di nuoto?",
+		html: `<p>Per i corsi Baby, Open e Propaganda sono necessari cuffia, costume, accappatoio e ciabatte; gli occhialini sono facoltativi per i bambini più piccoli.</p><p>Per il corso di Acquaticità neonatale, dai 3 ai 36 mesi, sono obbligatori il pannolino swimming e il costume contenitivo.</p>`,
+	},
+	{
+		q: "Il corso di acquaticità prevede l'ingresso in acqua con il proprio figlio/a?",
+		a: "Sì. Solo per il corso di acquaticità è previsto l'ingresso in acqua insieme al bambino.",
+	},
+	{
+		q: "I genitori possono assistere alla lezione?",
+		a: "Sì. I genitori possono seguire la lezione dall'esterno, dal gazebo dedicato. Per motivi organizzativi e di sicurezza non è previsto l'accesso al bordo vasca.",
+	},
+	{
+		q: "I genitori possono entrare negli spogliatoi?",
+		a: "No. Ronchiverdi offre un servizio di assistenza spogliatoio: il nostro personale si occupa dei bambini sia all'arrivo sia al termine della lezione, accompagnandoli nelle operazioni di cambio.",
+	},
+	{
+		q: "È obbligatorio il certificato medico?",
+		a: "Il certificato medico è obbligatorio per i bambini sopra i 6 anni.",
+	},
+	{
+		q: "È possibile recuperare le lezioni perse?",
+		html: `<p>Sì. I recuperi vanno concordati direttamente con la scuola nuoto e sono soggetti alla disponibilità dei gruppi. Sono previsti fino a 2 recuperi per i corsi quadrimestrali e fino a 4 recuperi per i corsi stagionali. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Contattaci per concordare il recupero</button>.</p>`,
+	},
+	{
+		q: "È disponibile un parcheggio?",
+		a: "Sì. Ronchiverdi dispone di un parcheggio gratuito a disposizione delle famiglie.",
+	},
+	{
 		q: "Primo giorno di corso",
 		a: "Si consiglia di arrivare con 20 minuti di anticipo rispetto all'orario di inizio della lezione.",
 	},
@@ -78,8 +164,8 @@ const faq = [
 		html: `<ul class="faq-sospensioni">${sospensioni.map((s) => `<li><strong>${s.nome}:</strong> ${s.periodo}</li>`).join("")}</ul>`,
 	},
 	{
-		q: "Recuperi",
-		a: "È possibile recuperare fino a 4 lezioni per i corsi stagionali e fino a 2 lezioni per i corsi quadrimestrali, contattando il numero WhatsApp 380 752 2285 per concordare giorno e ora.",
+		q: "Come posso ricevere maggiori informazioni?",
+		html: `<p>Per informazioni su corsi, orari, disponibilità, prove gratuite, recuperi e modalità di iscrizione <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">compila il form di contatto</button>: ti risponde lo staff della Young School Nuoto.</p>`,
 	},
 ];
 ---
@@ -128,10 +214,16 @@ const faq = [
 								</li>
 							))}
 						</ul>
-						<span class="program-card__durata">
-							<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.4" /><path d="M8 4.6V8l2.4 1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
-							{p.durata}
-						</span>
+						<div class="program-card__tags">
+							<span class="program-card__tag">
+								<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.4" /><path d="M8 4.6V8l2.4 1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								{p.durata}
+							</span>
+							<span class="program-card__tag">
+								<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.5 11.5c1 0 1 .9 2 .9s1-.9 2-.9 1 .9 2 .9 1-.9 2-.9 1 .9 2 .9 1-.9 2-.9M1.5 8.5c1 0 1 .9 2 .9s1-.9 2-.9 1 .9 2 .9 1-.9 2-.9 1 .9 2 .9 1-.9 2-.9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /><path d="M4.5 9V3.8a1.5 1.5 0 0 1 3 0M8.5 9V3.8a1.5 1.5 0 0 1 3 0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg>
+								{p.vasca}
+							</span>
+						</div>
 						<div class="program-card__cta">
 							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
 							<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
@@ -139,6 +231,51 @@ const faq = [
 					</div>
 				</article>
 			))}
+		</div>
+	</section>
+
+	<section class="famiglie">
+		<div class="famiglie__head">
+			<span class="eyebrow">Per le famiglie</span>
+			<h2>Come funziona una lezione</h2>
+			<p class="lede" style="margin-inline:auto">
+				Dall'arrivo al momento del cambio, tutto quello che serve sapere per accompagnare il bambino senza pensieri.
+			</p>
+		</div>
+		<div class="famiglie-grid">
+			{famiglie.map((f) => (
+				<article class="famiglia-card">
+					<span class="famiglia-card__icon" aria-hidden="true" set:html={f.icon} />
+					<h3>{f.title}</h3>
+					<p>{f.desc}</p>
+				</article>
+			))}
+		</div>
+
+		<div class="corredo">
+			<h3 class="corredo__title">Cosa mettere in borsa</h3>
+			<div class="corredo-grid">
+				{corredo.map((c) => (
+					<div class="corredo-card">
+						<span class="corredo-card__label">{c.title}</span>
+						<ul>
+							{c.items.map((i) => (
+								<li>
+									<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									<span>{i}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<div class="famiglie__cta">
+			<p class="famiglie__note">
+				Vuoi provare prima di iscriverti? La <strong>prova gratuita</strong> è possibile previa disponibilità dei posti: scrivici e organizziamo insieme il giorno.
+			</p>
+			<button type="button" class="btn" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
 		</div>
 	</section>
 
@@ -156,7 +293,7 @@ const faq = [
 	<section class="final-cta">
 		<h2>Pronto a iscrivere il tuo bambino?</h2>
 		<p class="lede" style="margin-inline:auto">
-			Se sai già a quale corso iscriverti, vai alla pagina modalità di iscrizione. Altrimenti, contattaci: ti aiutiamo a scegliere il percorso più adatto.
+			Le iscrizioni si effettuano <strong>esclusivamente online</strong>: dal portale consulti le disponibilità, scegli il corso e completi la procedura. Se hai dubbi contattaci, ti aiutiamo a scegliere il percorso più adatto.
 		</p>
 		<div class="final-cta__buttons">
 			<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
@@ -284,8 +421,13 @@ const faq = [
 			margin-top: 0.15rem;
 			color: var(--accent);
 		}
-		.program-card__durata {
-			align-self: flex-start;
+		.program-card__tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-bottom: 1.25rem;
+		}
+		.program-card__tag {
 			display: inline-flex;
 			align-items: center;
 			gap: 0.4rem;
@@ -297,9 +439,9 @@ const faq = [
 			border: 1px solid var(--border);
 			border-radius: 999px;
 			padding: 0.35rem 0.8rem;
-			margin-bottom: 1.25rem;
 		}
-		.program-card__durata svg {
+		.program-card__tag svg {
+			flex-shrink: 0;
 			color: var(--accent);
 		}
 		.program-card__cta {
@@ -316,6 +458,153 @@ const faq = [
 			.program-cards {
 				grid-template-columns: 1fr;
 			}
+		}
+
+		.famiglie {
+			background: var(--bg-alt);
+			padding: 5rem 1.5rem;
+		}
+		.famiglie__head {
+			max-width: 44rem;
+			margin: 0 auto 3rem;
+			text-align: center;
+		}
+		.famiglie-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1.5rem;
+			max-width: 80rem;
+			margin: 0 auto;
+		}
+		.famiglia-card {
+			background: var(--bg);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			padding: 1.75rem 1.5rem 1.9rem;
+		}
+		.famiglia-card__icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 2.6rem;
+			height: 2.6rem;
+			margin-bottom: 1rem;
+			border-radius: 50%;
+			background: var(--accent-tint);
+			color: var(--accent);
+		}
+		.famiglia-card h3 {
+			margin: 0 0 0.6rem;
+			font-size: var(--text-md);
+		}
+		.famiglia-card p {
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.65;
+		}
+		@media (max-width: 1040px) {
+			.famiglie-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		@media (max-width: 620px) {
+			.famiglie-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.corredo {
+			max-width: 80rem;
+			margin: 3rem auto 0;
+		}
+		.corredo__title {
+			text-align: center;
+			font-size: var(--text-xl);
+			margin: 0 0 1.75rem;
+		}
+		.corredo-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.5rem;
+			max-width: 58rem;
+			margin: 0 auto;
+		}
+		.corredo-card {
+			border: 1px solid var(--border-strong);
+			border-radius: 16px;
+			padding: 1.6rem 1.75rem 1.75rem;
+		}
+		.corredo-card__label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--accent);
+			margin-bottom: 1rem;
+		}
+		.corredo-card ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.55rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text);
+		}
+		.corredo-card li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.6rem;
+			line-height: 1.45;
+		}
+		.corredo-card li svg {
+			flex-shrink: 0;
+			margin-top: 0.2rem;
+			color: var(--accent);
+		}
+		@media (max-width: 700px) {
+			.corredo-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+		.famiglie__cta {
+			margin-top: 3rem;
+			text-align: center;
+		}
+		.famiglie__note {
+			max-width: 46rem;
+			margin: 0 auto 1.5rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.7;
+		}
+		.famiglie__cta .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+
+		/* Pulsante inline dentro una risposta FAQ: il markup passato via
+		   `html` vive nel componente Faq, quindi serve :global(). */
+		:global(.faq-inline-btn) {
+			padding: 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			font: inherit;
+			color: var(--accent-on-dark);
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+		}
+		:global(.faq-inline-btn:hover) {
+			color: var(--text-on-dark);
 		}
 
 		.adults {
