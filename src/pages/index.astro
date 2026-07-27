@@ -451,7 +451,7 @@ const clubGallery = [
 		<div class="eventi-preview__head">
 			<span class="eyebrow">Community</span>
 			<h2>La vita del club non finisce con l'allenamento</h2>
-			<p class="lede" style="margin-inline:auto">
+			<p class="lede">
 				Tornei sociali, feste in piscina, simulazioni di gara e appuntamenti per le famiglie: gli eventi sono una <strong>parte cardine della vita di Ronchiverdi</strong> e un valore aggiunto compreso nell'abbonamento. È qui che i soci diventano compagni di squadra, avversari e amici.
 			</p>
 		</div>
@@ -461,7 +461,7 @@ const clubGallery = [
 				{prossimiEventi.map((e) => {
 					const badge = badgeDate(e.data.date);
 					return (
-						<a class="evento-card" href={url(`/eventi#${e.id}`)} data-event-until={untilAttr(e.data.date, e.data.endDate)}>
+						<a class="evento-card" href={url(`/eventi/${e.id}`)} data-event-until={untilAttr(e.data.date, e.data.endDate)}>
 							<span class="evento-card__media">
 								{e.data.image && <img src={url(e.data.image)} alt="" loading="lazy" />}
 								<span class="evento-card__badge" aria-hidden="true">
@@ -1178,8 +1178,14 @@ const clubGallery = [
 			text-align: center;
 		}
 		.eventi-preview__head {
-			max-width: 46rem;
+			max-width: 52rem;
 			margin: 0 auto 3rem;
+		}
+		.eventi-preview__head .lede {
+			/* Il testo segue la larghezza del titolo, come nelle altre
+			   sezioni della home, invece dei 32rem ereditati da .lede. */
+			max-width: none;
+			margin-inline: auto;
 		}
 		.eventi-grid {
 			display: grid;
