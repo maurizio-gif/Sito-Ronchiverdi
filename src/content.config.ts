@@ -9,15 +9,6 @@ const pages = defineCollection({
   }),
 });
 
-const posts = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    date: z.coerce.date().optional(),
-  }),
-});
-
 const activities = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/activities" }),
   schema: z.object({
@@ -92,4 +83,4 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, posts, activities, services, memberships, events };
+export const collections = { pages, activities, services, memberships, events };
