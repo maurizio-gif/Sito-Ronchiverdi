@@ -65,11 +65,8 @@ const faq = [
 
 	<section class="info-section contacts-section">
 		<h2>Contatti</h2>
-		<ul class="contacts-list">
-			<li><strong>Tel:</strong> <a href="tel:+390116612146">011 6612146</a></li>
-			<li><strong>Mail:</strong> <a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></li>
-		</ul>
-		<p class="note">Per organizzare la lezione di prova o avere maggiori informazioni sui percorsi, il modo più rapido è compilare il modulo di contatto.</p>
+		<p>Per organizzare la lezione di prova, chiedere informazioni sui percorsi o completare l'iscrizione, compila il modulo di contatto: ti risponde il settore tennis.</p>
+		<button type="button" class="btn" data-open-contact data-interest="Tennis">Contattaci</button>
 	</section>
 
 	<Faq items={faq} />
@@ -159,20 +156,10 @@ const faq = [
 			color: var(--accent);
 		}
 
-		.contacts-list {
-			list-style: none;
-			margin: 0 0 1rem;
-			padding: 0;
+		.contacts-section .btn {
+			cursor: pointer;
 			font-family: var(--font-sans);
-			color: var(--text-muted);
-			line-height: 1.8;
-		}
-		.contacts-list a {
-			color: var(--text);
-			text-decoration: underline;
-		}
-		.contacts-list a:hover {
-			color: var(--accent);
+			border: none;
 		}
 
 		.final-cta {
