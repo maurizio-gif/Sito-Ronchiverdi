@@ -56,6 +56,65 @@ export default defineConfig({
         ],
       },
       {
+        // Sorgente unica della tabella abbonamenti: modificandola qui si
+        // aggiornano tutte le pagine che la mostrano (abbonamenti, gym
+        // floor, ...). Documento singolo, non se ne creano altri.
+        name: "membership",
+        label: "Tabella abbonamenti",
+        path: "src/content/memberships",
+        format: "json",
+        ui: { allowedActions: { create: false, delete: false } },
+        fields: [
+          {
+            type: "object",
+            name: "plans",
+            label: "Piani",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.name }) },
+            fields: [
+              {
+                type: "string",
+                name: "key",
+                label: "Codice",
+                required: true,
+                options: ["gold", "silver", "gym", "swim"],
+              },
+              { type: "string", name: "name", label: "Nome", required: true },
+              { type: "string", name: "price", label: "Prezzo mensile", required: true },
+              { type: "string", name: "duration", label: "Durata (nota)" },
+              { type: "boolean", name: "featured", label: "In evidenza" },
+            ],
+          },
+          {
+            type: "object",
+            name: "features",
+            label: "Attività incluse",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.label }) },
+            fields: [
+              { type: "string", name: "label", label: "Attività", required: true },
+              { type: "string", name: "note", label: "Nota (tooltip)" },
+              {
+                type: "object",
+                name: "access",
+                label: "Accesso per piano",
+                fields: ["gold", "silver", "gym", "swim"].map((k) => ({
+                  type: "string" as const,
+                  name: k,
+                  label: k.charAt(0).toUpperCase() + k.slice(1),
+                  required: true,
+                  options: [
+                    { value: "full", label: "Incluso" },
+                    { value: "rate", label: "Tariffa agevolata" },
+                    { value: "none", label: "Non incluso" },
+                  ],
+                })),
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "activity",
         label: "Attività (card home)",
         path: "src/content/activities",

@@ -1,0 +1,307 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ContactModal from "../../../components/ContactModal.astro";
+import PageHero from "../../../components/PageHero.astro";
+import Faq from "../../../components/Faq.astro";
+import { url } from "../../../lib/paths";
+
+const categorie = [
+	{
+		eyebrow: "6–13 anni",
+		title: "Young School",
+		desc: "L'iscrizione si effettua online dal sito Ronchiverdi: si consultano le disponibilità, si sceglie il programma da 1, 2 o 3 allenamenti settimanali e si completa la procedura.",
+		punti: [
+			"Iscrizione online dal sito",
+			"Prima settimana di attività dedicata alle prove gratuite",
+			"La quota comprende i tesseramenti FITRI e FIDAL",
+		],
+		anchor: "#young",
+	},
+	{
+		eyebrow: "14–20 anni",
+		title: "Academy",
+		desc: "L'iscrizione si effettua presso la Reception del Club. Prima di iscriversi è possibile partecipare a una lezione di prova, per conoscere i tecnici, il gruppo e l'organizzazione degli allenamenti.",
+		punti: [
+			"Iscrizione presso la Reception del Club",
+			"Lezione di prova su richiesta",
+			"La quota comprende il tesseramento FITRI e ha validità annuale",
+		],
+		anchor: "#academy",
+	},
+	{
+		eyebrow: "Dai 20 anni",
+		title: "Master",
+		desc: "L'attività della squadra è riservata ai soci del club: serve un abbonamento che comprenda piscina e palestra, Gold o Silver. Anche qui è possibile partecipare a una lezione di prova prima di entrare nel gruppo.",
+		punti: [
+			"Abbonamento Gold o Silver attivo",
+			"Lezione di prova su richiesta",
+			"Tesseramento FITRI per attività di squadra e gare",
+		],
+		anchor: "#master",
+	},
+];
+
+const documenti = [
+	"Certificato medico in corso di validità per la Young School; dai 12 anni è richiesto il certificato medico agonistico",
+	"Certificato medico agonistico in corso di validità per Academy e Master, obbligatorio anche per il tesseramento federale",
+	"Tesseramento FITRI, compreso nella quota per Young School e Academy",
+	"Tesseramento FIDAL, compreso nella quota della Young School",
+];
+
+const faq = [
+	{
+		q: "Come ci si iscrive, categoria per categoria?",
+		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, all'Academy presso la Reception del Club. Per il Triathlon Master l'accesso è riservato ai soci con abbonamento Gold o Silver: in tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura.",
+	},
+	{
+		q: "Posso provare prima di iscrivermi?",
+		a: "Sì. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite. Per Academy e Master è possibile richiedere una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento.",
+	},
+	{
+		q: "Quali documenti servono?",
+		a: "Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale.",
+	},
+	{
+		q: "Cosa comprende la quota?",
+		a: "La quota della Young School comprende i tesseramenti FITRI e FIDAL. Quella dell'Academy comprende il tesseramento FITRI e ha validità annuale; gli iscritti possono inoltre frequentare il club quotidianamente, anche al di fuori degli orari di allenamento.",
+	},
+];
+---
+
+<Layout
+	title="Modalità di iscrizione — Triathlon Ronchiverdi"
+	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
+>
+	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon">
+		<Fragment slot="title">Modalità di <em class="accent accent-dark">iscrizione</em></Fragment>
+		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
+		<div class="header-cta">
+			<button type="button" class="btn btn-outline-dark" data-open-contact data-interest="Triathlon">Contattaci</button>
+		</div>
+	</PageHero>
+
+	<section class="cat-section">
+		<div class="cat-section__head">
+			<span class="eyebrow">Le tre categorie</span>
+			<h2>Come ci si iscrive</h2>
+		</div>
+		<div class="cat-grid">
+			{categorie.map((c) => (
+				<article class="cat-card">
+					<span class="eyebrow">{c.eyebrow}</span>
+					<h3>{c.title}</h3>
+					<p class="cat-card__desc">{c.desc}</p>
+					<ul class="cat-card__punti">
+						{c.punti.map((p) => (
+							<li>
+								<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								<span>{p}</span>
+							</li>
+						))}
+					</ul>
+					<a class="cat-card__link" href={url(`/attivita/triathlon${c.anchor}`)}>Scopri il percorso →</a>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="info-section">
+		<h2>Documenti e tesseramenti</h2>
+		<ul class="plain-list">
+			{documenti.map((d) => <li>{d}</li>)}
+		</ul>
+		<p class="note">Il certificato medico va consegnato prima dell'inizio dell'attività: senza, non è possibile partecipare agli allenamenti.</p>
+	</section>
+
+	<section class="info-section">
+		<h2>Prova prima di iscriverti</h2>
+		<p>Nella Young School la <strong>prima settimana di attività</strong> è dedicata alle lezioni di prova gratuite: i ragazzi conoscono i tecnici e sperimentano nuoto, ciclismo e corsa. Per <strong>Academy</strong> e <strong>Master</strong> la lezione di prova si concorda su richiesta.</p>
+	</section>
+
+	<section class="info-section contacts-section">
+		<h2>Contatti</h2>
+		<p>Per organizzare la lezione di prova, chiedere informazioni sui percorsi o completare l'iscrizione, compila il modulo di contatto: ti risponde il settore triathlon.</p>
+		<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
+	</section>
+
+	<Faq items={faq} />
+
+	<section class="final-cta">
+		<h2>Pronto a partire?</h2>
+		<p class="lede" style="margin-inline:auto">Scrivici: ti aiutiamo a capire quale percorso è adatto e a organizzare la prova.</p>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<a class="btn btn-outline" href={url("/attivita/triathlon")}>Torna al triathlon</a>
+		</div>
+	</section>
+
+	<ContactModal />
+
+	<style>
+		.header-cta {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-top: 1.5rem;
+		}
+		.btn-outline-dark {
+			display: inline-block;
+			cursor: pointer;
+			font-family: var(--font-sans);
+			font-weight: 600;
+			font-size: var(--text-xs);
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			background: rgba(246, 239, 222, 0.1);
+			border: 1px solid rgba(246, 239, 222, 0.5);
+			color: var(--text-on-dark);
+			padding: 0.9rem 2rem;
+			border-radius: var(--radius);
+			transition: background 0.15s ease;
+		}
+		.btn-outline-dark:hover {
+			background: rgba(246, 239, 222, 0.2);
+		}
+
+		.cat-section {
+			max-width: 84rem;
+			margin: 0 auto;
+			padding: 4.5rem 1.5rem 2rem;
+		}
+		.cat-section__head {
+			max-width: 42rem;
+			margin: 0 auto 2.75rem;
+			text-align: center;
+		}
+		.cat-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.75rem;
+		}
+		.cat-card {
+			display: flex;
+			flex-direction: column;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			padding: 1.9rem 1.75rem 2rem;
+		}
+		.cat-card h3 {
+			margin: 0.3rem 0 0.9rem;
+			font-size: var(--text-xl);
+		}
+		.cat-card__desc {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.65;
+			margin: 0 0 1.1rem;
+		}
+		.cat-card__punti {
+			list-style: none;
+			margin: 0 0 1.5rem;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text);
+			line-height: 1.45;
+		}
+		.cat-card__punti li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.55rem;
+		}
+		.cat-card__punti li svg {
+			flex-shrink: 0;
+			margin-top: 0.2rem;
+			color: var(--accent);
+		}
+		.cat-card__link {
+			margin-top: auto;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			font-weight: 600;
+			color: var(--text);
+			text-decoration: none;
+		}
+		.cat-card__link:hover {
+			color: var(--accent);
+		}
+		@media (max-width: 900px) {
+			.cat-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.info-section {
+			max-width: 68rem;
+			margin: 0 auto;
+			padding: 2.25rem 1.5rem;
+			border-top: 1px solid var(--border);
+		}
+		.info-section h2 {
+			font-size: var(--text-lg);
+			margin-bottom: 1rem;
+		}
+		.info-section p {
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.65;
+			margin: 0 0 0.85rem;
+		}
+		.note {
+			font-size: var(--text-sm);
+			font-style: italic;
+		}
+		.plain-list {
+			list-style: none;
+			margin: 0 0 1rem;
+			padding: 0;
+			font-family: var(--font-sans);
+			color: var(--text-muted);
+			line-height: 1.7;
+		}
+		.plain-list li {
+			padding-left: 1.1rem;
+			position: relative;
+		}
+		.plain-list li::before {
+			content: "—";
+			position: absolute;
+			left: 0;
+			color: var(--accent);
+		}
+		.contacts-section .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.final-cta__buttons .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.final-cta__buttons .btn-outline {
+			border: 1px solid currentColor;
+		}
+	</style>
+</Layout>
