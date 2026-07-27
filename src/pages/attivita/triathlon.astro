@@ -267,8 +267,8 @@ const faq = [
 		</section>
 
 		<div class="section-cta">
-			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una prova gratuita</button>
-			<a class="btn btn-outline" href={url("/abbonamenti")}>Vedi gli abbonamenti</a>
+			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
 		</div>
 	</div>
 
@@ -305,7 +305,8 @@ const faq = [
 		</p>
 
 		<div class="section-cta">
-			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una lezione di prova</button>
+			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
 		</div>
 	</div>
 
@@ -335,12 +336,12 @@ const faq = [
 		</section>
 
 		<p class="frame-note">
-			L'attività Master è riservata ai soci del club e richiede un abbonamento che comprenda piscina e palestra: <strong>Gold</strong> o <strong>Silver</strong>. Per l'attività della squadra e per le competizioni serve il tesseramento FITRI, con certificato medico agonistico in corso di validità.
+			L'attività Master è riservata ai soci del club e richiede un <a href={url("/abbonamenti")}>abbonamento</a> che comprenda piscina e palestra: <strong>Gold</strong> o <strong>Silver</strong>. Per l'attività della squadra e per le competizioni serve il tesseramento FITRI, con certificato medico agonistico in corso di validità.
 		</p>
 
 		<div class="section-cta">
-			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una lezione di prova</button>
-			<a class="btn btn-outline" href={url("/abbonamenti")}>Vedi gli abbonamenti</a>
+			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
 		</div>
 	</div>
 
@@ -371,8 +372,8 @@ const faq = [
 			Contatta il settore triathlon per una <strong>lezione di prova</strong> o per capire quale percorso è adatto a te.
 		</p>
 		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
-			<a class="btn btn-outline" href={url("/prenota-un-tour")}>Prenota un tour</a>
+			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
 		</div>
 	</section>
 
@@ -769,6 +770,11 @@ const faq = [
 			}
 		}
 
+		.frame-note a {
+			color: var(--accent);
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+		}
 		.frame-note {
 			max-width: 52rem;
 			margin: 2.5rem auto 0;

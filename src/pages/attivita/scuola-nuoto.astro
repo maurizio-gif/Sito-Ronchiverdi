@@ -275,7 +275,10 @@ const faq = [
 			<p class="famiglie__note">
 				Vuoi provare prima di iscriverti? La <strong>prova gratuita</strong> è possibile previa disponibilità dei posti: scrivici e organizziamo insieme il giorno.
 			</p>
-			<button type="button" class="btn" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+			<div class="famiglie__buttons">
+				<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
+				<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+			</div>
 		</div>
 	</section>
 
@@ -585,10 +588,19 @@ const faq = [
 			color: var(--text-muted);
 			line-height: 1.7;
 		}
-		.famiglie__cta .btn {
+		.famiglie__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.famiglie__buttons .btn {
 			cursor: pointer;
 			font-family: var(--font-sans);
 			border: none;
+		}
+		.famiglie__buttons .btn-outline {
+			border: 1px solid currentColor;
 		}
 
 		/* Pulsante inline dentro una risposta FAQ: il markup passato via
