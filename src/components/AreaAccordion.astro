@@ -1,0 +1,490 @@
+---
+import { url } from "../lib/paths";
+
+interface Photo {
+	src: string;
+	alt: string;
+}
+
+interface AreaItem {
+	id: string;
+	name: string;
+	tag: string;
+	desc: string;
+	bullets?: string[];
+	note?: string;
+	photos: Photo[];
+	equipment?: string[];
+}
+
+interface Props {
+	items: AreaItem[];
+	/** Indice della voce aperta al caricamento della pagina. */
+	open?: number;
+	/** Etichetta del pulsante che rivela l'elenco attrezzatura. */
+	equipmentLabel?: string;
+}
+
+const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
+---
+
+<div class="areas">
+	{items.map((area, i) => (
+		<article class={`area${i === open ? " open" : ""}`} id={area.id}>
+			<h3 class="area__heading">
+				<button type="button" class="area__trigger" aria-expanded={i === open ? "true" : "false"} aria-controls={`${area.id}-panel`}>
+					<span class="area__num">{String(i + 1).padStart(2, "0")}</span>
+					<span class="area__titles">
+						<span class="area__name">{area.name}</span>
+						<span class="area__tag">{area.tag}</span>
+					</span>
+					<span class="area__icon" aria-hidden="true">
+						<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+					</span>
+				</button>
+			</h3>
+			<div class="area__panel" id={`${area.id}-panel`}>
+				<div class="area__panel-inner">
+					<div class="area__slideshow" data-slideshow>
+						<div class="slideshow__frame">
+							{area.photos.map((p, j) => (
+								<img class={`slideshow__img${j === 0 ? " is-active" : ""}`} src={url(p.src)} alt={p.alt} loading="lazy" />
+							))}
+							{area.photos.length > 1 && (
+								<>
+									<button type="button" class="slideshow__nav slideshow__nav--prev" data-slide-dir="-1" aria-label="Foto precedente">
+										<svg width="16" height="16" viewBox="0 0 18 14" fill="none"><path d="M17 7H2M8 1L2 7l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									</button>
+									<button type="button" class="slideshow__nav slideshow__nav--next" data-slide-dir="1" aria-label="Foto successiva">
+										<svg width="16" height="16" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									</button>
+									<div class="slideshow__dots">
+										{area.photos.map((_, j) => (
+											<button type="button" class={`slideshow__dot${j === 0 ? " is-active" : ""}`} data-slide-to={j} aria-label={`Vai alla foto ${j + 1}`} />
+										))}
+									</div>
+								</>
+							)}
+						</div>
+					</div>
+
+					<div class="area__content">
+						<p class="area__desc">{area.desc}</p>
+						{area.bullets && (
+							<ul class="area__bullets">
+								{area.bullets.map((b) => (
+									<li>
+										<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+										<span>{b}</span>
+									</li>
+								))}
+							</ul>
+						)}
+						{area.note && <p class="area__note">{area.note}</p>}
+						{area.equipment && (
+							<div class="area__equip">
+								<button type="button" class="area__equip-trigger" aria-expanded="false" aria-controls={`${area.id}-equip`}>
+									{equipmentLabel}
+									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								</button>
+								<div class="area__equip-panel" id={`${area.id}-equip`}>
+									<ul class="area__equip-list">
+										{area.equipment.map((e) => <li>{e}</li>)}
+									</ul>
+								</div>
+							</div>
+						)}
+					</div>
+				</div>
+			</div>
+		</article>
+	))}
+</div>
+
+<script>
+	// --- Accordion: una sola area aperta per volta ---------------------------
+	const areas = Array.from(document.querySelectorAll<HTMLElement>(".area"));
+
+	function panelOf(area: HTMLElement) {
+		return area.querySelector<HTMLElement>(".area__panel");
+	}
+
+	function expand(area: HTMLElement) {
+		const panel = panelOf(area);
+		if (!panel) return;
+		area.classList.add("open");
+		area.querySelector(".area__trigger")?.setAttribute("aria-expanded", "true");
+		panel.style.maxHeight = `${panel.scrollHeight}px`;
+		panel.addEventListener("transitionend", function done(e) {
+			if ((e as TransitionEvent).propertyName !== "max-height") return;
+			panel.removeEventListener("transitionend", done);
+			// Altezza libera a fine animazione: le foto e l'elenco macchinari
+			// possono crescere senza restare tagliati.
+			if (area.classList.contains("open")) panel.style.maxHeight = "none";
+		});
+	}
+
+	function collapse(area: HTMLElement) {
+		const panel = panelOf(area);
+		if (!panel) return;
+		area.classList.remove("open");
+		area.querySelector(".area__trigger")?.setAttribute("aria-expanded", "false");
+		panel.style.maxHeight = `${panel.scrollHeight}px`;
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				panel.style.maxHeight = "0px";
+			});
+		});
+	}
+
+	areas.forEach((area) => {
+		// Voce aperta di default: nessuna animazione al primo render.
+		if (area.classList.contains("open")) {
+			const panel = panelOf(area);
+			if (panel) panel.style.maxHeight = "none";
+		}
+
+		area.querySelector(".area__trigger")?.addEventListener("click", () => {
+			const isOpen = area.classList.contains("open");
+			areas.forEach((other) => other.classList.contains("open") && collapse(other));
+			if (!isOpen) expand(area);
+		});
+	});
+
+	// --- Elenco macchinari ---------------------------------------------------
+	document.querySelectorAll<HTMLElement>(".area__equip-trigger").forEach((trigger) => {
+		trigger.addEventListener("click", () => {
+			const wrap = trigger.closest(".area__equip");
+			const isOpen = wrap?.classList.toggle("open") ?? false;
+			trigger.setAttribute("aria-expanded", String(isOpen));
+		});
+	});
+
+	// --- Slideshow -----------------------------------------------------------
+	document.querySelectorAll<HTMLElement>("[data-slideshow]").forEach((box) => {
+		const slides = Array.from(box.querySelectorAll<HTMLElement>(".slideshow__img"));
+		const dots = Array.from(box.querySelectorAll<HTMLElement>(".slideshow__dot"));
+		if (slides.length < 2) return;
+		let index = 0;
+
+		function show(next: number) {
+			index = (next + slides.length) % slides.length;
+			slides.forEach((s, i) => s.classList.toggle("is-active", i === index));
+			dots.forEach((d, i) => d.classList.toggle("is-active", i === index));
+		}
+
+		box.querySelectorAll<HTMLElement>("[data-slide-dir]").forEach((btn) => {
+			btn.addEventListener("click", () => show(index + Number(btn.dataset.slideDir)));
+		});
+		dots.forEach((dot) => {
+			dot.addEventListener("click", () => show(Number(dot.dataset.slideTo)));
+		});
+	});
+</script>
+
+<style>
+	.areas {
+		border-top: 1px solid var(--border-strong);
+	}
+	.area {
+		border-bottom: 1px solid var(--border-strong);
+	}
+	.area__heading {
+		margin: 0;
+		font-size: inherit;
+		font-weight: inherit;
+		line-height: inherit;
+		letter-spacing: normal;
+	}
+	.area__trigger {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		width: 100%;
+		padding: 1.75rem 0.5rem;
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		color: var(--text);
+		transition: color 0.25s ease;
+	}
+	.area__trigger:hover {
+		color: var(--accent);
+	}
+	.area__num {
+		flex-shrink: 0;
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: var(--text-xl);
+		line-height: 1;
+		color: var(--accent);
+		opacity: 0.7;
+		transition: opacity 0.25s ease;
+	}
+	.area.open .area__num {
+		opacity: 1;
+	}
+	.area__titles {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		align-items: baseline;
+		gap: 0.9rem;
+		flex-wrap: wrap;
+	}
+	.area__name {
+		font-family: var(--font-sans);
+		font-size: var(--text-xl);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+	}
+	.area__tag {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		padding: 0.25rem 0.7rem;
+	}
+	.area__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 50%;
+		border: 1px solid var(--border-strong);
+		color: var(--accent);
+		transition: transform 0.35s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+	}
+	.area:hover .area__icon {
+		border-color: var(--accent);
+	}
+	.area.open .area__icon {
+		transform: rotate(135deg);
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--text-on-dark);
+	}
+
+	.area__panel {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	.area__panel-inner {
+		display: grid;
+		grid-template-columns: 1.15fr 1fr;
+		gap: 2.5rem;
+		align-items: start;
+		padding: 0.5rem 0.5rem 2.75rem;
+	}
+
+	.slideshow__frame {
+		position: relative;
+		aspect-ratio: 16 / 10;
+		border-radius: 16px;
+		overflow: hidden;
+		background: var(--bg-alt);
+		box-shadow: 0 12px 32px -14px rgba(28, 28, 24, 0.35);
+	}
+	.slideshow__img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.5s ease;
+	}
+	.slideshow__img.is-active {
+		opacity: 1;
+	}
+	.slideshow__nav {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		border: 1px solid rgba(246, 239, 222, 0.35);
+		background: rgba(28, 28, 24, 0.5);
+		color: var(--text-on-dark);
+		cursor: pointer;
+		transition: background 0.25s ease, border-color 0.25s ease;
+	}
+	.slideshow__nav:hover {
+		background: var(--accent);
+		border-color: var(--accent);
+	}
+	.slideshow__nav--prev {
+		left: 0.85rem;
+	}
+	.slideshow__nav--next {
+		right: 0.85rem;
+	}
+	.slideshow__dots {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0.9rem;
+		display: flex;
+		justify-content: center;
+		gap: 0.4rem;
+	}
+	.slideshow__dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		padding: 0;
+		border-radius: 50%;
+		border: none;
+		background: rgba(246, 239, 222, 0.45);
+		cursor: pointer;
+		transition: background 0.25s ease, transform 0.25s ease;
+	}
+	.slideshow__dot.is-active {
+		background: var(--accent-on-dark);
+		transform: scale(1.25);
+	}
+
+	.area__desc {
+		margin: 0 0 1.25rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-md);
+		color: var(--text-muted);
+		line-height: 1.65;
+	}
+	.area__bullets {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text);
+	}
+	.area__bullets li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6rem;
+		line-height: 1.45;
+	}
+	.area__bullets li svg {
+		flex-shrink: 0;
+		margin-top: 0.2rem;
+		color: var(--accent);
+	}
+	.area__note {
+		margin: 1.25rem 0 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		line-height: 1.6;
+		font-style: italic;
+	}
+
+	.area__equip {
+		margin-top: 1.5rem;
+	}
+	.area__equip-trigger {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.55rem 1.1rem;
+		background: var(--bg-alt);
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--text);
+		transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+	}
+	.area__equip-trigger:hover {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--text-on-dark);
+	}
+	.area__equip-trigger svg {
+		transition: transform 0.3s ease;
+	}
+	.area__equip.open .area__equip-trigger svg {
+		transform: rotate(180deg);
+	}
+	.area__equip-panel {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.4s ease;
+	}
+	.area__equip.open .area__equip-panel {
+		max-height: 40rem;
+	}
+	.area__equip-list {
+		margin: 1rem 0 0;
+		padding: 1.1rem 1.25rem;
+		list-style: none;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: var(--bg-alt);
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.5rem 1.25rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		line-height: 1.4;
+	}
+	.area__equip-list li {
+		position: relative;
+		padding-left: 0.9rem;
+	}
+	.area__equip-list li::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0.55em;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--accent);
+	}
+
+	@media (max-width: 900px) {
+		.area__panel-inner {
+			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
+	}
+	@media (max-width: 640px) {
+		.area__trigger {
+			gap: 1rem;
+			padding: 1.4rem 0.25rem;
+		}
+		.area__name {
+			font-size: var(--text-lg);
+		}
+		.area__titles {
+			gap: 0.5rem;
+		}
+		.area__equip-list {
+			grid-template-columns: 1fr;
+		}
+		.slideshow__nav {
+			width: 2.1rem;
+			height: 2.1rem;
+		}
+	}
+</style>
