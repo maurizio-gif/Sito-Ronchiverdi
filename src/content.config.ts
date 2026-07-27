@@ -43,4 +43,36 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { pages, posts, activities, services };
+// Tabella abbonamenti: sorgente unica usata da tutte le pagine che la
+// mostrano (abbonamenti, gym floor, ...). Modificarla qui — o da Tina —
+// la aggiorna ovunque.
+const accessLevel = z.enum(["full", "rate", "none"]);
+
+const memberships = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/memberships" }),
+  schema: z.object({
+    plans: z.array(
+      z.object({
+        key: z.enum(["gold", "silver", "gym", "swim"]),
+        name: z.string(),
+        price: z.string(),
+        duration: z.string().optional(),
+        featured: z.boolean().optional(),
+      })
+    ),
+    features: z.array(
+      z.object({
+        label: z.string(),
+        note: z.string().optional(),
+        access: z.object({
+          gold: accessLevel,
+          silver: accessLevel,
+          gym: accessLevel,
+          swim: accessLevel,
+        }),
+      })
+    ),
+  }),
+});
+
+export const collections = { pages, posts, activities, services, memberships };

@@ -1,0 +1,60 @@
+{
+  "plans": [
+    { "key": "gold", "name": "Gold", "price": "170€", "featured": true },
+    { "key": "silver", "name": "Silver", "price": "158€" },
+    { "key": "gym", "name": "Gym", "price": "99€" },
+    { "key": "swim", "name": "Swim", "price": "99€", "duration": "11 mesi · agosto escluso" }
+  ],
+  "features": [
+    {
+      "label": "Gym Floor",
+      "note": "Sala pesi con macchinari Technogym",
+      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+    },
+    {
+      "label": "Corsi Fitness",
+      "note": "Corsi di gruppo per tutti i livelli",
+      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+    },
+    {
+      "label": "Hyrox Training",
+      "note": "Allenamenti specifici per la gara fitness più intensa al mondo",
+      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+    },
+    {
+      "label": "Acqua Fitness",
+      "note": "AquaStep, hydrobike e allenamento in acqua",
+      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "full" }
+    },
+    {
+      "label": "Nuoto Libero",
+      "note": "assistito",
+      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "full" }
+    },
+    {
+      "label": "Piscina Estiva",
+      "note": "outdoor",
+      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "none" }
+    },
+    {
+      "label": "Spa",
+      "note": "Chinesis Postural Lab, Relax Zone",
+      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "full" }
+    },
+    {
+      "label": "Triathlon",
+      "note": "Nuoto, ciclismo e corsa con supporto tecnico qualificato",
+      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "none" }
+    },
+    {
+      "label": "Padel",
+      "note": "3 campi, coperti e scoperti",
+      "access": { "gold": "rate", "silver": "rate", "gym": "none", "swim": "none" }
+    },
+    {
+      "label": "Tennis",
+      "note": "9 campi in terra rossa",
+      "access": { "gold": "rate", "silver": "none", "gym": "none", "swim": "none" }
+    }
+  ]
+}

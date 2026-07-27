@@ -7,6 +7,7 @@ import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import InfoTip from "../../components/InfoTip.astro";
 import HoursTable from "../../components/HoursTable.astro";
+import MembershipTable from "../../components/MembershipTable.astro";
 import { gymFloorHours, gymFloorTrainerHours } from "../../data/schedules";
 import { url } from "../../lib/paths";
 
@@ -342,6 +343,17 @@ const faq = [
 		</div>
 	</section>
 
+	<MembershipTable
+		eyebrow="Abbonamenti"
+		title="Quale abbonamento ti serve"
+		lede="Il Gym Floor è compreso negli abbonamenti <strong>Gold</strong>, <strong>Silver</strong> e <strong>Gym</strong>: confronta le formule e scegli quella adatta a te."
+	>
+		<div class="membership-cta">
+			<button type="button" class="btn" data-open-contact data-interest="Fitness e Sala Pesi">Iscriviti ora</button>
+			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri le nostre membership</a>
+		</div>
+	</MembershipTable>
+
 	<section class="personal">
 		<div class="personal__head">
 			<span class="eyebrow eyebrow-dark">Personal Training</span>
@@ -586,6 +598,22 @@ const faq = [
 				gap: 2rem;
 				padding: 4rem 1.5rem;
 			}
+		}
+
+		.membership-cta {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-top: 2.5rem;
+		}
+		.membership-cta .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.membership-cta .btn-outline {
+			border: 1px solid currentColor;
 		}
 
 		.personal {
