@@ -499,21 +499,18 @@ const clubGallery = [
 				rgba(28, 28, 24, 0.7) 100%
 			);
 		}
-		/* Alone dietro al testo: scurisce e sfoca solo il centro del video,
-		   così il titolo resta leggibile su qualsiasi fotogramma. */
+		/* Alone dietro al testo: scurisce il centro del video sfumando fino
+		   a sparire, così il titolo resta leggibile su ogni fotogramma. */
 		.hero-spot {
 			position: absolute;
 			inset: 0;
 			background: radial-gradient(
-				ellipse 62% 42% at 50% 50%,
+				ellipse 66% 44% at 50% 50%,
 				rgba(28, 28, 24, 0.62) 0%,
 				rgba(28, 28, 24, 0.42) 45%,
+				rgba(28, 28, 24, 0.15) 75%,
 				rgba(28, 28, 24, 0) 100%
 			);
-			-webkit-backdrop-filter: blur(7px);
-			backdrop-filter: blur(7px);
-			-webkit-mask-image: radial-gradient(ellipse 62% 42% at 50% 50%, #000 35%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
-			mask-image: radial-gradient(ellipse 62% 42% at 50% 50%, #000 35%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
 		}
 		.hero-content {
 			position: relative;
@@ -539,13 +536,12 @@ const clubGallery = [
 			   l'alone si allarga per non lasciarne fuori i bordi. */
 			.hero-spot {
 				background: radial-gradient(
-					ellipse 95% 32% at 50% 50%,
+					ellipse 100% 34% at 50% 50%,
 					rgba(28, 28, 24, 0.62) 0%,
 					rgba(28, 28, 24, 0.42) 45%,
+					rgba(28, 28, 24, 0.15) 75%,
 					rgba(28, 28, 24, 0) 100%
 				);
-				-webkit-mask-image: radial-gradient(ellipse 95% 32% at 50% 50%, #000 35%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
-				mask-image: radial-gradient(ellipse 95% 32% at 50% 50%, #000 35%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
 			}
 		}
 
