@@ -9,15 +9,6 @@ const pages = defineCollection({
   }),
 });
 
-const posts = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    date: z.coerce.date().optional(),
-  }),
-});
-
 const activities = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/activities" }),
   schema: z.object({
@@ -40,6 +31,23 @@ const services = defineCollection({
     order: z.number().optional(),
     href: z.string(),
     external: z.boolean().optional(),
+  }),
+});
+
+// Eventi del club. Il corpo del file è HTML (o markdown) e viene renderizzato
+// così com'è; il pulsante compare solo se è valorizzato ctaHref.
+const events = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/events" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+    orario: z.string().optional(),
+    luogo: z.string().optional(),
+    image: z.string().optional(),
+    summary: z.string(),
+    ctaLabel: z.string().optional(),
+    ctaHref: z.string().optional(),
   }),
 });
 
@@ -75,4 +83,4 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, posts, activities, services, memberships };
+export const collections = { pages, activities, services, memberships, events };

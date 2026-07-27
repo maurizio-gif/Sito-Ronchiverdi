@@ -6,7 +6,7 @@ sono esclusi da questo progetto). Stack: [Astro](https://astro.build) +
 via git.
 
 > Questa è la base tecnica del progetto. La struttura definitiva delle pagine
-> (verticali sport, young school, corsi, blog, ecc.) è ancora da definire —
+> (verticali sport, young school, corsi, ecc.) è ancora da definire —
 > vedi la sezione "Stato attuale" più sotto.
 
 ## Struttura del progetto
@@ -18,7 +18,7 @@ via git.
 │   ├── content.config.ts    definizione delle content collection Astro
 │   ├── content/
 │   │   ├── pages/            pagine gestite da Tina (collection "page")
-│   │   └── posts/             articoli blog gestiti da Tina (collection "post")
+│   │   └── events/            eventi del club gestiti da Tina (collection "event")
 │   └── pages/
 │       └── index.astro       homepage (provvisoria)
 ├── tina/
@@ -49,10 +49,14 @@ variabili d'ambiente `TINA_CLIENT_ID` e `TINA_TOKEN`, poi usare
 
 ## Content collection
 
-Due collection di base per validare la pipeline Astro + Tina:
+Le collection gestite da Tina:
 
 - **`pages`** (`src/content/pages/*.md`) — pagine generiche
-- **`posts`** (`src/content/posts/*.md`) — articoli blog
+- **`events`** (`src/content/events/*.md`) — eventi del club: restano online
+  fino alla loro data (o alla data di fine), poi spariscono da soli
+- **`memberships`** (`src/content/memberships/tabella.json`) — tabella
+  abbonamenti, sorgente unica per tutte le pagine che la mostrano
+- **`activities`** / **`services`** — card di attività e servizi
 
 Lo schema è definito in due punti che devono restare allineati:
 `tina/config.ts` (editor) e `src/content.config.ts` (validazione Astro).

@@ -1,8 +1,7 @@
 import { defineConfig } from "tinacms";
 
-// Struttura provvisoria: due collection di base (pagine e blog) per validare
-// la pipeline Astro + Tina. L'architettura definitiva delle pagine (verticali
-// sport, young school, corsi, ecc.) verrà definita in un secondo momento.
+// Collection editabili da Tina: pagine, eventi, tabella abbonamenti e le
+// card attività della home.
 
 export default defineConfig({
   branch: process.env.TINA_BRANCH || process.env.HEAD || "main",
@@ -39,20 +38,34 @@ export default defineConfig({
         ],
       },
       {
-        name: "post",
-        label: "Blog",
-        path: "src/content/posts",
+        // Gli eventi passati non vanno cancellati: spariscono da soli dal
+        // sito il giorno dopo la data (o dopo la data di fine).
+        name: "event",
+        label: "Eventi",
+        path: "src/content/events",
         format: "md",
         fields: [
           { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          { type: "datetime", name: "date", label: "Data", required: true },
+          { type: "datetime", name: "endDate", label: "Data di fine (se su più giorni)" },
+          { type: "string", name: "orario", label: "Orario" },
+          { type: "string", name: "luogo", label: "Luogo" },
+          { type: "image", name: "image", label: "Foto" },
           {
             type: "string",
-            name: "description",
-            label: "Descrizione (SEO)",
+            name: "summary",
+            label: "Descrizione breve",
+            required: true,
             ui: { component: "textarea" },
           },
-          { type: "datetime", name: "date", label: "Data pubblicazione" },
-          { type: "rich-text", name: "body", label: "Contenuto", isBody: true },
+          { type: "string", name: "ctaLabel", label: "Testo del pulsante" },
+          {
+            type: "string",
+            name: "ctaHref",
+            label: "Link del pulsante",
+            description: "Il pulsante compare solo se questo campo è compilato.",
+          },
+          { type: "rich-text", name: "body", label: "Testo dell'evento", isBody: true },
         ],
       },
       {
