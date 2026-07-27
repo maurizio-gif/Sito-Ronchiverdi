@@ -1,21 +1,61 @@
 ---
+import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
 
-const sportLinks = [
-	{ href: url("/tennis"), label: "Tennis" },
-	{ href: url("/padel"), label: "Padel" },
-	{ href: url("/nuoto"), label: "Nuoto" },
-	{ href: url("/fitness"), label: "Fitness" },
-	{ href: url("/running"), label: "Running" },
-	{ href: url("/triathlon"), label: "Triathlon" },
-];
+// Attività e servizi arrivano dalle content collection, come nel menu:
+// aggiungere una scheda aggiorna automaticamente anche il footer.
+const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
+const allActivities = (await getCollection("activities")).filter((a) => a.data.visible !== false);
+const attivitaAdulti = allActivities.filter((a) => a.data.audience === "adulti").sort(byOrder);
+const attivitaJunior = allActivities.filter((a) => a.data.audience === "junior").sort(byOrder);
+const activityHref = (a) => (a.data.href ? url(a.data.href) : url("/#attivita"));
+
+const services = (await getCollection("services")).sort(byOrder);
+const serviceHref = (s) => (s.data.external ? s.data.href : url(s.data.href));
+
 const clubLinks = [
+	{ href: url("/"), label: "Home" },
 	{ href: url("/il-club"), label: "Il Club" },
-	{ href: url("/young-school"), label: "Young School" },
+	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/blog"), label: "Blog" },
-	{ href: url("/orari"), label: "Orari" },
-	{ href: url("/faq"), label: "FAQ Soci" },
+	{ href: url("/prenota-un-tour"), label: "Prenota un tour" },
+];
+
+const iscrizioniLinks = [
+	{ href: url("/attivita/tennis/iscrizione"), label: "Iscrizione Tennis" },
+	{ href: url("/attivita/scuola-nuoto/iscrizione"), label: "Iscrizione Scuola Nuoto" },
+];
+
+const legalLinks = [
+	{ href: url("/regolamento"), label: "Regolamento" },
+	{ href: url("/privacy"), label: "Privacy" },
+	{ href: url("/nomina-safeguarding"), label: "Nomina Safeguarding" },
+	{ href: url("/codice-di-condotta"), label: "Codice di Condotta" },
+];
+
+const social = [
+	{
+		href: "https://www.facebook.com/ronchiverdi",
+		label: "Facebook",
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.9c0-.7.2-1.1 1.2-1.1H16.5V3.1A16 16 0 0 0 14.6 3c-2 0-3.4 1.2-3.4 3.5v2H9v3h2.2V21h3v-9.5h2.3l.4-3H14Z"/></svg>`,
+	},
+	{
+		href: "https://www.instagram.com/ronchiverdi",
+		label: "Instagram",
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.1" cy="6.9" r="1.2" fill="currentColor"/></svg>`,
+	},
+];
+
+// Loghi placeholder: sostituire i file in /public/images/federazioni con
+// quelli ufficiali mantenendo lo stesso nome, senza toccare il markup.
+const enti = [
+	{ src: "images/federazioni/coni.svg", alt: "CONI — Comitato Olimpico Nazionale Italiano" },
+	{ src: "images/federazioni/csi.svg", alt: "CSI — Centro Sportivo Italiano" },
+	{ src: "images/federazioni/fitp.svg", alt: "FITP — Federazione Italiana Tennis e Padel" },
+	{ src: "images/federazioni/fin.svg", alt: "FIN — Federazione Italiana Nuoto" },
+	{ src: "images/federazioni/fitri.svg", alt: "FITRI — Federazione Italiana Triathlon" },
+	{ src: "images/federazioni/fidal.svg", alt: "FIDAL — Federazione Italiana di Atletica Leggera" },
 ];
 ---
 
@@ -27,12 +67,49 @@ const clubLinks = [
 				Club sportivo a Torino: tennis, padel, nuoto, fitness e young
 				school, in <strong>35.000 mq</strong> tra indoor e outdoor.
 			</p>
+			<ul class="footer-contacts">
+				<li><a href="tel:+390116612146">011 6612146</a></li>
+				<li><a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></li>
+				<li class="muted">Corso Moncalieri 466, Torino</li>
+			</ul>
+			<div class="footer-social">
+				{social.map((s) => (
+					<a class="social-btn" href={s.href} target="_blank" rel="noopener" aria-label={`Ronchiverdi su ${s.label}`}>
+						<span class="social-btn__icon" set:html={s.icon} />
+						<span>{s.label}</span>
+					</a>
+				))}
+			</div>
 		</div>
 
 		<div class="footer-col">
-			<p class="footer-heading">Sport</p>
+			<p class="footer-heading">Attività sportive</p>
 			<ul>
-				{sportLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+				{attivitaAdulti.map((a) => <li><a href={activityHref(a)}>{a.data.title}</a></li>)}
+			</ul>
+		</div>
+
+		<div class="footer-col">
+			<p class="footer-heading">Young School</p>
+			<ul>
+				{attivitaJunior.map((a) => <li><a href={activityHref(a)}>{a.data.title}</a></li>)}
+			</ul>
+			<p class="footer-heading footer-heading--spaced">Iscrizioni</p>
+			<ul>
+				{iscrizioniLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+			</ul>
+		</div>
+
+		<div class="footer-col">
+			<p class="footer-heading">Servizi</p>
+			<ul>
+				{services.map((s) => (
+					<li>
+						<a href={serviceHref(s)} target={s.data.external ? "_blank" : undefined} rel={s.data.external ? "noopener" : undefined}>
+							{s.data.title}
+						</a>
+					</li>
+				))}
 			</ul>
 		</div>
 
@@ -41,23 +118,47 @@ const clubLinks = [
 			<ul>
 				{clubLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
 			</ul>
-		</div>
-
-		<div class="footer-col">
-			<p class="footer-heading">Contatti</p>
+			<p class="footer-heading footer-heading--spaced">Ronchiverdi</p>
 			<ul>
-				<li><a href="tel:+390116612146">011 6612146</a></li>
-				<li><a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></li>
-				<li class="muted">Corso Moncalieri 466, Torino</li>
+				<li><a href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a></li>
+				<li><a href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a></li>
 			</ul>
 		</div>
 	</div>
+
+	<section class="federazioni" aria-label="Federazioni ed enti sportivi">
+		<p class="federazioni__claim">Sito web per la propaganda dell'attività sportiva dilettantistica</p>
+		<div class="marquee">
+			<div class="marquee__track">
+				{[0, 1].map((copy) => (
+					<ul class="marquee__group" aria-hidden={copy === 1 ? "true" : undefined}>
+						{enti.map((e) => (
+							<li><img src={url(e.src)} alt={copy === 1 ? "" : e.alt} loading="lazy" /></li>
+						))}
+					</ul>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="legal" aria-label="Documenti e informative">
+		<p class="footer-heading">Legal</p>
+		<ul class="legal-list">
+			{legalLinks.map((l) => (
+				<li>
+					<a href={l.href}>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.2 1.8H4.5a1 1 0 0 0-1 1v10.4a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.1L9.2 1.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /><path d="M9 2v3.2h3.3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /></svg>
+						<span>{l.label}</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	</section>
 
 	<div class="footer-bottom">
 		<p class="muted">© {new Date().getFullYear()} Ronchiverdi Sport Club</p>
 		<div class="footer-legal">
 			<a href={url("/termini-e-condizioni")}>Termini e Condizioni</a>
-			<a href={url("/privacy")}>Privacy</a>
 		</div>
 	</div>
 </footer>
@@ -69,10 +170,10 @@ const clubLinks = [
 		padding: 4rem 1.5rem 1.5rem;
 	}
 	.footer-grid {
-		max-width: 76rem;
+		max-width: 82rem;
 		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 1.6fr 1fr 1fr 1fr;
+		grid-template-columns: 1.5fr repeat(4, 1fr);
 		gap: 2.5rem;
 	}
 	.footer-brand img {
@@ -85,6 +186,56 @@ const clubLinks = [
 		font-size: var(--text-sm);
 		color: rgba(246, 239, 222, 0.6);
 	}
+	.footer-contacts {
+		list-style: none;
+		margin: 1.5rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		font-size: var(--text-sm);
+	}
+	.footer-contacts a {
+		text-decoration: none;
+		color: rgba(246, 239, 222, 0.8);
+	}
+	.footer-contacts a:hover {
+		color: var(--text-on-dark);
+	}
+	.footer-contacts .muted {
+		color: rgba(246, 239, 222, 0.5);
+	}
+	.footer-social {
+		display: flex;
+		gap: 0.75rem;
+		margin-top: 1.75rem;
+		flex-wrap: wrap;
+	}
+	.social-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.65rem 1.15rem;
+		border: 1px solid var(--accent-on-dark);
+		border-radius: 999px;
+		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent-on-dark);
+		transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+	}
+	.social-btn:hover {
+		background: var(--accent-on-dark);
+		color: var(--bg-dark);
+		transform: translateY(-2px);
+	}
+	.social-btn__icon {
+		display: inline-flex;
+	}
+
 	.footer-heading {
 		font-family: var(--font-sans);
 		text-transform: uppercase;
@@ -93,6 +244,9 @@ const clubLinks = [
 		font-weight: 500;
 		color: var(--accent-on-dark);
 		margin: 0 0 1rem;
+	}
+	.footer-heading--spaced {
+		margin-top: 1.75rem;
 	}
 	.footer-col ul {
 		list-style: none;
@@ -110,12 +264,117 @@ const clubLinks = [
 	.footer-col a:hover {
 		color: var(--text-on-dark);
 	}
-	.footer-col .muted {
-		color: rgba(246, 239, 222, 0.5);
+
+	.federazioni {
+		max-width: 82rem;
+		margin: 3.5rem auto 0;
+		padding-top: 2.5rem;
+		border-top: 1px solid rgba(246, 239, 222, 0.14);
 	}
-	.footer-bottom {
-		max-width: 76rem;
+	.federazioni__claim {
+		margin: 0 0 1.75rem;
+		text-align: center;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: rgba(246, 239, 222, 0.55);
+	}
+	.marquee {
+		overflow: hidden;
+		/* Sfuma i loghi ai bordi, così entrano ed escono senza stacco. */
+		-webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+		mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+	}
+	.marquee__track {
+		display: flex;
+		width: max-content;
+		animation: marquee-scroll 32s linear infinite;
+	}
+	.marquee:hover .marquee__track {
+		animation-play-state: paused;
+	}
+	.marquee__group {
+		list-style: none;
+		margin: 0;
+		/* Il padding finale eguaglia il gap interno: la giunzione tra le due
+		   copie resta invisibile durante lo scorrimento. */
+		padding: 0 3.5rem 0 0;
+		display: flex;
+		align-items: center;
+		gap: 3.5rem;
+	}
+	.marquee__group li {
+		flex-shrink: 0;
+	}
+	.marquee__group img {
+		display: block;
+		height: 3.25rem;
+		width: auto;
+		opacity: 0.75;
+		transition: opacity 0.25s ease;
+	}
+	.marquee__group img:hover {
+		opacity: 1;
+	}
+	@keyframes marquee-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.marquee__track {
+			animation: none;
+		}
+		.marquee {
+			overflow-x: auto;
+		}
+	}
+
+	.legal {
+		max-width: 82rem;
 		margin: 3rem auto 0;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(246, 239, 222, 0.14);
+	}
+	.legal-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1rem;
+	}
+	.legal-list a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.55rem 1rem;
+		border: 1px solid rgba(246, 239, 222, 0.14);
+		border-radius: var(--radius);
+		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: rgba(246, 239, 222, 0.8);
+		transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+	}
+	.legal-list a svg {
+		flex-shrink: 0;
+		color: var(--accent-on-dark);
+	}
+	.legal-list a:hover {
+		border-color: var(--accent-on-dark);
+		background: rgba(246, 239, 222, 0.04);
+		color: var(--text-on-dark);
+	}
+
+	.footer-bottom {
+		max-width: 82rem;
+		margin: 2.5rem auto 0;
 		padding-top: 1.5rem;
 		border-top: 1px solid rgba(246, 239, 222, 0.14);
 		display: flex;
@@ -138,9 +397,21 @@ const clubLinks = [
 	.footer-legal a:hover {
 		color: var(--text-on-dark);
 	}
-	@media (max-width: 760px) {
+	@media (max-width: 1100px) {
 		.footer-grid {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 2.5rem 2rem;
+		}
+		.footer-brand {
+			grid-column: 1 / -1;
+		}
+	}
+	@media (max-width: 700px) {
+		.footer-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.marquee__group img {
+			height: 2.75rem;
 		}
 	}
 </style>
