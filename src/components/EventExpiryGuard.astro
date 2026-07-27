@@ -1,0 +1,35 @@
+---
+/**
+ * Rete di sicurezza per gli eventi scaduti.
+ *
+ * L'elenco degli eventi è filtrato in fase di build: se il sito non viene
+ * ricompilato per qualche giorno, un evento appena passato resterebbe a
+ * video. Questo script lo toglie direttamente nel browser, confrontando la
+ * data odierna con `data-event-until` (l'ultimo giorno dell'evento).
+ *
+ * Va incluso una sola volta per pagina; agisce su tutti gli elementi che
+ * espongono l'attributo. Con `data-event-list` e `data-event-empty` si
+ * indicano il contenitore da nascondere e il messaggio da mostrare quando
+ * non resta più nulla in programma.
+ */
+---
+
+<script>
+	const oggi = new Date();
+	oggi.setHours(0, 0, 0, 0);
+
+	let inProgramma = 0;
+	document.querySelectorAll<HTMLElement>("[data-event-until]").forEach((el) => {
+		const until = el.dataset.eventUntil;
+		// Fine giornata dell'ultimo giorno: l'evento resta visibile per tutto
+		// il giorno in cui si svolge.
+		const scadenza = until ? new Date(`${until}T23:59:59`) : null;
+		if (scadenza && scadenza.getTime() < oggi.getTime()) el.remove();
+		else inProgramma++;
+	});
+
+	if (inProgramma === 0) {
+		document.querySelectorAll<HTMLElement>("[data-event-list]").forEach((el) => (el.hidden = true));
+		document.querySelectorAll<HTMLElement>("[data-event-empty]").forEach((el) => (el.hidden = false));
+	}
+</script>

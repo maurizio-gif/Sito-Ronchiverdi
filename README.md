@@ -53,7 +53,11 @@ Le collection gestite da Tina:
 
 - **`pages`** (`src/content/pages/*.md`) — pagine generiche
 - **`events`** (`src/content/events/*.md`) — eventi del club: restano online
-  fino alla loro data (o alla data di fine), poi spariscono da soli
+  fino alla loro data (o alla data di fine), poi spariscono da soli. Il filtro
+  è calcolato in build, quindi il workflow di deploy include un **rebuild
+  giornaliero** (cron alle 03:15 UTC); nel frattempo `EventExpiryGuard`
+  rimuove nel browser gli eventi già passati, così un evento scaduto non
+  resta a video nemmeno se la build è vecchia
 - **`memberships`** (`src/content/memberships/tabella.json`) — tabella
   abbonamenti, sorgente unica per tutte le pagine che la mostrano
 - **`activities`** / **`services`** — card di attività e servizi
