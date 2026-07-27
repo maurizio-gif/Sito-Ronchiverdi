@@ -1,79 +1,867 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
+import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+
+const facts = [
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" /></svg>`,
+		label: "La location",
+		html: "<strong>Tre piscine</strong>, la palestra e il Lungo Po appena fuori dal cancello: si parte in bici direttamente dal club, senza attraversare il traffico di Torino, e la collina è a pochi minuti.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.8 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Squadra federale",
+		html: "Squadra iscritta alla <strong>FITRI</strong> con oltre <strong>200 triatleti</strong> e un settore giovanile tra i più numerosi d'Italia, ai vertici delle classifiche nazionali.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7.5" r="3.5" stroke="currentColor" stroke-width="1.5" /><path d="M4.5 20c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		label: "Tecnici federali",
+		html: "Tutti gli allenamenti, dai 6 anni in avanti, sono guidati esclusivamente da <strong>tecnici federali</strong>: stesso metodo e stessa cura in tutte e tre le categorie.",
+	},
+];
+
+const youngProgrammi = [
+	{
+		title: "1 allenamento",
+		ore: "2 ore a settimana",
+		desc: "Il primo passo nel triathlon: una seduta a settimana per conoscere le tre discipline senza stravolgere gli altri impegni.",
+		dettagli: ["Giorno a scelta tra lunedì, mercoledì, giovedì e venerdì", "Gruppi per età e livello"],
+	},
+	{
+		title: "2 allenamenti",
+		ore: "4 ore a settimana",
+		desc: "Il ritmo più frequente: due sedute permettono di alternare le discipline e di costruire continuità nel corso della stagione.",
+		dettagli: ["Giorni a scelta tra lunedì, mercoledì, giovedì e venerdì", "Alternanza tra nuoto, ciclismo e corsa"],
+	},
+	{
+		title: "3 allenamenti",
+		ore: "6 ore a settimana",
+		desc: "Per chi vuole allenarsi con costanza e affrontare la stagione di gare con una preparazione più completa.",
+		dettagli: ["Tre giorni tra lunedì, mercoledì, giovedì e venerdì", "Preparazione più completa in vista delle gare"],
+	},
+];
+
+const academyCards = [
+	{
+		eyebrow: "Allenamenti quotidiani",
+		title: "Ci si allena tutta la settimana",
+		desc: "A differenza della Young School, l'Academy non è un corso a giorni fissi: gli allenamenti si svolgono durante tutta la settimana, secondo il programma definito dai tecnici. Frequenza e carico di lavoro cambiano in base al periodo della stagione, al livello di preparazione e agli obiettivi. Il lavoro comprende preparazione atletica, esercitazioni tecniche, lavori specifici e sedute personalizzate, con ore e corsie dedicate agli atleti.",
+	},
+	{
+		eyebrow: "Programmazione individuale",
+		title: "Un piano costruito su ogni atleta",
+		desc: "Ogni atleta segue una programmazione individuale elaborata dai tecnici sulla base del livello di preparazione, degli obiettivi personali e agonistici, del calendario delle competizioni e del periodo della stagione. Il programma viene aggiornato man mano, in base ai progressi e alle esigenze di chi lo segue.",
+	},
+	{
+		eyebrow: "Gare e campionati",
+		title: "Dai circuiti giovanili ai Campionati Italiani",
+		desc: "Durante la stagione gli atleti possono partecipare a gare giovanili di triathlon, duathlon, acquathlon e corsa, fino ai Campionati Italiani FITRI e alle principali competizioni del calendario nazionale. I tecnici sono presenti sui campi gara per assistere gli atleti. L'Academy resta aperta anche a chi vuole migliorare le proprie prestazioni senza puntare necessariamente all'alto livello.",
+	},
+];
+
+const masterCards = [
+	{
+		eyebrow: "Gli allenamenti",
+		title: "Di gruppo, tutta la settimana",
+		desc: "Nuoto, ciclismo, corsa, preparazione atletica, spinning e sessioni sui rulli: le attività sono distribuite lungo tutta la settimana e ognuno sceglie quelle più adatte ai propri impegni e obiettivi. Entrando nel programma si entra nella squadra Triathlon Ronchiverdi e ci si allena prevalentemente in gruppo.",
+	},
+	{
+		eyebrow: "Programmi personalizzati",
+		title: "Anche con lavoro e famiglia",
+		desc: "I tecnici possono predisporre una programmazione individuale che tiene conto del livello di preparazione, degli obiettivi personali, del calendario delle gare, della disponibilità settimanale e degli impegni di lavoro e famiglia. Tutte le attività sono coordinate e supervisionate da allenatori qualificati.",
+	},
+	{
+		eyebrow: "Le gare",
+		title: "Dallo Sprint all'Ironman",
+		desc: "Con il gruppo si preparano triathlon Sprint, Olimpico, Medio e Ironman, ma anche mezze maratone, maratone e gare podistiche. La squadra partecipa alle principali competizioni FITRI e alle gare di corsa del calendario stagionale. Gareggiare non è obbligatorio: ci si può allenare con il gruppo anche senza attività agonistica.",
+	},
+];
+
+const location = [
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2.5 17.5c1.6 0 1.6 1.4 3.2 1.4s1.6-1.4 3.2-1.4 1.6 1.4 3.1 1.4c1.6 0 1.6-1.4 3.2-1.4s1.6 1.4 3.2 1.4c1.5 0 1.5-1.4 3.1-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M6 14.5 12.5 8M9.5 5.5l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><circle cx="16.5" cy="6" r="1.8" stroke="currentColor" stroke-width="1.5" /></svg>`,
+		label: "Nuoto",
+		text: "Piscina indoor tutto l'anno e piscina outdoor in estate, con corsie dedicate agli atleti.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="5.5" cy="16.5" r="3.5" stroke="currentColor" stroke-width="1.5" /><circle cx="18.5" cy="16.5" r="3.5" stroke="currentColor" stroke-width="1.5" /><path d="m5.5 16.5 4-8h5l4 8M9 8.5h4.5M12 16.5l2.5-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		label: "Ciclismo",
+		text: "Si parte in bici direttamente dal club verso la collina torinese, con deposito bici riservato agli atleti.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="14" cy="4.8" r="2" stroke="currentColor" stroke-width="1.5" /><path d="m7 21 2.8-4.6-2.3-3.2 1.6-4.4 3.4-1.1 3 2.6 2.9.9M9.5 12.5 5 11M12.8 15.5 15 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		label: "Corsa",
+		text: "Si esce a correre direttamente sul Lungo Po, senza attraversare il traffico cittadino.",
+	},
+	{
+		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 9.5v5M7 7.5v9M17 7.5v9M20 9.5v5M7 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		label: "Preparazione atletica",
+		text: "Palestra per il lavoro a secco, più le sessioni di spinning e sui rulli nei mesi freddi.",
+	},
+];
 
 const faq = [
 	{
-		q: "Il programma triathlon è incluso nell'abbonamento?",
-		a: "Sì, il triathlon è incluso negli abbonamenti Gold e Silver, con supporto tecnico qualificato per nuoto, ciclismo e corsa.",
+		q: "Da quale età si può iniziare e come sono divise le categorie?",
+		a: "Il percorso triathlon copre tutte le età: la Young School è rivolta a bambini e ragazzi dai 6 ai 13 anni, la Triathlon Academy a ragazzi e ragazze dai 14 ai 20 anni, il Triathlon Master ai soci dai 20 anni in avanti. Il passaggio dalla Young School all'Academy è automatico, salvo eccezioni valutate con i tecnici.",
 	},
 	{
-		q: "È adatto anche a chi non ha mai fatto triathlon?",
-		a: "Sì, il percorso è pensato sia per chi vuole allenarsi con continuità sia per chi si prepara a una gara, con progressioni su misura.",
+		q: "Come vengono formati i gruppi?",
+		a: "Nella Young School i gruppi sono organizzati per età e livello di preparazione, così da proporre attività adeguate alle capacità di ciascuno. Nell'Academy gli atleti sono suddivisi in base a età, livello tecnico e obiettivi personali e agonistici.",
 	},
 	{
-		q: "C'è un percorso dedicato ai ragazzi?",
-		a: "Sì, Triathlon Young propone nuoto, ciclismo e corsa per ragazzi, con supporto tecnico qualificato pensato per le prime esperienze multisport.",
+		q: "È possibile fare una lezione di prova?",
+		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact data-interest="Triathlon">form di questa pagina</button>.</p>`,
+	},
+	{
+		q: "Bisogna avere già esperienza nel triathlon?",
+		a: "No. Nella Young School non è richiesta esperienza, ma è necessario saper nuotare e andare in bicicletta a un livello base: le attività vengono poi proposte gradualmente. Gli allenamenti Master sono aperti a tutti i soci, anche a chi non ha mai praticato triathlon, ed è possibile partecipare partendo anche da una sola disciplina tra nuoto, corsa e ciclismo.",
+	},
+	{
+		q: "Quante volte ci si allena a settimana?",
+		a: "Nella Young School sono disponibili programmi con 1, 2 o 3 allenamenti settimanali, per un totale rispettivamente di 2, 4 o 6 ore: gli allenamenti si svolgono il lunedì, mercoledì, giovedì e venerdì e ogni famiglia sceglie i giorni in base al programma acquistato. Academy e Master prevedono invece attività distribuite lungo tutta la settimana, con frequenza modulata dai tecnici in base al periodo della stagione, al livello e agli obiettivi.",
+	},
+	{
+		q: "È possibile recuperare un allenamento perso?",
+		a: "Sì. Nella Young School un allenamento non svolto può essere recuperato in un altro giorno della stessa settimana, compatibilmente con il programma scelto e con l'organizzazione delle attività.",
+	},
+	{
+		q: "Quale attrezzatura è necessaria?",
+		a: "Servono abbigliamento sportivo adatto alla corsa, costume e materiale per il nuoto, la bicicletta e il casco, obbligatorio durante gli allenamenti in bici. È consigliato utilizzare una bicicletta personale: nelle prime fasi del corso Young School, in base alla disponibilità, Ronchiverdi può metterne una a disposizione. Per tutti gli atleti è disponibile un deposito dedicato alle biciclette.",
+	},
+	{
+		q: "È obbligatorio partecipare alle gare?",
+		a: "No, in nessuna delle tre categorie. Durante la stagione vengono organizzati eventi e gare di corsa, acquathlon, duathlon e triathlon con il supporto dei tecnici, e la squadra partecipa alle principali competizioni FITRI, ma la partecipazione resta una scelta: ci si può allenare con il gruppo anche senza attività agonistica.",
+	},
+	{
+		q: "Sono previsti programmi di allenamento personalizzati?",
+		a: "Sì, per Academy e Master. I tecnici predispongono una programmazione individuale in base a livello di preparazione, obiettivi personali e agonistici, calendario delle gare, periodo della stagione e — per i Master — disponibilità settimanale e impegni di lavoro e famiglia. Il programma viene aggiornato in base ai progressi.",
+	},
+	{
+		q: "Come ci si iscrive, quali documenti servono e come arrivano le comunicazioni?",
+		a: "L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto il certificato medico agonistico, obbligatorio anche per Academy e Master e per il tesseramento federale. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo WhatsApp dedicato agli atleti e alle famiglie.",
 	},
 ];
 ---
 
 <Layout
 	title="Triathlon — Ronchiverdi Sport Club"
-	description="Triathlon a Ronchiverdi: nuoto, ciclismo e corsa con supporto tecnico qualificato, per adulti e ragazzi."
+	description="Triathlon a Ronchiverdi, punto di riferimento a Torino: Young School dai 6 anni, Academy dai 14 e squadra Master per i soci. Tecnici federali, tre piscine e uscite in bici dal club."
 >
-	<PageHero image="images/activities/triathlon.jpg" imageAlt="Allenamento triathlon Ronchiverdi" eyebrow="Attività sportive">
-		<Fragment slot="title">Triathlon, <em class="accent accent-dark">nuoto, bici e corsa</em></Fragment>
-		<Fragment slot="lede">Un percorso tecnico completo tra nuoto, ciclismo e corsa, con il supporto di istruttori qualificati, per adulti e ragazzi.</Fragment>
+	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Attività sportive">
+		<Fragment slot="title">Triathlon, <em class="accent accent-dark">dai 6 anni all'Ironman</em></Fragment>
+		<Fragment slot="lede">Nuoto, ciclismo e corsa con tecnici federali: un percorso unico che accompagna dai primi anni della Young School fino alla squadra Master.</Fragment>
 	</PageHero>
 
-	<section class="intro-grid">
-		<div class="intro-col">
-			<span class="eyebrow">Adulti</span>
-			<h2>Triathlon Adulti</h2>
-			<p class="lede" style="margin-inline:0">Nuoto, ciclismo e corsa con supporto tecnico qualificato, per chi vuole allenarsi o prepararsi a una gara.</p>
+	<nav class="intro-grid" aria-label="Vai alla sezione">
+		<a class="intro-col" href="#young">
+			<img class="intro-col__bg" src={url("images/activities/scuola-nuoto-young.jpg")} alt="" loading="lazy" />
+			<div class="intro-col__scrim"></div>
+			<span class="intro-col__index">01</span>
+			<span class="intro-col__body">
+				<span class="eyebrow eyebrow-dark">6–13 anni</span>
+				<h2>Young School</h2>
+				<p class="lede lede-dark" style="margin-inline:0">Il corso per bambini e ragazzi: nuoto, ciclismo e corsa in gruppi per età e livello.</p>
+			</span>
+			<span class="intro-col__arrow" aria-hidden="true">
+				<svg width="20" height="16" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</span>
+		</a>
+		<a class="intro-col" href="#academy">
+			<img class="intro-col__bg" src={url("images/activities/nuoto.jpg")} alt="" loading="lazy" />
+			<div class="intro-col__scrim"></div>
+			<span class="intro-col__index">02</span>
+			<span class="intro-col__body">
+				<span class="eyebrow eyebrow-dark">14–20 anni</span>
+				<h2>Academy</h2>
+				<p class="lede lede-dark" style="margin-inline:0">Allenamenti quotidiani e programmazione individuale, fino ai Campionati Italiani.</p>
+			</span>
+			<span class="intro-col__arrow" aria-hidden="true">
+				<svg width="20" height="16" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</span>
+		</a>
+		<a class="intro-col" href="#master">
+			<img class="intro-col__bg" src={url("images/activities/triathlon.jpg")} alt="" loading="lazy" />
+			<div class="intro-col__scrim"></div>
+			<span class="intro-col__index">03</span>
+			<span class="intro-col__body">
+				<span class="eyebrow eyebrow-dark">Dai 20 anni</span>
+				<h2>Master</h2>
+				<p class="lede lede-dark" style="margin-inline:0">La squadra dei soci: allenamenti di gruppo dallo Sprint all'Ironman.</p>
+			</span>
+			<span class="intro-col__arrow" aria-hidden="true">
+				<svg width="20" height="16" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</span>
+		</a>
+	</nav>
+
+	<IconFacts eyebrow="Il triathlon a Ronchiverdi" title="Un punto di riferimento per il triathlon a Torino" items={facts} />
+
+	<section class="about">
+		<div class="about__media">
+			<img src={url("images/services/piscina-esterna.jpg")} alt="Piscina esterna di Ronchiverdi" loading="lazy" />
 		</div>
-		<div class="intro-col">
-			<span class="eyebrow">Bambini</span>
-			<h2>Triathlon Young</h2>
-			<p class="lede" style="margin-inline:0">Nuoto, ciclismo e corsa per ragazzi, con supporto tecnico qualificato pensato per le prime esperienze multisport.</p>
+		<div class="about__content">
+			<span class="eyebrow">Perché qui</span>
+			<h2>La struttura fa la differenza</h2>
+			<p class="lede" style="margin-inline:0">
+				Il triathlon chiede tre discipline e tre spazi diversi: a Ronchiverdi sono tutti nello stesso posto. Tre piscine, la palestra per il lavoro a secco e una posizione ai margini della città, da cui si esce in bici senza affrontare rotaie, tram e traffico del centro, con il Lungo Po per correre e la collina torinese a pochi minuti.
+			</p>
+			<p class="about__text">
+				È il motivo per cui, da quando il triathlon esiste in Italia, Ronchiverdi è un riferimento per chi lo pratica a Torino: quindici anni di attività strutturata, una squadra federale che oggi conta oltre 200 triatleti e un settore giovanile cresciuto anno dopo anno, fino a diventare uno dei più forti e numerosi del panorama nazionale.
+			</p>
+		</div>
+	</section>
+
+	<div class="section-frame" id="young">
+		<span class="section-frame__tag">Young School · 6–13 anni</span>
+		<section class="split">
+			<div class="split__media young-school-photo">
+				<img src={url("images/activities/scuola-nuoto-young.jpg")} alt="Young School Triathlon a Ronchiverdi" loading="lazy" />
+			</div>
+			<div class="split__content">
+				<span class="eyebrow">Young School Triathlon</span>
+				<h2>Un corso vero, non un dopo-scuola</h2>
+				<p class="lede" style="margin-inline:0">
+					Dai 6 ai 13 anni, la Young School è un corso strutturato: una pianificazione settimanale, gruppi per età e livello e solo tecnici federali in campo. I ragazzi imparano nuoto, ciclismo e corsa con progressioni graduali, senza bisogno di esperienza pregressa — basta saper nuotare e andare in bici a livello base.
+				</p>
+				<p class="split__note">
+					La prima settimana di attività è dedicata alle <strong>lezioni di prova gratuite</strong>: si conoscono i tecnici, si provano le tre discipline e si capisce come è organizzato il corso.
+				</p>
+			</div>
+		</section>
+
+		<section class="programmi">
+			<div class="programmi__head">
+				<h3>Scegli quante volte allenarti</h3>
+				<p class="lede" style="margin-inline:auto">
+					Gli allenamenti si svolgono il lunedì, mercoledì, giovedì e venerdì: i giorni si scelgono in base al programma acquistato.
+				</p>
+			</div>
+			<div class="program-cards">
+				{youngProgrammi.map((p) => (
+					<article class="program-card">
+						<div class="program-card__content">
+							<h4>{p.title}</h4>
+							<span class="program-card__ore">{p.ore}</span>
+							<p class="program-card__desc">{p.desc}</p>
+							<ul class="program-card__dettagli">
+								{p.dettagli.map((d) => (
+									<li>
+										<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+										<span>{d}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					</article>
+				))}
+			</div>
+			<p class="programmi__note">
+				Un allenamento non svolto può essere <strong>recuperato in un altro giorno della stessa settimana</strong>, compatibilmente con il programma scelto. Durante la stagione vengono organizzati eventi e gare di corsa, acquathlon, duathlon e triathlon con il supporto dei tecnici: partecipare non è obbligatorio.
+			</p>
+		</section>
+
+		<div class="section-cta">
+			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una prova gratuita</button>
+			<a class="btn btn-outline" href={url("/abbonamenti")}>Vedi gli abbonamenti</a>
+		</div>
+	</div>
+
+	<div class="section-frame" id="academy">
+		<span class="section-frame__tag">Academy · 14–20 anni</span>
+		<section class="split split--reverse">
+			<div class="split__media">
+				<img src={url("images/activities/nuoto.jpg")} alt="Allenamento in piscina della Triathlon Academy" loading="lazy" />
+			</div>
+			<div class="split__content">
+				<span class="eyebrow">Triathlon Academy</span>
+				<h2>Dove il corso diventa percorso</h2>
+				<p class="lede" style="margin-inline:0">
+					Dai 14 ai 20 anni si passa all'Academy, come si passa dalle medie al liceo: il passaggio è automatico, salvo eccezioni valutate con i tecnici. Cambia il modo di allenarsi — non più giorni fissi, ma un programma individuale che accompagna l'atleta tutta la settimana.
+				</p>
+				<p class="split__note">
+					Gli iscritti all'Academy diventano <strong>soci di Ronchiverdi</strong>: hanno il braccialetto e possono frequentare il club sette giorni su sette, anche fuori dagli orari di allenamento.
+				</p>
+			</div>
+		</section>
+
+		<section class="cards-band">
+			{academyCards.map((c) => (
+				<article class="info-card">
+					<span class="eyebrow">{c.eyebrow}</span>
+					<h3>{c.title}</h3>
+					<p>{c.desc}</p>
+				</article>
+			))}
+		</section>
+
+		<p class="frame-note">
+			L'iscrizione si effettua presso la <strong>Reception del Club</strong> e comprende il tesseramento FITRI con validità annuale. È obbligatorio il certificato medico agonistico in corso di validità. Le comunicazioni su attività, programmi e gare passano dal gruppo WhatsApp dedicato ad atleti e famiglie.
+		</p>
+
+		<div class="section-cta">
+			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una lezione di prova</button>
+		</div>
+	</div>
+
+	<div class="section-frame" id="master">
+		<span class="section-frame__tag">Master · dai 20 anni</span>
+		<section class="split">
+			<div class="split__media">
+				<img src={url("images/activities/triathlon.jpg")} alt="Atleta Master della squadra Triathlon Ronchiverdi in gara" loading="lazy" />
+			</div>
+			<div class="split__content">
+				<span class="eyebrow">Triathlon Master</span>
+				<h2>Una squadra, non un allenamento in solitaria</h2>
+				<p class="lede" style="margin-inline:0">
+					Gli allenamenti Master sono aperti a tutti i soci Ronchiverdi, anche a chi non ha mai praticato triathlon. Ci si può avvicinare gradualmente, partendo anche da una sola disciplina, o allenarsi da atleti esperti dentro una squadra organizzata: in entrambi i casi si entra nel gruppo Triathlon Ronchiverdi, in un ambiente motivante e seguito da allenatori qualificati.
+				</p>
+			</div>
+		</section>
+
+		<section class="cards-band">
+			{masterCards.map((c) => (
+				<article class="info-card">
+					<span class="eyebrow">{c.eyebrow}</span>
+					<h3>{c.title}</h3>
+					<p>{c.desc}</p>
+				</article>
+			))}
+		</section>
+
+		<p class="frame-note">
+			L'attività Master è riservata ai soci del club e richiede un abbonamento che comprenda piscina e palestra: <strong>Gold</strong> o <strong>Silver</strong>. Per l'attività della squadra e per le competizioni serve il tesseramento FITRI, con certificato medico agonistico in corso di validità.
+		</p>
+
+		<div class="section-cta">
+			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Richiedi una lezione di prova</button>
+			<a class="btn btn-outline" href={url("/abbonamenti")}>Vedi gli abbonamenti</a>
+		</div>
+	</div>
+
+	<section class="location">
+		<div class="location__head">
+			<span class="eyebrow eyebrow-dark">Dove ci si allena</span>
+			<h2>Tre discipline, un solo posto</h2>
+			<p class="lede lede-dark" style="margin-inline:auto">
+				Tutto quello che serve per allenarsi è dentro al club o parte da qui.
+			</p>
+		</div>
+		<div class="location-grid">
+			{location.map((l) => (
+				<article class="location-card">
+					<span class="location-card__icon" aria-hidden="true" set:html={l.icon} />
+					<h3>{l.label}</h3>
+					<p>{l.text}</p>
+				</article>
+			))}
 		</div>
 	</section>
 
 	<Faq items={faq} />
 
 	<section class="final-cta">
-		<h2>Vieni a scoprire il club</h2>
+		<h2>Vuoi provare il triathlon?</h2>
 		<p class="lede" style="margin-inline:auto">
-			Prenota un <strong>tour gratuito</strong> e scopri il programma triathlon.
+			Contatta il settore triathlon per una <strong>lezione di prova</strong> o per capire quale percorso è adatto a te.
 		</p>
-		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<a class="btn btn-outline" href={url("/prenota-un-tour")}>Prenota un tour</a>
+		</div>
 	</section>
 
+	<ContactModal />
+
 	<style>
+		/* Pulsante inline dentro una risposta FAQ: il markup passato via `html`
+		   vive nel componente Faq, quindi serve :global(). */
+		:global(.faq-inline-btn) {
+			padding: 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			font: inherit;
+			color: var(--accent-on-dark);
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+		}
+		:global(.faq-inline-btn:hover) {
+			color: var(--text-on-dark);
+		}
+
 		.intro-grid {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 3rem;
-			max-width: 64rem;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.25rem;
+			max-width: 84rem;
 			margin: 0 auto;
-			padding: 3rem 1.5rem 5rem;
+			padding: 4rem 1.5rem 5rem;
 		}
-		.intro-col h2 {
-			margin: 0.4rem 0 0.75rem;
+		.intro-col {
+			position: relative;
+			display: flex;
+			align-items: flex-end;
+			min-height: 22rem;
+			overflow: hidden;
+			border-radius: 20px;
+			text-decoration: none;
+			color: inherit;
+			isolation: isolate;
+			box-shadow: 0 10px 30px -14px rgba(28, 28, 24, 0.35);
+			transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 		}
-		@media (max-width: 760px) {
+		.intro-col:hover,
+		.intro-col:focus-visible {
+			transform: translateY(-6px);
+			box-shadow: 0 24px 48px -16px rgba(28, 28, 24, 0.5);
+		}
+		.intro-col__bg {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transform: scale(1.02);
+			transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+			z-index: -2;
+		}
+		.intro-col:hover .intro-col__bg,
+		.intro-col:focus-visible .intro-col__bg {
+			transform: scale(1.1);
+		}
+		.intro-col__scrim {
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			background: linear-gradient(
+				180deg,
+				rgba(28, 28, 24, 0.2) 0%,
+				rgba(28, 28, 24, 0.4) 45%,
+				rgba(28, 28, 24, 0.92) 100%
+			);
+			transition: background 0.4s ease;
+		}
+		.intro-col:hover .intro-col__scrim,
+		.intro-col:focus-visible .intro-col__scrim {
+			background: linear-gradient(
+				180deg,
+				rgba(28, 28, 24, 0.15) 0%,
+				rgba(28, 28, 24, 0.35) 40%,
+				rgba(28, 28, 24, 0.96) 100%
+			);
+		}
+		.intro-col__index {
+			position: absolute;
+			top: 1.5rem;
+			left: 2rem;
+			z-index: 1;
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-size: var(--text-2xl);
+			color: rgba(246, 239, 222, 0.55);
+			line-height: 1;
+		}
+		.intro-col__body {
+			position: relative;
+			z-index: 1;
+			padding: 2.25rem 2rem;
+			width: 100%;
+		}
+		.intro-col__body .eyebrow {
+			margin-bottom: 0.6rem;
+		}
+		.intro-col__body h2 {
+			color: var(--text-on-dark);
+			margin: 0 0 0.6rem;
+		}
+		.intro-col__body .lede {
+			margin: 0;
+			max-width: none;
+			font-size: var(--text-sm);
+		}
+		.intro-col__arrow {
+			position: absolute;
+			bottom: 2rem;
+			right: 1.5rem;
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 2.75rem;
+			height: 2.75rem;
+			border-radius: 50%;
+			border: 1.5px solid rgba(246, 239, 222, 0.4);
+			color: var(--text-on-dark);
+			transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s ease, border-color 0.3s ease;
+		}
+		.intro-col:hover .intro-col__arrow,
+		.intro-col:focus-visible .intro-col__arrow {
+			transform: translateX(6px);
+			background: var(--accent);
+			border-color: var(--accent);
+		}
+		@media (max-width: 1040px) {
 			.intro-grid {
 				grid-template-columns: 1fr;
-				gap: 2.5rem;
-				text-align: center;
+				gap: 1.5rem;
 			}
-			.intro-col .lede {
-				margin-inline: auto;
+			.intro-col {
+				min-height: 18rem;
+			}
+			.intro-col__arrow {
+				display: none;
 			}
 		}
+
+		.about {
+			display: grid;
+			grid-template-columns: 1fr 1.1fr;
+			align-items: center;
+			gap: 3.5rem;
+			max-width: 80rem;
+			margin: 0 auto;
+			padding: 5.5rem 1.5rem;
+		}
+		.about__media img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 20px;
+			box-shadow: 0 16px 40px -16px rgba(28, 28, 24, 0.35);
+		}
+		.about__text {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.75;
+			margin: 0;
+			max-width: 38rem;
+		}
+		@media (max-width: 900px) {
+			.about {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+				padding: 4rem 1.5rem;
+			}
+		}
+
+		.section-frame {
+			position: relative;
+			max-width: 88rem;
+			margin: 0 auto 4.5rem;
+			padding-top: 0.75rem;
+			border: 1.5px solid var(--border-strong);
+			border-radius: 28px;
+			scroll-margin-top: 7.5rem;
+		}
+		.section-frame__tag {
+			position: absolute;
+			top: -1.1rem;
+			left: 2.5rem;
+			z-index: 2;
+			background: var(--bg);
+			border: 1.5px solid var(--border-strong);
+			border-radius: 999px;
+			padding: 0.5rem 1.4rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		@media (max-width: 640px) {
+			.section-frame {
+				border-radius: 20px;
+				margin-bottom: 3rem;
+			}
+			.section-frame__tag {
+				left: 1.5rem;
+				font-size: var(--text-xs);
+				padding: 0.45rem 1.1rem;
+			}
+		}
+
+		.split {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: center;
+			gap: 3.5rem;
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 2.5rem 1.5rem 3rem;
+		}
+		.split--reverse .split__media {
+			order: 2;
+		}
+		.split__media img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 16px;
+			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.25);
+		}
+		.split__note {
+			margin: 1.25rem 0 0;
+			padding: 1rem 1.25rem;
+			border-left: 3px solid var(--accent);
+			background: var(--bg-alt);
+			border-radius: 0 12px 12px 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.6;
+		}
+		@media (max-width: 860px) {
+			.split {
+				grid-template-columns: 1fr;
+				gap: 2rem;
+				text-align: center;
+			}
+			.split--reverse .split__media {
+				order: 0;
+			}
+			.split__content .lede {
+				margin-inline: auto;
+			}
+			.split__note {
+				text-align: left;
+			}
+		}
+
+		.programmi {
+			max-width: 84rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 2rem;
+		}
+		.programmi__head {
+			max-width: 42rem;
+			margin: 0 auto 2.5rem;
+			text-align: center;
+		}
+		.programmi__head h3 {
+			font-size: var(--text-xl);
+			margin: 0 0 0.75rem;
+		}
+		.program-cards {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.75rem;
+		}
+		.program-card {
+			display: flex;
+			flex-direction: column;
+			text-align: left;
+			border: 1px solid var(--border);
+			border-top: 4px solid var(--accent);
+			border-radius: 16px;
+			overflow: hidden;
+			background: var(--bg-alt);
+			transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+		}
+		.program-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 16px 32px -12px rgba(28, 28, 24, 0.25);
+		}
+		.program-card__content {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			padding: 1.6rem 1.5rem 1.75rem;
+		}
+		.program-card__content h4 {
+			margin: 0 0 0.35rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-lg);
+			font-weight: 400;
+			letter-spacing: -0.02em;
+		}
+		.program-card__ore {
+			align-self: flex-start;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+			margin-bottom: 0.9rem;
+		}
+		.program-card__desc {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.55;
+			margin: 0 0 1rem;
+		}
+		.program-card__dettagli {
+			list-style: none;
+			margin: auto 0 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.45rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text);
+			line-height: 1.4;
+		}
+		.program-card__dettagli li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.55rem;
+		}
+		.program-card__dettagli li svg {
+			flex-shrink: 0;
+			margin-top: 0.15rem;
+			color: var(--accent);
+		}
+		.programmi__note {
+			max-width: 46rem;
+			margin: 2.5rem auto 0;
+			text-align: center;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.7;
+		}
+		@media (max-width: 860px) {
+			.program-cards {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.cards-band {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.75rem;
+			max-width: 84rem;
+			margin: 0 auto;
+			padding: 1rem 1.5rem 0;
+		}
+		.info-card {
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			padding: 1.9rem 1.75rem 2rem;
+		}
+		.info-card h3 {
+			margin: 0.3rem 0 0.9rem;
+			font-size: var(--text-md);
+		}
+		.info-card p {
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.65;
+		}
+		@media (max-width: 900px) {
+			.cards-band {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.frame-note {
+			max-width: 52rem;
+			margin: 2.5rem auto 0;
+			padding: 0 1.5rem;
+			text-align: center;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			line-height: 1.7;
+		}
+
+		.section-cta {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			padding: 2.5rem 1.5rem;
+		}
+		.section-cta .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.section-cta .btn-outline {
+			border: 1px solid currentColor;
+		}
+
+		.location {
+			background: var(--bg-dark);
+			padding: 5.5rem 1.5rem;
+		}
+		.location__head {
+			max-width: 44rem;
+			margin: 0 auto 3rem;
+			text-align: center;
+		}
+		.location__head h2 {
+			color: var(--text-on-dark);
+			margin: 0.4rem 0 1.25rem;
+		}
+		.location-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1.5rem;
+			max-width: 84rem;
+			margin: 0 auto;
+		}
+		.location-card {
+			border: 1px solid var(--border-dark);
+			border-radius: 16px;
+			padding: 1.9rem 1.6rem 2rem;
+			transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, background 0.3s ease;
+		}
+		.location-card:hover {
+			transform: translateY(-4px);
+			border-color: var(--accent-on-dark);
+			background: rgba(246, 239, 222, 0.04);
+		}
+		.location-card__icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 2.75rem;
+			height: 2.75rem;
+			margin-bottom: 1.1rem;
+			border-radius: 50%;
+			background: rgba(200, 153, 31, 0.12);
+			color: var(--accent-on-dark);
+		}
+		.location-card h3 {
+			color: var(--text-on-dark);
+			margin: 0 0 0.6rem;
+			font-size: var(--text-md);
+		}
+		.location-card p {
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-on-dark);
+			opacity: 0.72;
+			line-height: 1.65;
+		}
+		@media (max-width: 1040px) {
+			.location-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		@media (max-width: 560px) {
+			.location-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
 		.final-cta {
 			padding: 6rem 1.5rem;
 			text-align: center;
@@ -81,6 +869,20 @@ const faq = [
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.final-cta__buttons .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.final-cta__buttons .btn-outline {
+			border: 1px solid currentColor;
 		}
 	</style>
 </Layout>
