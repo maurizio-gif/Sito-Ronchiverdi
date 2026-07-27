@@ -15,8 +15,14 @@ export const DAYS = [
 // --- Gym Floor: semplice tabella orari di apertura ---
 export const gymFloorHours = [
 	{ label: "Lunedì – Venerdì", hours: "7:00 – 22:00" },
-	{ label: "Sabato", hours: "9:00 – 20:00" },
-	{ label: "Domenica", hours: "9:00 – 20:00" },
+	{ label: "Sabato, domenica e festivi", hours: "9:00 – 20:00" },
+];
+
+// --- Gym Floor: fasce in cui è garantita la presenza dell'istruttore ---
+export const gymFloorTrainerHours = [
+	{ label: "Lunedì – Venerdì", hours: "9:00 – 21:30" },
+	{ label: "Sabato", hours: "10:00 – 19:30" },
+	{ label: "Domenica", hours: "11:00 – 19:30" },
 ];
 
 // --- Corsi Fitness: palinsesto settimanale completo ---

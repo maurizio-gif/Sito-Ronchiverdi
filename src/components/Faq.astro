@@ -153,7 +153,9 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 	.faq-item__panel-inner {
 		padding-bottom: 1.75rem;
 	}
-	.faq-item__panel p {
+	/* :global() serve anche per i paragrafi passati via `html`: il markup
+	   iniettato con set:html non riceve la classe scoped di Astro. */
+	.faq-item__panel :global(p) {
 		margin: 0 0 1rem;
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
@@ -161,6 +163,14 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 		opacity: 0.72;
 		line-height: 1.7;
 		max-width: 40rem;
+	}
+	.faq-item__panel :global(a) {
+		color: var(--accent-on-dark);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+	.faq-item__panel :global(a:hover) {
+		color: var(--text-on-dark);
 	}
 	.faq-item__panel :global(.faq-sospensioni) {
 		margin: 0 0 1.25rem;
