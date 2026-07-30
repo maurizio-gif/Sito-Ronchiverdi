@@ -51,6 +51,22 @@ const events = defineCollection({
   }),
 });
 
+const trainers = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/trainers" }),
+  schema: z.object({
+    name: z.string(),
+    role: z.string().optional(),
+    photo: z.string(),
+    phone: z.string().optional(),
+    email: z.string().optional(),
+    instagram: z.string().optional(),
+    website: z.string().optional(),
+    formazione: z.array(z.string()).optional(),
+    competenze: z.array(z.string()).optional(),
+    order: z.number().optional(),
+  }),
+});
+
 // Tabella abbonamenti: sorgente unica usata da tutte le pagine che la
 // mostrano (abbonamenti, gym floor, ...). Modificarla qui — o da Tina —
 // la aggiorna ovunque.
@@ -83,4 +99,4 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events };
+export const collections = { pages, activities, services, memberships, events, trainers };
