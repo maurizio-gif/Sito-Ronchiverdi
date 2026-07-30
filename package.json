@@ -18,10 +18,5 @@
     "@tinacms/cli": "^2.5.3",
     "astro": "^7.1.6",
     "tinacms": "^3.10.0"
-  },
-  "overrides": {
-    "astro": {
-      "vite": "7.3.6"
-    }
   }
 }
