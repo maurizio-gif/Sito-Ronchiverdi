@@ -1,0 +1,410 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import ContactModal from "../../components/ContactModal.astro";
+import PageHero from "../../components/PageHero.astro";
+import IconFacts from "../../components/IconFacts.astro";
+import { url } from "../../lib/paths";
+
+const trainers = (await getCollection("trainers")).sort(
+	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
+);
+
+// Normalizza un numero (con o senza prefisso) in un href tel: pulito.
+function telHref(phone: string) {
+	const digits = phone.replace(/\D/g, "");
+	const withCountry = digits.startsWith("39") && digits.length > 10 ? digits : `39${digits}`;
+	return `+${withCountry}`;
+}
+
+const igHref = (handle: string) => `https://instagram.com/${handle.replace(/^@/, "")}`;
+const webHref = (site: string) => (site.startsWith("http") ? site : `https://${site}`);
+
+const phoneIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 2.2h2l1 3-1.5 1.2a8 8 0 0 0 4.6 4.6l1.2-1.5 3 1v2a1.2 1.2 0 0 1-1.3 1.2A10.8 10.8 0 0 1 2.3 3.5a1.2 1.2 0 0 1 1.2-1.3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /></svg>`;
+const mailIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.5" stroke="currentColor" stroke-width="1.3" /><path d="M2.5 4l5.5 4.2L13.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>`;
+const igIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="1.8" width="12.4" height="12.4" rx="3.6" stroke="currentColor" stroke-width="1.3" /><circle cx="8" cy="8" r="3.1" stroke="currentColor" stroke-width="1.3" /><circle cx="11.6" cy="4.5" r="0.9" fill="currentColor" /></svg>`;
+const webIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3" /><path d="M1.8 8h12.4M8 1.8c1.7 1.8 2.6 4 2.6 6.2s-.9 4.4-2.6 6.2c-1.7-1.8-2.6-4-2.6-6.2S6.3 3.6 8 1.8Z" stroke="currentColor" stroke-width="1.3" /></svg>`;
+
+const facts = [
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="3.5" width="16" height="17" rx="2.2" stroke="currentColor" stroke-width="1.5" /><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		label: "Percorso su misura",
+		html: "Ogni programma nasce da un <strong>obiettivo personale</strong>: dimagrimento, forza, sport specifico o recupero funzionale. Nessun protocollo standard.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.8 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Trainer certificati",
+		html: "Laureati in Scienze Motorie, chinesiologi, specialisti Hyrox e preparatori atletici: un team con <strong>formazione ed esperienza verificabili</strong>.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l8.5 4.5L12 12 3.5 7.5 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M3.5 12 12 16.5 20.5 12M3.5 16.5 12 21l8.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Tutti gli spazi del club",
+		html: "Le sessioni si svolgono nel <strong>Gym Floor</strong>, in acqua o sui campi: ogni trainer sceglie lo spazio più adatto al tuo obiettivo.",
+	},
+];
+---
+
+<Layout
+	title="Personal Training — Ronchiverdi Sport Club"
+	description="Il team di Personal Trainer di Ronchiverdi Sport Club a Torino: percorsi su misura per dimagrimento, forza, recupero funzionale e preparazione atletica. Contatta direttamente il trainer che preferisci."
+>
+	<PageHero image="images/activities/personal-training.jpg" imageAlt="Sessione di personal training al Ronchiverdi Sport Club" eyebrow="Attività · Adulti">
+		<Fragment slot="title">Personal <em class="accent accent-dark">Training</em></Fragment>
+		<Fragment slot="lede">Un percorso costruito intorno a te, seguito da un trainer che scegli tu. Sfoglia i profili e contatta direttamente chi fa per te.</Fragment>
+	</PageHero>
+
+	<section class="intro">
+		<span class="eyebrow">Come funziona</span>
+		<h2>Un allenamento, un solo obiettivo: il tuo</h2>
+		<p class="lede" style="margin-inline:auto">
+			Il personal training di Ronchiverdi mette a disposizione un team di trainer con formazioni e specializzazioni diverse — dalla ricomposizione corporea alla preparazione atletica, dal recupero funzionale all'allenamento in gravidanza. Scegli il profilo più vicino al tuo obiettivo e <strong>contattalo direttamente</strong>: nessun intermediario, nessuna attesa.
+		</p>
+	</section>
+
+	<IconFacts eyebrow="Perché il personal training" title="Cosa comprende il servizio" items={facts} />
+
+	<section class="team">
+		<div class="team__head">
+			<span class="eyebrow">Il team</span>
+			<h2>I nostri Personal Trainer</h2>
+			<p class="lede" style="margin-inline:auto">
+				Passa il mouse su una scheda — o toccala da smartphone — per vedere formazione, competenze e contatti diretti.
+			</p>
+		</div>
+
+		<div class="pt-grid">
+			{trainers.map((t) => (
+				<article class="pt-card" tabindex="0">
+					<div class="pt-card__clip">
+						<img class="pt-card__img" src={url(t.data.photo)} alt={`Foto di ${t.data.name}`} loading="lazy" />
+						<div class="pt-card__scrim"></div>
+						<div class="pt-card__body">
+							<strong class="pt-card__name">{t.data.name}</strong>
+							{t.data.role && <span class="pt-card__role">{t.data.role}</span>}
+
+							<span class="pt-card__hint">Formazione e contatti <span aria-hidden="true">&rarr;</span></span>
+
+							<div class="pt-card__reveal">
+								{t.data.formazione && t.data.formazione.length > 0 && (
+									<div class="pt-card__group">
+										<span class="pt-card__group-label">Formazione</span>
+										<ul>{t.data.formazione.map((f) => <li>{f}</li>)}</ul>
+									</div>
+								)}
+								{t.data.competenze && t.data.competenze.length > 0 && (
+									<div class="pt-card__group">
+										<span class="pt-card__group-label">Competenze</span>
+										<ul>{t.data.competenze.map((c) => <li>{c}</li>)}</ul>
+									</div>
+								)}
+								<div class="pt-card__contacts">
+									{t.data.phone && (
+										<a class="pt-contact" href={`tel:${telHref(t.data.phone)}`} aria-label={`Chiama ${t.data.name}`}>
+											<span set:html={phoneIcon} />{t.data.phone}
+										</a>
+									)}
+									{t.data.email && (
+										<a class="pt-contact" href={`mailto:${t.data.email}`} aria-label={`Scrivi un'email a ${t.data.name}`}>
+											<span set:html={mailIcon} />Email
+										</a>
+									)}
+									{t.data.instagram && (
+										<a class="pt-contact" href={igHref(t.data.instagram)} target="_blank" rel="noopener" aria-label={`Instagram di ${t.data.name}`}>
+											<span set:html={igIcon} />Instagram
+										</a>
+									)}
+									{t.data.website && (
+										<a class="pt-contact" href={webHref(t.data.website)} target="_blank" rel="noopener" aria-label={`Sito di ${t.data.name}`}>
+											<span set:html={webIcon} />Sito web
+										</a>
+									)}
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<h2>Non sai quale trainer scegliere?</h2>
+		<p class="lede" style="margin-inline:auto">
+			Raccontaci il tuo obiettivo: ti mettiamo in contatto con il personal trainer più adatto a te.
+		</p>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="Personal Training">Contattaci</button>
+			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri gli abbonamenti</a>
+		</div>
+	</section>
+
+	<ContactModal />
+
+	<script>
+		document.querySelectorAll(".pt-card").forEach((card) => {
+			const toggle = () => card.classList.toggle("is-open");
+			card.addEventListener("click", (e) => {
+				if ((e.target as HTMLElement).closest("a")) return;
+				toggle();
+			});
+			card.addEventListener("keydown", (e) => {
+				if ((e.target as HTMLElement).closest("a")) return;
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					toggle();
+				}
+			});
+		});
+	</script>
+
+	<style>
+		.intro {
+			max-width: 52rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 1rem;
+			text-align: center;
+		}
+		.intro .lede {
+			max-width: none;
+		}
+
+		.team {
+			max-width: 88rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 6rem;
+		}
+		.team__head {
+			max-width: 42rem;
+			margin: 0 auto 3rem;
+			text-align: center;
+		}
+
+		.pt-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1.5rem;
+		}
+
+		.pt-card {
+			position: relative;
+			aspect-ratio: 3 / 4;
+			border-radius: 20px;
+			background: var(--bg-dark);
+			box-shadow: 0 0 22px rgba(28, 28, 24, 0.22);
+			cursor: pointer;
+			transform: translateY(0) scale(1);
+			transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+		}
+		.pt-card:hover,
+		.pt-card.is-open,
+		.pt-card:focus-visible {
+			transform: translateY(-8px) scale(1.015);
+			box-shadow: 0 0 34px rgba(28, 28, 24, 0.3);
+		}
+		.pt-card:focus-visible {
+			outline: 2px solid var(--accent-on-dark);
+			outline-offset: 3px;
+		}
+		.pt-card__clip {
+			position: absolute;
+			inset: 0;
+			border-radius: 20px;
+			overflow: hidden;
+		}
+		.pt-card__img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 0.5s ease;
+		}
+		.pt-card:hover .pt-card__img,
+		.pt-card.is-open .pt-card__img {
+			transform: scale(1.06);
+		}
+		.pt-card__scrim {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(28, 28, 24, 0) 38%, rgba(28, 28, 24, 0.86) 74%, rgba(28, 28, 24, 1) 92%);
+			transition: background 0.35s ease;
+		}
+		.pt-card:hover .pt-card__scrim,
+		.pt-card.is-open .pt-card__scrim {
+			background: linear-gradient(180deg, rgba(28, 28, 24, 0.25) 0%, rgba(28, 28, 24, 0.94) 60%, rgba(28, 28, 24, 1) 92%);
+		}
+		.pt-card__body {
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			padding: 1.35rem;
+		}
+		.pt-card__name {
+			display: block;
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: var(--text-xl);
+			color: var(--text-on-dark);
+			line-height: 1.15;
+		}
+		.pt-card__role {
+			display: block;
+			margin-top: 2px;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent-on-dark);
+		}
+		.pt-card__hint {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			margin-top: 10px;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.04em;
+			color: rgba(246, 239, 222, 0.75);
+			transition: opacity 0.25s ease;
+		}
+		.pt-card:hover .pt-card__hint,
+		.pt-card.is-open .pt-card__hint {
+			opacity: 0;
+			position: absolute;
+			pointer-events: none;
+		}
+
+		.pt-card__reveal {
+			max-height: 0;
+			opacity: 0;
+			overflow: hidden;
+			transform: translateY(8px);
+			transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease;
+		}
+		.pt-card:hover .pt-card__reveal,
+		.pt-card.is-open .pt-card__reveal {
+			max-height: 22rem;
+			opacity: 1;
+			transform: translateY(0);
+			margin-top: 8px;
+		}
+		.pt-card__group {
+			margin-bottom: 8px;
+		}
+		.pt-card__group-label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: 0.66rem;
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--accent-on-dark);
+			margin-bottom: 3px;
+		}
+		.pt-card__group ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			font-family: var(--font-sans);
+			font-size: 0.76rem;
+			line-height: 1.5;
+			color: rgba(246, 239, 222, 0.85);
+		}
+		.pt-card__group li {
+			position: relative;
+			padding-left: 0.85em;
+		}
+		.pt-card__group li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.62em;
+			width: 3px;
+			height: 3px;
+			border-radius: 50%;
+			background: var(--accent-on-dark);
+		}
+		.pt-card__contacts {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			margin-top: 10px;
+		}
+		.pt-contact {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			padding: 0.4rem 0.65rem;
+			border-radius: 999px;
+			background: rgba(246, 239, 222, 0.12);
+			color: var(--text-on-dark);
+			font-family: var(--font-sans);
+			font-size: 0.72rem;
+			font-weight: 600;
+			text-decoration: none;
+			line-height: 1;
+			transition: background 0.2s ease, color 0.2s ease;
+		}
+		.pt-contact:hover,
+		.pt-contact:focus-visible {
+			background: var(--accent-on-dark);
+			color: var(--bg-dark);
+		}
+		.pt-contact svg {
+			flex-shrink: 0;
+		}
+
+		@media (max-width: 1080px) {
+			.pt-grid {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		@media (max-width: 760px) {
+			.pt-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1rem;
+			}
+			.pt-card__reveal,
+			.pt-card:hover .pt-card__reveal,
+			.pt-card.is-open .pt-card__reveal {
+				max-height: 26rem;
+			}
+		}
+		@media (max-width: 480px) {
+			.pt-grid {
+				grid-template-columns: 1fr;
+			}
+			.pt-card {
+				aspect-ratio: 4 / 5;
+			}
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.final-cta__buttons .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.final-cta__buttons .btn-outline {
+			border: 1px solid currentColor;
+		}
+	</style>
+</Layout>
