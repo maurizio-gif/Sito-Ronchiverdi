@@ -192,6 +192,11 @@ const interests = [
 		font-size: 1.25rem;
 		line-height: 1;
 		cursor: pointer;
+		transition: transform 0.1s ease-out;
+	}
+	.contact-modal__close:active {
+		transform: scale(0.9);
+		transition-duration: 0.05s;
 	}
 	.contact-modal__body h3 {
 		margin: 0 0 0.6rem;

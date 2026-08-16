@@ -165,6 +165,10 @@ const modalId = `planning-modal-${id}`;
 	.planning-slot:focus-visible {
 		background: var(--bg-alt);
 	}
+	.planning-slot:active {
+		background: var(--border-strong);
+		transition-duration: 0.05s;
+	}
 	.planning-slot__time {
 		font-family: var(--font-sans);
 		font-size: var(--text-2xs);
@@ -229,6 +233,11 @@ const modalId = `planning-modal-${id}`;
 		font-size: 1.25rem;
 		line-height: 1;
 		cursor: pointer;
+		transition: transform 0.1s ease-out;
+	}
+	.planning-modal__close:active {
+		transform: scale(0.9);
+		transition-duration: 0.05s;
 	}
 	.planning-modal__panel h3 {
 		margin: 0 0 0.85rem;
