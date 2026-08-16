@@ -112,6 +112,13 @@ a {
   background: var(--text);
   color: var(--bg);
 }
+.btn-outline-dark {
+  color: var(--text-on-dark);
+}
+.btn-outline-dark:hover {
+  background: var(--text-on-dark);
+  color: var(--bg-dark);
+}
 
 /* Animazioni allo scroll — attivate da Layout.astro via [data-anim] +
    IntersectionObserver. Non impostare data-anim manualmente nei markup:
