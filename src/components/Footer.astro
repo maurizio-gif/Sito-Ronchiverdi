@@ -1,6 +1,12 @@
 ---
 import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
+import { gymFloorHours } from "../data/schedules";
+
+const address = "Corso Moncalieri 466, Torino";
+const mapsEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
 
 // Attività e servizi arrivano dalle content collection, come nel menu:
 // aggiungere una scheda aggiorna automaticamente anche il footer.
@@ -61,6 +67,50 @@ const enti = [
 ---
 
 <footer class="footer">
+	<section class="find-us" aria-label="Come trovarci">
+		<div class="find-us__head">
+			<span class="eyebrow eyebrow-dark">Come trovarci</span>
+			<h2 class="find-us__title">Vieni a <em class="accent accent-dark">trovarci</em></h2>
+		</div>
+
+		<div class="find-us__map">
+			<iframe
+				src={mapsEmbedSrc}
+				title={`Mappa: Ronchiverdi Sport Club, ${address}`}
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+			></iframe>
+			<a class="find-us__maps-link" href={mapsSearchUrl} target="_blank" rel="noopener">
+				Apri in Maps
+				<svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6.5 3H3.8A1.8 1.8 0 0 0 2 4.8v7.4A1.8 1.8 0 0 0 3.8 14h7.4A1.8 1.8 0 0 0 13 12.2V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /><path d="M9.5 2H14v4.5M13.6 2.4 7.8 8.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</a>
+		</div>
+
+		<div class="find-us__info">
+			<div class="find-us__item">
+				<p class="find-us__label">Indirizzo</p>
+				<p>Corso Moncalieri 466, Torino</p>
+			</div>
+			<div class="find-us__item">
+				<p class="find-us__label">Come arrivare</p>
+				<p>Parcheggio gratuito, direttamente all'interno del club.</p>
+			</div>
+			<div class="find-us__item">
+				<p class="find-us__label">Orari sala pesi</p>
+				<p>{gymFloorHours.map((r) => r.label + " " + r.hours).join(" · ")}</p>
+			</div>
+			<div class="find-us__item">
+				<p class="find-us__label">Contatti</p>
+				<p><a href="tel:+390116612146">011 6612146</a></p>
+			</div>
+		</div>
+
+		<div class="find-us__cta">
+			<a class="btn btn-outline btn-outline-dark" href={mapsDirectionsUrl} target="_blank" rel="noopener">Indicazioni</a>
+			<a class="btn" href={url("/prenota-un-tour")}>Contattaci</a>
+		</div>
+	</section>
+
 	<div class="footer-grid">
 		<div class="footer-brand">
 			<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="40" />
@@ -166,9 +216,121 @@ const enti = [
 		color: var(--text-on-dark);
 		padding: 4rem 1.5rem 1.5rem;
 	}
+	.find-us {
+		max-width: 82rem;
+		margin: 0 auto;
+		padding-bottom: 3.5rem;
+		border-bottom: 1px solid rgba(246, 239, 222, 0.14);
+	}
+	.find-us__head {
+		margin: 0 0 2rem;
+	}
+	.find-us__title {
+		color: var(--text-on-dark);
+		margin: 0.35rem 0 0;
+	}
+	.find-us__map {
+		position: relative;
+		aspect-ratio: 16 / 7;
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.5);
+	}
+	.find-us__map iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.find-us__maps-link {
+		position: absolute;
+		top: 1rem;
+		left: 1rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		background: rgba(248, 242, 229, 0.92);
+		backdrop-filter: blur(12px) saturate(160%);
+		color: var(--text);
+		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 600;
+		padding: 0.55rem 0.9rem;
+		border-radius: 999px;
+		transition: transform 0.1s ease-out;
+	}
+	.find-us__maps-link:hover {
+		color: var(--accent);
+	}
+	.find-us__maps-link:active {
+		transform: scale(0.96);
+		transition-duration: 0.05s;
+	}
+	@media (prefers-reduced-transparency: reduce) {
+		.find-us__maps-link {
+			background: var(--bg);
+			backdrop-filter: none;
+		}
+	}
+
+	.find-us__info {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		margin-top: 2rem;
+		border-top: 1px solid rgba(246, 239, 222, 0.14);
+		border-left: 1px solid rgba(246, 239, 222, 0.14);
+	}
+	.find-us__item {
+		padding: 1.5rem 1.75rem;
+		border-right: 1px solid rgba(246, 239, 222, 0.14);
+		border-bottom: 1px solid rgba(246, 239, 222, 0.14);
+	}
+	.find-us__label {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-sans);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		color: var(--accent-on-dark);
+	}
+	.find-us__item p:not(.find-us__label) {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: rgba(246, 239, 222, 0.8);
+		line-height: 1.5;
+	}
+	.find-us__item a {
+		color: rgba(246, 239, 222, 0.8);
+		text-decoration: none;
+	}
+	.find-us__item a:hover {
+		color: var(--text-on-dark);
+	}
+
+	.find-us__cta {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-top: 2rem;
+	}
+
+	@media (max-width: 760px) {
+		.find-us__info {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.find-us__map {
+			aspect-ratio: 4 / 3.4;
+		}
+	}
+
 	.footer-grid {
 		max-width: 82rem;
 		margin: 0 auto;
+		padding-top: 3.5rem;
 		display: grid;
 		grid-template-columns: 1.5fr repeat(4, 1fr);
 		gap: 2.5rem;
