@@ -212,6 +212,10 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 	.area__trigger:hover {
 		color: var(--accent);
 	}
+	.area__trigger:active {
+		transform: scale(0.995);
+		transition: transform 0.05s ease-out, color 0.25s ease;
+	}
 	.area__num {
 		flex-shrink: 0;
 		font-family: var(--font-serif);
@@ -325,6 +329,10 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 		background: var(--accent);
 		border-color: var(--accent);
 	}
+	.slideshow__nav:active {
+		transform: translateY(-50%) scale(0.9);
+		transition-duration: 0.05s;
+	}
 	.slideshow__nav--prev {
 		left: 0.85rem;
 	}
@@ -417,6 +425,10 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 		background: var(--accent);
 		border-color: var(--accent);
 		color: var(--text-on-dark);
+	}
+	.area__equip-trigger:active {
+		transform: scale(0.96);
+		transition-duration: 0.05s;
 	}
 	.area__equip-trigger svg {
 		transition: transform 0.3s ease;

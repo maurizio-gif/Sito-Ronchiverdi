@@ -43,6 +43,10 @@ const { text, align = "start", direction = "up" } = Astro.props;
 	.info-tip__icon:focus-visible {
 		background: var(--accent-hover);
 	}
+	.info-tip__icon:active {
+		transform: scale(0.85);
+		transition: transform 0.05s ease-out;
+	}
 	.info-tip__bubble {
 		position: absolute;
 		bottom: calc(100% + 9px);

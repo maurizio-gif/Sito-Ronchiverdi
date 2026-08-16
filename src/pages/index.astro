@@ -1105,6 +1105,11 @@ const clubGallery = [
 			font-size: 1.4rem;
 			line-height: 1;
 			cursor: pointer;
+			transition: transform 0.1s ease-out;
+		}
+		.club-lightbox__close:active {
+			transform: scale(0.9);
+			transition-duration: 0.05s;
 		}
 		.club-lightbox__nav {
 			position: absolute;
@@ -1125,6 +1130,10 @@ const clubGallery = [
 		}
 		.club-lightbox__nav:hover {
 			background: rgba(246, 239, 222, 0.2);
+		}
+		.club-lightbox__nav:active {
+			transform: translateY(-50%) scale(0.88);
+			transition-duration: 0.05s;
 		}
 		.club-lightbox__nav--prev {
 			left: 1.5rem;

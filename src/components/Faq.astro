@@ -122,6 +122,10 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 	.faq-item:hover .faq-item__trigger {
 		color: var(--accent-on-dark);
 	}
+	.faq-item__trigger:active {
+		transform: scale(0.99);
+		transition: transform 0.05s ease-out, color 0.25s ease;
+	}
 	.faq-item__icon {
 		display: flex;
 		align-items: center;
