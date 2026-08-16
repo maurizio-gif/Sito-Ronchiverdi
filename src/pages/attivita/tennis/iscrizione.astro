@@ -37,10 +37,10 @@ const faq = [
 	description="Come iscriversi al settore tennis di Ronchiverdi: lezione di prova, documenti necessari, tesseramento FITP e contatti."
 >
 	<PageHero image="images/attivita/tennis-hero.jpg" imageAlt="Campo da tennis in terra rossa a Ronchiverdi" eyebrow="Tennis">
-		<Fragment slot="title">Modalità di <em class="accent accent-dark">iscrizione</em></Fragment>
+		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Che tu voglia iscrivere tuo figlio alla Young School o riprendere a giocare da adulto, si parte sempre da una lezione di prova.</Fragment>
 		<div class="header-cta">
-			<button type="button" class="btn btn-outline-dark" data-open-contact data-interest="Tennis">Richiedi una prova gratuita</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Tennis">Richiedi una prova gratuita</button>
 		</div>
 	</PageHero>
 
@@ -83,27 +83,8 @@ const faq = [
 		.header-cta {
 			display: flex;
 			gap: 1rem;
-			justify-content: center;
 			flex-wrap: wrap;
-			margin-top: 1.5rem;
-		}
-		.btn-outline-dark {
-			display: inline-block;
-			cursor: pointer;
-			font-family: var(--font-sans);
-			font-weight: 600;
-			font-size: var(--text-xs);
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			background: rgba(246, 239, 222, 0.1);
-			border: 1px solid rgba(246, 239, 222, 0.5);
-			color: var(--text-on-dark);
-			padding: 0.9rem 2rem;
-			border-radius: var(--radius);
-			transition: background 0.15s ease;
-		}
-		.btn-outline-dark:hover {
-			background: rgba(246, 239, 222, 0.2);
+			margin-top: 0;
 		}
 
 		.info-section {

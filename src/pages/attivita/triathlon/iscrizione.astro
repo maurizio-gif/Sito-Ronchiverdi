@@ -73,10 +73,10 @@ const faq = [
 	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon">
-		<Fragment slot="title">Modalità di <em class="accent accent-dark">iscrizione</em></Fragment>
+		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
 		<div class="header-cta">
-			<button type="button" class="btn btn-outline-dark" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
 		</div>
 	</PageHero>
 
@@ -141,27 +141,8 @@ const faq = [
 		.header-cta {
 			display: flex;
 			gap: 1rem;
-			justify-content: center;
 			flex-wrap: wrap;
-			margin-top: 1.5rem;
-		}
-		.btn-outline-dark {
-			display: inline-block;
-			cursor: pointer;
-			font-family: var(--font-sans);
-			font-weight: 600;
-			font-size: var(--text-xs);
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			background: rgba(246, 239, 222, 0.1);
-			border: 1px solid rgba(246, 239, 222, 0.5);
-			color: var(--text-on-dark);
-			padding: 0.9rem 2rem;
-			border-radius: var(--radius);
-			transition: background 0.15s ease;
-		}
-		.btn-outline-dark:hover {
-			background: rgba(246, 239, 222, 0.2);
+			margin-top: 0;
 		}
 
 		.cat-section {
