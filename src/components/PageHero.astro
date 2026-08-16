@@ -8,101 +8,163 @@ interface Props {
 }
 
 const { image, imageAlt, eyebrow } = Astro.props;
+const hasStat = Astro.slots.has("stat");
+const hasExtra = Astro.slots.has("default");
 ---
 
-<header class="page-hero-full">
-	<img class="page-hero-full__bg" src={url(image)} alt={imageAlt} />
-	<div class="page-hero-full__scrim"></div>
-	<div class="page-hero-full__spot"></div>
-	<div class="page-hero-full__content">
-		<p class="eyebrow eyebrow-dark">{eyebrow}</p>
-		<h1 class="page-hero-full__title"><slot name="title" /></h1>
-		<p class="lede lede-dark"><slot name="lede" /></p>
-		<slot />
+<header class="page-hero">
+	<div class="page-hero__text">
+		<p class="eyebrow page-hero__eyebrow">{eyebrow}</p>
+		<h1 class="page-hero__title"><slot name="title" /></h1>
+		<p class="lede page-hero__lede"><slot name="lede" /></p>
+		{hasExtra && (
+			<div class="page-hero__extra">
+				<slot />
+			</div>
+		)}
+	</div>
+	<div class="page-hero__media">
+		<img class="page-hero__img" src={url(image)} alt={imageAlt} />
+		{hasStat && (
+			<div class="page-hero__stat">
+				<slot name="stat" />
+			</div>
+		)}
 	</div>
 </header>
 
 <style>
-	.page-hero-full {
-		position: relative;
-		/* Hero a tutto schermo: svh evita il taglio causato dalle barre del
-		   browser su mobile, vh resta come fallback. */
-		min-height: 100vh;
-		min-height: 100svh;
-		display: flex;
+	.page-hero {
+		display: grid;
+		grid-template-columns: 1.05fr 1fr;
 		align-items: center;
-		justify-content: center;
-		text-align: center;
-		overflow: hidden;
-		background: var(--bg-dark);
+		gap: 3.5rem;
+		max-width: 84rem;
+		margin: 0 auto;
+		padding: 6.5rem 1.5rem 5rem;
 	}
-	.page-hero-full__bg {
+	.page-hero__eyebrow {
+		margin: 0;
+		opacity: 0;
+		animation: page-hero-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+	}
+	.page-hero__title {
+		font-family: var(--font-serif);
+		color: var(--text);
+		margin: 0.35rem 0 1rem;
+		opacity: 0;
+		animation: page-hero-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+		animation-delay: 60ms;
+	}
+	.page-hero__title :global(em) {
+		font-style: italic;
+	}
+	.page-hero__lede {
+		margin: 0;
+		max-width: 30rem;
+		opacity: 0;
+		animation: page-hero-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+		animation-delay: 120ms;
+	}
+	.page-hero__extra {
+		margin-top: 1.75rem;
+		opacity: 0;
+		animation: page-hero-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+		animation-delay: 180ms;
+	}
+	@keyframes page-hero-in {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.page-hero__media {
+		position: relative;
+		aspect-ratio: 4 / 3.1;
+		border-radius: 24px;
+		overflow: hidden;
+		box-shadow: 0 30px 60px -20px rgba(28, 28, 24, 0.35);
+		opacity: 0;
+		transform: scale(0.97);
+		animation: page-hero-media-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+		animation-delay: 60ms;
+	}
+	@keyframes page-hero-media-in {
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	.page-hero__img {
 		position: absolute;
 		inset: 0;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 	}
-	.page-hero-full__scrim {
+	.page-hero__stat {
 		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			180deg,
-			rgba(28, 28, 24, 0.55) 0%,
-			rgba(28, 28, 24, 0.42) 45%,
-			rgba(28, 28, 24, 0.78) 100%
-		);
+		left: -1.25rem;
+		bottom: -1.25rem;
+		max-width: 13rem;
+		background: rgba(248, 242, 229, 0.86);
+		backdrop-filter: blur(16px) saturate(160%);
+		border: 1px solid rgba(28, 28, 24, 0.08);
+		border-radius: 16px;
+		padding: 1rem 1.15rem;
+		box-shadow: 0 16px 32px -14px rgba(28, 28, 24, 0.3);
 	}
-	/* Alone dietro al testo: scurisce il centro dell'immagine sfumando fino
-	   a sparire, così il titolo resta leggibile su qualsiasi foto senza
-	   appiattire tutto lo scatto con un velo uniforme. */
-	.page-hero-full__spot {
-		position: absolute;
-		inset: 0;
-		background: radial-gradient(
-			ellipse 66% 44% at 50% 50%,
-			rgba(28, 28, 24, 0.72) 0%,
-			rgba(28, 28, 24, 0.52) 45%,
-			rgba(28, 28, 24, 0.18) 75%,
-			rgba(28, 28, 24, 0) 100%
-		);
-	}
-	.page-hero-full__content {
-		position: relative;
-		z-index: 1;
-		max-width: 62rem;
-		padding: 4rem 1.5rem;
-	}
-	.page-hero-full__content .eyebrow {
-		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-	}
-	.page-hero-full__content .lede {
-		max-width: 46rem;
-		margin-inline: auto;
-		color: rgba(246, 239, 222, 0.92);
-		text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65), 0 1px 3px rgba(0, 0, 0, 0.5);
-	}
-	.page-hero-full__title {
+	.page-hero__stat :global(strong) {
+		display: block;
 		font-family: var(--font-serif);
-		color: var(--text-on-dark);
-		margin: 0 0 1rem;
-		text-shadow: 0 10px 34px rgba(0, 0, 0, 0.6), 0 3px 10px rgba(0, 0, 0, 0.55),
-			0 1px 2px rgba(0, 0, 0, 0.45);
+		font-size: var(--text-xl);
+		color: var(--accent);
+		line-height: 1;
+		margin-bottom: 0.3rem;
 	}
-	@media (max-width: 640px) {
-		.page-hero-full__content {
-			padding: 3rem 1.5rem;
+	.page-hero__stat :global(span) {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		color: var(--text-muted);
+		line-height: 1.4;
+	}
+	@media (prefers-reduced-transparency: reduce) {
+		.page-hero__stat {
+			background: var(--bg);
+			backdrop-filter: none;
 		}
-		/* Su schermo stretto il testo occupa quasi tutta la larghezza:
-		   l'alone si allarga per non lasciarne fuori i bordi. */
-		.page-hero-full__spot {
-			background: radial-gradient(
-				ellipse 100% 34% at 50% 50%,
-				rgba(28, 28, 24, 0.72) 0%,
-				rgba(28, 28, 24, 0.52) 45%,
-				rgba(28, 28, 24, 0.18) 75%,
-				rgba(28, 28, 24, 0) 100%
-			);
+	}
+
+	@media (max-width: 860px) {
+		.page-hero {
+			grid-template-columns: 1fr;
+			padding: 3rem 1.5rem 4rem;
+			gap: 2.5rem;
+		}
+		.page-hero__media {
+			order: -1;
+		}
+		.page-hero__stat {
+			left: 1rem;
+			bottom: -1rem;
+			max-width: calc(100% - 2rem);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.page-hero__eyebrow,
+		.page-hero__title,
+		.page-hero__lede,
+		.page-hero__extra,
+		.page-hero__media {
+			opacity: 1;
+			animation: none;
+			transform: none;
 		}
 	}
 </style>
