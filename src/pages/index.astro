@@ -761,6 +761,10 @@ const clubGallery = [
 			border-color: var(--accent);
 			color: var(--text-on-dark);
 		}
+		.carousel-btn:active {
+			transform: scale(0.92);
+			transition-duration: 0.05s;
+		}
 
 		.act-carousel {
 			position: relative;
@@ -799,6 +803,10 @@ const clubGallery = [
 		.act-card.is-active {
 			transform: translateY(-10px) scale(1.015);
 			box-shadow: 0 0 34px rgba(28, 28, 24, 0.3);
+		}
+		.act-card:active {
+			transform: scale(0.985);
+			transition-duration: 0.05s;
 		}
 		.act-card__clip {
 			position: absolute;
@@ -975,6 +983,10 @@ const clubGallery = [
 		.club-gallery__item:hover img,
 		.club-gallery__item:focus-visible img {
 			transform: scale(1.08);
+		}
+		.club-gallery__item:active img {
+			transform: scale(1.03);
+			transition-duration: 0.05s;
 		}
 		.club-gallery__scrim {
 			position: absolute;
@@ -1207,6 +1219,10 @@ const clubGallery = [
 		.evento-card:hover {
 			transform: translateY(-6px);
 			box-shadow: 0 16px 32px -12px rgba(28, 28, 24, 0.25);
+		}
+		.evento-card:active {
+			transform: scale(0.98);
+			transition-duration: 0.05s;
 		}
 		.evento-card__media {
 			position: relative;

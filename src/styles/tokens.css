@@ -38,5 +38,15 @@
   --text-3xl: clamp(2.6rem, 5vw, 3.6rem); /* numeri statistica */
   --text-4xl: clamp(2.5rem, 6vw, 4.5rem); /* h1 / hero */
 
+  /* Tracking (letter-spacing) e leading (line-height) per livello —
+     il testo grande vuole tracking negativo e leading stretto, il testo
+     piccolo l'opposto: mai un valore fisso su tutte le dimensioni. */
+  --tracking-4xl: -0.03em;
+  --leading-4xl: 1.02;
+  --tracking-2xl: -0.02em;
+  --leading-2xl: 1.1;
+  --tracking-lg: -0.005em;
+  --leading-lg: 1.25;
+
   --radius: 8px;
 }

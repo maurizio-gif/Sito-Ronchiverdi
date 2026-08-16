@@ -14,18 +14,22 @@ h2,
 h3 {
   font-family: var(--font-sans);
   font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
   margin: 0 0 1.25rem;
 }
 h1 {
   font-size: var(--text-4xl);
+  line-height: var(--leading-4xl);
+  letter-spacing: var(--tracking-4xl);
 }
 h2 {
   font-size: var(--text-2xl);
+  line-height: var(--leading-2xl);
+  letter-spacing: var(--tracking-2xl);
 }
 h3 {
   font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  letter-spacing: var(--tracking-lg);
 }
 
 strong,
@@ -88,10 +92,16 @@ a {
   text-decoration: none;
   padding: 0.9rem 2rem;
   border-radius: var(--radius);
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.1s ease-out;
 }
 .btn:hover {
   background: var(--accent-hover);
+}
+/* Feedback sulla pressione, non solo al rilascio: la risposta deve
+   essere immediata (principio "Response"), non un fade a fine gesto. */
+.btn:active {
+  transform: scale(0.96);
+  transition-duration: 0.05s;
 }
 .btn-outline {
   background: transparent;
