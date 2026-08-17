@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 100" role="img" aria-label="Triathlon">
-  <rect x="1.5" y="1.5" width="217" height="97" rx="12" fill="none" stroke="#f6efde" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <circle cx="44" cy="50" r="19" fill="none" stroke="#c8991f" stroke-width="2"/>
-  <text x="44" y="56" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#c8991f">FI</text>
-  <text x="76" y="46" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1.5" fill="#f6efde">FITRI</text>
-  <text x="77" y="66" font-family="Helvetica, Arial, sans-serif" font-size="10.5" letter-spacing="0.6" fill="#f6efde" fill-opacity="0.6">Triathlon</text>
-</svg>
