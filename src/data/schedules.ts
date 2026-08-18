@@ -25,6 +25,12 @@ export const gymFloorTrainerHours = [
 	{ label: "Domenica", hours: "11:00 – 19:30" },
 ];
 
+// --- Tennis e Padel: orari di utilizzo dei campi ---
+export const tennisPadelHours = [
+	{ label: "Lunedì – Venerdì", hours: "8:00 – 23:00" },
+	{ label: "Sabato, domenica e festivi", hours: "9:00 – 20:00" },
+];
+
 // --- Corsi Fitness: palinsesto settimanale completo ---
 export const corsiFitnessLessons = {
 	"full-body-workout": {
