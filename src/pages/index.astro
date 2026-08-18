@@ -505,7 +505,7 @@ const clubGallery = [
 			min-height: 100vh;
 			min-height: 100svh;
 			display: flex;
-			align-items: center;
+			align-items: flex-end;
 			justify-content: center;
 			background: var(--bg-dark);
 			overflow: hidden;
@@ -528,12 +528,14 @@ const clubGallery = [
 			);
 		}
 		/* Alone dietro al testo: scurisce il centro del video sfumando fino
-		   a sparire, così il titolo resta leggibile su ogni fotogramma. */
+		   a sparire, così il titolo resta leggibile su ogni fotogramma.
+		   Centrato più in basso per seguire il testo, ora ancorato al
+		   fondo della hero. */
 		.hero-spot {
 			position: absolute;
 			inset: 0;
 			background: radial-gradient(
-				ellipse 66% 44% at 50% 50%,
+				ellipse 66% 44% at 50% 68%,
 				rgba(28, 28, 24, 0.62) 0%,
 				rgba(28, 28, 24, 0.42) 45%,
 				rgba(28, 28, 24, 0.15) 75%,
@@ -543,7 +545,7 @@ const clubGallery = [
 		.hero-content {
 			position: relative;
 			z-index: 1;
-			padding: 4rem 1.5rem;
+			padding: 4rem 1.5rem 7rem;
 		}
 		.hero-content .eyebrow {
 			text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
@@ -564,12 +566,15 @@ const clubGallery = [
 			   l'alone si allarga per non lasciarne fuori i bordi. */
 			.hero-spot {
 				background: radial-gradient(
-					ellipse 100% 34% at 50% 50%,
+					ellipse 100% 34% at 50% 68%,
 					rgba(28, 28, 24, 0.62) 0%,
 					rgba(28, 28, 24, 0.42) 45%,
 					rgba(28, 28, 24, 0.15) 75%,
 					rgba(28, 28, 24, 0) 100%
 				);
+			}
+			.hero-content {
+				padding-bottom: 5rem;
 			}
 		}
 
