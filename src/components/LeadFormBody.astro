@@ -54,6 +54,13 @@ const { prefix } = Astro.props;
 									{activity.badge && <em class="lf__opt-badge">{activity.badge}</em>}
 								</span>
 								<span class="lf__opt-sub">{activity.sub}</span>
+								{activity.includes && (
+									<span class="lf__opt-includes">
+										{activity.includes.map((item) => (
+											<span class="lf__opt-tag">{item}</span>
+										))}
+									</span>
+								)}
 							</span>
 							<span class="lf__opt-mark" aria-hidden="true">
 								<svg width="12" height="12" viewBox="0 0 14 14" fill="none">

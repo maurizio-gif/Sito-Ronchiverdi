@@ -6,9 +6,9 @@
 // voce qui, non toccare il markup.
 //
 // A differenza del form del TC Ambrosiano la scelta è **singola**: l'utente
-// indica un solo interesse e il form si ramifica su quello. Chi ha più
-// interessi — o più persone in famiglia — sceglie l'opzione "Family", che è
-// esattamente il caso "non riesco a rispondere con una sola voce".
+// indica un solo interesse e il form si ramifica su quello. Chi deve chiedere
+// per più persone della propria famiglia sceglie l'opzione "Family", l'unico
+// caso in cui una voce sola non basta.
 
 export type LeadAudience = "adulti" | "young" | "misto" | "famiglia";
 
@@ -20,7 +20,10 @@ export interface LeadActivity {
 	badge?: string;
 	/** Riga che spiega cosa comprende l'opzione: è ciò che rende leggibile un macro-gruppo. */
 	sub: string;
-	/** Chip facoltativi mostrati solo quando l'opzione è selezionata. */
+	/**
+	 * Attività comprese: elencate sulla card perché si vedano a colpo d'occhio,
+	 * e selezionabili come chip facoltativi quando l'opzione viene scelta.
+	 */
 	includes?: string[];
 	/** Serve alle ramificazioni: chi frequenta è un adulto, un ragazzo, o entrambi. */
 	audience: LeadAudience;
@@ -56,7 +59,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				id: "club-adulti",
 				label: "Abbonamento Club",
 				badge: "Adulti",
-				sub: "Accesso al club e a tutte le attività per adulti: sala attrezzi, corsi, piscina, triathlon, tennis e padel.",
+				sub: "Un solo abbonamento per tutte le attività del club dedicate agli adulti.",
 				includes: [
 					"Gym Floor",
 					"Corsi Fitness",
@@ -79,6 +82,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 			{
 				id: "corsi-tennis",
 				label: "Corsi Tennis",
+				badge: "Bambini",
 				sub: "Scuola tennis per bambini e ragazzi, lezioni individuali per adulti.",
 				audience: "misto",
 				icon: ICON_TENNIS,
@@ -121,7 +125,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 			{
 				id: "family",
 				label: "Family",
-				sub: "Ti interessano più attività, o attività diverse per più persone della famiglia? Partiamo da qui.",
+				sub: "Vuoi informazioni per più persone della tua famiglia? Partiamo da qui.",
 				audience: "famiglia",
 				icon: ICON_FAMILY,
 			},
