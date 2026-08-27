@@ -81,22 +81,15 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 		items: [
 			{
 				id: "corsi-tennis",
-				label: "Corsi Tennis",
+				label: "Young School Tennis",
 				badge: "Bambini",
-				sub: "Scuola tennis per bambini e ragazzi, lezioni individuali per adulti.",
-				audience: "misto",
+				sub: "Tennis per bambini e ragazzi, dal primo approccio alla racchetta ai percorsi agonistici.",
+				audience: "young",
 				icon: ICON_TENNIS,
 			},
 			{
-				id: "corsi-padel",
-				label: "Corsi Padel",
-				sub: "Corsi di gruppo e lezioni individuali, per bambini e per adulti.",
-				audience: "misto",
-				icon: ICON_PADEL,
-			},
-			{
 				id: "scuola-nuoto",
-				label: "Scuola Nuoto",
+				label: "Young School Nuoto",
 				badge: "Bambini",
 				sub: "Corsi di nuoto per bambini e ragazzi, dall'ambientamento al perfezionamento.",
 				audience: "young",
@@ -104,10 +97,18 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 			},
 			{
 				id: "triathlon-young",
-				label: "Triathlon Young",
-				sub: "Nuoto, bici e corsa: il percorso di triathlon per bambini e ragazzi.",
+				label: "Young School Triathlon",
+				badge: "Bambini",
+				sub: "Nuoto, bici e corsa per bambini e ragazzi dai 6 ai 13 anni.",
 				audience: "young",
 				icon: ICON_TRIATHLON,
+			},
+			{
+				id: "corsi-padel",
+				label: "Corsi Padel",
+				sub: "Corsi di gruppo e lezioni individuali, per bambini e per adulti.",
+				audience: "misto",
+				icon: ICON_PADEL,
 			},
 			{
 				id: "summer-camp",
