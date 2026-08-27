@@ -1,0 +1,111 @@
+---
+// Corpo del form contatti: tutti gli step, uno per <div data-step="…">.
+// Stesso schema del form TCA — il componente è "muto" (solo markup), la logica
+// vive in src/lib/leadForm.client.js e viene inizializzata dal contenitore
+// (LeadModal.astro oggi, un eventuale form inline domani) passando il prefisso
+// degli id, così due istanze sulla stessa pagina non si calpestano.
+import { leadActivityGroups } from "../data/leadActivities";
+
+interface Props {
+	/** Prefisso degli id: "lm" per il modal, "li" per la versione inline. */
+	prefix: string;
+}
+const { prefix } = Astro.props;
+---
+
+<!-- ── Indicatore di step ───────────────────────────────────────────── -->
+<div class="lf__steps" aria-hidden="true">
+	<span class="lf__step is-active" data-step-dot="1">1</span>
+	<span class="lf__step-line"></span>
+	<span class="lf__step" data-step-dot="2">2</span>
+	<span class="lf__step-line"></span>
+	<span class="lf__step" data-step-dot="3">3</span>
+</div>
+
+<!-- ─── STEP 1 · Attività di interesse ──────────────────────────────── -->
+<div class="lf__body" data-step="1">
+	<p class="lf__sub">
+		Scegli l'attività che ti interessa: in base alla tua scelta ti facciamo
+		qualche domanda veloce e ti mettiamo in contatto con la persona giusta.
+	</p>
+
+	<fieldset class="lf__opts">
+		<legend class="lf__sr-only">Attività di interesse</legend>
+
+		{leadActivityGroups.map((group) => (
+			<div class="lf__opt-group">
+				<p class="lf__opt-group-label">{group.label}</p>
+
+				{group.items.map((activity) => (
+					<div class="lf__opt-wrap">
+						<label class="lf__opt" for={`${prefix}-att-${activity.id}`}>
+							<input
+								class="lf__opt-input"
+								type="radio"
+								id={`${prefix}-att-${activity.id}`}
+								name="attivita"
+								value={activity.id}
+								data-audience={activity.audience}
+							/>
+							<span class="lf__opt-icon" aria-hidden="true" set:html={activity.icon} />
+							<span class="lf__opt-texts">
+								<span class="lf__opt-title">
+									{activity.label}
+									{activity.badge && <em class="lf__opt-badge">{activity.badge}</em>}
+								</span>
+								<span class="lf__opt-sub">{activity.sub}</span>
+							</span>
+							<span class="lf__opt-mark" aria-hidden="true">
+								<svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+									<path d="M2 7.5L5.5 11L12 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+								</svg>
+							</span>
+						</label>
+
+						{activity.includes && (
+							<div class="lf__opt-extra" data-extra-for={activity.id} hidden>
+								<p class="lf__opt-extra-label">Cosa ti interessa di più? <span>facoltativo</span></p>
+								<div class="lf__chips">
+									{activity.includes.map((item) => (
+										<label class="lf__chip">
+											<input type="checkbox" name="dettagli" value={item} />
+											<span>{item}</span>
+										</label>
+									))}
+								</div>
+							</div>
+						)}
+					</div>
+				))}
+			</div>
+		))}
+	</fieldset>
+
+	<div class="lf__actions">
+		<button class="btn lf__next" id={`${prefix}-step1-next`} type="button" disabled>
+			Continua <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 2 · Segnaposto: qui iniziano le ramificazioni ──────────── -->
+<!-- Lo step successivo cambia in base all'attività scelta (dati, domande
+     specifiche, poi appuntamento in sede / telefonata / messaggio). Finché i
+     rami non sono definiti questo pannello mostra il ramo che verrebbe
+     imboccato: serve a verificare in anteprima che lo step 1 instradi bene. -->
+<div class="lf__body" data-step="2" hidden>
+	<p class="lf__sub">Scelta registrata. Da qui parte il percorso dedicato:</p>
+
+	<div class="lf__recap" id={`${prefix}-recap`}></div>
+
+	<p class="lf__placeholder">
+		<strong>Prossimo step da definire.</strong> In base a questa scelta il form
+		proseguirà con le domande specifiche del percorso e con la proposta di
+		contatto (appuntamento in sede, telefonata o messaggio).
+	</p>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="1" type="button">← Indietro</button>
+	</div>
+</div>

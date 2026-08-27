@@ -72,6 +72,9 @@ const structuredData = {
 			function register(selector, type, baseDelay = 0, stagger = 0) {
 				document.querySelectorAll(selector).forEach((el, i) => {
 					if (el.closest(".hero")) return;
+					// Il contenuto di un <dialog> chiuso non interseca mai il viewport:
+					// registrarlo lo lascerebbe a opacity 0 anche dopo l'apertura.
+					if (el.closest("dialog")) return;
 					if (!el.hasAttribute("data-anim")) el.setAttribute("data-anim", type);
 					if (!el.dataset.animDelay && baseDelay + stagger * i > 0) {
 						el.dataset.animDelay = String(baseDelay + stagger * i);

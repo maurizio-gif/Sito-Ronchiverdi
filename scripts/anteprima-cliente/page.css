@@ -1,0 +1,262 @@
+/* ── Pagina di presentazione (prefisso pg-) ───────────────────────────
+   Il modulo dentro .pg-frame usa le classi reali del sito (.lf__*, .btn,
+   .eyebrow): qui non si tocca nulla di quello, si costruisce solo la
+   cornice attorno. Palette e font sono quelli di Ronchiverdi, la pagina
+   vive in un unico mondo chiaro — è un mock di marca, non un documento. */
+
+body {
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+}
+
+.pg {
+	max-width: 62rem;
+	margin: 0 auto;
+	padding: clamp(2.5rem, 6vw, 5rem) clamp(1.1rem, 4vw, 2.5rem) 5rem;
+	display: flex;
+	flex-direction: column;
+	gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* ── Intestazione ─────────────────────────────────────────────────── */
+.pg-head {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	border-top: 2px solid var(--accent);
+	padding-top: 1.4rem;
+}
+.pg-head__eyebrow {
+	margin: 0;
+	font-size: var(--text-2xs);
+	font-weight: 500;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--accent);
+}
+.pg-head h1 {
+	margin: 0;
+	max-width: 20ch;
+	text-wrap: balance;
+	font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+	line-height: 1.03;
+	letter-spacing: var(--tracking-4xl);
+	font-weight: 400;
+}
+.pg-head h1 em {
+	font-family: var(--font-serif);
+	font-style: italic;
+	color: var(--accent);
+	font-size: 1.12em;
+}
+.pg-head__lede {
+	margin: 0;
+	max-width: 58ch;
+	font-size: var(--text-md);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+
+.pg-tags {
+	list-style: none;
+	margin: 0.4rem 0 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+.pg-tags li {
+	font-size: var(--text-2xs);
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	background: var(--bg-alt);
+	border-radius: 999px;
+	padding: 0.35rem 0.75rem;
+}
+
+/* ── Palco del modulo ─────────────────────────────────────────────── */
+.pg-stage {
+	background: var(--bg-alt);
+	border-radius: 14px;
+	padding: clamp(1rem, 3vw, 2rem);
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.pg-stage__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+	padding: 0 0.25rem;
+}
+.pg-stage__label {
+	margin: 0;
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--accent);
+}
+.pg-stage__hint {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--text-muted);
+}
+
+.pg-frame {
+	max-width: 40rem;
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+}
+/* In pagina il pannello non è un <dialog>: niente scroll interno, altrimenti
+   il modulo si mangia lo scroll della pagina e le note sotto diventano
+   irraggiungibili. Si estende per intero, con l'ombra che avrebbe sul backdrop. */
+.pg-frame .lf__panel {
+	max-height: none;
+	overflow: hidden;
+	box-shadow: 0 18px 44px -18px rgba(28, 28, 24, 0.45);
+	border: 1px solid var(--border-strong);
+}
+.pg-frame .lf__head {
+	position: static;
+}
+
+.pg-frame__closed {
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	text-align: center;
+	background: var(--bg);
+	border: 1px dashed var(--border-strong);
+	border-radius: var(--radius);
+	padding: 3.5rem 1.5rem;
+}
+.pg-frame.is-closed .lf__panel {
+	display: none;
+}
+.pg-frame.is-closed .pg-frame__closed {
+	display: flex;
+}
+.pg-frame__closed p {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--text-muted);
+}
+.pg-reopen {
+	border: none;
+	cursor: pointer;
+}
+
+/* ── Note ─────────────────────────────────────────────────────────── */
+.pg-notes {
+	display: grid;
+	grid-template-columns: 1.35fr 1fr;
+	gap: clamp(1.5rem, 4vw, 3rem);
+	align-items: start;
+}
+@media (max-width: 46rem) {
+	.pg-notes {
+		grid-template-columns: 1fr;
+	}
+}
+
+.pg-notes h2 {
+	margin: 0 0 1.2rem;
+	font-size: var(--text-lg);
+	font-weight: 500;
+	letter-spacing: var(--tracking-lg);
+	line-height: var(--leading-lg);
+}
+
+.pg-qa {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1.15rem;
+}
+.pg-qa dt {
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--accent);
+	margin-bottom: 0.3rem;
+}
+.pg-qa dd {
+	margin: 0;
+	font-size: var(--text-sm);
+	line-height: 1.65;
+	color: var(--text-muted);
+	max-width: 62ch;
+}
+.pg-qa dd strong {
+	color: var(--text);
+	font-weight: 600;
+}
+
+.pg-next {
+	background: var(--bg-alt);
+	border-radius: var(--radius);
+	padding: 1.4rem 1.5rem;
+}
+.pg-next ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	counter-reset: passo;
+}
+.pg-next li {
+	display: grid;
+	grid-template-columns: 1.5rem 1fr;
+	gap: 0.7rem;
+	font-size: var(--text-sm);
+	line-height: 1.55;
+	color: var(--text-muted);
+}
+.pg-next li::before {
+	counter-increment: passo;
+	content: counter(passo);
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 50%;
+	border: 1px solid var(--border-strong);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	color: var(--text-muted);
+}
+.pg-next li strong {
+	display: block;
+	color: var(--text);
+	font-weight: 600;
+}
+
+.pg-foot {
+	border-top: 1px solid var(--border-strong);
+	padding-top: 1.2rem;
+	font-size: var(--text-xs);
+	line-height: 1.6;
+	color: var(--text-muted);
+	margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
