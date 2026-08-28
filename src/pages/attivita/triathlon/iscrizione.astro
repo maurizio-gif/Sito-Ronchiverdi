@@ -1,6 +1,5 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import ContactModal from "../../../components/ContactModal.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
@@ -76,7 +75,7 @@ const faq = [
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
 		<div class="header-cta">
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 		</div>
 	</PageHero>
 
@@ -121,7 +120,7 @@ const faq = [
 	<section class="info-section contacts-section">
 		<h2>Contatti</h2>
 		<p>Per organizzare la lezione di prova, chiedere informazioni sui percorsi o completare l'iscrizione, compila il modulo di contatto: ti risponde il settore triathlon.</p>
-		<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
+		<button type="button" class="btn" data-open-contact>Contattaci</button>
 	</section>
 
 	<Faq items={faq} />
@@ -130,12 +129,10 @@ const faq = [
 		<h2>Pronto a partire?</h2>
 		<p class="lede" style="margin-inline:auto">Scrivici: ti aiutiamo a capire quale percorso è adatto e a organizzare la prova.</p>
 		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn" data-open-contact>Contattaci</button>
 			<a class="btn btn-outline" href={url("/attivita/triathlon")}>Torna al triathlon</a>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.header-cta {

@@ -2,7 +2,8 @@
 // cliente per far approvare il primo step del modulo contatti.
 //
 // La pagina NON riscrive il modulo: ne estrae markup e CSS dalla build reale
-// (dist/anteprima-form/), così quello che vede il cliente e quello che c'è nel
+// (dist/index.html — il modal è ora globale, presente su ogni pagina del sito
+// tramite Layout.astro), così quello che vede il cliente e quello che c'è nel
 // sito non possono divergere. Attorno ci mette la cornice editoriale che vive
 // in scripts/anteprima-cliente/ (testi, stili e interazione della sola pagina
 // di presentazione).
@@ -25,7 +26,7 @@ import path from "node:path";
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, "dist");
 const PARTS = path.join(ROOT, "scripts", "anteprima-cliente");
-const SORGENTE = path.join(DIST, "anteprima-form", "index.html");
+const SORGENTE = path.join(DIST, "index.html");
 const USCITA = path.join(ROOT, "public", "anteprima-modulo-contatti.html");
 
 if (!fs.existsSync(SORGENTE)) {
@@ -47,8 +48,20 @@ const attivita = dialog
 	.replace(/&quot;/g, '"')
 	.replace(/&amp;/g, "&");
 
-// ── 2 · Tutti i fogli di stile della pagina, nell'ordine in cui li carica ──
-const fogli = [...html.matchAll(/<link rel="stylesheet" href="\/[^/]+\/([^"]+)"/g)].map((m) => m[1]);
+// ── 2 · Fogli di stile: solo quelli che riguardano il modulo ────────────
+// La home page carica anche un grosso bundle di CSS suo (hero, sezioni,
+// homepage-only): non ci serve. Il modal è globale (Layout.astro), quindi le
+// sue regole .lf__ vivono nel bundle condiviso insieme a token/base — è
+// quello, e solo quello, che si deve incollare qui dentro.
+const tuttiIFogli = [...html.matchAll(/<link rel="stylesheet" href="\/[^/]+\/([^"]+)"/g)].map((m) => m[1]);
+const fogli = tuttiIFogli.filter((f) => {
+	const contenuto = fs.readFileSync(path.join(DIST, f), "utf8");
+	return contenuto.includes(".lf__") || contenuto.includes("--accent:");
+});
+if (!fogli.length) {
+	console.error("Nessun foglio di stile con le regole .lf__ trovato: controlla la build.");
+	process.exit(1);
+}
 let css = fogli.map((f) => fs.readFileSync(path.join(DIST, f), "utf8")).join("\n");
 
 // ── 3 · Font: teniamo solo i sottoinsiemi latini e li incorporiamo ──────

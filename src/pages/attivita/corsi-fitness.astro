@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import WeeklySchedule from "../../components/WeeklySchedule.astro";
 import Faq from "../../components/Faq.astro";
@@ -185,6 +184,9 @@ const courses = [
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
+		<div class="section-cta">
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
+		</div>
 	</section>
 
 	<Faq items={faq} />
@@ -195,12 +197,10 @@ const courses = [
 			Prenota un <strong>tour gratuito</strong> e scopri i corsi dal vivo.
 		</p>
 		<div class="final-cta__buttons">
-			<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Fitness e Sala Pesi">Contattaci</button>
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">Prenota un tour</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.courses-section {
@@ -308,6 +308,11 @@ const courses = [
 		.planning-section__cta {
 			text-align: center;
 			margin-top: 2.5rem;
+		}
+		.section-cta {
+			display: flex;
+			justify-content: center;
+			margin-top: 1.5rem;
 		}
 
 		.final-cta {

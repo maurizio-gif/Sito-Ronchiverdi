@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import AreaAccordion from "../../components/AreaAccordion.astro";
 import Faq from "../../components/Faq.astro";
@@ -349,7 +348,7 @@ const faq = [
 		lede="Il Gym Floor è compreso negli abbonamenti <strong>Gold</strong>, <strong>Silver</strong> e <strong>Gym</strong>: confronta le formule e scegli quella adatta a te."
 	>
 		<div class="membership-cta">
-			<button type="button" class="btn" data-open-contact data-interest="Fitness e Sala Pesi">Iscriviti ora</button>
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">Iscriviti ora</button>
 			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri le nostre membership</a>
 		</div>
 	</MembershipTable>
@@ -380,7 +379,7 @@ const faq = [
 		</div>
 		<div class="personal__cta">
 			<a class="btn" href={url("/attivita/personal-training")}>Scopri i personal trainer</a>
-			<button type="button" class="btn btn-outline btn-outline-dark" data-open-contact data-interest="Fitness e Sala Pesi">Contattaci</button>
+			<button type="button" class="btn btn-outline btn-outline-dark" data-open-contact data-interest="club-adulti">Contattaci</button>
 		</div>
 	</section>
 
@@ -392,12 +391,10 @@ const faq = [
 			Prenota un <strong>tour gratuito</strong> e scopri gli spazi dal vivo, con uno dei nostri istruttori.
 		</p>
 		<div class="final-cta__buttons">
-			<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Fitness e Sala Pesi">Contattaci</button>
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">Prenota un tour</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.about {

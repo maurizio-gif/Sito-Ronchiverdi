@@ -70,7 +70,7 @@ const links = [
 		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
 		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
 	</div>
-	<a class="btn nav-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	<button type="button" class="btn nav-cta" data-open-contact>Prenota un tour</button>
 
 	<button class="nav-hamburger" id="nav-hamburger" aria-label="Apri il menu" aria-expanded="false" aria-controls="nav-mobile">
 		<span></span>
@@ -119,7 +119,7 @@ const links = [
 		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
 		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
 	</div>
-	<a class="btn nav-mobile-cta" href={url("/prenota-un-tour")}>Prenota un tour</a>
+	<button type="button" class="btn nav-mobile-cta" data-open-contact>Prenota un tour</button>
 </div>
 
 <script>
@@ -140,7 +140,10 @@ const links = [
 		document.body.classList.toggle("nav-mobile-locked", isOpen);
 	});
 
-	mobileMenu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+	// Anche il pulsante "Prenota un tour" deve chiudere il menu mobile: non è
+	// un link che porta via dalla pagina come gli altri, apre il modal sopra
+	// lo stesso overlay, quindi va incluso esplicitamente insieme alle <a>.
+	mobileMenu?.querySelectorAll("a, .nav-mobile-cta").forEach((el) => el.addEventListener("click", closeMenu));
 
 	function closeOtherDropdowns(item) {
 		document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {

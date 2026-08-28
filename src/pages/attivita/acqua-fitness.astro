@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import WeeklySchedule from "../../components/WeeklySchedule.astro";
 import Faq from "../../components/Faq.astro";
@@ -130,6 +129,9 @@ const courses = [
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
+		<div class="section-cta">
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
+		</div>
 	</section>
 
 	<Faq items={faq} />
@@ -139,10 +141,11 @@ const courses = [
 		<p class="lede" style="margin-inline:auto">
 			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
 		</p>
-		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">Prenota un tour</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
+		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 
@@ -251,6 +254,11 @@ const courses = [
 			font-style: italic;
 			color: var(--accent);
 		}
+		.section-cta {
+			display: flex;
+			justify-content: center;
+			margin-top: 1.5rem;
+		}
 
 		.final-cta {
 			padding: 6rem 1.5rem;
@@ -259,6 +267,12 @@ const courses = [
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
 		}
 	</style>
 </Layout>

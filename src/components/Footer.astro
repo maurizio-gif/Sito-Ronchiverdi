@@ -25,7 +25,7 @@ const clubLinks = [
 	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/eventi"), label: "Eventi" },
-	{ href: url("/prenota-un-tour"), label: "Prenota un tour" },
+	{ openContact: true, label: "Prenota un tour" },
 ];
 
 const iscrizioniLinks = [
@@ -107,7 +107,7 @@ const enti = [
 
 		<div class="find-us__cta">
 			<a class="btn btn-outline btn-outline-dark" href={mapsDirectionsUrl} target="_blank" rel="noopener">Indicazioni</a>
-			<a class="btn" href={url("/prenota-un-tour")}>Contattaci</a>
+			<button type="button" class="btn" data-open-contact>Contattaci</button>
 		</div>
 	</section>
 
@@ -166,7 +166,15 @@ const enti = [
 		<div class="footer-col">
 			<p class="footer-heading">Il club</p>
 			<ul>
-				{clubLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+				{clubLinks.map((l) => (
+					<li>
+						{l.openContact ? (
+							<button type="button" data-open-contact>{l.label}</button>
+						) : (
+							<a href={l.href}>{l.label}</a>
+						)}
+					</li>
+				))}
 			</ul>
 			<p class="footer-heading footer-heading--spaced">Ronchiverdi</p>
 			<ul>
@@ -420,11 +428,21 @@ const enti = [
 		gap: 0.6rem;
 		font-size: var(--text-sm);
 	}
-	.footer-col a {
+	.footer-col a,
+	.footer-col button {
 		text-decoration: none;
 		color: rgba(246, 239, 222, 0.8);
 	}
-	.footer-col a:hover {
+	.footer-col button {
+		font: inherit;
+		text-align: left;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+	}
+	.footer-col a:hover,
+	.footer-col button:hover {
 		color: var(--text-on-dark);
 	}
 

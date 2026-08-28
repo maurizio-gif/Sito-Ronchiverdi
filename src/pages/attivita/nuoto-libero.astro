@@ -120,6 +120,9 @@ const faq = [
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
+		<div class="section-cta">
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
+		</div>
 	</section>
 
 	<section class="summer">
@@ -137,7 +140,10 @@ const faq = [
 		<p class="lede" style="margin-inline:auto">
 			Prenota un <strong>tour gratuito</strong> e visita le nostre piscine.
 		</p>
-		<a class="btn" href={url("/prenota-un-tour")}>Prenota un tour</a>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">Prenota un tour</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
+		</div>
 	</section>
 
 	<style>
@@ -319,6 +325,11 @@ const faq = [
 			text-align: center;
 			margin-top: 2.5rem;
 		}
+		.section-cta {
+			display: flex;
+			justify-content: center;
+			margin-top: 1.5rem;
+		}
 
 		.summer {
 			background: var(--bg-dark);
@@ -342,6 +353,12 @@ const faq = [
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
 		}
 
 	</style>

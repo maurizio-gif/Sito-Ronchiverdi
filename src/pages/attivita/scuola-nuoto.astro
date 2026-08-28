@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
@@ -117,7 +116,7 @@ const faq = [
 	},
 	{
 		q: "È possibile fare una prova gratuita?",
-		html: `<p>Sì, è possibile effettuare una prova gratuita, previa disponibilità dei posti e organizzazione con la scuola nuoto. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Scrivici per prenotarla</button>.</p>`,
+		html: `<p>Sì, è possibile effettuare una prova gratuita, previa disponibilità dei posti e organizzazione con la scuola nuoto. <button type="button" class="faq-inline-btn" data-open-contact data-interest="scuola-nuoto">Scrivici per prenotarla</button>.</p>`,
 	},
 	{
 		q: "I corsi sono divisi per età e livello?",
@@ -149,7 +148,7 @@ const faq = [
 	},
 	{
 		q: "È possibile recuperare le lezioni perse?",
-		html: `<p>Sì. I recuperi vanno concordati direttamente con la scuola nuoto e sono soggetti alla disponibilità dei gruppi. Sono previsti fino a 2 recuperi per i corsi quadrimestrali e fino a 4 recuperi per i corsi stagionali. <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">Contattaci per concordare il recupero</button>.</p>`,
+		html: `<p>Sì. I recuperi vanno concordati direttamente con la scuola nuoto e sono soggetti alla disponibilità dei gruppi. Sono previsti fino a 2 recuperi per i corsi quadrimestrali e fino a 4 recuperi per i corsi stagionali. <button type="button" class="faq-inline-btn" data-open-contact data-interest="scuola-nuoto">Contattaci per concordare il recupero</button>.</p>`,
 	},
 	{
 		q: "È disponibile un parcheggio?",
@@ -165,7 +164,7 @@ const faq = [
 	},
 	{
 		q: "Come posso ricevere maggiori informazioni?",
-		html: `<p>Per informazioni su corsi, orari, disponibilità, prove gratuite, recuperi e modalità di iscrizione <button type="button" class="faq-inline-btn" data-open-contact data-interest="Scuola Nuoto">compila il form di contatto</button>: ti risponde lo staff della Young School Nuoto.</p>`,
+		html: `<p>Per informazioni su corsi, orari, disponibilità, prove gratuite, recuperi e modalità di iscrizione <button type="button" class="faq-inline-btn" data-open-contact data-interest="scuola-nuoto">compila il form di contatto</button>: ti risponde lo staff della Young School Nuoto.</p>`,
 	},
 ];
 ---
@@ -226,7 +225,7 @@ const faq = [
 						</div>
 						<div class="program-card__cta">
 							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
-							<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+							<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
 						</div>
 					</div>
 				</article>
@@ -277,7 +276,7 @@ const faq = [
 			</p>
 			<div class="famiglie__buttons">
 				<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
-				<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+				<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
 			</div>
 		</div>
 	</section>
@@ -288,7 +287,7 @@ const faq = [
 		<p class="lede" style="margin-inline:auto">
 			Non esiste una scuola nuoto strutturata per adulti: chi desidera lezioni di nuoto acquista un <strong>carnet da 5 lezioni</strong> in reception e si organizza direttamente con l'istruttore di riferimento in base ai propri obiettivi. Ogni lezione dura <strong>40 o 60 minuti</strong>, a seconda del carnet scelto.
 		</p>
-		<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+		<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
 	</section>
 
 	<Faq items={faq} />
@@ -300,11 +299,9 @@ const faq = [
 		</p>
 		<div class="final-cta__buttons">
 			<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Scuola Nuoto">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Richiedi maggiori informazioni</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.dates-banner {

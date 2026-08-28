@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
@@ -133,12 +132,11 @@ const facts = [
 			Raccontaci il tuo obiettivo: ti mettiamo in contatto con il personal trainer più adatto a te.
 		</p>
 		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact data-interest="Personal Training">Contattaci</button>
+			<button type="button" class="btn" data-open-contact>Prenota un tour</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri gli abbonamenti</a>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<script>
 		document.querySelectorAll(".pt-card").forEach((card) => {

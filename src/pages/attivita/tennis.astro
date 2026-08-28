@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
@@ -207,7 +206,7 @@ const faq = [
 		</p>
 		<div class="section-cta">
 			<a class="btn" href={url("/attivita/tennis/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Tennis">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 		</div>
 	</section>
 
@@ -282,7 +281,7 @@ const faq = [
 
 	<div class="section-cta">
 		<a class="btn" href={url("/attivita/tennis/iscrizione")}>Modalità di iscrizione</a>
-		<button type="button" class="btn btn-outline" data-open-contact data-interest="Tennis">Contattaci</button>
+		<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-tennis">Richiedi maggiori informazioni</button>
 	</div>
 	</div>
 
@@ -313,11 +312,9 @@ const faq = [
 		</p>
 		<div class="final-cta__buttons">
 			<a class="btn" href={url("/attivita/tennis/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Tennis">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.intro-grid {

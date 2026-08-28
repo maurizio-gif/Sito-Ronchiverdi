@@ -1,6 +1,5 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import ContactModal from "../../../components/ContactModal.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
@@ -40,7 +39,7 @@ const faq = [
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Che tu voglia iscrivere tuo figlio alla Young School o riprendere a giocare da adulto, si parte sempre da una lezione di prova.</Fragment>
 		<div class="header-cta">
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Tennis">Richiedi una prova gratuita</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Richiedi una prova gratuita</button>
 		</div>
 	</PageHero>
 
@@ -66,7 +65,7 @@ const faq = [
 	<section class="info-section contacts-section">
 		<h2>Contatti</h2>
 		<p>Per organizzare la lezione di prova, chiedere informazioni sui percorsi o completare l'iscrizione, compila il modulo di contatto: ti risponde il settore tennis.</p>
-		<button type="button" class="btn" data-open-contact data-interest="Tennis">Contattaci</button>
+		<button type="button" class="btn" data-open-contact>Contattaci</button>
 	</section>
 
 	<Faq items={faq} />
@@ -74,10 +73,8 @@ const faq = [
 	<section class="final-cta">
 		<h2>Pronto a iniziare?</h2>
 		<p class="lede" style="margin-inline:auto">Contattaci: ti aiutiamo a organizzare la tua lezione di prova.</p>
-		<button type="button" class="btn" data-open-contact data-interest="Tennis">Contattaci</button>
+		<button type="button" class="btn" data-open-contact>Contattaci</button>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.header-cta {

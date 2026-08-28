@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
@@ -115,7 +114,7 @@ const faq = [
 	},
 	{
 		q: "È possibile fare una lezione di prova?",
-		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact data-interest="Triathlon">form di questa pagina</button>.</p>`,
+		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact>form di questa pagina</button>.</p>`,
 	},
 	{
 		q: "Bisogna avere già esperienza nel triathlon?",
@@ -268,7 +267,7 @@ const faq = [
 
 		<div class="section-cta">
 			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="triathlon-young">Contattaci</button>
 		</div>
 	</div>
 
@@ -306,7 +305,7 @@ const faq = [
 
 		<div class="section-cta">
 			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Richiedi maggiori informazioni</button>
 		</div>
 	</div>
 
@@ -341,7 +340,7 @@ const faq = [
 
 		<div class="section-cta">
 			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Contattaci</button>
 		</div>
 	</div>
 
@@ -373,11 +372,9 @@ const faq = [
 		</p>
 		<div class="final-cta__buttons">
 			<a class="btn" href={url("/attivita/triathlon/iscrizione")}>Modalità di iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Triathlon">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		/* Pulsante inline dentro una risposta FAQ: il markup passato via `html`

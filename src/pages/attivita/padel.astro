@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
@@ -146,7 +145,7 @@ const faq = [
 		</p>
 		<div class="section-cta">
 			<a class="btn" href={WANSPORT_URL} target="_blank" rel="noopener">Prenota su Wansport</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Padel">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-padel">Contattaci</button>
 		</div>
 	</section>
 
@@ -227,11 +226,9 @@ const faq = [
 		</p>
 		<div class="final-cta__buttons">
 			<a class="btn" href={WANSPORT_URL} target="_blank" rel="noopener">Prenota su Wansport</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Padel">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-padel">Contattaci</button>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.section-frame {

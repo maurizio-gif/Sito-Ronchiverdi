@@ -1,7 +1,6 @@
 ---
 import { render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import ContactModal from "../../components/ContactModal.astro";
 import PageHero from "../../components/PageHero.astro";
 import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../../lib/events";
 import { url } from "../../lib/paths";
@@ -67,7 +66,7 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 					{entry.data.ctaLabel ?? "Scopri di più"}
 				</a>
 			)}
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="Altro">Contattaci</button>
+			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
 		</div>
 	</article>
 
@@ -103,8 +102,6 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 			</div>
 		</section>
 	)}
-
-	<ContactModal />
 
 	<script>
 		// Se l'evento è già passato ma il sito non è ancora stato ricompilato,

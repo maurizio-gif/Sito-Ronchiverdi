@@ -1,7 +1,6 @@
 ---
 import { render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import ContactModal from "../components/ContactModal.astro";
 import PageHero from "../components/PageHero.astro";
 import IconFacts from "../components/IconFacts.astro";
 import EventExpiryGuard from "../components/EventExpiryGuard.astro";
@@ -130,12 +129,10 @@ const facts = [
 			Gli eventi sono aperti ai soci del club. Scrivici per sapere come partecipare al prossimo appuntamento.
 		</p>
 		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact data-interest="Altro">Contattaci</button>
+			<button type="button" class="btn" data-open-contact>Contattaci</button>
 			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri le nostre membership</a>
 		</div>
 	</section>
-
-	<ContactModal />
 
 	<style>
 		.intro {
