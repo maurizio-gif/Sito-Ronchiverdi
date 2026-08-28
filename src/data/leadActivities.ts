@@ -28,6 +28,12 @@ export interface LeadActivity {
 	/** Serve alle ramificazioni: chi frequenta è un adulto, un ragazzo, o entrambi. */
 	audience: LeadAudience;
 	icon: string;
+	/**
+	 * Percorso dopo lo step 1. "azione" propone appuntamento in sede,
+	 * telefonata o messaggio (il flusso costruito finora). Le attività senza
+	 * questo campo restano sul passo segnaposto, in attesa dei referenti.
+	 */
+	contactFlow?: "azione";
 }
 
 export interface LeadActivityGroup {
@@ -72,6 +78,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				],
 				audience: "adulti",
 				icon: ICON_MEMBERSHIP,
+				contactFlow: "azione",
 			},
 			{
 				id: "family",
@@ -79,6 +86,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				sub: "Vuoi informazioni per più persone della tua famiglia? Partiamo da qui.",
 				audience: "famiglia",
 				icon: ICON_FAMILY,
+				contactFlow: "azione",
 			},
 		],
 	},
@@ -132,9 +140,10 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 export const leadActivities: LeadActivity[] = leadActivityGroups.flatMap((g) => g.items);
 
 /**
- * Mappa id → { label, audience } passata al client come JSON: serve a comporre
- * il riepilogo e il payload senza duplicare i testi nello script.
+ * Mappa id → { label, audience, contactFlow } passata al client come JSON:
+ * serve a comporre il riepilogo, instradare lo step 2 e costruire il
+ * payload senza duplicare i testi nello script.
  */
 export const leadActivityMap = Object.fromEntries(
-	leadActivities.map((a) => [a.id, { label: a.label, audience: a.audience }])
+	leadActivities.map((a) => [a.id, { label: a.label, audience: a.audience, contactFlow: a.contactFlow }])
 );

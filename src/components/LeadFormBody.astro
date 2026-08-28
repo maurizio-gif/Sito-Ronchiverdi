@@ -5,6 +5,7 @@
 // (LeadModal.astro oggi, un eventuale form inline domani) passando il prefisso
 // degli id, così due istanze sulla stessa pagina non si calpestano.
 import { leadActivityGroups } from "../data/leadActivities";
+import prefissi from "../data/prefissi-telefonici";
 
 interface Props {
 	/** Prefisso degli id: "lm" per il modal, "li" per la versione inline. */
@@ -115,4 +116,162 @@ const { prefix } = Astro.props;
 	<div class="lf__actions">
 		<button class="lf__back" data-step-back="1" type="button">← Indietro</button>
 	</div>
+</div>
+
+<!-- ─── STEP 2-SCELTA · Come possiamo aiutarti ──────────────────────── -->
+<div class="lf__body" data-step="2-scelta" hidden>
+	<p class="lf__sub">Come preferisci procedere?</p>
+
+	<div class="lf__choices">
+		<button class="lf__choice" type="button" data-azione="appuntamento">
+			<span class="lf__choice-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5" /></svg>
+			</span>
+			<span class="lf__choice-texts">
+				<span class="lf__choice-label">Appuntamento in sede</span>
+				<span class="lf__choice-sub">Vieni a trovarci al club, ti mostriamo tutto</span>
+			</span>
+			<span class="lf__choice-arr" aria-hidden="true">→</span>
+		</button>
+
+		<button class="lf__choice" type="button" data-azione="telefonata">
+			<span class="lf__choice-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.7.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__choice-texts">
+				<span class="lf__choice-label">Telefonata</span>
+				<span class="lf__choice-sub">Scegli giorno e orario, ti chiamiamo noi</span>
+			</span>
+			<span class="lf__choice-arr" aria-hidden="true">→</span>
+		</button>
+
+		<button class="lf__choice" type="button" data-azione="messaggio">
+			<span class="lf__choice-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__choice-texts">
+				<span class="lf__choice-label">Messaggio</span>
+				<span class="lf__choice-sub">Scrivici, ti rispondiamo via email</span>
+			</span>
+			<span class="lf__choice-arr" aria-hidden="true">→</span>
+		</button>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="1" type="button">← Indietro</button>
+	</div>
+</div>
+
+<!-- ─── STEP 3-APPUNTAMENTO · Giorno e orario in sede ───────────────── -->
+<div class="lf__body" data-step="3-appuntamento" hidden>
+	<p class="lf__sub">Scegli quando vuoi venire a trovarci.</p>
+
+	<div class="lf__picker" id={`${prefix}-picker-appuntamento`}>
+		<div class="lf__daystrip" id={`${prefix}-giorni-appuntamento`}></div>
+		<div class="lf__slots" id={`${prefix}-slots-appuntamento`} hidden></div>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="2-scelta" type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-appuntamento-next`} type="button" disabled>
+			Continua <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 3-TELEFONATA · Giorno e orario per la chiamata ─────────── -->
+<div class="lf__body" data-step="3-telefonata" hidden>
+	<p class="lf__sub">Scegli quando ti richiamiamo.</p>
+
+	<div class="lf__picker" id={`${prefix}-picker-telefonata`}>
+		<div class="lf__daystrip" id={`${prefix}-giorni-telefonata`}></div>
+		<div class="lf__slots" id={`${prefix}-slots-telefonata`} hidden></div>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="2-scelta" type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-telefonata-next`} type="button" disabled>
+			Continua <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 3-MESSAGGIO · Testo libero ──────────────────────────────── -->
+<div class="lf__body" data-step="3-messaggio" hidden>
+	<p class="lf__sub">Scrivici la tua richiesta: ti risponderemo il prima possibile.</p>
+
+	<div class="lf__field">
+		<label for={`${prefix}-messaggio-testo`}>Il tuo messaggio <span aria-hidden="true">*</span></label>
+		<textarea id={`${prefix}-messaggio-testo`} name="messaggio" rows="5" placeholder="Raccontaci cosa cerchi o quali domande hai…"></textarea>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="2-scelta" type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-messaggio-next`} type="button">
+			Continua <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 4-DATI · Contatto, condiviso dai tre percorsi ──────────── -->
+<div class="lf__body" data-step="4-dati" hidden>
+	<p class="lf__sub">Un'ultima cosa: come possiamo raggiungerti?</p>
+
+	<div class="lf__grid">
+		<div class="lf__field">
+			<label for={`${prefix}-dati-nome`}>Nome <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dati-nome`} name="nome" type="text" autocomplete="given-name" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dati-cognome`}>Cognome <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dati-cognome`} name="cognome" type="text" autocomplete="family-name" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dati-email`}>Email <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dati-email`} name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dati-cellulare`}>Cellulare <span aria-hidden="true">*</span></label>
+			<div class="lf__tel">
+				<select id={`${prefix}-dati-prefisso`} class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+					{prefissi.map((pf) => (
+						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+					))}
+				</select>
+				<input id={`${prefix}-dati-cellulare`} name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+			</div>
+		</div>
+	</div>
+
+	<div class="lf__consent">
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dati-privacy`} name="privacy" type="checkbox" />
+			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+		</label>
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dati-marketing`} name="marketing" type="checkbox" />
+			<span>Acconsento a ricevere comunicazioni e novità da Ronchiverdi. <em>(facoltativo)</em></span>
+		</label>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" id={`${prefix}-dati-back`} type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-dati-invia`} type="button">
+			Invia richiesta <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 5-CONFERMA · Riepilogo, contenuto composto via JS ──────── -->
+<div class="lf__body lf__confirm" data-step="5-conferma" hidden aria-live="polite">
+	<div class="lf__confirm-check" aria-hidden="true">
+		<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+	</div>
+	<h3 class="lf__confirm-title" id={`${prefix}-confirm-title`}></h3>
+	<div class="lf__recap" id={`${prefix}-confirm-summary`}></div>
+	<button class="btn lf__confirm-cta" type="button" data-lf-close>Chiudi</button>
 </div>
