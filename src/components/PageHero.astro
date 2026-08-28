@@ -24,7 +24,9 @@ const hasExtra = Astro.slots.has("default");
 		)}
 	</div>
 	<div class="page-hero__media">
-		<img class="page-hero__img" src={url(image)} alt={imageAlt} />
+		<div class="page-hero__frame">
+			<img class="page-hero__img" src={url(image)} alt={imageAlt} />
+		</div>
 		{hasStat && (
 			<div class="page-hero__stat">
 				<slot name="stat" />
@@ -83,7 +85,13 @@ const hasExtra = Astro.slots.has("default");
 		}
 	}
 
+	/* Contenitore non ritagliato: la card statistica vive qui, non dentro
+	   .page-hero__frame, altrimenti l'overflow:hidden che serve a smussare
+	   l'immagine taglierebbe anche la card che sporge dal suo bordo. */
 	.page-hero__media {
+		position: relative;
+	}
+	.page-hero__frame {
 		position: relative;
 		aspect-ratio: 4 / 3.1;
 		border-radius: 24px;
@@ -161,7 +169,7 @@ const hasExtra = Astro.slots.has("default");
 		.page-hero__title,
 		.page-hero__lede,
 		.page-hero__extra,
-		.page-hero__media {
+		.page-hero__frame {
 			opacity: 1;
 			animation: none;
 			transform: none;
