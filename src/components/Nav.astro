@@ -12,7 +12,6 @@ const services = (await getCollection("services")).sort(byOrder);
 const serviceHref = (s) => (s.data.external ? s.data.href : url(s.data.href));
 
 const links = [
-	{ href: url("/il-club"), label: "Il Club" },
 	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/eventi"), label: "Eventi" },
