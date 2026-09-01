@@ -21,10 +21,7 @@ export function initLeadForm(root, options) {
 	var P = options.prefix;
 	var onClose = options.onClose || function () {};
 
-	// Non ancora configurato: i referenti a cui instradare ogni attività
-	// arrivano dal cliente attività per attività. Il punto di invio è già
-	// cablato — appena l'endpoint esiste basta valorizzare questa costante.
-	var WEBHOOK_LEAD = "";
+	var WEBHOOK_LEAD = "/api/lead";
 
 	// Placeholder in attesa degli orari reali del club: nessuna chiusura,
 	// stessa fascia oraria ogni giorno. Da sostituire quando il cliente
