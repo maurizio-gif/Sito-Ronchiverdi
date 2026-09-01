@@ -45,7 +45,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          # L'adapter @astrojs/vercel (necessario per l'endpoint /api/lead)
+          # scrive l'output statico sotto dist/client/ invece che dist/.
+          path: ./dist/client
 
   deploy:
     needs: build

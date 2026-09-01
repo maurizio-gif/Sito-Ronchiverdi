@@ -13,8 +13,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/vercel": "^11.0.9",
     "@fontsource/cormorant-garamond": "^5.2.11",
     "@fontsource/jost": "^5.2.8",
+    "@supabase/supabase-js": "^2.112.4",
     "@tinacms/cli": "^2.5.3",
     "astro": "^7.1.6",
     "tinacms": "^3.10.0"

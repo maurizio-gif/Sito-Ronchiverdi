@@ -148,7 +148,7 @@ const services = [
 
 			<p class="lf__error" id="cf-error" hidden role="alert"></p>
 
-			<button class="btn" type="submit">Invia richiesta</button>
+			<button class="btn" type="submit" id="cf-invia">Invia richiesta</button>
 		</form>
 
 		<div class="contact-form__confirm" id="cf-confirm" hidden>
@@ -165,6 +165,7 @@ const services = [
 		const errorEl = document.getElementById("cf-error");
 		const confirmEl = document.getElementById("cf-confirm");
 		const confirmText = document.getElementById("cf-confirm-text");
+		const inviaBtn = document.getElementById("cf-invia");
 
 		function isValidEmail(v) {
 			return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
@@ -184,21 +185,51 @@ const services = [
 			if (focusEl) focusEl.focus();
 		}
 
-		form.addEventListener("submit", (e) => {
+		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
 			errorEl.hidden = true;
 
 			const nome = document.getElementById("cf-nome");
 			const cognome = document.getElementById("cf-cognome");
 			const email = document.getElementById("cf-email");
+			const prefisso = document.getElementById("cf-prefisso");
 			const cellulare = document.getElementById("cf-cellulare");
+			const messaggio = document.getElementById("cf-messaggio");
 			const privacy = document.getElementById("cf-privacy");
+			const marketing = document.getElementById("cf-marketing");
 
 			if (!nome.value.trim()) return showError("Inserisci il tuo nome.", nome);
 			if (!cognome.value.trim()) return showError("Inserisci il tuo cognome.", cognome);
 			if (!isValidEmail(email.value)) return showError("Inserisci un indirizzo email valido.", email);
 			if (!isValidPhone(cellulare.value)) return showError("Inserisci un numero di cellulare valido.", cellulare);
 			if (!privacy.checked) return showError("Il consenso alla Privacy Policy è obbligatorio.");
+
+			inviaBtn.disabled = true;
+			inviaBtn.textContent = "Invio in corso…";
+
+			try {
+				const res = await fetch("/api/lead", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						origine: "chinesis-inline",
+						pagina: location.pathname,
+						cta: "Richiedi informazioni",
+						nome: nome.value.trim(),
+						cognome: cognome.value.trim(),
+						email: email.value.trim(),
+						cellulare: `${prefisso.value} ${cellulare.value.trim()}`,
+						messaggio: messaggio.value.trim(),
+						privacy: privacy.checked,
+						marketing: marketing.checked,
+					}),
+				});
+				if (!res.ok) throw new Error("request failed");
+			} catch {
+				inviaBtn.disabled = false;
+				inviaBtn.textContent = "Invia richiesta";
+				return showError("Non siamo riusciti a inviare la richiesta. Riprova, oppure chiamaci direttamente.");
+			}
 
 			confirmText.textContent = `Grazie ${nome.value.trim()}, ti ricontattiamo il prima possibile su ${email.value.trim()}.`;
 			form.hidden = true;
