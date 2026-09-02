@@ -67,6 +67,10 @@ export async function POST({ request }: { request: Request }) {
 		cellulare,
 		privacy: body.privacy === true,
 		marketing: body.marketing === true,
+		settore: str(body.settore),
+		minore_nome: str(body.minoreNome),
+		minore_cognome: str(body.minoreCognome),
+		minore_data_nascita: str(body.minoreDataNascita),
 	});
 
 	if (error) {

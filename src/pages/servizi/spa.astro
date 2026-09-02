@@ -25,6 +25,19 @@ const services = [
 	{ title: "Cascata di ghiaccio", desc: "Il contrasto freddo-caldo che completa il percorso benessere iniziato tra vapore e calore." },
 	{ title: "Kneipp verticale", desc: "Un percorso sensoriale che alterna docce calde e fredde, tra colore e design." },
 ];
+
+// Galleria degli ambienti. L'ordine non è casuale: si entra dalla Relax Zone,
+// si passa per il calore (sauna, vapore), poi il freddo, e si chiude alla
+// tisaneria — lo stesso percorso che si fa in sede. `span` marca le due foto
+// che nel mosaico occupano il doppio della larghezza.
+const galleria = [
+	{ src: "spa-relax-zone", alt: "Relax Zone della Spa Ronchiverdi con sedute illuminate", titolo: "Relax Zone", nota: "Il momento della pausa", span: true },
+	{ src: "spa-sauna", alt: "Sauna finlandese in legno scuro affacciata sul verde", titolo: "Sauna", nota: "Legno scuro e luce sul parco" },
+	{ src: "spa-bagno-vapore", alt: "Bagno di vapore con illuminazione rossa", titolo: "Bagno di vapore", nota: "Calore umido e cromoterapia" },
+	{ src: "spa-cascata-ghiaccio", alt: "Cascata di ghiaccio della Spa Ronchiverdi", titolo: "Cascata di ghiaccio", nota: "Il contrasto che rigenera" },
+	{ src: "spa-percorso", alt: "Percorso benessere tra sauna e cascata di ghiaccio", titolo: "Il percorso", nota: "Dal caldo al freddo, e ritorno" },
+	{ src: "spa-tisaneria", alt: "Angolo tisaneria della Spa Ronchiverdi", titolo: "Tisaneria", nota: "Dove il percorso si chiude", span: true },
+];
 ---
 
 <Layout
@@ -44,6 +57,50 @@ const services = [
 			</div>
 		))}
 	</section>
+
+	<section class="spa-gallery">
+		<div class="spa-gallery__head">
+			<p class="eyebrow eyebrow-dark">Gli ambienti</p>
+			<h2>Un percorso <em class="accent accent-dark">tra caldo e freddo</em></h2>
+		</div>
+
+		<div class="spa-gallery__grid">
+			{galleria.map((foto, i) => (
+				<button
+					class:list={["spa-shot", { "spa-shot--wide": foto.span }]}
+					type="button"
+					data-lightbox={i}
+					aria-label={`Ingrandisci: ${foto.titolo}`}
+				>
+					<img
+						src={url(`images/services/${foto.src}.jpg`)}
+						alt={foto.alt}
+						loading="lazy"
+						decoding="async"
+						width="1400"
+						height="933"
+					/>
+					<span class="spa-shot__veil"></span>
+					<span class="spa-shot__caption">
+						<span class="spa-shot__title">{foto.titolo}</span>
+						<span class="spa-shot__note">{foto.nota}</span>
+					</span>
+				</button>
+			))}
+		</div>
+	</section>
+
+	<div class="spa-lightbox" id="spa-lightbox" hidden>
+		<button class="spa-lightbox__close" type="button" aria-label="Chiudi">
+			<svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+		</button>
+		<button class="spa-lightbox__nav spa-lightbox__nav--prev" type="button" aria-label="Foto precedente">‹</button>
+		<figure class="spa-lightbox__figure">
+			<img id="spa-lightbox-img" src="" alt="" />
+			<figcaption id="spa-lightbox-cap"></figcaption>
+		</figure>
+		<button class="spa-lightbox__nav spa-lightbox__nav--next" type="button" aria-label="Foto successiva">›</button>
+	</div>
 
 	<Faq items={faq} />
 
@@ -74,6 +131,261 @@ const services = [
 				text-align: center;
 			}
 		}
+		/* ── Galleria ambienti ─────────────────────────────────────────────
+		   Fondo scuro non per vezzo: le foto della Spa sono girate al buio, su
+		   crema risulterebbero macchie nere staccate dalla pagina. Qui invece
+		   la pagina si spegne e le immagini diventano l'unica fonte di luce. */
+		.spa-gallery {
+			background: var(--bg-dark);
+			color: var(--text-on-dark);
+			padding: 5.5rem 1.5rem 6rem;
+		}
+		.spa-gallery__head {
+			max-width: 72rem;
+			margin: 0 auto 2.5rem;
+		}
+		.spa-gallery__head h2 {
+			margin: 0;
+		}
+		.spa-gallery__grid {
+			max-width: 72rem;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 0.85rem;
+		}
+		/* Mosaico: due scatti larghi il doppio spezzano la griglia regolare,
+		   che con sei foto uguali sembrerebbe un catalogo. */
+		.spa-shot--wide {
+			grid-column: span 2;
+		}
+
+		.spa-shot {
+			position: relative;
+			display: block;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			border: none;
+			border-radius: 14px;
+			overflow: hidden;
+			background: #14140f;
+			cursor: zoom-in;
+			aspect-ratio: 3 / 2;
+			isolation: isolate;
+		}
+		.spa-shot img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+			transform: scale(1.02);
+			transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
+			filter: saturate(0.92);
+		}
+		.spa-shot__veil {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(10, 10, 8, 0.82) 0%, rgba(10, 10, 8, 0.15) 45%, rgba(10, 10, 8, 0) 70%);
+			opacity: 0.75;
+			transition: opacity 0.45s ease;
+		}
+		.spa-shot__caption {
+			position: absolute;
+			left: 1.15rem;
+			right: 1.15rem;
+			bottom: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.15rem;
+			text-align: left;
+			transform: translateY(0.55rem);
+			transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+		}
+		.spa-shot__title {
+			font-family: var(--font-serif);
+			font-size: 1.45rem;
+			line-height: 1.15;
+			color: var(--text-on-dark);
+		}
+		/* La nota resta nascosta finché non ci si sofferma: sulla griglia a
+		   riposo pesa, al passaggio del mouse aggiunge il dettaglio. */
+		.spa-shot__note {
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			letter-spacing: 0.02em;
+			color: rgba(246, 239, 222, 0.72);
+			opacity: 0;
+			transform: translateY(0.35rem);
+			transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+		}
+		.spa-shot:hover img,
+		.spa-shot:focus-visible img {
+			transform: scale(1.075);
+			filter: saturate(1.05);
+		}
+		.spa-shot:hover .spa-shot__veil,
+		.spa-shot:focus-visible .spa-shot__veil {
+			opacity: 1;
+		}
+		.spa-shot:hover .spa-shot__caption,
+		.spa-shot:focus-visible .spa-shot__caption {
+			transform: translateY(0);
+		}
+		.spa-shot:hover .spa-shot__note,
+		.spa-shot:focus-visible .spa-shot__note {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		.spa-shot:focus-visible {
+			outline: 2px solid var(--accent-on-dark);
+			outline-offset: 3px;
+		}
+
+		@media (max-width: 860px) {
+			.spa-gallery__grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			.spa-shot--wide {
+				grid-column: span 2;
+			}
+		}
+		@media (max-width: 560px) {
+			.spa-gallery {
+				padding: 4rem 1.1rem 4.5rem;
+			}
+			.spa-gallery__grid {
+				grid-template-columns: 1fr;
+			}
+			.spa-shot--wide {
+				grid-column: span 1;
+			}
+			/* Senza hover la nota non comparirebbe mai: sul touch resta sempre
+			   visibile. */
+			.spa-shot__note {
+				opacity: 1;
+				transform: none;
+			}
+			.spa-shot__caption {
+				transform: none;
+			}
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.spa-shot img,
+			.spa-shot__caption,
+			.spa-shot__note,
+			.spa-shot__veil {
+				transition: none;
+			}
+			.spa-shot:hover img {
+				transform: scale(1.02);
+			}
+		}
+
+		/* ── Lightbox ─────────────────────────────────────────────────────── */
+		.spa-lightbox {
+			position: fixed;
+			inset: 0;
+			z-index: 120;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			padding: 1.5rem;
+			background: rgba(8, 8, 6, 0.94);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		.spa-lightbox[hidden] {
+			display: none !important;
+		}
+		.spa-lightbox.is-open {
+			opacity: 1;
+		}
+		.spa-lightbox__figure {
+			margin: 0;
+			max-width: min(94vw, 68rem);
+			display: flex;
+			flex-direction: column;
+			gap: 0.9rem;
+			align-items: center;
+		}
+		.spa-lightbox__figure img {
+			max-width: 100%;
+			max-height: 78vh;
+			border-radius: 12px;
+			display: block;
+			box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8);
+		}
+		.spa-lightbox__figure figcaption {
+			font-family: var(--font-serif);
+			font-size: 1.35rem;
+			color: var(--text-on-dark);
+			text-align: center;
+		}
+		.spa-lightbox__close {
+			position: absolute;
+			top: 1.25rem;
+			right: 1.25rem;
+			width: 2.6rem;
+			height: 2.6rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			border: 1px solid rgba(246, 239, 222, 0.35);
+			background: transparent;
+			color: var(--text-on-dark);
+			cursor: pointer;
+			transition: border-color 0.2s ease, color 0.2s ease;
+		}
+		.spa-lightbox__close:hover {
+			border-color: var(--accent-on-dark);
+			color: var(--accent-on-dark);
+		}
+		.spa-lightbox__nav {
+			flex-shrink: 0;
+			width: 3rem;
+			height: 3rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2rem;
+			line-height: 1;
+			border-radius: 50%;
+			border: 1px solid rgba(246, 239, 222, 0.28);
+			background: transparent;
+			color: var(--text-on-dark);
+			cursor: pointer;
+			transition: border-color 0.2s ease, color 0.2s ease, transform 0.12s ease-out;
+		}
+		.spa-lightbox__nav:hover {
+			border-color: var(--accent-on-dark);
+			color: var(--accent-on-dark);
+		}
+		.spa-lightbox__nav:active {
+			transform: scale(0.92);
+		}
+		@media (max-width: 560px) {
+			.spa-lightbox {
+				padding: 1rem 0.5rem;
+			}
+			.spa-lightbox__nav {
+				position: absolute;
+				bottom: 1.5rem;
+			}
+			.spa-lightbox__nav--prev {
+				left: 25%;
+			}
+			.spa-lightbox__nav--next {
+				right: 25%;
+			}
+			.spa-lightbox__figure img {
+				max-height: 62vh;
+			}
+		}
 		.final-cta {
 			padding: 6rem 1.5rem;
 			text-align: center;
@@ -83,4 +395,76 @@ const services = [
 			margin-bottom: 2rem;
 		}
 	</style>
+
+	<script>
+		// @ts-nocheck — script vanilla per il browser
+		const shots = Array.from(document.querySelectorAll("[data-lightbox]"));
+		const box = document.getElementById("spa-lightbox");
+
+		if (shots.length && box) {
+			const img = document.getElementById("spa-lightbox-img");
+			const cap = document.getElementById("spa-lightbox-cap");
+			const btnClose = box.querySelector(".spa-lightbox__close");
+			const btnPrev = box.querySelector(".spa-lightbox__nav--prev");
+			const btnNext = box.querySelector(".spa-lightbox__nav--next");
+
+			// Le foto sono già nel DOM: la lightbox le rilegge da lì invece di
+			// duplicare l'elenco lato client.
+			const foto = shots.map((s) => {
+				const el = s.querySelector("img");
+				const t = s.querySelector(".spa-shot__title");
+				return { src: el.getAttribute("src"), alt: el.getAttribute("alt"), titolo: t ? t.textContent : "" };
+			});
+
+			let indice = 0;
+			// Da dove si è aperta la lightbox, per restituire il fuoco alla
+			// chiusura: chi naviga da tastiera non deve ripartire da capo.
+			let origine = null;
+
+			const mostra = (i) => {
+				indice = (i + foto.length) % foto.length;
+				img.setAttribute("src", foto[indice].src);
+				img.setAttribute("alt", foto[indice].alt);
+				cap.textContent = foto[indice].titolo;
+			};
+
+			const apri = (i, trigger) => {
+				origine = trigger || null;
+				mostra(i);
+				box.hidden = false;
+				document.body.style.overflow = "hidden";
+				requestAnimationFrame(() => box.classList.add("is-open"));
+				btnClose.focus();
+			};
+
+			const chiudi = () => {
+				box.classList.remove("is-open");
+				document.body.style.overflow = "";
+				window.setTimeout(() => {
+					box.hidden = true;
+					if (origine) origine.focus();
+				}, 260);
+			};
+
+			shots.forEach((s, i) => {
+				s.addEventListener("click", () => apri(i, s));
+			});
+
+			btnClose.addEventListener("click", chiudi);
+			btnPrev.addEventListener("click", () => mostra(indice - 1));
+			btnNext.addEventListener("click", () => mostra(indice + 1));
+
+			// Il click sullo sfondo chiude, quello sulla foto no.
+			box.addEventListener("click", (e) => {
+				if (e.target === box || e.target.classList.contains("spa-lightbox__figure")) chiudi();
+			});
+
+			document.addEventListener("keydown", (e) => {
+				if (box.hidden) return;
+				if (e.key === "Escape") chiudi();
+				if (e.key === "ArrowLeft") mostra(indice - 1);
+				if (e.key === "ArrowRight") mostra(indice + 1);
+			});
+		}
+	</script>
 </Layout>

@@ -162,6 +162,284 @@ const { prefix } = Astro.props;
 	</div>
 </div>
 
+<!-- ─── STEP 2-SETTORE-TENNIS · Scuola o Competizione ───────────────── -->
+<div class="lf__body" data-step="2-settore-tennis" hidden>
+	<p class="lf__sub">Young School Tennis si divide in due settori: dicci quale ti interessa.</p>
+
+	<div class="lf__choices">
+		<button class="lf__choice" type="button" data-settore="scuola">
+			<span class="lf__choice-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M6.5 10.2v4.3c0 1.5 2.5 3 5.5 3s5.5-1.5 5.5-3v-4.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</span>
+			<span class="lf__choice-texts">
+				<span class="lf__choice-label">Settore Scuola</span>
+				<span class="lf__choice-sub">Dal primo approccio alla racchetta ai corsi di miglioramento</span>
+			</span>
+			<span class="lf__choice-arr" aria-hidden="true">→</span>
+		</button>
+
+		<button class="lf__choice" type="button" data-settore="competizione">
+			<span class="lf__choice-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2.5v5M12 21.5v-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M7 3.5h10c0 3-1.5 5.5-5 5.5S7 6.5 7 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M9 21.5h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__choice-texts">
+				<span class="lf__choice-label">Settore Competizione</span>
+				<span class="lf__choice-sub">Percorsi agonistici e squadre</span>
+			</span>
+			<span class="lf__choice-arr" aria-hidden="true">→</span>
+		</button>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="1" type="button">← Indietro</button>
+	</div>
+</div>
+
+<!-- ─── STEP 3-DATI-YOUNG · Dati genitore e bambino/a (Young School Tennis) ─── -->
+<div class="lf__body" data-step="3-dati-young" hidden>
+	<p class="lf__sub">Ultimo passaggio: i dati del genitore e del bambino/a per questa richiesta.</p>
+
+	<div class="lf__grid">
+		<div class="lf__field">
+			<label for={`${prefix}-dy-gen-nome`}>Nome del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-gen-nome`} type="text" autocomplete="given-name" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dy-gen-cognome`}>Cognome del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-gen-cognome`} type="text" autocomplete="family-name" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dy-gen-email`}>Email del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-gen-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dy-gen-cellulare`}>Cellulare del genitore <span aria-hidden="true">*</span></label>
+			<div class="lf__tel">
+				<select id={`${prefix}-dy-gen-prefisso`} class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+					{prefissi.map((pf) => (
+						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+					))}
+				</select>
+				<input id={`${prefix}-dy-gen-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+			</div>
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dy-bam-nome`}>Nome del bambino/a <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-bam-nome`} type="text" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dy-bam-cognome`}>Cognome del bambino/a <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-bam-cognome`} type="text" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dy-bam-nascita`}>Data di nascita del bambino/a <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dy-bam-nascita`} type="date" />
+		</div>
+	</div>
+
+	<div class="lf__consent">
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dy-privacy`} type="checkbox" />
+			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+		</label>
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dy-marketing`} type="checkbox" />
+			<span>Acconsento a ricevere comunicazioni e novità da Ronchiverdi. <em>(facoltativo)</em></span>
+		</label>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" id={`${prefix}-dy-back`} type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-dy-invia`} type="button">
+			Invia richiesta <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 4-REFERENTE-TENNIS · Richiesta inviata + contatto diretto ─── -->
+<div class="lf__body lf__confirm" data-step="4-referente-tennis" hidden aria-live="polite">
+	<div class="lf__confirm-check" aria-hidden="true">
+		<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+	</div>
+	<h3 class="lf__confirm-title">Richiesta <em>inviata!</em></h3>
+	<p class="lf__sub" id={`${prefix}-referente-intro`}></p>
+
+	<div class="lf__referente">
+		<a class="lf__referente-btn" id={`${prefix}-referente-chiama`} href="#">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.7.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Chiama</span>
+				<span class="lf__referente-btn-value" id={`${prefix}-referente-tel-label`}></span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--outline" id={`${prefix}-referente-email`} href="#">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Invia Email</span>
+				<span class="lf__referente-btn-value" id={`${prefix}-referente-email-label`}></span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--ghost" id={`${prefix}-referente-salva`} href="#" download>
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M17.5 8v5.5M14.75 10.75h5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Salva contatto</span>
+				<span class="lf__referente-btn-value">Aggiungilo in rubrica</span>
+			</span>
+		</a>
+	</div>
+
+	<button class="btn lf__confirm-cta" type="button" data-lf-close>Chiudi</button>
+</div>
+
+<!-- ─── STEP 4-REFERENTE-YOUNG · Nuoto e Triathlon: contatto diretto ─── -->
+<div class="lf__body lf__confirm" data-step="4-referente-young" hidden aria-live="polite">
+	<div class="lf__confirm-check" aria-hidden="true">
+		<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+	</div>
+	<h3 class="lf__confirm-title">Richiesta <em>inviata!</em></h3>
+	<p class="lf__sub" id={`${prefix}-young-intro`}></p>
+	<p class="lf__orari" id={`${prefix}-young-orari`} hidden></p>
+
+	<div class="lf__referente">
+		<a class="lf__referente-btn" id={`${prefix}-young-chiama`} href="#">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.7.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Chiama</span>
+				<span class="lf__referente-btn-value" id={`${prefix}-young-tel-label`}></span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--outline" id={`${prefix}-young-whatsapp`} href="#" target="_blank" rel="noopener">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c-5.25 0-9.5 4.25-9.5 9.5 0 1.68.44 3.25 1.2 4.62L2.5 21.5l5.02-1.17A9.44 9.44 0 0 0 12 21.5c5.25 0 9.5-4.25 9.5-9.5S17.25 2.5 12 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M8.7 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.8.1.1.1.3 0 .4-.1.2-.2.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.7 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.4.2.5.3.1.2.1.9-.2 1.7-.3.8-1.6 1.5-2.3 1.6-.6.1-1.3.2-4.1-.9-3.4-1.4-5.5-4.8-5.7-5-.2-.3-1.3-1.7-1.3-3.3 0-1.6.8-2.3 1.1-2.6Z" fill="currentColor" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">WhatsApp</span>
+				<span class="lf__referente-btn-value">Scrivi un messaggio</span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--outline" id={`${prefix}-young-email`} href="#">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Invia Email</span>
+				<span class="lf__referente-btn-value" id={`${prefix}-young-email-label`}></span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--ghost" id={`${prefix}-young-salva`} href="#" download>
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M17.5 8v5.5M14.75 10.75h5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Salva contatto</span>
+				<span class="lf__referente-btn-value">Aggiungilo in rubrica</span>
+			</span>
+		</a>
+	</div>
+
+	<button class="btn lf__confirm-cta" type="button" data-lf-close>Chiudi</button>
+</div>
+
+<!-- ─── STEP 2-DATI-PADEL · Dati dell'adulto (Corsi Padel) ──────────── -->
+<div class="lf__body" data-step="2-dati-padel" hidden>
+	<p class="lf__sub">Ultimo passaggio: i tuoi dati per questa richiesta.</p>
+
+	<div class="lf__grid">
+		<div class="lf__field">
+			<label for={`${prefix}-dp-nome`}>Nome <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dp-nome`} type="text" autocomplete="given-name" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dp-cognome`}>Cognome <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dp-cognome`} type="text" autocomplete="family-name" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dp-email`}>Email <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dp-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dp-cellulare`}>Cellulare <span aria-hidden="true">*</span></label>
+			<div class="lf__tel">
+				<select id={`${prefix}-dp-prefisso`} class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+					{prefissi.map((pf) => (
+						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+					))}
+				</select>
+				<input id={`${prefix}-dp-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+			</div>
+		</div>
+	</div>
+
+	<div class="lf__consent">
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dp-privacy`} type="checkbox" />
+			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+		</label>
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dp-marketing`} type="checkbox" />
+			<span>Acconsento a ricevere comunicazioni e novità da Ronchiverdi. <em>(facoltativo)</em></span>
+		</label>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="1" type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-dp-invia`} type="button">
+			Invia richiesta <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
+<!-- ─── STEP 3-REFERENTE-PADEL · Richiesta inviata + contatto diretto ─── -->
+<div class="lf__body lf__confirm" data-step="3-referente-padel" hidden aria-live="polite">
+	<div class="lf__confirm-check" aria-hidden="true">
+		<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+	</div>
+	<h3 class="lf__confirm-title">Richiesta <em>inviata!</em></h3>
+	<p class="lf__sub" id={`${prefix}-padel-intro`}></p>
+
+	<div class="lf__referente">
+		<a class="lf__referente-btn" id={`${prefix}-padel-whatsapp`} href="#" target="_blank" rel="noopener">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c-5.25 0-9.5 4.25-9.5 9.5 0 1.68.44 3.25 1.2 4.62L2.5 21.5l5.02-1.17A9.44 9.44 0 0 0 12 21.5c5.25 0 9.5-4.25 9.5-9.5S17.25 2.5 12 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M8.7 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.8.1.1.1.3 0 .4-.1.2-.2.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.7 1.6.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.4.2.5.3.1.2.1.9-.2 1.7-.3.8-1.6 1.5-2.3 1.6-.6.1-1.3.2-4.1-.9-3.4-1.4-5.5-4.8-5.7-5-.2-.3-1.3-1.7-1.3-3.3 0-1.6.8-2.3 1.1-2.6Z" fill="currentColor" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">WhatsApp</span>
+				<span class="lf__referente-btn-value">Scrivi un messaggio</span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--outline" id={`${prefix}-padel-chiama`} href="#">
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.2 2.4 3.2 4.4 5.6 5.6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.7.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Chiama</span>
+				<span class="lf__referente-btn-value" id={`${prefix}-padel-tel-label`}></span>
+			</span>
+		</a>
+		<a class="lf__referente-btn lf__referente-btn--ghost" id={`${prefix}-padel-salva`} href="#" download>
+			<span class="lf__referente-btn-icon" aria-hidden="true">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" /><path d="M3.5 19c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><path d="M17.5 8v5.5M14.75 10.75h5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+			</span>
+			<span class="lf__referente-btn-texts">
+				<span class="lf__referente-btn-label">Salva contatto</span>
+				<span class="lf__referente-btn-value">Aggiungilo in rubrica</span>
+			</span>
+		</a>
+	</div>
+
+	<button class="btn lf__confirm-cta" type="button" data-lf-close>Chiudi</button>
+</div>
+
 <!-- ─── STEP 3-APPUNTAMENTO · Giorno e orario in sede ───────────────── -->
 <div class="lf__body" data-step="3-appuntamento" hidden>
 	<p class="lf__sub">Scegli quando vuoi venire a trovarci.</p>

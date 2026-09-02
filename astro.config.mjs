@@ -1,6 +1,18 @@
 // @ts-check
+import { existsSync, realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+
+// Quando node_modules è un collegamento simbolico fuori dalla cartella del
+// progetto, il dev server di Vite rifiuta di servire quei file (403) e i font
+// @fontsource non si caricano: i titoli ripiegano su Georgia/Arial. Riguarda
+// solo lo sviluppo in locale — in build i font vengono impacchettati — quindi
+// qui ci limitiamo ad autorizzare il percorso reale, e solo se è davvero un
+// link a un'altra posizione.
+const nodeModules = fileURLToPath(new URL('./node_modules', import.meta.url));
+const nodeModulesReale = existsSync(nodeModules) ? realpathSync(nodeModules) : nodeModules;
+const nodeModulesFuoriProgetto = nodeModulesReale !== nodeModules ? [nodeModulesReale] : [];
 
 // In locale e su GitHub Pages il sito vive sotto /Sito-Ronchiverdi/, ma su
 // Vercel viene servito dalla root del dominio: la base va quindi adattata
@@ -19,4 +31,9 @@ export default defineConfig({
 	// function per /api/lead — che però gira solo su Vercel: su GitHub Pages
 	// resta un file statico inerte, dato che quel sito non ha un runtime.
 	adapter: vercel(),
+	// Nel caso normale non tocchiamo affatto la configurazione di Vite: elencare
+	// i percorsi consentiti quando non serve restringerebbe il suo default.
+	...(nodeModulesFuoriProgetto.length
+		? { vite: { server: { fs: { allow: ['.', ...nodeModulesFuoriProgetto] } } } }
+		: {}),
 });

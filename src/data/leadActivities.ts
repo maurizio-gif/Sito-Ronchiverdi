@@ -30,10 +30,18 @@ export interface LeadActivity {
 	icon: string;
 	/**
 	 * Percorso dopo lo step 1. "azione" propone appuntamento in sede,
-	 * telefonata o messaggio (il flusso costruito finora). Le attività senza
-	 * questo campo restano sul passo segnaposto, in attesa dei referenti.
+	 * telefonata o messaggio (il flusso costruito finora). "settore-tennis" fa
+	 * scegliere fra Settore Scuola e Settore Competizione, poi raccoglie i dati
+	 * di genitore e bambino/a e mette in contatto diretto (chiamata o email)
+	 * col referente di quel settore. "padel" raccoglie i dati dell'adulto e
+	 * mette in contatto diretto (WhatsApp o chiamata) col referente del corso.
+	 * "young-diretto" (Nuoto e Triathlon) raccoglie gli stessi dati di genitore
+	 * e bambino/a di "settore-tennis" ma senza scelta di settore, poi mette in
+	 * contatto diretto (chiamata, WhatsApp o email) col referente dell'attività.
+	 * Le attività senza questo campo restano sul passo segnaposto, in attesa
+	 * dei referenti.
 	 */
-	contactFlow?: "azione";
+	contactFlow?: "azione" | "settore-tennis" | "padel" | "young-diretto";
 }
 
 export interface LeadActivityGroup {
@@ -101,6 +109,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				sub: "Tennis per bambini e ragazzi, dal primo approccio alla racchetta ai percorsi agonistici.",
 				audience: "young",
 				icon: ICON_TENNIS,
+				contactFlow: "settore-tennis",
 			},
 			{
 				id: "scuola-nuoto",
@@ -109,6 +118,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				sub: "Corsi di nuoto per bambini e ragazzi, dall'ambientamento al perfezionamento.",
 				audience: "young",
 				icon: ICON_NUOTO,
+				contactFlow: "young-diretto",
 			},
 			{
 				id: "triathlon-young",
@@ -117,20 +127,25 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 				sub: "Nuoto, bici e corsa per bambini e ragazzi dai 6 ai 13 anni.",
 				audience: "young",
 				icon: ICON_TRIATHLON,
+				contactFlow: "young-diretto",
 			},
 			{
 				id: "corsi-padel",
 				label: "Corsi Padel",
-				sub: "Corsi di gruppo e lezioni individuali, per bambini e per adulti.",
-				audience: "misto",
+				badge: "Adulti",
+				sub: "Corsi di gruppo e lezioni individuali per adulti.",
+				audience: "adulti",
 				icon: ICON_PADEL,
+				contactFlow: "padel",
 			},
 			{
 				id: "summer-camp",
 				label: "Summer Camp",
+				badge: "Bambini",
 				sub: "Le settimane estive per bambini e ragazzi: sport, piscina e gioco tutto il giorno.",
 				audience: "young",
 				icon: ICON_CAMP,
+				contactFlow: "young-diretto",
 			},
 		],
 	},

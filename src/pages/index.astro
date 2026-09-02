@@ -46,7 +46,7 @@ const clubGallery = [
 		<div class="hero-spot"></div>
 		<div class="hero-content">
 			<p class="eyebrow eyebrow-dark">Club sportivo · Torino</p>
-			<h1 class="hero-title-dark">Benvenuti al <strong class="accent-dark">Ronchiverdi</strong> Sport Club</h1>
+			<h1 class="hero-title-dark"><span class="hero-title-riga">Benvenuti al</span> <strong class="accent-dark hero-title-riga">Ronchiverdi</strong> <span class="hero-title-riga">Sport Club</span></h1>
 			<p class="lede lede-dark">
 				<strong>Tennis, padel, nuoto, fitness e Young School</strong> nel
 				verde lungo il Po. Un luogo storico dello sport torinese, aperto
@@ -61,10 +61,10 @@ const clubGallery = [
 			<div class="chi-siamo-text">
 				<p class="eyebrow">Chi siamo</p>
 				<h2>Lo sport che si <em class="accent">tramanda</em></h2>
-				<p class="lede" style="margin-inline:0">
+				<p class="lede">
 					Ai piedi della collina, Ronchiverdi appartiene alla storia sportiva di Torino: <strong>35.000 mq tra spazi indoor e outdoor</strong>, nove campi da tennis in terra rossa, quattro piscine coperte e scoperte, tre campi da padel, il beach volley, una palestra con <strong>Gym Floor Technogym</strong> e area funzionale Lacertosus. Un patrimonio di spazi immerso nel verde, curato ogni giorno con l'attenzione che si riserva alle cose destinate a durare.
 				</p>
-				<p class="lede" style="margin-inline:0">
+				<p class="lede">
 					Sugli stessi campi in terra rossa si incontrano chi gioca da una vita e chi impara oggi; i bambini della <strong>Young School</strong> crescono accanto agli adulti del tennis, del nuoto e del triathlon. Non servono presentazioni per entrare: basta la voglia di fare sport, e di farlo bene. Il resto lo mettono <strong>istruttori certificati</strong>, spazi curati in ogni dettaglio e un'accoglienza che si sente dal primo giorno.
 				</p>
 			</div>
@@ -283,59 +283,60 @@ const clubGallery = [
 
 		document.querySelectorAll(".act-carousel__track").forEach((track) => {
 			const id = track.getAttribute("data-carousel-id");
-			let autoTimer;
+			const carousel = track.closest(".act-carousel");
 
 			const cardStep = () => {
 				const card = track.querySelector(".act-card");
 				return card ? card.getBoundingClientRect().width + 20 : 0;
 			};
 
-			const advance = (amount) => {
-				track.scrollBy({ left: amount, behavior: "smooth" });
-			};
-
-			const stopAuto = () => clearInterval(autoTimer);
-
-			const startAuto = () => {
-				if (prefersReducedMotion) return;
-				stopAuto();
-				autoTimer = setInterval(() => {
-					const max = track.scrollWidth - track.clientWidth;
-					if (max <= 2) return;
-					if (track.scrollLeft >= max - 2) {
-						track.scrollTo({ left: 0, behavior: "smooth" });
-					} else {
-						advance(cardStep());
-					}
-				}, 3500);
-			};
-
-			let resumeTimer;
-			const pauseAuto = () => {
-				stopAuto();
-				clearTimeout(resumeTimer);
-			};
-			const resumeAutoLater = () => {
-				clearTimeout(resumeTimer);
-				resumeTimer = setTimeout(startAuto, 2500);
+			// Accende la sfumatura di destra solo finché c'è davvero altro da
+			// vedere: niente velo sul bordo a fine corsa o se le card ci stanno
+			// tutte.
+			const syncEdge = () => {
+				if (!carousel) return;
+				const max = track.scrollWidth - track.clientWidth;
+				carousel.classList.toggle("is-scrollable", max > 8);
+				carousel.classList.toggle("is-end", track.scrollLeft >= max - 8);
 			};
 
 			document.querySelectorAll(`.carousel-btn[data-track="${id}"]`).forEach((btn) => {
 				btn.addEventListener("click", () => {
-					pauseAuto();
 					const btnDir = Number(btn.getAttribute("data-dir"));
-					advance(btnDir * cardStep());
-					resumeAutoLater();
+					track.scrollBy({ left: btnDir * cardStep(), behavior: "smooth" });
 				});
 			});
 
-			track.addEventListener("mouseenter", pauseAuto);
-			track.addEventListener("mouseleave", resumeAutoLater);
-			track.addEventListener("pointerdown", pauseAuto);
-			track.addEventListener("pointerup", resumeAutoLater);
-			track.addEventListener("touchstart", pauseAuto, { passive: true });
-			track.addEventListener("touchend", resumeAutoLater);
-			track.addEventListener("wheel", () => { pauseAuto(); resumeAutoLater(); }, { passive: true });
+			track.addEventListener("scroll", syncEdge, { passive: true });
+			window.addEventListener("resize", syncEdge);
+			syncEdge();
+
+			// Invito allo scorrimento: un accenno morbido verso destra e
+			// ritorno, una sola volta quando il carosello entra in vista.
+			// Sostituisce l'avanzamento automatico continuo, che portava via la
+			// prima card; qui lo spostamento è di pochi pixel, così la prima
+			// card resta sempre visibile e si capisce solo che ce ne sono altre.
+			if (!prefersReducedMotion && "IntersectionObserver" in window) {
+				let hinted = false;
+				const io = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting || hinted) return;
+						hinted = true;
+						io.disconnect();
+						const max = track.scrollWidth - track.clientWidth;
+						// Se l'utente ha già scorrito per conto suo, l'invito
+						// non serve più e sarebbe solo un sobbalzo.
+						if (max <= 8 || track.scrollLeft > 4) return;
+						window.setTimeout(() => {
+							track.scrollTo({ left: Math.min(34, max), behavior: "smooth" });
+							window.setTimeout(() => {
+								track.scrollTo({ left: 0, behavior: "smooth" });
+							}, 720);
+						}, 450);
+					});
+				}, { threshold: 0.35 });
+				io.observe(track);
+			}
 
 			if (window.matchMedia("(hover: none)").matches) {
 				const cards = Array.from(track.querySelectorAll(".act-card"));
@@ -363,8 +364,6 @@ const clubGallery = [
 					window.requestAnimationFrame(activateCentered);
 				}, { passive: true });
 			}
-
-			startAuto();
 		});
 	</script>
 
@@ -559,6 +558,15 @@ const clubGallery = [
 			text-shadow: 0 10px 34px rgba(0, 0, 0, 0.6), 0 3px 10px rgba(0, 0, 0, 0.55),
 				0 1px 2px rgba(0, 0, 0, 0.45);
 		}
+		/* Su schermo stretto il titolo va su tre righe fisse — "Benvenuti al /
+		   Ronchiverdi / Sport Club" — invece di andare a capo dove capita
+		   spezzando il nome del club. Sopra i 640px resta una riga sola che si
+		   dispone da sé. */
+		@media (max-width: 640px) {
+			.hero-title-riga {
+				display: block;
+			}
+		}
 		@media (max-width: 640px) {
 			/* Su schermo stretto il testo occupa quasi tutta la larghezza:
 			   l'alone si allarga per non lasciarne fuori i bordi. */
@@ -594,6 +602,8 @@ const clubGallery = [
 		.chi-siamo-text {
 			text-align: left;
 		}
+		/* Su due colonne il testo riempie la sua metà: nessun limite di
+		   larghezza e nessun rientro laterale. */
 		.chi-siamo-text .lede {
 			font-size: var(--text-md);
 			margin: 0 0 1.25rem;
@@ -625,10 +635,15 @@ const clubGallery = [
 			.chi-siamo-grid {
 				grid-template-columns: 1fr;
 			}
+			/* A colonna singola occhiello e titolo restano centrati, ma i
+			   paragrafi tornano allineati a sinistra: centrati, su righe lunghe,
+			   sfrangerebbero entrambi i bordi rendendo faticosa la lettura.
+			   Il blocco di testo resta comunque centrato sotto il titolo. */
 			.chi-siamo-text {
 				text-align: center;
 			}
 			.chi-siamo-text .lede {
+				text-align: left;
 				margin-inline: auto;
 				max-width: 34rem;
 			}
@@ -773,21 +788,50 @@ const clubGallery = [
 			margin: 0 auto;
 			overflow: hidden;
 		}
+		/* Sfumatura sul bordo destro: insieme allo spiraglio della card
+		   successiva dice che il carosello continua. Sparisce a fine corsa,
+		   così non resta un velo su un bordo che non nasconde più nulla. */
+		.act-carousel::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			width: 4.5rem;
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.45s ease;
+			background: linear-gradient(to right, rgba(246, 240, 226, 0), var(--bg));
+		}
+		.act-carousel.is-scrollable:not(.is-end)::after {
+			opacity: 1;
+		}
 		.act-carousel__track {
+			/* Spazio lasciato libero a destra perché si veda spuntare la card
+			   successiva: è l'indizio principale che si può scorrere. */
+			--peek: 3rem;
 			display: flex;
 			gap: 1.25rem;
 			overflow-x: scroll;
-			scroll-snap-type: x mandatory;
+			/* "proximity" invece di "mandatory": lo scorrimento resta morbido e
+			   non viene strattonato sull'aggancio più vicino a ogni pixel. */
+			scroll-snap-type: x proximity;
+			scroll-behavior: smooth;
 			-webkit-overflow-scrolling: touch;
 			scrollbar-width: none;
 			padding: 1.75rem 0.5rem 2.75rem;
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.act-carousel__track {
+				scroll-behavior: auto;
+			}
 		}
 		.act-carousel__track::-webkit-scrollbar {
 			display: none;
 		}
 		.act-card {
 			position: relative;
-			flex: 0 0 calc((100% - 2 * 1.25rem) / 3);
+			flex: 0 0 calc((100% - 2 * 1.25rem - var(--peek)) / 3);
 			aspect-ratio: 3 / 4;
 			scroll-snap-align: start;
 			display: block;
@@ -908,7 +952,7 @@ const clubGallery = [
 		}
 		@media (max-width: 860px) {
 			.act-card {
-				flex: 0 0 calc((100% - 1.25rem) / 2);
+				flex: 0 0 calc((100% - 1.25rem - var(--peek)) / 2);
 			}
 		}
 		@media (max-width: 640px) {
