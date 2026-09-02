@@ -1,9 +1,9 @@
 // Avviso via email di una nuova richiesta dal sito, verso la casella della
 // segreteria (form@ronchiverdi.it).
 //
-// Passa dall'API HTTP di Resend con una fetch, senza aggiungere dipendenze al
-// progetto: è una sola chiamata, e un pacchetto in più andrebbe mantenuto per
-// niente.
+// Passa dall'API HTTP di SendGrid con una fetch, senza aggiungere dipendenze
+// al progetto (@sendgrid/mail non serve per una sola chiamata: sarebbe un
+// pacchetto in più da mantenere per niente).
 //
 // Se le variabili non sono configurate l'avviso viene semplicemente saltato,
 // con una riga nei log: la richiesta è già salvata su Supabase, e non
@@ -53,41 +53,44 @@ function righe(body: CampiLead): string[] {
 }
 
 export async function notificaLead(body: CampiLead): Promise<void> {
-	const apiKey = import.meta.env.RESEND_API_KEY;
+	const apiKey = import.meta.env.SENDGRID_API_KEY;
 	const a = import.meta.env.EMAIL_NOTIFICHE_A ?? "form@ronchiverdi.it";
-	// Il mittente deve stare su un dominio verificato in Resend: finché
-	// ronchiverdi.it non lo è, l'invio viene rifiutato dal servizio.
+	// Il mittente deve essere un indirizzo verificato su SendGrid — basta la
+	// Single Sender Verification, non serve autenticare tutto il dominio:
+	// finché non lo è, l'invio viene rifiutato con 403.
 	const da = import.meta.env.EMAIL_NOTIFICHE_DA;
 
 	if (!apiKey || !da) {
-		console.log("Avviso email non inviato: RESEND_API_KEY o EMAIL_NOTIFICHE_DA non configurate");
+		console.log("Avviso email non inviato: SENDGRID_API_KEY o EMAIL_NOTIFICHE_DA non configurate");
 		return;
 	}
 
 	const tipo = tipoRichiesta(body);
 	const chi = [testo(body.nome), testo(body.cognome)].filter(Boolean).join(" ") || "senza nome";
 	const corpo = righe(body).join("\n");
+	const emailPersona = testo(body.email);
 
 	try {
-		const risposta = await fetch("https://api.resend.com/emails", {
+		const risposta = await fetch("https://api.sendgrid.com/v3/mail/send", {
 			method: "POST",
 			headers: {
 				Authorization: `Bearer ${apiKey}`,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				from: da,
-				to: [a],
+				personalizations: [{ to: [{ email: a }] }],
+				from: { email: da, name: "Sito Ronchiverdi" },
 				// Rispondere all'avviso scrive direttamente alla persona, senza
 				// ricopiarne l'indirizzo a mano.
-				reply_to: testo(body.email) ?? undefined,
+				...(emailPersona ? { reply_to: { email: emailPersona } } : {}),
 				subject: `${tipo} — ${chi}`,
-				text: `${tipo}\n\n${corpo}\n`,
+				content: [{ type: "text/plain", value: `${tipo}\n\n${corpo}\n` }],
 			}),
 		});
 
+		// SendGrid risponde 202 quando ha accettato il messaggio in coda.
 		if (!risposta.ok) {
-			console.error("Avviso email rifiutato da Resend:", risposta.status, await risposta.text());
+			console.error("Avviso email rifiutato da SendGrid:", risposta.status, await risposta.text());
 		}
 	} catch (e) {
 		console.error("Avviso email non inviato:", e);
