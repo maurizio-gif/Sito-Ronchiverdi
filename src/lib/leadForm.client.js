@@ -25,16 +25,37 @@ export function initLeadForm(root, options) {
 
 	var WEBHOOK_LEAD = "/api/lead";
 
-	// Placeholder in attesa degli orari reali del club: nessuna chiusura,
-	// stessa fascia oraria ogni giorno. Da sostituire quando il cliente
-	// conferma orari di segreteria e durata di visita/chiamata per attività.
-	var DISPONIBILITA = {
-		giorniAvanti: 14,
-		oraApertura: "09:00",
-		oraChiusura: "19:00",
-		passoAppuntamento: 30,
-		passoTelefonata: 15,
+	// Endpoint del pannello che dice quali orari sono già occupati, mettendo
+	// insieme gli appuntamenti presi dalla segreteria e quelli prenotati da
+	// altri visitatori. Sta su un dominio diverso dal sito (il pannello è
+	// un'app Next su Vercel) e risponde con CORS aperto: espone solo giorno,
+	// ora e durata, nessun dato di chi ha prenotato.
+	var ENDPOINT_DISPONIBILITA = "https://app-ronchiverdi.vercel.app/api/disponibilita";
+
+	// Regole di prenotazione, diverse per i due tipi. Il weekend chiude un'ora
+	// prima. Il preavviso minimo evita di proporre un orario che il club non
+	// farebbe in tempo a onorare, e l'orizzonte è volutamente corto sulla
+	// telefonata: una chiamata si fissa per i prossimi giorni, non fra due
+	// settimane.
+	//
+	// I passi (45 e 20 minuti) sono anche le durate con cui il pannello occupa
+	// l'agenda: vivono in DURATA_PREDEFINITA in lib/agenda.ts dell'app, e
+	// vanno cambiati nei due posti insieme, altrimenti il sito offre slot che
+	// l'agenda calcola più lunghi o più corti.
+	var ORARI_CLUB = {
+		feriali: { apre: "10:00", chiude: "19:00" },
+		weekend: { apre: "10:00", chiude: "18:00" },
 	};
+
+	var DISPONIBILITA = {
+		appuntamento: { giorniAvanti: 7, passoMinuti: 45, orari: ORARI_CLUB },
+		telefonata: { giorniAvanti: 3, passoMinuti: 20, orari: ORARI_CLUB },
+		preavvisoMinuti: 120,
+	};
+
+	function regoleDi(tipo) {
+		return DISPONIBILITA[tipo] || DISPONIBILITA.appuntamento;
+	}
 
 	// Mappa id → { label, audience, contactFlow }, serializzata dal componente
 	// Astro su data-activities: le etichette restano definite una volta sola in
@@ -722,14 +743,63 @@ export function initLeadForm(root, options) {
 		return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
 	}
 
-	function slotsInRange(stepMinutes) {
-		var start = parseHHMM(DISPONIBILITA.oraApertura);
-		var end = parseHHMM(DISPONIBILITA.oraChiusura);
+	// Sabato e domenica il club chiude un'ora prima: la fascia dipende dal
+	// giorno, non è più una sola per tutta la settimana.
+	function fasciaDelGiorno(tipo, date) {
+		var dow = date.getDay(); // 0 = domenica, 6 = sabato
+		var orari = regoleDi(tipo).orari;
+		return dow === 0 || dow === 6 ? orari.weekend : orari.feriali;
+	}
+
+	function slotsInRange(tipo, date) {
+		var fascia = fasciaDelGiorno(tipo, date);
+		var passo = regoleDi(tipo).passoMinuti;
+		var start = parseHHMM(fascia.apre);
+		var end = parseHHMM(fascia.chiude);
 		var slots = [];
-		for (var t = start; t < end; t += stepMinutes) {
+		// `t + passo <= end`: l'ultimo slot deve stare dentro l'orario, non
+		// cominciare all'ora di chiusura. Con passi di 45 minuti su 10:00–19:00
+		// l'ultimo utile è 18:15, non 18:45.
+		for (var t = start; t + passo <= end; t += passo) {
 			slots.push(pad2(Math.floor(t / 60)) + ":" + pad2(t % 60));
 		}
 		return slots;
+	}
+
+	// Due impegni si sovrappongono se uno comincia prima che l'altro sia
+	// finito: non basta confrontare le ore di inizio, perché una visita da 45
+	// minuti alle 10:00 occupa anche lo slot delle 10:20 di una telefonata.
+	function siSovrappone(inizioA, durataA, inizioB, durataB) {
+		return inizioA < inizioB + durataB && inizioB < inizioA + durataA;
+	}
+
+	// Chiede al pannello gli orari già occupati per i prossimi `giorni`.
+	// Se non risponde — rete assente, endpoint giù — si prosegue come se non
+	// ci fosse nulla occupato: un doppione raro è meno grave di un calendario
+	// vuoto che impedisce di prenotare.
+	function caricaOccupati(giorni) {
+		var oggi = new Date();
+		var fine = new Date();
+		fine.setDate(oggi.getDate() + giorni - 1);
+		var url =
+			ENDPOINT_DISPONIBILITA +
+			"?da=" + isoDateLocal(oggi) +
+			"&a=" + isoDateLocal(fine);
+
+		try {
+			return fetch(url, { headers: { Accept: "application/json" } })
+				.then(function (r) {
+					return r.ok ? r.json() : null;
+				})
+				.then(function (dati) {
+					return (dati && dati.occupati) || {};
+				})
+				.catch(function () {
+					return {};
+				});
+		} catch (e) {
+			return Promise.resolve({});
+		}
 	}
 
 	// Ora corrente nel fuso del club (Europe/Rome), indipendente dal fuso del
@@ -751,24 +821,37 @@ export function initLeadForm(root, options) {
 		};
 	}
 
-	// Slot disponibili per un giorno: per oggi si escludono quelli entro le
-	// prossime 2 ore, così non si propone un orario che il club non farebbe
-	// in tempo a onorare.
-	function slotsDisponibili(date, stepMinutes) {
-		var slots = slotsInRange(stepMinutes);
+	// Slot proponibili per un giorno: si togliono quelli entro il preavviso
+	// minimo (solo per oggi) e quelli che si sovrappongono a un impegno già in
+	// agenda.
+	function slotsDisponibili(date, tipo, occupati) {
+		var slots = slotsInRange(tipo, date);
+		var durata = regoleDi(tipo).passoMinuti;
+
 		var ora = oraLocaleClub();
 		var eOggi = date.getFullYear() === ora.y && date.getMonth() + 1 === ora.m && date.getDate() === ora.d;
 		if (eOggi) {
-			var soglia = ora.minuti + 120;
+			var soglia = ora.minuti + DISPONIBILITA.preavvisoMinuti;
 			slots = slots.filter(function (s) {
 				return parseHHMM(s) >= soglia;
 			});
 		}
-		return slots;
+
+		var presi = (occupati && occupati[isoDateLocal(date)]) || [];
+		if (!presi.length) return slots;
+
+		return slots.filter(function (s) {
+			var inizio = parseHHMM(s);
+			return !presi.some(function (p) {
+				var inizioPreso = parseHHMM(p.ora);
+				if (inizioPreso === null) return false;
+				return siSovrappone(inizio, durata, inizioPreso, Number(p.durataMinuti) || durata);
+			});
+		});
 	}
 
 	function buildPicker(tipo) {
-		var stepMinutes = tipo === "appuntamento" ? DISPONIBILITA.passoAppuntamento : DISPONIBILITA.passoTelefonata;
+		var regole = regoleDi(tipo);
 		var stripEl = document.getElementById(P + "-giorni-" + tipo);
 		var slotsEl = document.getElementById(P + "-slots-" + tipo);
 		var nextEl = document.getElementById(P + "-" + tipo + "-next");
@@ -777,7 +860,7 @@ export function initLeadForm(root, options) {
 		oggi.setHours(0, 0, 0, 0);
 
 		var giorni = [];
-		for (var i = 0; i < DISPONIBILITA.giorniAvanti; i++) {
+		for (var i = 0; i < regole.giorniAvanti; i++) {
 			var d = new Date(oggi);
 			d.setDate(oggi.getDate() + i);
 			giorni.push(d);
@@ -789,9 +872,24 @@ export function initLeadForm(root, options) {
 		slotsEl.hidden = true;
 		slotsEl.innerHTML = "";
 
+		// I giorni si disegnano solo dopo aver saputo cosa è occupato: un
+		// giorno pieno deve risultare già non selezionabile, e mostrare prima
+		// tutti gli orari per poi farne sparire alcuni sotto le dita è peggio
+		// di una breve attesa.
 		stripEl.innerHTML = "";
+		var attesa = document.createElement("p");
+		attesa.className = "lf__picker-empty";
+		attesa.textContent = "Verifico gli orari disponibili…";
+		stripEl.appendChild(attesa);
+
+		caricaOccupati(regole.giorniAvanti).then(function (occupati) {
+			stripEl.innerHTML = "";
+			disegnaGiorni(occupati);
+		});
+
+		function disegnaGiorni(occupati) {
 		giorni.forEach(function (d) {
-			var slotsGiorno = slotsDisponibili(d, stepMinutes);
+			var slotsGiorno = slotsDisponibili(d, tipo, occupati);
 			var btn = document.createElement("button");
 			btn.type = "button";
 			btn.className = "lf__day";
@@ -821,6 +919,7 @@ export function initLeadForm(root, options) {
 
 			stripEl.appendChild(btn);
 		});
+		}
 
 		function renderSlots(d, slots) {
 			slotsEl.hidden = false;

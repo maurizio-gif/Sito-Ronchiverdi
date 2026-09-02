@@ -3,6 +3,7 @@
 // Chinesis). Gira solo su Vercel — vedi astro.config.mjs — e scrive su
 // Supabase con la service_role key, mai esposta al client.
 import { createClient } from "@supabase/supabase-js";
+import { notificaLead } from "../../lib/notificaLead";
 
 export const prerender = false;
 
@@ -110,6 +111,11 @@ export async function POST({ request }: { request: Request }) {
 		console.error("Errore inserimento form_contatti:", error.message);
 		return json({ ok: false, error: "db_error" }, 500);
 	}
+
+	// Avviso alla segreteria. Dopo l'insert e con l'errore ingoiato dentro
+	// notificaLead: la richiesta è già salvata, e un problema col servizio di
+	// posta non deve diventare un errore in faccia a chi ha compilato il form.
+	await notificaLead(body);
 
 	// Marca la sessione come convertita, così il tasso di conversione per
 	// campagna si legge direttamente da campagne_rendimento. Non è bloccante:
