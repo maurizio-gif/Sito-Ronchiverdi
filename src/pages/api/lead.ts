@@ -49,6 +49,38 @@ export async function POST({ request }: { request: Request }) {
 	const supabase = createClient(supabaseUrl, serviceRoleKey);
 	const dettagli = Array.isArray(body.dettagli) ? body.dettagli.filter((d) => typeof d === "string") : null;
 
+	// Provenienza: campi calcolati dal client (src/lib/tracking.client.js) e
+	// spediti insieme al form. Tutti opzionali — un lead resta valido anche se
+	// arriva senza UTM, e i campi restano semplicemente nulli.
+	const tracking = {
+		session_id: str(body.session_id),
+		ga_session_id: str(body.ga_session_id),
+		ga_client_id: str(body.ga_client_id),
+		utm_source: str(body.utm_source),
+		utm_medium: str(body.utm_medium),
+		utm_campaign: str(body.utm_campaign),
+		utm_term: str(body.utm_term),
+		utm_content: str(body.utm_content),
+		utm_id: str(body.utm_id),
+		first_utm_source: str(body.first_utm_source),
+		first_utm_medium: str(body.first_utm_medium),
+		first_utm_campaign: str(body.first_utm_campaign),
+		first_utm_term: str(body.first_utm_term),
+		first_utm_content: str(body.first_utm_content),
+		gclid: str(body.gclid),
+		gbraid: str(body.gbraid),
+		wbraid: str(body.wbraid),
+		fbclid: str(body.fbclid),
+		ttclid: str(body.ttclid),
+		msclkid: str(body.msclkid),
+		li_fat_id: str(body.li_fat_id),
+		landing_page: str(body.landing_page),
+		referrer: str(body.referrer),
+		first_touch_at: str(body.first_touch_at),
+		consent_analytics: body.consent_analytics === true,
+		consent_advertisement: body.consent_advertisement === true,
+	};
+
 	const { error } = await supabase.from("form_contatti").insert({
 		origine: str(body.origine) ?? "lead-modal",
 		pagina: str(body.pagina),
@@ -71,11 +103,25 @@ export async function POST({ request }: { request: Request }) {
 		minore_nome: str(body.minoreNome),
 		minore_cognome: str(body.minoreCognome),
 		minore_data_nascita: str(body.minoreDataNascita),
+		...tracking,
 	});
 
 	if (error) {
 		console.error("Errore inserimento form_contatti:", error.message);
 		return json({ ok: false, error: "db_error" }, 500);
+	}
+
+	// Marca la sessione come convertita, così il tasso di conversione per
+	// campagna si legge direttamente da campagne_rendimento. Non è bloccante:
+	// se la riga di sessione non è mai arrivata (utente con JS parziale, o
+	// /api/track non raggiunto) il lead resta comunque salvato.
+	if (tracking.session_id) {
+		const { error: errSessione } = await supabase.rpc("marca_sessione_convertita", {
+			p_session_id: tracking.session_id,
+		});
+		if (errSessione) {
+			console.error("Sessione non marcata come convertita:", errSessione.message);
+		}
 	}
 
 	return json({ ok: true }, 200);

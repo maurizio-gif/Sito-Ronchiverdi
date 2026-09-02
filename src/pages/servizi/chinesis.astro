@@ -161,6 +161,8 @@ const services = [
 	</section>
 
 	<script>
+		import { withTracking, trackLead } from "../../lib/tracking.client.js";
+
 		const form = document.getElementById("chinesis-form");
 		const errorEl = document.getElementById("cf-error");
 		const confirmEl = document.getElementById("cf-confirm");
@@ -207,24 +209,27 @@ const services = [
 			inviaBtn.disabled = true;
 			inviaBtn.textContent = "Invio in corso…";
 
+			const datiLead = {
+				origine: "chinesis-inline",
+				pagina: location.pathname,
+				cta: "Richiedi informazioni",
+				nome: nome.value.trim(),
+				cognome: cognome.value.trim(),
+				email: email.value.trim(),
+				cellulare: `${prefisso.value} ${cellulare.value.trim()}`,
+				messaggio: messaggio.value.trim(),
+				privacy: privacy.checked,
+				marketing: marketing.checked,
+			};
+
 			try {
 				const res = await fetch("/api/lead", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						origine: "chinesis-inline",
-						pagina: location.pathname,
-						cta: "Richiedi informazioni",
-						nome: nome.value.trim(),
-						cognome: cognome.value.trim(),
-						email: email.value.trim(),
-						cellulare: `${prefisso.value} ${cellulare.value.trim()}`,
-						messaggio: messaggio.value.trim(),
-						privacy: privacy.checked,
-						marketing: marketing.checked,
-					}),
+					body: JSON.stringify(withTracking(datiLead)),
 				});
 				if (!res.ok) throw new Error("request failed");
+				trackLead(datiLead);
 			} catch {
 				inviaBtn.disabled = false;
 				inviaBtn.textContent = "Invia richiesta";

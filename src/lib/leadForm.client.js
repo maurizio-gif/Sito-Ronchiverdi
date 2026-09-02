@@ -17,6 +17,8 @@
 // con Esc, senza passare da nessun pulsante), così ogni via di uscita — X,
 // backdrop, Esc — lascia il form nello stesso stato pulito.
 
+import { withTracking, trackLead } from "./tracking.client.js";
+
 export function initLeadForm(root, options) {
 	var P = options.prefix;
 	var onClose = options.onClose || function () {};
@@ -482,8 +484,9 @@ export function initLeadForm(root, options) {
 				fetch(WEBHOOK_LEAD, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(state),
+					body: JSON.stringify(withTracking(state)),
 				});
+				trackLead(state);
 			} catch (e) {}
 		}
 
@@ -654,8 +657,9 @@ export function initLeadForm(root, options) {
 				fetch(WEBHOOK_LEAD, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(state),
+					body: JSON.stringify(withTracking(state)),
 				});
+				trackLead(state);
 			} catch (e) {}
 		}
 		renderReferentePadel();
@@ -992,8 +996,9 @@ export function initLeadForm(root, options) {
 				fetch(WEBHOOK_LEAD, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(payload),
+					body: JSON.stringify(withTracking(payload)),
 				});
+				trackLead(payload);
 			} catch (e) {}
 		}
 

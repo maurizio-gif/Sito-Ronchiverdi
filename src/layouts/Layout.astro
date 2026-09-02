@@ -45,6 +45,13 @@ const structuredData = {
 <html lang="it">
 	<head>
 		<meta charset="utf-8" />
+		<!-- CookieYes: primo script del <head>, così il blocco preventivo dei
+		     cookie di terze parti avviene prima che qualunque tag parta. -->
+		<script
+			id="cookieyes"
+			type="text/javascript"
+			src="https://cdn-cookieyes.com/client_data/c6534d8ba21a289ba21b246fdea24820/script.js"
+			is:inline></script>
 		<link rel="icon" href={url("favicon.ico")} sizes="any" />
 		<link rel="icon" type="image/png" href={url("favicon.png")} />
 		<link rel="apple-touch-icon" href={url("apple-touch-icon.png")} />
@@ -60,6 +67,12 @@ const structuredData = {
 		<slot />
 		<Footer />
 		<LeadModal />
+		<script>
+			// Apre la sessione e fissa le UTM di ingresso su ogni pagina, prima
+			// che l'utente navighi via e l'URL con i parametri sia perso.
+			import { initTracking } from "../lib/tracking.client.js";
+			initTracking();
+		</script>
 		<script>
 			const obs = new IntersectionObserver(
 				(entries) => {
