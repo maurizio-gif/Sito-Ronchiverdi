@@ -34,6 +34,20 @@ function json(data: unknown, status: number) {
 	});
 }
 
+/**
+ * La città arriva percent-encoded dall'header di Vercel. Se la decodifica
+ * fallisce — sequenza malformata — si tiene il valore grezzo: un nome di
+ * città storto è meglio di una sessione senza città.
+ */
+function decodeCitta(valore: string | null): string | null {
+	if (!valore) return null;
+	try {
+		return decodeURIComponent(valore);
+	} catch {
+		return valore;
+	}
+}
+
 /** Tipo di dispositivo dallo user agent: basta la distinzione grossolana. */
 function deviceType(ua: string | null): string | null {
 	if (!ua) return null;
@@ -84,7 +98,9 @@ export async function POST({ request }: { request: Request }) {
 	const userAgent = str(h.get("user-agent"), 300);
 	const paese = str(h.get("x-vercel-ip-country"), 8);
 	const regione = str(h.get("x-vercel-ip-country-region"), 16);
-	const citta = str(h.get("x-vercel-ip-city"), 120);
+	// Vercel manda la città URL-encoded: senza decodificare, in tabella
+	// finisce "San%20Jose" invece di "San Jose".
+	const citta = decodeCitta(str(h.get("x-vercel-ip-city"), 120));
 
 	const pagina = str(body.pagina) ?? "/";
 
