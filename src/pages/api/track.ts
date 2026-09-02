@@ -138,15 +138,21 @@ export async function POST({ request }: { request: Request }) {
 		consent_advertisement: body.consent_advertisement === true,
 	};
 
-	// Un solo round-trip: la funzione SQL registra_pagina fa upsert della
-	// sessione (senza sovrascrivere la provenienza), incrementa il contatore
-	// pagine e inserisce la riga in sessioni_pagine.
-	const { error } = await supabase.rpc("registra_pagina", {
-		p_sessione: sessione,
-		p_pagina: pagina,
-		p_titolo: str(body.titolo, 300),
-		p_referrer_pagina: str(body.referrer_pagina),
-	});
+	// Due strade. Il pageview vero fa upsert della sessione, incrementa il
+	// contatore e scrive la riga in sessioni_pagine. L'aggiornamento di
+	// sessione — che arriva quando il consenso viene dato dopo l'atterraggio —
+	// porta solo gli identificativi e il consenso: contarlo come pagina
+	// vista raddoppierebbe i pageview di ogni visita.
+	const soloSessione = body.solo_sessione === true;
+
+	const { error } = soloSessione
+		? await supabase.rpc("aggiorna_sessione", { p_sessione: sessione })
+		: await supabase.rpc("registra_pagina", {
+				p_sessione: sessione,
+				p_pagina: pagina,
+				p_titolo: str(body.titolo, 300),
+				p_referrer_pagina: str(body.referrer_pagina),
+			});
 
 	if (error) {
 		console.error("Errore tracciamento sessione:", error.message);

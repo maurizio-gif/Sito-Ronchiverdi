@@ -307,9 +307,25 @@ export function getVisitorId() {
  * navigazione né bloccare un form.
  */
 export function trackPageview() {
+	inviaAlPannello(false);
+}
+
+/**
+ * Aggiorna la riga di sessione senza contare una nuova pagina vista.
+ *
+ * CookieYes emette cookieyes_consent_update anche al caricamento: rispedire
+ * un pageview per portare visitor_id e id GA4 contava due volte la stessa
+ * pagina, con pagine_viste a 2 per una visita sola.
+ */
+export function aggiornaSessione() {
+	inviaAlPannello(true);
+}
+
+function inviaAlPannello(soloSessione) {
 	if (typeof window === "undefined") return;
 
 	var payload = getTrackingPayload();
+	payload.solo_sessione = soloSessione === true;
 	payload.visitor_id = getVisitorId();
 	payload.pagina = window.location.pathname;
 	payload.titolo = document.title ? String(document.title).slice(0, 300) : null;
@@ -408,9 +424,9 @@ export function initTracking() {
 		window.__rvTrackingConsentBound = true;
 		document.addEventListener("cookieyes_consent_update", function () {
 			updateTouches();
-			// Il consenso appena dato porta visitor_id e id GA4: rimandiamo la
-			// riga di sessione così su Supabase si completa da sé.
-			trackPageview();
+			// Il consenso appena dato porta visitor_id e id GA4: si aggiorna la
+			// riga di sessione, senza contare un'altra pagina vista.
+			aggiornaSessione();
 		});
 	}
 }
