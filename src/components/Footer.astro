@@ -54,15 +54,17 @@ const social = [
 	},
 ];
 
-// Loghi placeholder ancora da sostituire: aggiungere il file in
-// /public/images/federazioni con lo stesso nome, senza toccare il markup.
+// `negativo` marca i loghi forniti in versione per fondo chiaro: la loro parte
+// scura (il testo del FIDAL su tutti) sul footer sparirebbe, quindi vengono
+// resi bianchi pieni. Da togliere se in futuro arrivano i file in negativo,
+// che manterrebbero i colori di marca.
 const enti = [
 	{ src: "images/federazioni/coni.png", alt: "CONI — Comitato Olimpico Nazionale Italiano" },
-	{ src: "images/federazioni/csi.svg", alt: "CSI — Centro Sportivo Italiano" },
+	{ src: "images/federazioni/csi.png", alt: "CSI — Centro Sportivo Italiano", negativo: true },
 	{ src: "images/federazioni/fitp.png", alt: "FITP — Federazione Italiana Tennis e Padel" },
 	{ src: "images/federazioni/fin.png", alt: "FIN — Federazione Italiana Nuoto" },
 	{ src: "images/federazioni/fitri.png", alt: "FITRI — Federazione Italiana Triathlon" },
-	{ src: "images/federazioni/fidal.svg", alt: "FIDAL — Federazione Italiana di Atletica Leggera" },
+	{ src: "images/federazioni/fidal.png", alt: "FIDAL — Federazione Italiana di Atletica Leggera", negativo: true },
 ];
 ---
 
@@ -191,7 +193,7 @@ const enti = [
 				{[0, 1].map((copy) => (
 					<ul class="marquee__group" aria-hidden={copy === 1 ? "true" : undefined}>
 						{enti.map((e) => (
-							<li><img src={url(e.src)} alt={copy === 1 ? "" : e.alt} loading="lazy" /></li>
+							<li><img class:list={{ "is-negativo": e.negativo }} src={url(e.src)} alt={copy === 1 ? "" : e.alt} loading="lazy" /></li>
 						))}
 					</ul>
 				))}
@@ -498,6 +500,16 @@ const enti = [
 	}
 	.marquee__group img:hover {
 		opacity: 1;
+	}
+	/* Loghi forniti per fondo chiaro: senza correzione, sul footer scuro le
+	   parti nere spariscono (il testo del FIDAL su tutti). L'inversione ribalta
+	   solo la luminosità — scuro e chiaro si scambiano — e la rotazione di
+	   tinta rimette i colori originali: così restano il blu e il tricolore
+	   invece di ridursi a una sagoma bianca. Serve anche a preservare il
+	   dettaglio del CSI, le cui fessure sono bianco pieno e non trasparenza:
+	   schiarirlo e basta lo appiattirebbe in una macchia. */
+	.marquee__group img.is-negativo {
+		filter: invert(1) hue-rotate(180deg);
 	}
 	@keyframes marquee-scroll {
 		from {
