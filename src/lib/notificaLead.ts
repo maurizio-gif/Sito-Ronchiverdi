@@ -32,6 +32,8 @@ function righe(body: CampiLead): string[] {
 	const dettagli = Array.isArray(body.dettagli)
 		? body.dettagli.filter((d) => typeof d === "string").join(", ")
 		: null;
+	const azione = testo(body.azione);
+	const conAppuntamento = azione === "appuntamento" || azione === "telefonata";
 
 	const voci: [string, string | null][] = [
 		["Attività", testo(body.attivitaLabel)],
@@ -43,7 +45,13 @@ function righe(body: CampiLead): string[] {
 		["Data di nascita", testo(body.minoreDataNascita)],
 		["Quando", [testo(body.dataScelta), testo(body.oraScelta)].filter(Boolean).join(" alle ") || null],
 		["Interessi", dettagli || null],
-		["Messaggio", testo(body.messaggioTesto) ?? testo(body.messaggio)],
+		// Per un appuntamento o una telefonata l'etichetta dice "Oggetto": è
+		// quello che serve sapere prima di presentarsi o di chiamare, e
+		// chiamarlo "Messaggio" lo farebbe sembrare un commento accessorio.
+		[
+			conAppuntamento ? "Oggetto" : "Messaggio",
+			testo(body.messaggioTesto) ?? testo(body.oggetto) ?? testo(body.messaggio),
+		],
 		["Marketing", body.marketing === true ? "acconsente" : "no"],
 		["Pagina", testo(body.pagina)],
 		["Provenienza", [testo(body.utm_source), testo(body.utm_campaign)].filter(Boolean).join(" · ") || null],

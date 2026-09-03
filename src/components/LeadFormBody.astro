@@ -449,6 +449,11 @@ const { prefix } = Astro.props;
 		<div class="lf__slots" id={`${prefix}-slots-appuntamento`} hidden></div>
 	</div>
 
+	<div class="lf__field lf__field--oggetto">
+		<label for={`${prefix}-appuntamento-oggetto`}>Di cosa vorresti parlare? <span aria-hidden="true">*</span></label>
+		<textarea id={`${prefix}-appuntamento-oggetto`} name="oggetto" rows="4" placeholder="Es. vorrei informazioni sull'abbonamento Family e vedere la piscina…"></textarea>
+	</div>
+
 	<div class="lf__actions">
 		<button class="lf__back" data-step-back="2-scelta" type="button">← Indietro</button>
 		<button class="btn lf__next" id={`${prefix}-appuntamento-next`} type="button" disabled>
@@ -465,6 +470,11 @@ const { prefix } = Astro.props;
 	<div class="lf__picker" id={`${prefix}-picker-telefonata`}>
 		<div class="lf__daystrip" id={`${prefix}-giorni-telefonata`}></div>
 		<div class="lf__slots" id={`${prefix}-slots-telefonata`} hidden></div>
+	</div>
+
+	<div class="lf__field lf__field--oggetto">
+		<label for={`${prefix}-telefonata-oggetto`}>Di cosa vorresti parlare? <span aria-hidden="true">*</span></label>
+		<textarea id={`${prefix}-telefonata-oggetto`} name="oggetto" rows="4" placeholder="Es. vorrei sapere orari e costi dei corsi di nuoto per mio figlio…"></textarea>
 	</div>
 
 	<div class="lf__actions">

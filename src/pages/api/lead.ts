@@ -93,7 +93,12 @@ export async function POST({ request }: { request: Request }) {
 		azione: str(body.azione),
 		data_scelta: str(body.dataScelta),
 		ora_scelta: str(body.oraScelta),
-		messaggio: str(body.messaggioTesto) ?? str(body.messaggio),
+		// Una colonna sola per "il testo che ha scritto la persona": il
+		// messaggio del percorso libero e l'oggetto di un appuntamento o di una
+		// telefonata sono la stessa cosa per chi lavora la richiesta, e `azione`
+		// dice già in quale dei due modi è arrivato. Con due colonne il CRM
+		// dovrebbe leggerle entrambe ovunque, e prima o poi ne dimenticherebbe una.
+		messaggio: str(body.messaggioTesto) ?? str(body.oggetto) ?? str(body.messaggio),
 		nome,
 		cognome,
 		email,

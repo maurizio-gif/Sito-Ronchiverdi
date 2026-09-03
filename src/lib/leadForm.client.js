@@ -196,6 +196,7 @@ export function initLeadForm(root, options) {
 		giorno: "Scegli un giorno per continuare.",
 		orario: "Scegli un orario per continuare.",
 		messaggio: "Scrivi la tua richiesta prima di continuare.",
+		oggetto: "Scrivi di cosa vorresti parlare prima di continuare.",
 		nome: "Inserisci il tuo nome.",
 		cognome: "Inserisci il tuo cognome.",
 		email: "Inserisci un indirizzo email valido.",
@@ -226,6 +227,11 @@ export function initLeadForm(root, options) {
 			dataScelta: null,
 			oraScelta: null,
 			messaggioTesto: "",
+			// L'oggetto dell'appuntamento o della telefonata: cosa la persona
+			// vuole discutere. Finisce nella stessa colonna del messaggio (vedi
+			// api/lead.ts), perché per la segreteria è la stessa cosa — il testo
+			// che ha scritto chi ha compilato il form.
+			oggetto: "",
 			nome: "",
 			cognome: "",
 			email: "",
@@ -981,6 +987,16 @@ export function initLeadForm(root, options) {
 			clearError(s);
 			if (!state.dataScelta) return showError(s, ERR.giorno);
 			if (!state.oraScelta) return showError(s, ERR.orario);
+			// L'oggetto è obbligatorio: un appuntamento senza sapere di cosa si
+			// parlerà arriva in segreteria da richiamare per chiederlo, e la
+			// telefonata di preparazione vale quanto l'appuntamento stesso.
+			var oggetto = root.querySelector("#" + P + "-" + tipo + "-oggetto");
+			if (oggetto && !oggetto.value.trim()) {
+				showError(s, ERR.oggetto);
+				oggetto.focus();
+				return;
+			}
+			state.oggetto = oggetto ? oggetto.value.trim() : "";
 			showStep("4-dati");
 		});
 	});
@@ -1112,6 +1128,7 @@ export function initLeadForm(root, options) {
 		rows.push(["Email", state.email]);
 		rows.push(["Cellulare", state.cellulare]);
 		if (state.azione === "messaggio") rows.push(["Richiesta", state.messaggioTesto]);
+		else if (state.oggetto) rows.push(["Oggetto", state.oggetto]);
 
 		var box = root.querySelector("#" + P + "-confirm-summary");
 		if (box) box.innerHTML = rows.map(recapRow).join("");
@@ -1171,6 +1188,8 @@ export function initLeadForm(root, options) {
 			var strip = document.getElementById(P + "-giorni-" + tipo);
 			var slots = document.getElementById(P + "-slots-" + tipo);
 			var next = document.getElementById(P + "-" + tipo + "-next");
+			var oggetto = document.getElementById(P + "-" + tipo + "-oggetto");
+			if (oggetto) oggetto.value = "";
 			if (strip) strip.innerHTML = "";
 			if (slots) {
 				slots.innerHTML = "";
