@@ -19,7 +19,7 @@ const facts = [
 	{
 		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
 		label: "Storia",
-		html: "La scuola tennis nasce nel <strong>1992</strong>: oltre trent'anni di storia, da cui è passato anche Edoardo Lavagni, arrivato fino alla <strong>250ª posizione ATP</strong>.",
+		html: "La scuola tennis nasce nel <strong>1992</strong>: oltre trent'anni di storia, da cui è passato anche Edoardo Lavagno, arrivato fino alla <strong>250ª posizione ATP</strong>. La nostra squadra è arrivata a giocare in <strong>Serie A2</strong>.",
 	},
 ];
 
@@ -48,7 +48,7 @@ const youngPrograms = [
 	{
 		ageLabel: "Indicativamente 7–9 anni",
 		title: "Orange",
-		percorso: "Si continua a giocare con la palla arancione, di peso e dimensione intermedia: da qui in poi ogni seduta include anche la preparazione atletica.",
+		percorso: "Si inizia a giocare con la palla arancione, di peso e dimensione intermedia: da qui in poi ogni seduta include anche la preparazione atletica.",
 		obiettivi: ["Tecnica di base e primi scambi", "45' di tennis + 45' di preparazione atletica", "1 o 2 volte a settimana"],
 		durata: "45 + 45 minuti",
 		color: "#c8791f",
@@ -75,12 +75,12 @@ const agonismoCards = [
 	{
 		eyebrow: "Next Gen",
 		title: "Per giovani atleti motivati",
-		desc: "Accesso su valutazione dello staff tecnico, indicativamente a partire dai 12–14 anni: allenamenti da 90 minuti di tennis più 60 minuti di preparazione atletica specifica, da 2 a 5 volte a settimana. Allenamento personalizzato, con analisi tecnica e programmazione dei tornei in base agli obiettivi di ciascun atleta.",
+		desc: "Accesso su valutazione dello staff tecnico, indicativamente a partire dai 12–14 anni: allenamenti da 90 minuti di tennis più 45 minuti di preparazione atletica specifica, da 2 a 5 volte a settimana. Allenamento personalizzato, con analisi tecnica e programmazione dei tornei in base agli obiettivi di ciascun atleta.",
 	},
 	{
 		eyebrow: "Settore Competizione",
 		title: "Allenamenti mirati per ogni atleta",
-		desc: "La parte competitiva della Young School: un torneo interno ogni sabato del mese, come prima introduzione soft alla competizione, fino alle squadre federali — Ronchiverdi partecipa alla Serie B1 e alle categorie a scalare — secondo il calendario della Federazione Italiana Tennis e Padel.",
+		desc: "La parte competitiva della Young School: si parte dal settore formazione, con un torneo interno al mese il sabato pomeriggio come prima introduzione soft alla competizione, fino alle squadre federali — Ronchiverdi partecipa alla Serie B1 e alle categorie a scalare — secondo il calendario della Federazione Italiana Tennis e Padel.",
 	},
 ];
 
@@ -89,6 +89,9 @@ const maestri = [
 	{ nome: "Stefano Bertone", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Laurent Bondaz", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Andrea Dario", ruolo: "Maestro Nazionale FITP" },
+	{ nome: "Andrea Durando", ruolo: "Maestro Nazionale FITP" },
+	{ nome: "Fabio Vallino", ruolo: "Maestro Nazionale FITP" },
+	{ nome: "Tommaso Vescovi", ruolo: "Istruttore 2° grado FITP" },
 ];
 
 const faq = [
@@ -179,9 +182,9 @@ const faq = [
 			</div>
 			<div class="adulti-intro__content">
 				<span class="eyebrow">Adulti</span>
-				<h2>Tornare a giocare, a ogni età</h2>
+				<h2>Giocare a ogni livello, a ogni età</h2>
 				<p class="lede" style="margin-inline:0">
-					Il motivo più frequente per cui un adulto si avvicina al nostro settore tennis è riprendere in mano la racchetta dopo anni di pausa. Complice la voglia crescente, soprattutto oltre i 40 anni, di dedicare più tempo libero allo sport, il tennis resta una delle attività più motivanti per chi vuole rimettersi in gioco — anche partendo da zero.
+					Chi arriva al nostro settore tennis parte da storie diverse: c'è chi prende la racchetta in mano per la prima volta, chi torna a giocare dopo anni di pausa e chi è in campo ogni settimana e vuole affinare tecnica, tattica e continuità di rendimento. I gruppi vengono formati per livello di gioco, così ognuno si allena con compagni alla propria altezza — dai primi scambi fino al gioco evoluto e ai tornei amatoriali.
 				</p>
 			</div>
 		</div>
@@ -202,7 +205,7 @@ const faq = [
 			))}
 		</div>
 		<p class="adulti-note">
-			I campi sono compresi nel tuo abbonamento e sempre prenotabili (fino a un'ora di gioco al giorno, un'ora e mezza per il doppio): corsi e lezioni individuali con i maestri si acquistano a parte.
+			Nella stagione estiva i campi sono compresi nel tuo abbonamento e sempre prenotabili (fino a un'ora di gioco al giorno, un'ora e mezza per il doppio): corsi, lezioni individuali con i maestri e ore invernali si acquistano a parte.
 		</p>
 		<div class="section-cta">
 			<a class="btn" href={url("/attivita/tennis/iscrizione")}>Modalità di iscrizione</a>

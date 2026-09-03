@@ -1,0 +1,461 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import IconFacts from "../components/IconFacts.astro";
+import Faq from "../components/Faq.astro";
+import WeeklySchedule from "../components/WeeklySchedule.astro";
+import { corsiFitnessLessons, corsiFitnessSchedule } from "../data/schedules";
+import { url } from "../lib/paths";
+
+// La pagina sta su /hyrox e non sotto /attivita come le altre: è l'indirizzo
+// che il vecchio sito ha già indicizzato per "palestra hyrox a torino", e
+// spostarlo butterebbe via il posizionamento invece di ereditarlo.
+
+const facts = [
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.8 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
+		label: "Affiliazione ufficiale",
+		html: "Ronchiverdi è <strong>affiliato ufficialmente al mondo HYROX</strong>: una sala progettata per la performance, con circuiti ad alta intensità e attenzione a tecnica e progressione.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="M7 7V5.5M17 7V5.5M7 17v1.5M17 17v1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
+		label: "Functional Area",
+		html: "La <strong>Functional Area powered by Lacertosus</strong>, primo centro pilota del Nord Italia: attrezzatura prevista dal regolamento ufficiale, senza adattamenti.",
+	},
+	{
+		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M8.5 12.2l2.4 2.4 4.6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
+		label: "Tutto in un abbonamento",
+		html: "Allenamento libero, sessioni guidate e gruppi di corsa outdoor sono <strong>compresi nell'abbonamento</strong>: nessun pacchetto da acquistare a parte.",
+	},
+];
+
+// Le otto stazioni nell'ordine di gara, con la distanza ufficiale: è lo
+// stesso elenco della vecchia pagina, che resta la fonte del club.
+const stazioni = [
+	{ n: "01", nome: "Row", misura: "1000 m" },
+	{ n: "02", nome: "Sled Push", misura: "50 m" },
+	{ n: "03", nome: "Sled Pull", misura: "50 m" },
+	{ n: "04", nome: "Burpee Broad Jump", misura: "80 m" },
+	{ n: "05", nome: "SkiErg", misura: "1000 m" },
+	{ n: "06", nome: "Farmers Carry", misura: "200 m" },
+	{ n: "07", nome: "Sandbag Lunges", misura: "100 m" },
+	{ n: "08", nome: "Wall Balls", misura: "100 ripetizioni" },
+];
+
+const programmi = [
+	{
+		eyebrow: "In autonomia",
+		title: "Free Hyrox Training",
+		desc: "La Functional Area è aperta all'allenamento libero negli orari in cui non ospita i corsi: attrezzatura ufficiale a disposizione, per costruire il tuo lavoro sulle stazioni della gara.",
+	},
+	{
+		eyebrow: "Sessioni guidate",
+		title: "Hyrox Workout",
+		desc: "Le sessioni dedicate condotte da coach certificati: si lavora su tutti gli aspetti della gara, dalla tecnica delle singole stazioni alla gestione del passo fra una e l'altra.",
+	},
+	{
+		eyebrow: "Base di preparazione",
+		title: "Functional Training",
+		desc: "Il lavoro a circuito con trainer dedicato che allena forza, mobilità, resistenza, flessibilità e coordinazione: la base su cui poggia tutto il percorso Hyrox.",
+	},
+];
+
+const attrezzatura = [
+	"SkiErg",
+	"Vogatori",
+	"Lingua di sintetico per la slitta (sled push e pull)",
+	"Quattro rack per lo squat",
+	"Bilancieri, dischi e manubri",
+	"Kettlebell",
+	"Wall ball",
+	"Air Bike e due Skillmill",
+];
+
+// Solo le righe che riguardano il percorso Hyrox, prese dal palinsesto vero
+// (src/data/schedules.ts, lo stesso della pagina Planning): copiare gli orari
+// qui vorrebbe dire aggiornarli in due posti, e uno dei due resterebbe
+// indietro al primo cambio di stagione.
+const ID_HYROX = ["hyrox-workout", "functional-training", "running-training"];
+const palinsestoHyrox = Object.fromEntries(
+	Object.entries(corsiFitnessSchedule).map(([giorno, slot]) => [
+		giorno,
+		slot.filter((s) => ID_HYROX.includes(s.id)),
+	])
+);
+
+const faq = [
+	{
+		q: "Devo essere già allenato per iniziare?",
+		a: "No. Si parte dal Functional Training, che costruisce forza, resistenza e mobilità, e si passa alle sessioni Hyrox Workout quando le basi ci sono. I coach ti indicano da dove cominciare in base al tuo livello.",
+	},
+	{
+		q: "Serve iscriversi a una gara per allenarsi qui?",
+		a: "No. Il format Hyrox è un ottimo allenamento anche per chi non ha in programma nessuna competizione: si lavora su corsa, forza e capacità di recupero in un'unica sessione.",
+	},
+	{
+		q: "Gli allenamenti Hyrox sono compresi nell'abbonamento?",
+		html: `<p>Sì. Allenamento libero nella Functional Area, sessioni guidate e gruppi di corsa outdoor sono inclusi nell'abbonamento fitness. Puoi confrontare le formule nella pagina <a href="${url("/abbonamenti")}">abbonamenti</a>.</p>`,
+	},
+	{
+		q: "Posso allenarmi nella Functional Area quando voglio?",
+		html: `<p>Negli orari in cui l'area non ospita i corsi, sì. Le fasce occupate sono quelle che trovi nel <a href="${url("/planning")}">planning settimanale</a>.</p>`,
+	},
+	{
+		q: "Che categorie esistono in gara?",
+		a: "Open, Pro, Doubles e Relay. Il format degli esercizi resta identico in tutto il mondo: cambiano i carichi e il modo in cui la prova viene distribuita fra gli atleti.",
+	},
+	{
+		q: "La corsa fa parte della preparazione?",
+		html: `<p>Sì, è metà della gara: otto chilometri divisi fra una stazione e l'altra. Per questo il club organizza gruppi di corsa outdoor guidati dai coach, in città e in collina, inclusi nell'abbonamento e visibili nel <a href="${url("/planning")}">planning</a>.</p>`,
+	},
+];
+---
+
+<Layout
+	title="Hyrox a Torino — Ronchiverdi Sport Club"
+	description="Palestra Hyrox a Torino: Ronchiverdi è affiliato ufficialmente HYROX, con la Functional Area powered by Lacertosus. Allenamento libero, sessioni guidate con coach certificati e gruppi di corsa, tutto compreso nell'abbonamento."
+>
+	<PageHero image="images/hyrox/functional-area.jpg" imageAlt="La Functional Area powered by Lacertosus di Ronchiverdi, con i rack per lo squat" eyebrow="Attività · Adulti">
+		<Fragment slot="title">Built for <em class="accent">Hyrox</em>. Made in Ronchi.</Fragment>
+		<Fragment slot="lede">Cerchi una palestra Hyrox a Torino? Una sala progettata per la performance, con l'attrezzatura prevista dal regolamento ufficiale e coach certificati che ti allenano con metodo.</Fragment>
+		<div class="hyrox-hero-cta">
+			<button type="button" class="btn" data-open-contact>Prenota un tour</button>
+			<a class="btn btn-outline" href="#palinsesto">Vedi gli allenamenti</a>
+		</div>
+	</PageHero>
+
+	<IconFacts
+		eyebrow="Perché qui"
+		title="Attrezzatura ufficiale, nessun compromesso"
+		items={facts}
+	/>
+
+	<section class="hyrox-cose">
+		<div class="hyrox-cose__intro">
+			<span class="eyebrow">Cos'è Hyrox</span>
+			<h2>Otto chilometri di corsa, <em class="accent">otto stazioni</em></h2>
+			<p class="lede">
+				Hyrox è una gara indoor che combina 8 km di corsa con 8 esercizi funzionali standardizzati, da eseguire in sequenza: si corre un chilometro, si affronta una stazione, si torna a correre. Un format internazionale identico in tutto il mondo, in cui il confronto è con il proprio tempo prima ancora che con gli altri.
+			</p>
+		</div>
+		<ol class="hyrox-stazioni">
+			{stazioni.map((s) => (
+				<li class="hyrox-stazione">
+					<span class="hyrox-stazione__n">{s.n}</span>
+					<span class="hyrox-stazione__nome">{s.nome}</span>
+					<span class="hyrox-stazione__misura">{s.misura}</span>
+				</li>
+			))}
+		</ol>
+		<p class="hyrox-nota">
+			Fra una stazione e l'altra si corre sempre un chilometro: la gara si vince gestendo il passo, non solo la forza.
+		</p>
+	</section>
+
+	<section class="hyrox-programmi">
+		<div class="hyrox-programmi__head">
+			<span class="eyebrow">Tre programmi, una sola sala</span>
+			<h2>Scegli come allenarti</h2>
+		</div>
+		<div class="hyrox-programmi__grid">
+			{programmi.map((p) => (
+				<article class="hyrox-card">
+					<span class="eyebrow">{p.eyebrow}</span>
+					<h3>{p.title}</h3>
+					<p>{p.desc}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<figure class="hyrox-banda">
+		<img src={url("images/hyrox/allenamento-gruppo.jpg")} alt="Sessione di gruppo nella Functional Area di Ronchiverdi" loading="lazy" />
+	</figure>
+
+	<section class="hyrox-attrezzatura">
+		<div class="hyrox-attrezzatura__media">
+			<img src={url("images/hyrox/squat-lacertosus.jpg")} alt="Allenamento con bilanciere e dischi Lacertosus nella Functional Area" loading="lazy" />
+		</div>
+		<div class="hyrox-attrezzatura__content">
+			<span class="eyebrow">Attrezzatura</span>
+			<h2>Allenati con precisione, <em class="accent">senza adattamenti</em></h2>
+			<p class="lede" style="margin-inline:0">
+				La Functional Area powered by Lacertosus — primo centro pilota del Nord Italia — è attrezzata con gli strumenti previsti dal regolamento ufficiale: qui si riproducono tutte e otto le stazioni della gara.
+			</p>
+			<ul class="hyrox-lista">
+				{attrezzatura.map((a) => (
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						<span>{a}</span>
+					</li>
+				))}
+			</ul>
+			<a class="btn btn-outline" href={url("/attivita/gym-floor#lacertosus")}>Scopri il Gym Floor</a>
+		</div>
+	</section>
+
+	<section class="hyrox-palinsesto" id="palinsesto">
+		<div class="hyrox-palinsesto__head">
+			<span class="eyebrow">Palinsesto</span>
+			<h2>Gli allenamenti della settimana</h2>
+			<p class="lede" style="margin-inline:auto">
+				Le sessioni Hyrox Workout, il Functional Training e i gruppi di corsa, con orari sempre aggiornati. Tocca una lezione per leggere di cosa si tratta.
+			</p>
+		</div>
+		<WeeklySchedule id="hyrox" lessons={corsiFitnessLessons} schedule={palinsestoHyrox} />
+		<div class="section-cta">
+			<a class="btn btn-outline" href={url("/planning")}>Vedi tutto il planning</a>
+		</div>
+	</section>
+
+	<section class="hyrox-corsa">
+		<div class="hyrox-corsa__media">
+			<img src={url("images/hyrox/corsa-outdoor.jpg")} alt="Gruppo di corsa outdoor" loading="lazy" />
+		</div>
+		<div class="hyrox-corsa__content">
+			<span class="eyebrow">Corsa outdoor</span>
+			<h2>E naturalmente, <em class="accent">la corsa</em></h2>
+			<p class="lede" style="margin-inline:0">
+				È metà della gara, e non si allena in sala. Per questo i coach del club guidano gruppi di corsa outdoor settimanali, in città e sulla collina torinese: sono inclusi nel tuo abbonamento e li trovi nel planning insieme alle sessioni in Functional Area.
+			</p>
+		</div>
+	</section>
+
+	<Faq items={faq} />
+
+	<section class="hyrox-finale">
+		<span class="eyebrow eyebrow-dark">Un solo abbonamento</span>
+		<h2>Pronto a iniziare?</h2>
+		<p class="lede lede-dark" style="margin-inline:auto">
+			Con un'unica iscrizione accedi alle sessioni Hyrox e Functional, ai gruppi di corsa outdoor, alla sala pesi, ai corsi in palinsesto, alla spa e a tutti gli spazi del club.
+		</p>
+		<div class="hyrox-finale__buttons">
+			<button type="button" class="btn" data-open-contact>Prenota un tour</button>
+			<a class="btn btn-outline btn-outline-dark" href={url("/abbonamenti")}>Scopri gli abbonamenti</a>
+		</div>
+	</section>
+
+	<style>
+		.hyrox-hero-cta {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+		}
+		.hyrox-hero-cta .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		.hyrox-hero-cta .btn-outline {
+			border: 1px solid currentColor;
+		}
+
+		.hyrox-cose {
+			max-width: 60rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem;
+			text-align: center;
+		}
+		.hyrox-cose__intro .lede {
+			max-width: 44rem;
+			margin-inline: auto;
+		}
+		.hyrox-stazioni {
+			list-style: none;
+			margin: 3rem 0 0;
+			padding: 0;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1rem;
+			text-align: left;
+		}
+		.hyrox-stazione {
+			display: flex;
+			flex-direction: column;
+			gap: 0.2rem;
+			padding: 1.1rem 1.2rem;
+			background: var(--bg-alt);
+			border-radius: var(--radius, 12px);
+		}
+		.hyrox-stazione__n {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			letter-spacing: 0.12em;
+			color: var(--accent);
+		}
+		.hyrox-stazione__nome {
+			font-family: var(--font-serif);
+			font-size: var(--text-lg);
+			line-height: 1.2;
+		}
+		.hyrox-stazione__misura {
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			color: var(--text-muted);
+		}
+		.hyrox-nota {
+			margin: 2rem 0 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+		}
+
+		.hyrox-programmi {
+			background: var(--bg-alt);
+			padding: 5rem 1.5rem;
+		}
+		.hyrox-programmi__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto 3rem;
+		}
+		.hyrox-programmi__grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.5rem;
+			max-width: 68rem;
+			margin: 0 auto;
+		}
+		.hyrox-card {
+			background: var(--bg);
+			border: 1px solid var(--border);
+			border-radius: var(--radius, 12px);
+			padding: 2rem 1.8rem;
+		}
+		.hyrox-card h3 {
+			margin: 0.4rem 0 0.8rem;
+			font-size: var(--text-lg);
+		}
+		.hyrox-card p {
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.7;
+			color: var(--text-muted);
+		}
+
+		.hyrox-attrezzatura {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3.5rem;
+			align-items: center;
+			max-width: 72rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem;
+		}
+		.hyrox-attrezzatura__media img {
+			width: 100%;
+			height: 100%;
+			max-height: 30rem;
+			object-fit: cover;
+			border-radius: var(--radius, 12px);
+		}
+		.hyrox-lista {
+			list-style: none;
+			margin: 1.5rem 0 2rem;
+			padding: 0;
+			display: grid;
+			gap: 0.5rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+		}
+		.hyrox-lista li {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+		}
+		.hyrox-lista svg {
+			color: var(--accent);
+			flex-shrink: 0;
+		}
+
+		.hyrox-palinsesto {
+			background: var(--bg-alt);
+			padding: 5rem 1.5rem;
+		}
+		.hyrox-palinsesto__head {
+			text-align: center;
+			max-width: 40rem;
+			margin: 0 auto 2.5rem;
+		}
+		.hyrox-palinsesto .section-cta {
+			display: flex;
+			justify-content: center;
+			margin-top: 2.5rem;
+		}
+		.hyrox-palinsesto .btn-outline {
+			border: 1px solid currentColor;
+		}
+
+		.hyrox-banda {
+			margin: 0;
+		}
+		.hyrox-banda img {
+			display: block;
+			width: 100%;
+			height: clamp(16rem, 34vw, 26rem);
+			object-fit: cover;
+		}
+
+		.hyrox-corsa {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3.5rem;
+			align-items: center;
+			max-width: 72rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem;
+		}
+		.hyrox-corsa__media img {
+			width: 100%;
+			max-height: 26rem;
+			object-fit: cover;
+			border-radius: var(--radius, 12px);
+		}
+
+		.hyrox-finale {
+			background: var(--bg-dark);
+			color: var(--text-on-dark);
+			text-align: center;
+			padding: 5rem 1.5rem;
+		}
+		.hyrox-finale h2 {
+			margin: 0 0 1rem;
+		}
+		.hyrox-finale__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-top: 2rem;
+		}
+		.hyrox-finale__buttons .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+		/* Nessun ritocco locale a .btn-outline qui: su fondo scuro basta
+		   btn-outline-dark, che porta con sé anche l'hover (fondo chiaro,
+		   testo scuro). Ridichiarare background o border in questa pagina
+		   vinceva sul :hover globale e lo lasciava nero su nero. */
+
+		@media (max-width: 900px) {
+			.hyrox-stazioni {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			.hyrox-programmi__grid {
+				grid-template-columns: 1fr;
+			}
+			.hyrox-attrezzatura,
+			.hyrox-corsa {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+			}
+		}
+		@media (max-width: 520px) {
+			.hyrox-stazioni {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</Layout>

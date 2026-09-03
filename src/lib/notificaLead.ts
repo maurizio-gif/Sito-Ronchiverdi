@@ -23,6 +23,7 @@ function tipoRichiesta(body: CampiLead): string {
 	if (azione === "telefonata") return "Richiesta di telefonata";
 	if (azione === "messaggio") return "Messaggio";
 	if (testo(body.origine) === "chinesis-inline") return "Richiesta Chinesis";
+	if (testo(body.origine) === "fitness-manager-inline") return "Consulenza Fitness Manager";
 	return "Richiesta informazioni";
 }
 
@@ -41,8 +42,9 @@ function righe(body: CampiLead): string[] {
 		["Nome", nome || null],
 		["Email", testo(body.email)],
 		["Cellulare", testo(body.cellulare)],
+		["Data di nascita", testo(body.dataNascita)],
 		["Bambino/a", minore || null],
-		["Data di nascita", testo(body.minoreDataNascita)],
+		["Data di nascita bambino/a", testo(body.minoreDataNascita)],
 		["Quando", [testo(body.dataScelta), testo(body.oraScelta)].filter(Boolean).join(" alle ") || null],
 		["Interessi", dettagli || null],
 		// Per un appuntamento o una telefonata l'etichetta dice "Oggetto": è

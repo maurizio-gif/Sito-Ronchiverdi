@@ -106,6 +106,9 @@ export async function POST({ request }: { request: Request }) {
 		privacy: body.privacy === true,
 		marketing: body.marketing === true,
 		settore: str(body.settore),
+		// Data di nascita di chi compila: la chiede il form della consulenza
+		// col Fitness Manager. Resta nulla per tutti gli altri percorsi.
+		data_nascita: str(body.dataNascita),
 		minore_nome: str(body.minoreNome),
 		minore_cognome: str(body.minoreCognome),
 		minore_data_nascita: str(body.minoreDataNascita),

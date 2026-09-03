@@ -24,7 +24,7 @@ const faq = [
 
 <Layout
 	title="Abbonamenti — Ronchiverdi Sport Club"
-	description="Confronta gli abbonamenti Gold, Silver, Gym e Swim di Ronchiverdi Sport Club: gym floor, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
+	description="Confronta gli abbonamenti Gym, Swim, Silver e Gold di Ronchiverdi Sport Club: gym floor, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
 >
 	<PageHero image="images/club/lacertosus.jpg" imageAlt="Area Lacertosus Ronchiverdi" eyebrow="Abbonamenti">
 		<Fragment slot="title">Scegli il tuo <em class="accent">abbonamento</em></Fragment>
@@ -33,6 +33,22 @@ const faq = [
 
 	<MembershipTable />
 
+	{/* La tabella mostra le quattro formule più richieste, non il listino
+	    completo: fasce d'età e soluzioni flessibili si costruiscono con un
+	    consulente, e senza dirlo qui chi non si riconosce in nessuna delle
+	    quattro colonne se ne va pensando che non ci sia altro. */}
+	<section class="su-misura">
+		<div class="su-misura__box">
+			<span class="eyebrow">Non è tutto qui</span>
+			<h2>Formule <em class="accent">su misura</em></h2>
+			<p class="lede" style="margin-inline:auto">
+				Quelle qui sopra sono una selezione. Le formule sono <strong>personalizzate in base alla fascia di età</strong> e disponibili anche con <strong>soluzioni flessibili</strong>.
+			</p>
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">
+				Contatta un consulente per un preventivo personalizzato
+			</button>
+		</div>
+	</section>
 
 	<Faq items={faq} />
 
@@ -46,6 +62,30 @@ const faq = [
 	</section>
 
 	<style>
+		.su-misura {
+			padding: 0 1.5rem 5rem;
+		}
+		.su-misura__box {
+			max-width: 46rem;
+			margin: 0 auto;
+			padding: 3rem 2rem;
+			text-align: center;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: var(--radius, 12px);
+		}
+		.su-misura__box h2 {
+			margin: 0.4rem 0 0.8rem;
+		}
+		.su-misura__box .lede {
+			margin-bottom: 2rem;
+		}
+		.su-misura__box .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
+		}
+
 		.final-cta {
 			padding: 6rem 1.5rem;
 			text-align: center;

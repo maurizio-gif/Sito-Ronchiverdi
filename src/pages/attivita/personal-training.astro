@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import IconFacts from "../../components/IconFacts.astro";
+import prefissi from "../../data/prefissi-telefonici";
 import { url } from "../../lib/paths";
 
 const trainers = (await getCollection("trainers")).sort(
@@ -23,6 +24,26 @@ const phoneIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" a
 const mailIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.5" stroke="currentColor" stroke-width="1.3" /><path d="M2.5 4l5.5 4.2L13.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>`;
 const igIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="1.8" width="12.4" height="12.4" rx="3.6" stroke="currentColor" stroke-width="1.3" /><circle cx="8" cy="8" r="3.1" stroke="currentColor" stroke-width="1.3" /><circle cx="11.6" cy="4.5" r="0.9" fill="currentColor" /></svg>`;
 const webIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3" /><path d="M1.8 8h12.4M8 1.8c1.7 1.8 2.6 4 2.6 6.2s-.9 4.4-2.6 6.2c-1.7-1.8-2.6-4-2.6-6.2S6.3 3.6 8 1.8Z" stroke="currentColor" stroke-width="1.3" /></svg>`;
+
+// Il mini questionario della consulenza col Fitness Manager. Sta qui e non
+// nel markup perché le risposte viaggiano anche nel payload: una lista sola
+// evita che l'etichetta mostrata e quella salvata prendano strade diverse.
+const obiettivi = [
+	"Dimagrimento e ricomposizione corporea",
+	"Tonificazione e forza",
+	"Preparazione atletica o gara",
+	"Recupero funzionale e postura",
+	"Rientro dopo un lungo stop",
+	"Gravidanza o post parto",
+];
+
+const livelli = [
+	"Non mi alleno da tempo",
+	"Mi alleno saltuariamente",
+	"Mi alleno con regolarità",
+];
+
+const frequenze = ["1 volta a settimana", "2 volte a settimana", "3 o più volte a settimana", "Non lo so ancora"];
 
 const facts = [
 	{
@@ -126,19 +147,225 @@ const facts = [
 		</div>
 	</section>
 
-	<section class="final-cta">
-		<h2>Non sai quale trainer scegliere?</h2>
-		<p class="lede" style="margin-inline:auto">
-			Raccontaci il tuo obiettivo: ti mettiamo in contatto con il personal trainer più adatto a te.
-		</p>
-		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact>Prenota un tour</button>
-			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
+	<section class="fm-section" id="consulenza-fitness-manager">
+		<div class="fm-intro">
+			<span class="eyebrow">Consulenza gratuita</span>
+			<h2>Non sai quale trainer <em class="accent">scegliere</em>?</h2>
+			<p class="lede">
+				Rispondi a tre domande sul tuo obiettivo e lasciaci i tuoi dati: li riceve il <strong>Fitness Manager</strong>, che ti richiama personalmente per fissare una prima consulenza e indicarti il personal trainer più adatto a te.
+			</p>
+		</div>
+
+		<form class="fm-form" id="fm-form" novalidate>
+			<fieldset class="fm-fieldset">
+				<legend class="fm-legend">1 · Qual è il tuo obiettivo? <em>(puoi sceglierne più di uno)</em></legend>
+				<div class="lf__chips">
+					{obiettivi.map((o) => (
+						<label class="lf__chip">
+							<input type="checkbox" name="obiettivo" value={o} />
+							<span>{o}</span>
+						</label>
+					))}
+				</div>
+			</fieldset>
+
+			<fieldset class="fm-fieldset">
+				<legend class="fm-legend">2 · A che punto sei oggi?</legend>
+				<div class="lf__chips">
+					{livelli.map((l, i) => (
+						<label class="lf__chip">
+							<input type="radio" name="livello" value={l} checked={i === 0} />
+							<span>{l}</span>
+						</label>
+					))}
+				</div>
+			</fieldset>
+
+			<fieldset class="fm-fieldset">
+				<legend class="fm-legend">3 · Quanto vorresti allenarti?</legend>
+				<div class="lf__chips">
+					{frequenze.map((f, i) => (
+						<label class="lf__chip">
+							<input type="radio" name="frequenza" value={f} checked={i === 1} />
+							<span>{f}</span>
+						</label>
+					))}
+				</div>
+			</fieldset>
+
+			<div class="lf__grid">
+				<div class="lf__field">
+					<label for="fm-nome">Nome <span aria-hidden="true">*</span></label>
+					<input id="fm-nome" name="nome" type="text" autocomplete="given-name" />
+				</div>
+				<div class="lf__field">
+					<label for="fm-cognome">Cognome <span aria-hidden="true">*</span></label>
+					<input id="fm-cognome" name="cognome" type="text" autocomplete="family-name" />
+				</div>
+				<div class="lf__field lf__field--full">
+					<label for="fm-email">Email <span aria-hidden="true">*</span></label>
+					<input id="fm-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+				</div>
+				<div class="lf__field lf__field--full">
+					<label for="fm-cellulare">Cellulare <span aria-hidden="true">*</span></label>
+					<div class="lf__tel">
+						<select id="fm-prefisso" class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+							{prefissi.map((pf) => (
+								<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+							))}
+						</select>
+						<input id="fm-cellulare" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+					</div>
+				</div>
+				<div class="lf__field lf__field--full">
+					<label for="fm-nascita">Data di nascita <span aria-hidden="true">*</span></label>
+					<input id="fm-nascita" name="dataNascita" type="date" autocomplete="bday" />
+				</div>
+				<div class="lf__field lf__field--full">
+					<label for="fm-messaggio">Qualcosa che dobbiamo sapere? <em>(facoltativo)</em></label>
+					<textarea id="fm-messaggio" name="messaggio" rows="3" placeholder="Infortuni, orari in cui sei disponibile, esperienze precedenti…"></textarea>
+				</div>
+			</div>
+
+			<div class="lf__consent">
+				<label class="lf__consent-item">
+					<input id="fm-privacy" name="privacy" type="checkbox" />
+					<span>Ho letto e accetto la <a href={url("/privacy")} target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+				</label>
+				<label class="lf__consent-item">
+					<input id="fm-marketing" name="marketing" type="checkbox" />
+					<span>Acconsento a ricevere comunicazioni e novità da Ronchiverdi. <em>(facoltativo)</em></span>
+				</label>
+			</div>
+
+			<p class="fm-nota">
+				I dati che lasci qui vengono inoltrati al Fitness Manager del club: sarà lui a ricontattarti direttamente al telefono per fissare la prima consulenza.
+			</p>
+
+			<p class="lf__error" id="fm-error" hidden role="alert"></p>
+
+			<button class="btn" type="submit" id="fm-invia">Richiedi la consulenza</button>
+		</form>
+
+		<div class="fm-confirm" id="fm-confirm" hidden>
+			<div class="lf__confirm-check" aria-hidden="true">
+				<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</div>
+			<h3>Richiesta <em class="accent">ricevuta!</em></h3>
+			<p class="lede" style="margin-inline:auto" id="fm-confirm-text"></p>
+		</div>
+
+		<div class="fm-altro">
 			<a class="btn btn-outline" href={url("/abbonamenti")}>Scopri gli abbonamenti</a>
+			<button type="button" class="btn btn-outline" data-open-contact>Prenota un tour</button>
 		</div>
 	</section>
 
 	<script>
+		import { withTracking, trackLead } from "../../lib/tracking.client.js";
+
+		// Stesso giro degli altri form inline (vedi servizi/chinesis.astro):
+		// validazione in pagina, POST su /api/lead, conferma al posto del
+		// modulo. Qui in piu' viaggiano le risposte del questionario, che
+		// diventano le voci di `dettagli`, e la data di nascita.
+		const fmForm = document.getElementById("fm-form");
+		const fmErrore = document.getElementById("fm-error");
+		const fmConferma = document.getElementById("fm-confirm");
+		const fmConfermaTesto = document.getElementById("fm-confirm-text");
+		const fmInvia = document.getElementById("fm-invia");
+
+		function fmEmailValida(v) {
+			return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+		}
+
+		function fmTelefonoValido(v) {
+			const cifre = v.replace(/[^0-9]/g, "");
+			if (!/^[0-9\s-]+$/.test(v.trim())) return false;
+			if (cifre.length < 6 || cifre.length > 14) return false;
+			if (/^(\d)\1+$/.test(cifre)) return false;
+			return true;
+		}
+
+		function fmErroreMostra(msg, elemento) {
+			fmErrore.textContent = msg;
+			fmErrore.hidden = false;
+			if (elemento) elemento.focus();
+		}
+
+		function fmSelezionati(nome) {
+			return Array.from(fmForm.querySelectorAll(`input[name="${nome}"]:checked`)).map(
+				(i) => (i as HTMLInputElement).value
+			);
+		}
+
+		fmForm?.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			fmErrore.hidden = true;
+
+			const nome = document.getElementById("fm-nome") as HTMLInputElement;
+			const cognome = document.getElementById("fm-cognome") as HTMLInputElement;
+			const email = document.getElementById("fm-email") as HTMLInputElement;
+			const prefisso = document.getElementById("fm-prefisso") as HTMLSelectElement;
+			const cellulare = document.getElementById("fm-cellulare") as HTMLInputElement;
+			const nascita = document.getElementById("fm-nascita") as HTMLInputElement;
+			const messaggio = document.getElementById("fm-messaggio") as HTMLTextAreaElement;
+			const privacy = document.getElementById("fm-privacy") as HTMLInputElement;
+			const marketing = document.getElementById("fm-marketing") as HTMLInputElement;
+
+			const obiettiviScelti = fmSelezionati("obiettivo");
+			if (!obiettiviScelti.length) return fmErroreMostra("Scegli almeno un obiettivo.");
+			if (!nome.value.trim()) return fmErroreMostra("Inserisci il tuo nome.", nome);
+			if (!cognome.value.trim()) return fmErroreMostra("Inserisci il tuo cognome.", cognome);
+			if (!fmEmailValida(email.value)) return fmErroreMostra("Inserisci un indirizzo email valido.", email);
+			if (!fmTelefonoValido(cellulare.value)) return fmErroreMostra("Inserisci un numero di cellulare valido.", cellulare);
+			if (!nascita.value) return fmErroreMostra("Inserisci la tua data di nascita.", nascita);
+			if (!privacy.checked) return fmErroreMostra("Il consenso alla Privacy Policy è obbligatorio.");
+
+			fmInvia.disabled = true;
+			fmInvia.textContent = "Invio in corso…";
+
+			// Il questionario in una lista di righe leggibili: il CRM le mostra
+			// cosi' come sono, senza dover sapere com'erano fatte le domande.
+			const dettagli = [
+				...obiettiviScelti.map((o) => `Obiettivo: ${o}`),
+				...fmSelezionati("livello").map((l) => `Livello: ${l}`),
+				...fmSelezionati("frequenza").map((f) => `Frequenza: ${f}`),
+			];
+
+			const datiLead = {
+				origine: "fitness-manager-inline",
+				pagina: location.pathname,
+				cta: "Consulenza con il Fitness Manager",
+				nome: nome.value.trim(),
+				cognome: cognome.value.trim(),
+				email: email.value.trim(),
+				cellulare: `${prefisso.value} ${cellulare.value.trim()}`,
+				dataNascita: nascita.value,
+				dettagli,
+				messaggio: messaggio.value.trim(),
+				privacy: privacy.checked,
+				marketing: marketing.checked,
+			};
+
+			try {
+				const res = await fetch("/api/lead", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(withTracking(datiLead)),
+				});
+				if (!res.ok) throw new Error("request failed");
+				trackLead(datiLead);
+			} catch {
+				fmInvia.disabled = false;
+				fmInvia.textContent = "Richiedi la consulenza";
+				return fmErroreMostra("Non siamo riusciti a inviare la richiesta. Riprova, oppure chiamaci direttamente.");
+			}
+
+			fmConfermaTesto.textContent = `Grazie ${nome.value.trim()}, la tua richiesta è arrivata al Fitness Manager: ti richiamerà al numero che ci hai lasciato per fissare la prima consulenza.`;
+			fmForm.hidden = true;
+			fmConferma.hidden = false;
+		});
+
 		document.querySelectorAll(".pt-card").forEach((card) => {
 			const toggle = () => card.classList.toggle("is-open");
 			card.addEventListener("click", (e) => {
@@ -382,26 +609,92 @@ const facts = [
 			}
 		}
 
-		.final-cta {
+		.fm-section {
 			padding: 6rem 1.5rem;
-			text-align: center;
 			background: var(--bg-alt);
 		}
-		.final-cta .lede {
-			margin-bottom: 2rem;
+		.fm-intro {
+			text-align: center;
+			/* Stessa larghezza del modulo: il testo che lo introduce e i campi
+			   che si compilano devono stare sulla stessa colonna, o l'occhio
+			   legge due blocchi diversi invece di uno solo. */
+			max-width: 40rem;
+			margin: 0 auto 3rem;
 		}
-		.final-cta__buttons {
+		.fm-intro .lede {
+			/* .lede si ferma a 32rem: qui la colonna la decide .fm-intro. */
+			max-width: none;
+			margin-bottom: 0;
+		}
+		.fm-form {
+			max-width: 40rem;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			gap: 1.6rem;
+		}
+		.fm-fieldset {
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+		.fm-legend {
+			padding: 0;
+			margin-bottom: 0.6rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+		}
+		.fm-legend em {
+			font-style: normal;
+			text-transform: none;
+			letter-spacing: 0.04em;
+			opacity: 0.75;
+		}
+		.fm-nota {
+			margin: 0;
+			padding: 0.9rem 1.1rem;
+			background: var(--bg);
+			border-left: 2px solid var(--accent);
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.fm-form .btn {
+			align-self: center;
+			border: none;
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+		.fm-confirm {
+			max-width: 34rem;
+			margin: 0 auto;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+		}
+		.fm-confirm .lf__confirm-check {
+			background: var(--bg);
+		}
+		.fm-form[hidden],
+		.fm-confirm[hidden] {
+			display: none !important;
+		}
+		.fm-altro {
 			display: flex;
 			gap: 1rem;
 			justify-content: center;
 			flex-wrap: wrap;
+			margin-top: 3rem;
 		}
-		.final-cta__buttons .btn {
+		.fm-altro .btn {
 			cursor: pointer;
 			font-family: var(--font-sans);
-			border: none;
-		}
-		.final-cta__buttons .btn-outline {
 			border: 1px solid currentColor;
 		}
 	</style>

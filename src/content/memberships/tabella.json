@@ -1,60 +1,60 @@
 {
   "plans": [
-    { "key": "gold", "name": "Gold", "price": "170€", "featured": true },
-    { "key": "silver", "name": "Silver", "price": "158€" },
-    { "key": "gym", "name": "Gym", "price": "99€" },
-    { "key": "swim", "name": "Swim", "price": "99€", "duration": "11 mesi · agosto escluso" }
+    {"key": "gym", "name": "Gym", "price": "99€"},
+    {"key": "swim", "name": "Swim", "price": "99€", "duration": "11 mesi · agosto escluso"},
+    {"key": "silver", "name": "Silver", "price": "158€"},
+    {"key": "gold", "name": "Gold", "price": "170€", "featured": true}
   ],
   "features": [
     {
       "label": "Gym Floor",
-      "note": "Sala pesi con macchinari Technogym",
-      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+      "note": "Quattro spazi per allenarti in autonomia: skill area, cardio e isotonici Technogym, pesi liberi e area funzionale, con gli istruttori in sala. Programma di allenamento personalizzato incluso.",
+      "access": {"gold": "full", "silver": "full", "gym": "full", "swim": "none"}
     },
     {
       "label": "Corsi Fitness",
-      "note": "Corsi di gruppo per tutti i livelli",
-      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+      "note": "Un palinsesto per tutta la settimana: mobilità, pilates, yoga, tonificazione, funzionale e danza. Prenoti dall'App del Club fino a esaurimento posti.",
+      "access": {"gold": "full", "silver": "full", "gym": "full", "swim": "none"}
     },
     {
       "label": "Hyrox Training",
-      "note": "Allenamenti specifici per la gara fitness più intensa al mondo",
-      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "none" }
+      "note": "La Functional Area powered by Lacertosus, con l'attrezzatura ufficiale della gara: allenamento libero, sessioni Hyrox Workout con coach certificati e Functional Training.",
+      "access": {"gold": "full", "silver": "full", "gym": "full", "swim": "none"}
     },
     {
       "label": "Acqua Fitness",
-      "note": "AquaStep, hydrobike e allenamento in acqua",
-      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "full" }
+      "note": "Corsi in acqua tutto l'anno fra vasca interna ed esterna — acquagym, hydrobike e AquaStep — per lavorare su tonicità e resistenza senza carico sulle articolazioni.",
+      "access": {"gold": "full", "silver": "full", "gym": "none", "swim": "full"}
     },
     {
       "label": "Nuoto Libero",
-      "note": "assistito",
-      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "full" }
+      "note": "Nuoto assistito da bagnino, senza prenotazione e senza fasce riservate: con l'abbonamento attivo una corsia libera è sempre garantita.",
+      "access": {"gold": "full", "silver": "full", "gym": "none", "swim": "full"}
     },
     {
       "label": "Piscina Estiva",
-      "note": "outdoor",
-      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "none" }
+      "note": "La vasca scoperta immersa nel verde del club, aperta da giugno ad agosto: si aggiunge a quella interna per nuotare, fare acqua fitness o prendere il sole.",
+      "access": {"gold": "full", "silver": "full", "gym": "none", "swim": "none"}
     },
     {
       "label": "Spa",
-      "note": "Chinesis Postural Lab, Relax Zone",
-      "access": { "gold": "full", "silver": "full", "gym": "full", "swim": "full" }
+      "note": "Il percorso benessere della Relax Zone — sauna, bagno turco e area relax — e gli spazi di Chinesis Postural Lab.",
+      "access": {"gold": "full", "silver": "full", "gym": "full", "swim": "full"}
     },
     {
       "label": "Triathlon",
-      "note": "Nuoto, ciclismo e corsa con supporto tecnico qualificato",
-      "access": { "gold": "full", "silver": "full", "gym": "none", "swim": "none" }
+      "note": "Nuoto, ciclismo e corsa seguiti da tecnici federali, dalla Young School alla squadra Master: un unico percorso per le tre discipline.",
+      "access": {"gold": "full", "silver": "full", "gym": "none", "swim": "none"}
     },
     {
       "label": "Padel",
-      "note": "3 campi, coperti e scoperti",
-      "access": { "gold": "rate", "silver": "rate", "gym": "none", "swim": "none" }
+      "note": "Tre campi, coperti e scoperti, aperti anche ai non soci: prenoti su Wansport, da solo o in gruppo. Con l'abbonamento hai la tariffa agevolata.",
+      "access": {"gold": "rate", "silver": "rate", "gym": "none", "swim": "none"}
     },
     {
       "label": "Tennis",
-      "note": "9 campi in terra rossa",
-      "access": { "gold": "rate", "silver": "none", "gym": "none", "swim": "none" }
+      "note": "Nove campi in terra rossa, sei coperti e riscaldati da ottobre a marzo. Nella stagione estiva i campi sono compresi nell'abbonamento Gold; le ore invernali, i corsi e le lezioni si acquistano a parte.",
+      "access": {"gold": "rate", "silver": "none", "gym": "none", "swim": "none"}
     }
   ]
 }
