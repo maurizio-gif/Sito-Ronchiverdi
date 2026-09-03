@@ -328,7 +328,7 @@ const enti = [
 		margin-top: 2rem;
 	}
 
-	@media (max-width: 760px) {
+	@media (max-width: 760px), (orientation: portrait) {
 		.find-us__info {
 			grid-template-columns: repeat(2, 1fr);
 		}
@@ -583,7 +583,7 @@ const enti = [
 	.footer-bottom .muted {
 		color: rgba(246, 239, 222, 0.5);
 	}
-	@media (max-width: 1100px) {
+	@media (max-width: 1100px), (orientation: portrait) {
 		.footer-grid {
 			grid-template-columns: repeat(3, 1fr);
 			gap: 2.5rem 2rem;
@@ -592,7 +592,7 @@ const enti = [
 			grid-column: 1 / -1;
 		}
 	}
-	@media (max-width: 700px) {
+	@media (max-width: 700px), (orientation: portrait) {
 		.footer-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}

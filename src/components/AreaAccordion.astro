@@ -474,7 +474,7 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 		background: var(--accent);
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 900px), (orientation: portrait) {
 		.area__panel-inner {
 			grid-template-columns: 1fr;
 			gap: 1.75rem;

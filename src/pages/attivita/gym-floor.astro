@@ -433,7 +433,7 @@ const faq = [
 			border-radius: 20px;
 			box-shadow: 0 16px 40px -16px rgba(28, 28, 24, 0.35);
 		}
-		@media (max-width: 900px) {
+		@media (max-width: 900px), (orientation: portrait) {
 			.about {
 				grid-template-columns: 1fr;
 				gap: 2.5rem;
@@ -502,7 +502,7 @@ const faq = [
 			color: var(--text-muted);
 			line-height: 1.65;
 		}
-		@media (max-width: 1040px) {
+		@media (max-width: 1040px), (orientation: portrait) {
 			.servizio-grid {
 				grid-template-columns: repeat(2, 1fr);
 			}
@@ -589,7 +589,7 @@ const faq = [
 		.orari__table :global(.hours-table) {
 			max-width: none;
 		}
-		@media (max-width: 860px) {
+		@media (max-width: 860px), (orientation: portrait) {
 			.orari {
 				grid-template-columns: 1fr;
 				gap: 2rem;
@@ -676,7 +676,7 @@ const faq = [
 			flex-wrap: wrap;
 			margin-top: 3rem;
 		}
-		@media (max-width: 760px) {
+		@media (max-width: 760px), (orientation: portrait) {
 			.personal-grid {
 				grid-template-columns: 1fr;
 			}

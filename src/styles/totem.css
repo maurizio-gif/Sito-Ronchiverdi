@@ -1,0 +1,91 @@
+/* ============================================================================
+   Totem verticale — 27" in 9:16 (1080×1920, o 1440×2560 sui pannelli 2K)
+   ----------------------------------------------------------------------------
+   Il totem non è "un desktop stretto": si guarda in piedi da 70-100 cm e si usa
+   col dito. Rispetto a un monitor da scrivania serve quindi testo più grande
+   (schermo più lontano e con densità più bassa) e aree toccabili più generose.
+
+   La condizione è volutamente in tre pezzi:
+   - `orientation: portrait`   → esclude ogni desktop e ogni monitor in
+                                 orizzontale, a qualunque risoluzione;
+   - `min-width: 900px`        → esclude gli smartphone, che hanno già il loro
+                                 layout mobile e non vanno ingranditi;
+   - `min-height: 1400px`      → esclude i tablet in verticale (un iPad Pro è
+                                 1024×1366): la scala del totem parte solo su
+                                 schermi davvero alti.
+   Le tre condizioni insieme individuano il totem senza dipendere dai pixel
+   esatti del pannello: valgono sia per un 1080×1920 sia per un 1440×2560. La
+   stessa terna compare nei componenti che hanno un ritocco proprio (Nav,
+   WeeklySchedule, index): se cambia qui va cambiata anche là.
+
+   Il layout (colonne, griglie, menu) non è ridefinito qui: i componenti hanno
+   già i loro breakpoint tablet, estesi a `(orientation: portrait)` perché su
+   1080 px di larghezza la versione a più colonne del desktop starebbe stretta.
+   Questo file si occupa della scala: tipografia, misura di lettura, tocco.
+   ============================================================================ */
+
+@media (orientation: portrait) and (min-width: 900px) and (min-height: 1400px) {
+	/* Tutta la scala tipografica del progetto è in rem (vedi tokens.css):
+	   alzare la radice ingrandisce testi, padding e gap in modo coerente,
+	   senza dover ritoccare un valore per volta. */
+	html {
+		font-size: 20px;
+		/* La barra in alto resta fissa e sul totem è più alta: senza questo
+		   margine i link con ancora (per esempio `/#attivita`) fanno atterrare
+		   il titolo della sezione proprio sotto la barra. */
+		scroll-padding-top: 8rem;
+	}
+
+	/* Pannelli 2K: a parità di pollici i pixel sono più piccoli, quindi la
+	   stessa misura in px si legge peggio. */
+	@media (min-width: 1300px) {
+		html {
+			font-size: 26px;
+		}
+	}
+
+	/* Il titolo di pagina è quello che si legge da più lontano: parte più
+	   grande e continua a salire con la larghezza dello schermo. */
+	:root {
+		--text-4xl: clamp(3.4rem, 8vw, 5.5rem);
+	}
+
+	/* Misura di lettura del paragrafo di apertura. Diverse pagine lo allargano
+	   (`max-width: none`, oppure 76rem) perché sul desktop vive in una colonna
+	   della griglia già stretta di suo: sul totem quella colonna è tutta la
+	   larghezza dello schermo e la riga arriverebbe a 110 caratteri, il doppio
+	   di quanto si segue comodamente. L'`!important` serve a riportare sotto
+	   controllo quegli allargamenti, che hanno tutti specificità più alta di
+	   `.lede`: è l'unico punto del file che ne ha bisogno, e vale solo qui. */
+	.lede {
+		max-width: 40rem !important;
+	}
+
+	/* Stesso motivo per il testo corrente. Essendo un `max-width` non stringe
+	   niente che sia già più stretto, quindi funziona come regola unica per
+	   tutte le pagine invece di un ritocco per componente. */
+	p {
+		max-width: 42rem;
+	}
+	/* Questi due hanno una misura propria più larga, pensata per la griglia
+	   del desktop, e specificità maggiore di `p`. */
+	.facts-band__lede,
+	.body-copy {
+		max-width: 42rem;
+	}
+
+	/* Area toccabile: 44 px è il minimo che si consiglia su smartphone, ma un
+	   totem si usa in piedi e di fretta — qui si sta più larghi. */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 4rem;
+		padding: 1.1rem 2.4rem;
+	}
+}
+
+/* Nota: le card dei caroselli in home non hanno bisogno di niente qui. Quello
+   che sul desktop si scopre passandoci sopra col mouse, su uno schermo touch
+   si apre da sé sulla card al centro (vedi il ramo `hover: none` in
+   index.astro), quindi sul totem il testo è già visibile. */
