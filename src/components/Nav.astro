@@ -555,7 +555,11 @@ const links = [
 		transform: translateY(0);
 	}
 
-	@media (max-width: 860px) {
+	/* Sotto gli 860 px la barra completa non ci sta: su un totem verticale da
+	   1080 px il pulsante "Prenota un tour" finiva fuori schermo e la pagina
+	   scorreva in orizzontale. Il menu compatto vale quindi per ogni schermo
+	   verticale, non solo per i telefoni. */
+	@media (max-width: 860px), (orientation: portrait) {
 		.nav {
 			padding: 0.5rem 1.25rem;
 		}
@@ -573,6 +577,53 @@ const links = [
 		}
 		.nav-hamburger {
 			display: flex;
+		}
+	}
+
+	/* Totem verticale: stessa struttura del menu compatto, ma alla scala di uno
+	   schermo da 27" guardato in piedi (la condizione è spiegata in
+	   styles/totem.css). Logo e hamburger non sono in rem, quindi non
+	   seguono la scala della radice e vanno alzati qui. */
+	@media (orientation: portrait) and (min-width: 900px) and (min-height: 1400px) {
+		.nav {
+			padding: 1rem 2.5rem;
+		}
+		.nav-logo img {
+			height: 5.5rem;
+		}
+		.nav-hamburger {
+			width: 4rem;
+			height: 4rem;
+			gap: 0.5rem;
+		}
+		.nav-hamburger span {
+			width: 2.4rem;
+			height: 2px;
+		}
+		.nav-hamburger.open span:nth-child(1) {
+			transform: translateY(0.65rem) rotate(45deg);
+		}
+		.nav-hamburger.open span:nth-child(3) {
+			transform: translateY(-0.65rem) rotate(-45deg);
+		}
+		.nav-mobile {
+			padding: 12rem 4rem 4rem;
+			/* Sul telefono la lista si allunga fino ai pulsanti in fondo; su
+			   1920 px di altezza lascerebbe invece un buco al centro dello
+			   schermo. Qui il menu resta un blocco compatto, nella fascia
+			   dove il dito arriva senza allungarsi. */
+			justify-content: center;
+		}
+		.nav-mobile-list {
+			flex: 0 1 auto;
+		}
+		/* Le voci del menu sono la superficie toccabile principale del totem:
+		   qui diventano righe alte, non testo da centrare col dito. */
+		.nav-mobile-link {
+			padding: 1.4rem 0;
+		}
+		.nav-mobile-sublink {
+			padding: 1rem 1.6rem;
 		}
 	}
 </style>

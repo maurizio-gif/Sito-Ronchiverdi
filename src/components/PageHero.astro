@@ -148,7 +148,7 @@ const hasExtra = Astro.slots.has("default");
 		}
 	}
 
-	@media (max-width: 860px) {
+	@media (max-width: 860px), (orientation: portrait) {
 		.page-hero {
 			grid-template-columns: 1fr;
 			padding: 3rem 1.5rem 4rem;

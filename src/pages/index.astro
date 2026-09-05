@@ -631,7 +631,7 @@ const clubGallery = [
 			border: 6px solid var(--bg);
 			box-shadow: 0 12px 32px -8px rgba(28, 28, 24, 0.35);
 		}
-		@media (max-width: 860px) {
+		@media (max-width: 860px), (orientation: portrait) {
 			.chi-siamo-grid {
 				grid-template-columns: 1fr;
 			}
@@ -697,7 +697,7 @@ const clubGallery = [
 			color: var(--text-muted);
 			margin: 0;
 		}
-		@media (max-width: 760px) {
+		@media (max-width: 760px), (orientation: portrait) {
 			.stats {
 				grid-template-columns: 1fr 1fr;
 				row-gap: 2.5rem;
@@ -950,7 +950,7 @@ const clubGallery = [
 			padding: 0.55rem 1rem;
 			border-radius: var(--radius);
 		}
-		@media (max-width: 860px) {
+		@media (max-width: 860px), (orientation: portrait) {
 			.act-card {
 				flex: 0 0 calc((100% - 1.25rem - var(--peek)) / 2);
 			}
@@ -1061,7 +1061,7 @@ const clubGallery = [
 			opacity: 1;
 			transform: translateY(0);
 		}
-		@media (max-width: 760px) {
+		@media (max-width: 760px), (orientation: portrait) {
 			.club-gallery {
 				grid-template-columns: repeat(2, 1fr);
 				grid-auto-rows: 8rem;
@@ -1227,7 +1227,7 @@ const clubGallery = [
 		.young-school-content .lede {
 			margin-left: 0;
 		}
-		@media (max-width: 760px) {
+		@media (max-width: 760px), (orientation: portrait) {
 			.young-school {
 				grid-template-columns: 1fr;
 			}
@@ -1349,7 +1349,7 @@ const clubGallery = [
 		.eventi-preview__cta {
 			margin-top: 3rem;
 		}
-		@media (max-width: 960px) {
+		@media (max-width: 960px), (orientation: portrait) {
 			.eventi-grid {
 				grid-template-columns: 1fr;
 			}
@@ -1362,6 +1362,55 @@ const clubGallery = [
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+		/* ---- Totem verticale (condizione spiegata in styles/totem.css) ---- */
+		@media (orientation: portrait) and (min-width: 900px) and (min-height: 1400px) {
+			/* I quattro numeri su due righe sono la resa da telefono: su 1080 px
+			   ci stanno tutti in fila, che è il modo in cui la fascia è
+			   disegnata (una riga sola, separata dai filetti). */
+			.stats {
+				grid-template-columns: repeat(4, 1fr);
+				row-gap: 0;
+			}
+			.stat:nth-child(3)::before {
+				display: block;
+			}
+			/* Un hero a schermo pieno su 1920 px di altezza lascia il titolo in
+			   mezzo al vuoto e non lascia intuire che sotto ci sia altro:
+			   accorciandolo, la sezione successiva si affaccia in fondo e
+			   invita a scorrere. */
+			.hero {
+				min-height: 82vh;
+				min-height: 82svh;
+			}
+			.hero-content {
+				padding: 5rem 3rem;
+			}
+			/* Alla scala del totem il titolo su una riga sola arriverebbe da un
+			   bordo all'altro: le tre righe fisse tengono insieme il nome del
+			   club invece di spezzarlo dove capita. */
+			.hero-title-riga {
+				display: block;
+			}
+			.hero-spot {
+				background: radial-gradient(
+					ellipse 86% 30% at 50% 50%,
+					rgba(28, 28, 24, 0.62) 0%,
+					rgba(28, 28, 24, 0.42) 45%,
+					rgba(28, 28, 24, 0.15) 75%,
+					rgba(28, 28, 24, 0) 100%
+				);
+			}
+			/* Frecce dei caroselli: 40 px erano tarati sul puntatore del mouse,
+			   qui si preme col dito. */
+			.carousel-btn {
+				width: 4rem;
+				height: 4rem;
+			}
+			.carousel-btn svg {
+				width: 1.4rem;
+				height: 1.4rem;
+			}
 		}
 	</style>
 

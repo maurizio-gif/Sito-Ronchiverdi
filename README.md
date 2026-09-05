@@ -65,6 +65,24 @@ Le collection gestite da Tina:
 Lo schema è definito in due punti che devono restare allineati:
 `tina/config.ts` (editor) e `src/content.config.ts` (validazione Astro).
 
+## Totem verticale
+
+Oltre a desktop e mobile il sito è tarato su un **totem da 27" in verticale**
+(9:16 — 1080×1920, o 1440×2560 sui pannelli 2K), pensato per stare all'ingresso
+del club: si guarda in piedi da circa un metro e si usa col dito.
+
+Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
+
+- i breakpoint dei componenti valgono anche `(orientation: portrait)`, così su
+  1080 px di larghezza si usa il layout a colonna singola invece di quello
+  desktop (che con la barra di navigazione completa usciva dallo schermo);
+- `src/styles/totem.css` alza la scala — tipografia, misura di lettura, aree
+  toccabili — sotto una condizione che individua il totem senza dipendere dalla
+  risoluzione esatta (`portrait` + larghezza ≥ 900px + altezza ≥ 1400px, quindi
+  fuori telefoni, tablet e monitor in orizzontale). La stessa condizione è
+  ripetuta nei componenti che hanno un ritocco proprio (`Nav`,
+  `WeeklySchedule`, `index`): se cambia, va cambiata anche là.
+
 ## Stato attuale / prossimi passi
 
 - [x] Scaffold Astro + Tina CMS funzionante (dev, build, admin)

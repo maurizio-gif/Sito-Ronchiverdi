@@ -250,6 +250,35 @@ const modalId = `planning-modal-${id}`;
 		line-height: 1.6;
 		color: var(--text-muted);
 	}
+
+	/* ---- Totem verticale (condizione spiegata in styles/totem.css) ---- */
+	@media (orientation: portrait) and (min-width: 900px) and (min-height: 1400px) {
+		/* Sul desktop la griglia tiene una larghezza minima e, se non ci sta,
+		   si scorre in orizzontale. Su un totem quello scorrimento dentro la
+		   tabella è la cosa più difficile da indovinare per chi passa: qui le
+		   colonne si stringono quanto serve, così la settimana si vede tutta
+		   in una schermata e resta da leggere, non da manovrare. */
+		.planning-grid {
+			min-width: 0;
+		}
+		.planning-day {
+			min-width: 0;
+		}
+		.planning-day__head,
+		.planning-slot {
+			padding-inline: 0.55rem;
+		}
+		/* Il nome del corso va a capo invece di allargare la colonna. */
+		.planning-slot__name {
+			overflow-wrap: break-word;
+		}
+		/* La X del modale è quella di un puntatore: qui si chiude col dito. */
+		.planning-modal__close {
+			width: 3.4rem;
+			height: 3.4rem;
+			font-size: 1.8rem;
+		}
+	}
 </style>
 
 <style is:global>

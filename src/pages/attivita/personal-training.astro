@@ -584,12 +584,12 @@ const facts = [
 			flex-shrink: 0;
 		}
 
-		@media (max-width: 1080px) {
+		@media (max-width: 1080px), (orientation: portrait) {
 			.pt-grid {
 				grid-template-columns: repeat(3, 1fr);
 			}
 		}
-		@media (max-width: 760px) {
+		@media (max-width: 760px), (orientation: portrait) {
 			.pt-grid {
 				grid-template-columns: repeat(2, 1fr);
 				gap: 1rem;

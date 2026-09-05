@@ -116,7 +116,7 @@ const { eyebrow, title, lede, items } = Astro.props;
 		color: var(--accent-on-dark);
 		opacity: 1;
 	}
-	@media (max-width: 760px) {
+	@media (max-width: 760px), (orientation: portrait) {
 		.facts-grid {
 			grid-template-columns: 1fr;
 		}

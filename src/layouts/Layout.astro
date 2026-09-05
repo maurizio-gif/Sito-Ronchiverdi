@@ -1,6 +1,7 @@
 ---
 import "../styles/tokens.css";
 import "../styles/base.css";
+import "../styles/totem.css";
 import "@fontsource/jost/300.css";
 import "@fontsource/jost/400.css";
 import "@fontsource/jost/400-italic.css";
@@ -55,7 +56,7 @@ const structuredData = {
 		<link rel="icon" href={url("favicon.ico")} sizes="any" />
 		<link rel="icon" type="image/png" href={url("favicon.png")} />
 		<link rel="apple-touch-icon" href={url("apple-touch-icon.png")} />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
 		{noindex && <meta name="robots" content="noindex, nofollow" />}
