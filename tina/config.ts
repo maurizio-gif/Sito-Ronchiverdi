@@ -128,6 +128,154 @@ export default defineConfig({
         ],
       },
       {
+        // Planning del club: un unico documento con gli orari di apertura e
+        // tutti i palinsesti settimanali. È la sorgente usata da ogni pagina
+        // (Planning, Acqua Fitness, Corsi Fitness, Nuoto Libero, Gym Floor,
+        // Padel, Hyrox): si modifica qui e si aggiorna ovunque.
+        name: "schedule",
+        label: "Planning e orari",
+        path: "src/content/schedules",
+        format: "json",
+        ui: { allowedActions: { create: false, delete: false } },
+        fields: [
+          { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          {
+            type: "object",
+            name: "hours",
+            label: "Tabelle orari",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.title }) },
+            fields: [
+              {
+                type: "string",
+                name: "id",
+                label: "Codice",
+                required: true,
+                description: "Identificativo usato dalle pagine (es. gym-floor). Non modificarlo.",
+              },
+              { type: "string", name: "title", label: "Titolo", required: true },
+              { type: "string", name: "note", label: "Nota" },
+              {
+                type: "object",
+                name: "rows",
+                label: "Righe",
+                list: true,
+                ui: { itemProps: (item) => ({ label: [item?.label, item?.hours].filter(Boolean).join(" · ") }) },
+                fields: [
+                  { type: "string", name: "label", label: "Giorni", required: true },
+                  { type: "string", name: "hours", label: "Orario", required: true },
+                ],
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "sections",
+            label: "Palinsesti settimanali",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.title }) },
+            fields: [
+              {
+                type: "string",
+                name: "id",
+                label: "Codice",
+                required: true,
+                description:
+                  "Identificativo usato dalle pagine (es. acqua-fitness). Non modificarlo: è il collegamento con la pagina dell'attività.",
+              },
+              { type: "string", name: "title", label: "Titolo", required: true },
+              {
+                type: "string",
+                name: "intro",
+                label: "Introduzione",
+                ui: { component: "textarea" },
+              },
+              {
+                type: "string",
+                name: "note",
+                label: "Nota sul palinsesto",
+                description: "Compare sotto al titolo, in tutte le pagine che mostrano questo palinsesto.",
+              },
+              {
+                type: "object",
+                name: "lessons",
+                label: "Tipologie di lezione",
+                list: true,
+                ui: { itemProps: (item) => ({ label: item?.name }) },
+                fields: [
+                  {
+                    type: "string",
+                    name: "id",
+                    label: "Codice",
+                    required: true,
+                    description: "Identificativo usato negli orari (es. hydrobike). Senza spazi.",
+                  },
+                  { type: "string", name: "name", label: "Nome", required: true },
+                  {
+                    type: "string",
+                    name: "description",
+                    label: "Descrizione",
+                    required: true,
+                    ui: { component: "textarea" },
+                  },
+                ],
+              },
+              {
+                type: "object",
+                name: "days",
+                label: "Giorni",
+                list: true,
+                ui: { itemProps: (item) => ({ label: item?.day }) },
+                fields: [
+                  {
+                    type: "string",
+                    name: "day",
+                    label: "Giorno",
+                    required: true,
+                    options: [
+                      { value: "lunedi", label: "Lunedì" },
+                      { value: "martedi", label: "Martedì" },
+                      { value: "mercoledi", label: "Mercoledì" },
+                      { value: "giovedi", label: "Giovedì" },
+                      { value: "venerdi", label: "Venerdì" },
+                      { value: "sabato", label: "Sabato" },
+                      { value: "domenica", label: "Domenica" },
+                    ],
+                  },
+                  {
+                    type: "object",
+                    name: "slots",
+                    label: "Lezioni in programma",
+                    list: true,
+                    ui: {
+                      itemProps: (item) => ({ label: [item?.time, item?.lesson].filter(Boolean).join(" · ") }),
+                    },
+                    fields: [
+                      {
+                        type: "string",
+                        name: "time",
+                        label: "Orario",
+                        required: true,
+                        description: "Es. 11.00 – 11.45",
+                      },
+                      {
+                        type: "string",
+                        name: "lesson",
+                        label: "Lezione (codice)",
+                        required: true,
+                        description: "Deve corrispondere al codice di una delle tipologie di lezione sopra.",
+                      },
+                      { type: "string", name: "trainer", label: "Trainer" },
+                      { type: "string", name: "note", label: "Nota (es. dal 16/9/26)" },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "trainer",
         label: "Personal Trainer",
         path: "src/content/trainers",

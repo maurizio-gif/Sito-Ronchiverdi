@@ -99,4 +99,55 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, trainers };
+// Planning del club: sorgente unica (src/content/schedules/planning.json)
+// editabile da Tina. Contiene gli orari di apertura e tutti i palinsesti
+// settimanali; ogni pagina pesca da qui la sezione che le serve, quindi si
+// modifica in un punto solo e si aggiorna ovunque.
+const scheduleDay = z.enum(["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica"]);
+
+const schedules = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/schedules" }),
+  schema: z.object({
+    title: z.string(),
+    hours: z
+      .array(
+        z.object({
+          id: z.string(),
+          title: z.string(),
+          note: z.string().optional(),
+          rows: z.array(z.object({ label: z.string(), hours: z.string() })),
+        })
+      )
+      .default([]),
+    sections: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        intro: z.string().optional(),
+        note: z.string().optional(),
+        lessons: z.array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+            description: z.string(),
+          })
+        ),
+        days: z.array(
+          z.object({
+            day: scheduleDay,
+            slots: z.array(
+              z.object({
+                time: z.string(),
+                lesson: z.string(),
+                trainer: z.string().optional(),
+                note: z.string().optional(),
+              })
+            ),
+          })
+        ),
+      })
+    ),
+  }),
+});
+
+export const collections = { pages, activities, services, memberships, events, trainers, schedules };

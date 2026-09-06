@@ -9,6 +9,8 @@ interface Lesson {
 interface Slot {
 	time: string;
 	id: string;
+	trainer?: string;
+	note?: string;
 }
 
 interface Props {
@@ -37,8 +39,12 @@ const modalId = `planning-modal-${id}`;
 							const lesson = lessons[slot.id];
 							return (
 								<button type="button" class="planning-slot" data-schedule={id} data-lesson={slot.id}>
-									<span class="planning-slot__time">{slot.time}</span>
+									<span class="planning-slot__time">
+										{slot.time}
+										{slot.note && <em class="planning-slot__note">{slot.note}</em>}
+									</span>
 									<span class="planning-slot__name">{lesson.name}</span>
+									{slot.trainer && <span class="planning-slot__trainer">{slot.trainer}</span>}
 								</button>
 							);
 						})
@@ -175,6 +181,17 @@ const modalId = `planning-modal-${id}`;
 		font-weight: 600;
 		color: var(--text-muted);
 		font-variant-numeric: tabular-nums;
+	}
+	.planning-slot__note {
+		font-style: italic;
+		font-weight: 500;
+		color: var(--accent);
+	}
+	.planning-slot__trainer {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		color: var(--text-muted);
+		line-height: 1.25;
 	}
 	.planning-slot__name {
 		font-family: var(--font-sans);

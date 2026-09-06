@@ -4,7 +4,8 @@ import PageHero from "../components/PageHero.astro";
 import IconFacts from "../components/IconFacts.astro";
 import Faq from "../components/Faq.astro";
 import WeeklySchedule from "../components/WeeklySchedule.astro";
-import { corsiFitnessLessons, corsiFitnessSchedule } from "../data/schedules";
+// Palinsesto dal file unico editabile da Tina (src/content/schedules/planning.json).
+import { getSchedule } from "../lib/schedules";
 import { url } from "../lib/paths";
 
 // La pagina sta su /hyrox e non sotto /attivita come le altre: è l'indirizzo
@@ -72,12 +73,13 @@ const attrezzatura = [
 ];
 
 // Solo le righe che riguardano il percorso Hyrox, prese dal palinsesto vero
-// (src/data/schedules.ts, lo stesso della pagina Planning): copiare gli orari
-// qui vorrebbe dire aggiornarli in due posti, e uno dei due resterebbe
-// indietro al primo cambio di stagione.
+// (la sezione "corsi-fitness" del planning, la stessa della pagina Planning):
+// copiare gli orari qui vorrebbe dire aggiornarli in due posti, e uno dei due
+// resterebbe indietro al primo cambio di stagione.
+const corsiFitness = await getSchedule("corsi-fitness");
 const ID_HYROX = ["hyrox-workout", "functional-training", "running-training"];
 const palinsestoHyrox = Object.fromEntries(
-	Object.entries(corsiFitnessSchedule).map(([giorno, slot]) => [
+	Object.entries(corsiFitness.schedule).map(([giorno, slot]) => [
 		giorno,
 		slot.filter((s) => ID_HYROX.includes(s.id)),
 	])
@@ -202,7 +204,7 @@ const faq = [
 				Le sessioni Hyrox Workout, il Functional Training e i gruppi di corsa, con orari sempre aggiornati. Tocca una lezione per leggere di cosa si tratta.
 			</p>
 		</div>
-		<WeeklySchedule id="hyrox" lessons={corsiFitnessLessons} schedule={palinsestoHyrox} />
+		<WeeklySchedule id="hyrox" lessons={corsiFitness.lessons} schedule={palinsestoHyrox} />
 		<div class="section-cta">
 			<a class="btn btn-outline" href={url("/planning")}>Vedi tutto il planning</a>
 		</div>

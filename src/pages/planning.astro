@@ -4,15 +4,13 @@ import { url } from "../lib/paths";
 import HoursTable from "../components/HoursTable.astro";
 import WeeklySchedule from "../components/WeeklySchedule.astro";
 import Faq from "../components/Faq.astro";
-import {
-	gymFloorHours,
-	corsiFitnessLessons,
-	corsiFitnessSchedule,
-	acquaFitnessLessons,
-	acquaFitnessSchedule,
-	nuotoLiberoLessons,
-	nuotoLiberoSchedule,
-} from "../data/schedules";
+// Orari e palinsesti arrivano tutti da src/content/schedules/planning.json,
+// il file unico editabile da Tina: le sezioni qui sotto sono le stesse che
+// vedono le pagine delle singole attività.
+import { getAllSchedules, getHours } from "../lib/schedules";
+
+const gymFloor = await getHours("gym-floor");
+const sezioni = await getAllSchedules();
 
 const faq = [
 	{
@@ -21,7 +19,7 @@ const faq = [
 	},
 	{
 		q: "Gli orari mostrati sono sempre aggiornati?",
-		a: "Il palinsesto Corsi Fitness e gli orari Gym Floor sono aggiornati; i planning di Acqua Fitness e Nuoto Libero sono al momento bozze in fase di aggiornamento.",
+		a: "I palinsesti Corsi Fitness e Acqua Fitness e gli orari Gym Floor sono aggiornati; il planning del Nuoto Libero è al momento una bozza in fase di aggiornamento.",
 	},
 	{
 		q: "Cosa succede se un corso non è disponibile nella fascia che mi interessa?",
@@ -44,39 +42,23 @@ const faq = [
 
 	<section class="planning-section">
 		<div class="planning-section__head">
-			<h2>Gym Floor</h2>
+			<h2>{gymFloor.title}</h2>
 			<p class="lede" style="margin-inline:0">Orari di apertura della sala pesi.</p>
 		</div>
-		<HoursTable rows={gymFloorHours} />
+		<HoursTable rows={gymFloor.rows} />
 	</section>
 
-	<section class="planning-section">
-		<div class="planning-section__head">
-			<h2>Corsi Fitness</h2>
-			<p class="lede" style="margin-inline:0">Il palinsesto settimanale dei corsi di gruppo.</p>
-		</div>
-		<WeeklySchedule id="corsi-fitness" lessons={corsiFitnessLessons} schedule={corsiFitnessSchedule} />
-	</section>
-
-	<section class="planning-section">
-		<div class="planning-section__head">
-			<h2>Acqua Fitness</h2>
-			<p class="lede" style="margin-inline:0">
-				Il palinsesto settimanale dei corsi in acqua. <em>Bozza in fase di aggiornamento.</em>
-			</p>
-		</div>
-		<WeeklySchedule id="acqua-fitness" lessons={acquaFitnessLessons} schedule={acquaFitnessSchedule} />
-	</section>
-
-	<section class="planning-section">
-		<div class="planning-section__head">
-			<h2>Nuoto Libero</h2>
-			<p class="lede" style="margin-inline:0">
-				Le fasce orarie dedicate al nuoto libero. <em>Bozza in fase di aggiornamento.</em>
-			</p>
-		</div>
-		<WeeklySchedule id="nuoto-libero" lessons={nuotoLiberoLessons} schedule={nuotoLiberoSchedule} />
-	</section>
+	{sezioni.map((sezione) => (
+		<section class="planning-section">
+			<div class="planning-section__head">
+				<h2>{sezione.title}</h2>
+				<p class="lede" style="margin-inline:0">
+					Il palinsesto settimanale. Clicca su una lezione per leggerne la descrizione.{sezione.note && <em> {sezione.note}</em>}
+				</p>
+			</div>
+			<WeeklySchedule id={sezione.id} lessons={sezione.lessons} schedule={sezione.schedule} />
+		</section>
+	))}
 
 	<Faq items={faq} />
 
