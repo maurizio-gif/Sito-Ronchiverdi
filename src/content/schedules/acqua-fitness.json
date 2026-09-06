@@ -1,0 +1,138 @@
+{
+  "title": "Acqua Fitness",
+  "intro": "L'acqua fitness è ginnastica in acqua a ritmo di musica: tonifica senza sovraccaricare le articolazioni, dà vigore a cuore e polmoni, favorisce la circolazione e ha un'azione drenante che contrasta ritenzione idrica e cellulite. L'acqua è il vero attrezzo: la resistenza che oppone al movimento è circa 12 volte superiore a quella dell'aria. Si lavora in acqua bassa e in acqua alta, con o senza piccoli attrezzi: non serve saper nuotare ed è adatta a tutti, anche in gravidanza o in caso di mal di schiena e dolori articolari.",
+  "note": "Il palinsesto può subire variazioni: verifica sempre gli aggiornamenti sull'App del Club.",
+  "lessons": [
+    {
+      "id": "hydrobike",
+      "name": "Hydrobike",
+      "description": "Attività su biciclette immerse in acqua, progettate per garantire stabilità e sicurezza. Si pedala seguendo il ritmo della musica, alternando lavoro aerobico a fasi più intense: gambe e glutei sono i protagonisti, con addominali e zona lombare attivi per il controllo posturale e un lavoro specifico per gli arti superiori. Migliora resistenza cardiovascolare e tono muscolare, con un alto dispendio energetico."
+    },
+    {
+      "id": "acquakickboxing",
+      "name": "Acquakickboxing",
+      "description": "Disciplina musicale che unisce acqua fitness e kick boxing: un mix di aerobica e arti marziali che permette di bruciare molte calorie. Armati di guantoni speciali si sferrano calci, pugni e gomitate: si rafforzano braccia e spalle, mentre calci e torsioni tonificano cosce, glutei, dorsali, pettorali e girovita. Ottima anche per scaricare stress e tensione."
+    },
+    {
+      "id": "aquastep",
+      "name": "Aquastep",
+      "description": "Attività musicale in acqua che utilizza un'apposita pedana rialzata (step) ancorata al fondo vasca. Il lavoro coinvolge soprattutto gli arti inferiori, ma tutti i distretti corporei partecipano al movimento e ne traggono beneficio."
+    },
+    {
+      "id": "extreme-power-step",
+      "name": "Extreme Power Step",
+      "description": "Versione ad alta intensità dell'Aquastep: i principi della lezione sono amplificati da blocchi di lavoro a complessità crescente e, a discrezione del trainer, dall'aggiunta delle cavigliere (Donuts Sponge Power)."
+    },
+    {
+      "id": "aquatrekking",
+      "name": "Aquatrekking",
+      "description": "Lezione a media/alta intensità su tapis roulant acquatico: la resistenza del rullo è proporzionale alla forza impressa, più spingi più l'intensità aumenta. Andature, cambi di ritmo ed esercizi funzionali sviluppano resistenza cardiovascolare, forza e controllo del core, con massimo dispendio energetico e minimo impatto articolare."
+    },
+    {
+      "id": "aqua-double-level",
+      "name": "Aqua Double Level",
+      "description": "Allenamento senza attrezzi, in cui l'unico strumento è l'acqua. Si impara a sfruttarne la resistenza naturale per allenare tutto il corpo, migliorando forza, resistenza e coordinazione e ottenendo ottimi risultati in termini di tonificazione, equilibrio e stabilità."
+    },
+    {
+      "id": "kick-to-donuts",
+      "name": "Kick to Donuts",
+      "description": "Allenamento completo con una fase in acqua bassa e una in acqua alta e due attrezzi specifici. I kick alle mani aumentano la resistenza e fanno lavorare braccia, spalle e parte centrale del corpo; i donuts alle caviglie favoriscono l'elevazione e intensificano l'attivazione di addominali e arti inferiori. Dinamica, ideale per tono muscolare, coordinazione e stabilità."
+    },
+    {
+      "id": "aqua-cardio-tone",
+      "name": "Aqua Cardio Tone",
+      "description": "Allenamento a corpo libero che combina fasi cardio e di tonificazione: movimenti fluidi e continui migliorano la capacità aerobica, mentre esercizi mirati rafforzano tutto il corpo. Un workout completo, efficace e accessibile a tutti."
+    },
+    {
+      "id": "kick-core",
+      "name": "Kick & Core",
+      "description": "Lezione incentrata sull'utilizzo dei kick per aumentare la resistenza dell'acqua e intensificare il lavoro muscolare. Particolare attenzione al core: addominali, lombari e stabilizzatori restano costantemente attivi per migliorare forza, postura e controllo del movimento."
+    },
+    {
+      "id": "hit-choreography",
+      "name": "Hit Choreography",
+      "description": "Ci si muove all'unisono, come un unico corpo. Lezione energica e aggregante basata su sequenze coreografiche in acqua: si lavora sul gioco di squadra, sull'esecuzione precisa di esercizi e spostamenti, sulla sincronizzazione, sul timing musicale e sui fondamentali di gara. Favorisce coordinazione, qualità del movimento e consapevolezza del corpo nel gruppo."
+    },
+    {
+      "id": "donuts-smile",
+      "name": "Donuts & Smile",
+      "description": "Lezione ad alta intensità in cui due attrezzi dalla massima efficacia si fondono in un allenamento funzionale intenso. Il lavoro è tecnico e potente: forza, controllo e precisione del gesto sono fondamentali. Ideale per chi cerca un allenamento muscolare profondo e sfidante."
+    },
+    {
+      "id": "aqua-wave-blast",
+      "name": "Aqua Wave Blast",
+      "description": "Un'esplosione di energia: lezione intensa che alterna picchi di lavoro cardiovascolare e muscolare, creando vere e proprie onde di movimento. Ritmo alto, grande coinvolgimento e massimo dispendio energetico."
+    },
+    {
+      "id": "aqua-functional-combo",
+      "name": "Aqua Functional Combo",
+      "description": "Allenamento funzionale in acqua che combina movimenti globali e multiarticolari. Si svolge con l'ausilio di piccoli attrezzi scelti dal trainer — palle mediche, manubri, candies e donuts — per lezioni sempre diverse e altamente adattabili. Migliora forza, coordinazione e funzionalità del movimento."
+    },
+    {
+      "id": "aqua-surprise",
+      "name": "Aqua Surprise",
+      "description": "Qui nulla è scontato: una lezione a sorpresa in cui struttura, intensità e attrezzi dipendono totalmente dal trainer. Creativa, imprevedibile e sempre stimolante, perfetta per chi ama allenarsi senza routine."
+    },
+    {
+      "id": "water-cross",
+      "name": "Water Cross",
+      "description": "Lezione innovativa che unisce allenamento funzionale, esercizi cardiovascolari e circuiti dinamici per migliorare forza, resistenza, coordinazione e tonicità. Grazie alla resistenza naturale dell'acqua ogni movimento è efficace ma a basso impatto articolare, adatto a tutti i livelli."
+    }
+  ],
+  "days": [
+    {
+      "day": "lunedi",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "kick-to-donuts", "trainer": "Denise" },
+        { "time": "13.00 – 13.45", "lesson": "hydrobike", "trainer": "Denise" },
+        { "time": "19.00 – 20.00", "lesson": "hit-choreography", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "martedi",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "aquastep", "trainer": "Denise" },
+        { "time": "12.30 – 13.15", "lesson": "aqua-double-level", "trainer": "Katherine" },
+        { "time": "19.00 – 19.45", "lesson": "donuts-smile", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "mercoledi",
+      "slots": [
+        { "time": "7.30 – 8.15", "lesson": "water-cross", "trainer": "Adrian", "note": "dal 16/9/26" },
+        { "time": "11.00 – 11.45", "lesson": "kick-core", "trainer": "Mattia" },
+        { "time": "13.00 – 13.45", "lesson": "aqua-functional-combo", "trainer": "Valentina" },
+        { "time": "19.00 – 19.45", "lesson": "aquatrekking", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "giovedi",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "aqua-cardio-tone", "trainer": "Katherine" },
+        { "time": "12.30 – 13.15", "lesson": "hydrobike", "trainer": "Katherine" },
+        { "time": "19.00 – 19.45", "lesson": "acquakickboxing", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "venerdi",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "aqua-functional-combo", "trainer": "Valentina" },
+        { "time": "12.30 – 13.15", "lesson": "aqua-functional-combo", "trainer": "Valentina" },
+        { "time": "19.00 – 19.45", "lesson": "extreme-power-step", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "sabato",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "aqua-wave-blast", "trainer": "Noemi" },
+        { "time": "13.00 – 20.00", "lesson": "aquatrekking", "trainer": "Noemi" }
+      ]
+    },
+    {
+      "day": "domenica",
+      "slots": [
+        { "time": "11.00 – 11.45", "lesson": "aqua-surprise", "trainer": "Trainer a rotazione" }
+      ]
+    }
+  ]
+}

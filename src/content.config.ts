@@ -99,4 +99,35 @@ const memberships = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, trainers };
+// Planning settimanali (Acqua Fitness, ...): sorgente unica editabile da Tina.
+// Modificarla qui aggiorna tutte le pagine che mostrano quel planning.
+const schedules = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/schedules" }),
+  schema: z.object({
+    title: z.string(),
+    intro: z.string().optional(),
+    note: z.string().optional(),
+    lessons: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+      })
+    ),
+    days: z.array(
+      z.object({
+        day: z.enum(["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica"]),
+        slots: z.array(
+          z.object({
+            time: z.string(),
+            lesson: z.string(),
+            trainer: z.string().optional(),
+            note: z.string().optional(),
+          })
+        ),
+      })
+    ),
+  }),
+});
+
+export const collections = { pages, activities, services, memberships, events, trainers, schedules };

@@ -218,58 +218,8 @@ export const corsiFitnessSchedule = {
 	domenica: [{ time: "11.00 – 12.00", id: "jolly-class" }],
 };
 
-// --- Acqua Fitness: palinsesto settimanale (BOZZA, da confermare) ---
-export const acquaFitnessLessons = {
-	"acqua-trekking": {
-		name: "Acqua Trekking",
-		description: "Camminata in acqua a ritmo sostenuto: lavora su resistenza e tonificazione con il minimo impatto sulle articolazioni.",
-	},
-	hydrobike: {
-		name: "Hydrobike",
-		description: "Pedalata su bike subacquea a ritmo di musica: un allenamento cardio intenso, divertente e a bassissimo impatto.",
-	},
-	"step-acqua": {
-		name: "Step Acqua",
-		description: "Il classico step rivisitato in acqua, su base rialzata: coordinazione, resistenza cardiovascolare e tonificazione.",
-	},
-	acquagym: {
-		name: "Acquagym",
-		description: "Ginnastica a corpo libero in acqua, a ritmo di musica: un allenamento completo per tonificare tutto il corpo.",
-	},
-	"swim-training": {
-		name: "Swim Training",
-		description: "Allenamento di nuoto strutturato, per chi vuole migliorare tecnica e resistenza nelle quattro nuotate.",
-	},
-	"total-body-acqua": {
-		name: "Total Body Acqua",
-		description: "Circuito a corpo libero in acqua che alterna forza, resistenza e mobilità per un allenamento a 360°.",
-	},
-};
-
-export const acquaFitnessSchedule = {
-	lunedi: [
-		{ time: "9.00 – 9.45", id: "acqua-trekking" },
-		{ time: "18.30 – 19.15", id: "acquagym" },
-	],
-	martedi: [
-		{ time: "9.00 – 9.45", id: "hydrobike" },
-		{ time: "18.30 – 19.15", id: "step-acqua" },
-	],
-	mercoledi: [
-		{ time: "9.00 – 9.45", id: "acqua-trekking" },
-		{ time: "18.30 – 19.15", id: "total-body-acqua" },
-	],
-	giovedi: [
-		{ time: "9.00 – 9.45", id: "hydrobike" },
-		{ time: "18.30 – 19.15", id: "acquagym" },
-	],
-	venerdi: [
-		{ time: "9.00 – 9.45", id: "swim-training" },
-		{ time: "18.30 – 19.15", id: "step-acqua" },
-	],
-	sabato: [{ time: "10.00 – 10.45", id: "acquagym" }],
-	domenica: [],
-};
+// --- Acqua Fitness: il palinsesto è gestito da Tina CMS ---
+// Sorgente unica: src/content/schedules/acqua-fitness.json (vedi src/lib/schedules.ts).
 
 // --- Nuoto Libero: fasce settimanali (BOZZA, da confermare) ---
 export const nuotoLiberoLessons = {

@@ -128,6 +128,104 @@ export default defineConfig({
         ],
       },
       {
+        // Planning settimanali (Acqua Fitness, ...): sorgente unica usata da
+        // tutte le pagine che mostrano quel palinsesto (Planning, pagina
+        // dell'attività, ...). Modificandolo qui si aggiorna ovunque.
+        name: "schedule",
+        label: "Planning settimanali",
+        path: "src/content/schedules",
+        format: "json",
+        ui: { allowedActions: { create: false, delete: false } },
+        fields: [
+          { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          {
+            type: "string",
+            name: "intro",
+            label: "Introduzione",
+            ui: { component: "textarea" },
+          },
+          {
+            type: "string",
+            name: "note",
+            label: "Nota sul palinsesto",
+            description: "Compare sotto al titolo del planning, in tutte le pagine che lo mostrano.",
+          },
+          {
+            type: "object",
+            name: "lessons",
+            label: "Tipologie di lezione",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.name }) },
+            fields: [
+              {
+                type: "string",
+                name: "id",
+                label: "Codice",
+                required: true,
+                description: "Identificativo usato negli orari (es. hydrobike). Non usare spazi.",
+              },
+              { type: "string", name: "name", label: "Nome", required: true },
+              {
+                type: "string",
+                name: "description",
+                label: "Descrizione",
+                required: true,
+                ui: { component: "textarea" },
+              },
+            ],
+          },
+          {
+            type: "object",
+            name: "days",
+            label: "Giorni",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.day }) },
+            fields: [
+              {
+                type: "string",
+                name: "day",
+                label: "Giorno",
+                required: true,
+                options: [
+                  { value: "lunedi", label: "Lunedì" },
+                  { value: "martedi", label: "Martedì" },
+                  { value: "mercoledi", label: "Mercoledì" },
+                  { value: "giovedi", label: "Giovedì" },
+                  { value: "venerdi", label: "Venerdì" },
+                  { value: "sabato", label: "Sabato" },
+                  { value: "domenica", label: "Domenica" },
+                ],
+              },
+              {
+                type: "object",
+                name: "slots",
+                label: "Lezioni in programma",
+                list: true,
+                ui: { itemProps: (item) => ({ label: [item?.time, item?.lesson].filter(Boolean).join(" · ") }) },
+                fields: [
+                  {
+                    type: "string",
+                    name: "time",
+                    label: "Orario",
+                    required: true,
+                    description: "Es. 11.00 – 11.45",
+                  },
+                  {
+                    type: "string",
+                    name: "lesson",
+                    label: "Lezione (codice)",
+                    required: true,
+                    description: "Deve corrispondere al codice di una delle tipologie di lezione sopra.",
+                  },
+                  { type: "string", name: "trainer", label: "Trainer" },
+                  { type: "string", name: "note", label: "Nota (es. dal 16/9/26)" },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
         name: "trainer",
         label: "Personal Trainer",
         path: "src/content/trainers",

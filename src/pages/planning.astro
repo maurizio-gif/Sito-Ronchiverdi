@@ -8,11 +8,14 @@ import {
 	gymFloorHours,
 	corsiFitnessLessons,
 	corsiFitnessSchedule,
-	acquaFitnessLessons,
-	acquaFitnessSchedule,
 	nuotoLiberoLessons,
 	nuotoLiberoSchedule,
 } from "../data/schedules";
+// Planning Acqua Fitness: sorgente unica editabile da Tina
+// (src/content/schedules/acqua-fitness.json), condivisa con la pagina attività.
+import { getSchedule } from "../lib/schedules";
+
+const acquaFitness = await getSchedule("acqua-fitness");
 
 const faq = [
 	{
@@ -21,7 +24,7 @@ const faq = [
 	},
 	{
 		q: "Gli orari mostrati sono sempre aggiornati?",
-		a: "Il palinsesto Corsi Fitness e gli orari Gym Floor sono aggiornati; i planning di Acqua Fitness e Nuoto Libero sono al momento bozze in fase di aggiornamento.",
+		a: "I palinsesti Corsi Fitness e Acqua Fitness e gli orari Gym Floor sono aggiornati; il planning del Nuoto Libero è al momento una bozza in fase di aggiornamento.",
 	},
 	{
 		q: "Cosa succede se un corso non è disponibile nella fascia che mi interessa?",
@@ -62,10 +65,10 @@ const faq = [
 		<div class="planning-section__head">
 			<h2>Acqua Fitness</h2>
 			<p class="lede" style="margin-inline:0">
-				Il palinsesto settimanale dei corsi in acqua. <em>Bozza in fase di aggiornamento.</em>
+				Il palinsesto settimanale dei corsi in acqua, con il trainer di ogni lezione.{acquaFitness.note && <em> {acquaFitness.note}</em>}
 			</p>
 		</div>
-		<WeeklySchedule id="acqua-fitness" lessons={acquaFitnessLessons} schedule={acquaFitnessSchedule} />
+		<WeeklySchedule id="acqua-fitness" lessons={acquaFitness.lessons} schedule={acquaFitness.schedule} />
 	</section>
 
 	<section class="planning-section">

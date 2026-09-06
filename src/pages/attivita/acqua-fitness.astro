@@ -4,8 +4,12 @@ import PageHero from "../../components/PageHero.astro";
 import WeeklySchedule from "../../components/WeeklySchedule.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
-import { acquaFitnessLessons, acquaFitnessSchedule } from "../../data/schedules";
 import { url } from "../../lib/paths";
+// Lezioni e planning arrivano dalla stessa sorgente editabile da Tina
+// (src/content/schedules/acqua-fitness.json), condivisa con la pagina Planning.
+import { getSchedule } from "../../lib/schedules";
+
+const acquaFitness = await getSchedule("acqua-fitness");
 
 const faq = [
 	{
@@ -40,44 +44,6 @@ const facts = [
 	},
 ];
 
-const courses = [
-	{
-		title: "Acqua Trekking",
-		durata: "45 minuti",
-		descrizione: "Camminata in acqua a ritmo sostenuto: lavora su resistenza e tonificazione con il minimo impatto sulle articolazioni.",
-		image: "images/services/piscina-esterna.jpg",
-	},
-	{
-		title: "Hydrobike",
-		durata: "45 minuti",
-		descrizione: "Pedalata su bike subacquea a ritmo di musica: un allenamento cardio intenso, divertente e a bassissimo impatto.",
-		image: "images/club/piscina-esterna-alt.jpg",
-	},
-	{
-		title: "Step Acqua",
-		durata: "45 minuti",
-		descrizione: "Il classico step rivisitato in acqua, su base rialzata: coordinazione, resistenza cardiovascolare e tonificazione.",
-		image: "images/services/piscina-esterna-hero.jpg",
-	},
-	{
-		title: "Acquagym",
-		durata: "45 minuti",
-		descrizione: "Ginnastica a corpo libero in acqua, a ritmo di musica: un allenamento completo per tonificare tutto il corpo.",
-		image: "images/activities/nuoto.jpg",
-	},
-	{
-		title: "Swim Training",
-		durata: "60 minuti",
-		descrizione: "Allenamento di nuoto strutturato, per chi vuole migliorare tecnica e resistenza nelle quattro nuotate.",
-		image: "images/attivita/scuola-nuoto-hero.jpg",
-	},
-	{
-		title: "Total Body Acqua",
-		durata: "45 minuti",
-		descrizione: "Circuito a corpo libero in acqua che alterna forza, resistenza e mobilità per un allenamento a 360°.",
-		image: "images/activities/scuola-nuoto-adulti.jpg",
-	},
-];
 ---
 
 <Layout
@@ -93,28 +59,21 @@ const courses = [
 
 	<section class="courses-section">
 		<div class="courses-section__head">
-			<span class="eyebrow">Il palinsesto</span>
-			<h2>I nostri corsi</h2>
-			<p class="lede" style="margin-inline:auto">
-				Un'anteprima delle tipologie di corso in programma. Calendario, orari e descrizioni ufficiali sono in fase di aggiornamento.
-			</p>
+			<span class="eyebrow">Le lezioni</span>
+			<h2>Le tipologie di lezione</h2>
+			{acquaFitness.intro && <p class="lede" style="margin-inline:auto">{acquaFitness.intro}</p>}
 		</div>
 		<div class="course-grid">
-			{courses.map((c) => (
+			{acquaFitness.lessonList.map((c) => (
 				<article class="course-card">
-					<div class="course-card__media">
-						<img src={url(c.image)} alt={c.title} loading="lazy" />
-					</div>
-					<div class="course-card__body">
-						<div class="course-card__head">
-							<h3>{c.title}</h3>
-							<span class="course-card__durata">{c.durata}</span>
-						</div>
-						<p>{c.descrizione}</p>
-					</div>
+					<h3>{c.name}</h3>
+					<p>{c.description}</p>
 				</article>
 			))}
 		</div>
+		<p class="courses-section__note">
+			L'acqua fitness non ha controindicazioni: acqua e divertimento accompagnano tutte le lezioni.
+		</p>
 	</section>
 
 	<section class="planning-section">
@@ -122,10 +81,10 @@ const courses = [
 			<span class="eyebrow">Planning settimanale</span>
 			<h2>Il palinsesto Acqua Fitness</h2>
 			<p class="lede" style="margin-inline:0">
-				Orari indicativi dei corsi in acqua. <em>Bozza in fase di aggiornamento.</em>
+				Orari e trainer di tutte le lezioni in acqua. Clicca su una lezione per leggerne la descrizione.{acquaFitness.note && <em> {acquaFitness.note}</em>}
 			</p>
 		</div>
-		<WeeklySchedule id="acqua-fitness" lessons={acquaFitnessLessons} schedule={acquaFitnessSchedule} />
+		<WeeklySchedule id="acqua-fitness" lessons={acquaFitness.lessons} schedule={acquaFitness.schedule} />
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
@@ -158,8 +117,17 @@ const courses = [
 		}
 		.courses-section__head {
 			text-align: center;
-			max-width: 40rem;
+			max-width: 46rem;
 			margin: 0 auto;
+		}
+		.courses-section__note {
+			max-width: 46rem;
+			margin: 2.5rem auto 0;
+			text-align: center;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			font-style: italic;
+			color: var(--text-muted);
 		}
 		.course-grid {
 			margin-top: 2.5rem;
@@ -168,9 +136,9 @@ const courses = [
 			gap: 1.75rem;
 		}
 		.course-card {
+			padding: 1.5rem;
 			border: 1px solid var(--border);
 			border-radius: 16px;
-			overflow: hidden;
 			background: var(--bg-alt);
 			transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 		}
@@ -178,44 +146,11 @@ const courses = [
 			transform: translateY(-4px);
 			box-shadow: 0 16px 32px -12px rgba(28, 28, 24, 0.25);
 		}
-		.course-card__media {
-			position: relative;
-			aspect-ratio: 4 / 3;
-		}
-		.course-card__media img {
-			position: absolute;
-			inset: 0;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 0.5s ease;
-		}
-		.course-card:hover .course-card__media img {
-			transform: scale(1.06);
-		}
-		.course-card__body {
-			padding: 1.5rem;
-		}
-		.course-card__head {
-			display: flex;
-			align-items: baseline;
-			justify-content: space-between;
-			gap: 0.75rem;
-			margin-bottom: 0.6rem;
-		}
-		.course-card__head h3 {
-			margin: 0;
+		.course-card h3 {
+			margin: 0 0 0.6rem;
 			font-size: var(--text-lg);
 		}
-		.course-card__durata {
-			flex-shrink: 0;
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-weight: 600;
-			color: var(--accent);
-			white-space: nowrap;
-		}
-		.course-card__body p {
+		.course-card p {
 			margin: 0;
 			font-family: var(--font-sans);
 			font-size: var(--text-sm);
