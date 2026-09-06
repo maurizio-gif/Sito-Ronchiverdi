@@ -1,5 +1,9 @@
 ---
+import { schemaFaq } from "../data/faq";
+import { url } from "../lib/paths";
+
 interface FaqItem {
+	id?: string;
 	q: string;
 	a?: string;
 	html?: string;
@@ -9,10 +13,20 @@ interface Props {
 	items: FaqItem[];
 	eyebrow?: string;
 	title?: string;
+	/** Link alla knowledge base completa in coda all'elenco. */
+	linkWiki?: boolean;
 }
 
-const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.props;
+const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti", linkWiki = true } = Astro.props;
+
+// Structured data FAQPage. Sta qui e non nel Layout perché così lo ottiene
+// automaticamente ogni pagina che mostra delle FAQ, comprese quelle future, e
+// resta legato alle domande davvero visibili — che è la condizione che Google
+// pone per accettarlo.
+const schema = schemaFaq(items, title, Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined);
 ---
+
+{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
 <section class="faq-section">
 	<div class="faq-section__head">
@@ -21,7 +35,7 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 	</div>
 	<div class="faq-list">
 		{items.map((item, i) => (
-			<div class="faq-item">
+			<div class="faq-item" id={item.id}>
 				<span class="faq-item__num">{String(i + 1).padStart(2, "0")}</span>
 				<div class="faq-item__body">
 					<button type="button" class="faq-item__trigger" aria-expanded="false">
@@ -40,6 +54,12 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 			</div>
 		))}
 	</div>
+	{linkWiki && (
+		<p class="faq-section__wiki">
+			Non trovi la risposta?
+			<a href={url("/faq")}>Tutte le domande frequenti del club</a>
+		</p>
+	)}
 </section>
 
 <script>
@@ -174,6 +194,24 @@ const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti" } = Astro.pro
 		text-underline-offset: 0.15em;
 	}
 	.faq-item__panel :global(a:hover) {
+		color: var(--text-on-dark);
+	}
+	/* La sezione FAQ sta sempre su fondo scuro: colori "on dark". */
+	.faq-section__wiki {
+		max-width: 52rem;
+		margin: 2.5rem auto 0;
+		text-align: center;
+		font-size: var(--text-sm);
+		color: rgba(246, 239, 222, 0.6);
+	}
+	.faq-section__wiki a {
+		margin-left: 0.4rem;
+		color: var(--accent-on-dark);
+		font-weight: 500;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.faq-section__wiki a:hover {
 		color: var(--text-on-dark);
 	}
 	.faq-item__panel :global(.faq-sospensioni) {

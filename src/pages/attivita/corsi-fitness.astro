@@ -7,25 +7,10 @@ import IconFacts from "../../components/IconFacts.astro";
 // Palinsesto dal file unico editabile da Tina (src/content/schedules/planning.json).
 import { getSchedule } from "../../lib/schedules";
 import { url } from "../../lib/paths";
+import { faqDiPagina, APP_URL } from "../../data/faq";
 
 const corsiFitness = await getSchedule("corsi-fitness");
 
-const APP_URL = "https://onelink.to/tqhpzr";
-
-const faq = [
-	{
-		q: "Devo prenotare per partecipare a un corso?",
-		html: `<p>Sì, tutti i corsi si prenotano tramite l'<strong>App del Club</strong>, fino a esaurimento dei posti disponibili. Puoi <a href="${APP_URL}" target="_blank" rel="noopener">scaricare l'app qui</a>.</p>`,
-	},
-	{
-		q: "I corsi sono adatti anche ai principianti?",
-		a: "Sì, il palinsesto comprende corsi per ogni livello: gli istruttori propongono sempre varianti su misura per chi inizia e per chi è già allenato.",
-	},
-	{
-		q: "I corsi sono inclusi nell'abbonamento?",
-		a: "Sì, i corsi fitness sono inclusi negli abbonamenti Gold, Silver e Gym, salvo eventuali attività speciali per cui sono previste condizioni differenti.",
-	},
-];
 
 const facts = [
 	{
@@ -140,11 +125,14 @@ const courses = [
 		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="14.5" r="4" stroke="currentColor" stroke-width="1.5" /><path d="M12 6.5v2M5.5 14.5h-2M20.5 14.5h-2M7 9 5.5 7.5M17 9l1.5-1.5M3.5 19.5h17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
 	},
 ].map((c) => ({ ...c, ...corsiFitness.lessons[c.id] }));
+
+const faq = faqDiPagina("corsi-fitness");
 ---
 
 <Layout
 	title="Corsi Fitness — Ronchiverdi Sport Club"
 	description="Il palinsesto Corsi Fitness di Ronchiverdi: mobilità, pilates, yoga, tonificazione, funzionale e danza. Corsi di gruppo per ogni livello, tutta la settimana."
+	image="og/corsi-fitness.jpg"
 >
 	<PageHero image="images/activities/fitness.jpg" imageAlt="Corso fitness di gruppo al Ronchiverdi Sport Club" eyebrow="Attività sportive">
 		<Fragment slot="title">Corsi Fitness, <em class="accent">allenati in gruppo</em></Fragment>

@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
+import { faqDiPagina } from "../../../data/faq";
 
 const pagamento = [
 	"In un'unica soluzione",
@@ -16,25 +17,14 @@ const procedura = [
 	"Carica il certificato medico e il regolamento firmato",
 ];
 
-const faq = [
-	{
-		q: "Ho perso le credenziali del portale, cosa faccio?",
-		a: "Contatta la segreteria allo 011 6612146: se il bambino ha già ricevuto in passato le credenziali, te le recuperiamo noi.",
-	},
-	{
-		q: "Cosa succede se non completo il pagamento?",
-		a: "In assenza di regolare pagamento non sarà possibile partecipare alle lezioni.",
-	},
-	{
-		q: "Il braccialetto badge è obbligatorio?",
-		a: "Sì, va indossato sempre, sin dalla prima lezione. Se lo possiedi già da corsi precedenti va vidimato in reception; altrimenti si acquista al costo di 10,00 €.",
-	},
-];
+
+const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
 
 <Layout
 	title="Modalità di iscrizione — Scuola Nuoto Ronchiverdi"
 	description="Come iscriversi alla Scuola Nuoto Ronchiverdi: quote, procedura, pagamento, accesso al club e contatti della segreteria."
+	image="og/scuola-nuoto-iscrizione.jpg"
 >
 	<PageHero image="images/activities/scuola-nuoto-adulti.jpg" imageAlt="Piscina interna Ronchiverdi" eyebrow="Scuola Nuoto">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>

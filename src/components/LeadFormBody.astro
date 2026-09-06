@@ -6,6 +6,7 @@
 // degli id, così due istanze sulla stessa pagina non si calpestano.
 import { leadActivityGroups } from "../data/leadActivities";
 import prefissi from "../data/prefissi-telefonici";
+import { url } from "../lib/paths";
 
 interface Props {
 	/** Prefisso degli id: "lm" per il modal, "li" per la versione inline. */
@@ -240,7 +241,7 @@ const { prefix } = Astro.props;
 	<div class="lf__consent">
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dy-privacy`} type="checkbox" />
-			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+			<span>Ho letto e accetto la <a href={url("/privacy")} target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
 		</label>
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dy-marketing`} type="checkbox" />
@@ -382,7 +383,7 @@ const { prefix } = Astro.props;
 	<div class="lf__consent">
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dp-privacy`} type="checkbox" />
-			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+			<span>Ho letto e accetto la <a href={url("/privacy")} target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
 		</label>
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dp-marketing`} type="checkbox" />
@@ -537,7 +538,7 @@ const { prefix } = Astro.props;
 	<div class="lf__consent">
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dati-privacy`} name="privacy" type="checkbox" />
-			<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+			<span>Ho letto e accetto la <a href={url("/privacy")} target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
 		</label>
 		<label class="lf__consent-item">
 			<input id={`${prefix}-dati-marketing`} name="marketing" type="checkbox" />

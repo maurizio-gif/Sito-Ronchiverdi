@@ -7,6 +7,7 @@ import WeeklySchedule from "../components/WeeklySchedule.astro";
 // Palinsesto dal file unico editabile da Tina (src/content/schedules/planning.json).
 import { getSchedule } from "../lib/schedules";
 import { url } from "../lib/paths";
+import { faqDiPagina } from "../data/faq";
 
 // La pagina sta su /hyrox e non sotto /attivita come le altre: è l'indirizzo
 // che il vecchio sito ha già indicizzato per "palestra hyrox a torino", e
@@ -85,37 +86,14 @@ const palinsestoHyrox = Object.fromEntries(
 	])
 );
 
-const faq = [
-	{
-		q: "Devo essere già allenato per iniziare?",
-		a: "No. Si parte dal Functional Training, che costruisce forza, resistenza e mobilità, e si passa alle sessioni Hyrox Workout quando le basi ci sono. I coach ti indicano da dove cominciare in base al tuo livello.",
-	},
-	{
-		q: "Serve iscriversi a una gara per allenarsi qui?",
-		a: "No. Il format Hyrox è un ottimo allenamento anche per chi non ha in programma nessuna competizione: si lavora su corsa, forza e capacità di recupero in un'unica sessione.",
-	},
-	{
-		q: "Gli allenamenti Hyrox sono compresi nell'abbonamento?",
-		html: `<p>Sì. Allenamento libero nella Functional Area, sessioni guidate e gruppi di corsa outdoor sono inclusi nell'abbonamento fitness. Puoi confrontare le formule nella pagina <a href="${url("/abbonamenti")}">abbonamenti</a>.</p>`,
-	},
-	{
-		q: "Posso allenarmi nella Functional Area quando voglio?",
-		html: `<p>Negli orari in cui l'area non ospita i corsi, sì. Le fasce occupate sono quelle che trovi nel <a href="${url("/planning")}">planning settimanale</a>.</p>`,
-	},
-	{
-		q: "Che categorie esistono in gara?",
-		a: "Open, Pro, Doubles e Relay. Il format degli esercizi resta identico in tutto il mondo: cambiano i carichi e il modo in cui la prova viene distribuita fra gli atleti.",
-	},
-	{
-		q: "La corsa fa parte della preparazione?",
-		html: `<p>Sì, è metà della gara: otto chilometri divisi fra una stazione e l'altra. Per questo il club organizza gruppi di corsa outdoor guidati dai coach, in città e in collina, inclusi nell'abbonamento e visibili nel <a href="${url("/planning")}">planning</a>.</p>`,
-	},
-];
+
+const faq = faqDiPagina("hyrox");
 ---
 
 <Layout
 	title="Hyrox a Torino — Ronchiverdi Sport Club"
 	description="Palestra Hyrox a Torino: Ronchiverdi è affiliato ufficialmente HYROX, con la Functional Area powered by Lacertosus. Allenamento libero, sessioni guidate con coach certificati e gruppi di corsa, tutto compreso nell'abbonamento."
+	image="og/hyrox.jpg"
 >
 	<PageHero image="images/hyrox/functional-area.jpg" imageAlt="La Functional Area powered by Lacertosus di Ronchiverdi, con i rack per lo squat" eyebrow="Attività · Adulti">
 		<Fragment slot="title">Built for <em class="accent">Hyrox</em>. Made in Ronchi.</Fragment>

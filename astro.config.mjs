@@ -2,6 +2,7 @@
 import { existsSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 // Quando node_modules è un collegamento simbolico fuori dalla cartella del
@@ -20,10 +21,50 @@ const nodeModulesFuoriProgetto = nodeModulesReale !== nodeModules ? [nodeModules
 // che su Vercel non esiste.
 const isVercel = !!process.env.VERCEL;
 
+const senzaSlashFinale = (v) => v.replace(/\/+$/, '');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Indirizzo pubblico del sito.
+//
+// Serve a canonical, Open Graph, JSON-LD e sitemap: sono tutti URL assoluti,
+// e se puntano all'indirizzo sbagliato Google indicizza l'indirizzo sbagliato.
+//
+// L'ordine di scelta:
+//   1. SITE_URL — da impostare a mano quando il dominio definitivo è pronto
+//      (es. https://www.ronchiverdi.it). È anche l'interruttore che dichiara
+//      "questa è la produzione": vedi src/pages/robots.txt.ts.
+//   2. VERCEL_PROJECT_PRODUCTION_URL — l'indirizzo *stabile* di produzione del
+//      progetto Vercel. Da preferire sempre a VERCEL_URL, che invece cambia a
+//      ogni deployment (sito-ronchiverdi-7g3vthec1-r2d.vercel.app): usarlo
+//      significherebbe dichiarare a Google un indirizzo diverso a ogni build.
+//   3. VERCEL_URL — ultima spiaggia sulle preview, meglio di niente.
+//   4. GitHub Pages, dove oggi gira la copia di test.
+// ─────────────────────────────────────────────────────────────────────────────
+const sitoProduzione = process.env.SITE_URL ? senzaSlashFinale(process.env.SITE_URL) : null;
+const sitoVercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+const site =
+	sitoProduzione ?? (isVercel && sitoVercel ? `https://${sitoVercel}` : 'https://maurizio-gif.github.io');
+
+if (!sitoProduzione) {
+	// Senza SITE_URL il sito si considera un ambiente di prova e robots.txt
+	// chiede ai motori di non indicizzare nulla. È voluto finché si testa —
+	// ma al go-live va impostata, altrimenti il sito resta invisibile.
+	console.warn(
+		`[ronchiverdi] SITE_URL non impostata: build di prova su ${site}, robots.txt bloccherà l'indicizzazione.`
+	);
+}
+
 // https://astro.build/config
 export default defineConfig({
-	site: isVercel && process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://maurizio-gif.github.io',
+	site,
 	base: isVercel ? '/' : '/Sito-Ronchiverdi',
+	integrations: [
+		sitemap({
+			// Le pagine marcate noindex nel Layout non devono comparire in sitemap:
+			// dichiararle e poi negarle è un segnale contraddittorio per Google.
+			filter: (pagina) => !/\/(anteprima|admin)(\/|$)/.test(pagina),
+		}),
+	],
 	// Serve sempre, anche nella build per GitHub Pages: senza adapter, l'unica
 	// route non prerenderizzata (src/pages/api/lead.ts) farebbe fallire la
 	// build. Con l'adapter presente Astro scrive l'output statico sotto

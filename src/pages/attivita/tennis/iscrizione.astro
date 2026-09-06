@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
+import { faqDiPagina } from "../../../data/faq";
 
 const procedura = [
 	"Richiedi una lezione di prova gratuita tramite il modulo di contatto, indicando età e livello (per la Young School) o disponibilità (per gli adulti)",
@@ -15,25 +16,14 @@ const documenti = [
 	"Tesseramento FITP non agonistico, incluso nella quota d'iscrizione",
 ];
 
-const faq = [
-	{
-		q: "Da dove parto se non ho mai giocato a tennis?",
-		a: "Richiedi una lezione di prova: per i bambini si individua il gruppo Young School adatto all'età e al livello, per gli adulti si valuta se un corso collettivo o una lezione individuale è la scelta più adatta.",
-	},
-	{
-		q: "La lezione di prova è sempre gratuita?",
-		a: "Sì, per Young School e per adulti: è su appuntamento, in base alla disponibilità dei corsi, dal lunedì al venerdì (non disponibile nel weekend).",
-	},
-	{
-		q: "Cosa serve il primo giorno?",
-		a: "Abbigliamento sportivo adeguato: la racchetta, nella fase iniziale della Young School, può essere fornita da Ronchiverdi. Certificato medico e tesseramento FITP vanno perfezionati in reception prima dell'inizio dei corsi.",
-	},
-];
+
+const faq = faqDiPagina("tennis-iscrizione");
 ---
 
 <Layout
 	title="Modalità di iscrizione — Tennis Ronchiverdi"
 	description="Come iscriversi al settore tennis di Ronchiverdi: lezione di prova, documenti necessari, tesseramento FITP e contatti."
+	image="og/tennis.jpg"
 >
 	<PageHero image="images/attivita/tennis-hero.jpg" imageAlt="Campo da tennis in terra rossa a Ronchiverdi" eyebrow="Tennis">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>

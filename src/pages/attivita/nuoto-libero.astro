@@ -8,6 +8,7 @@ import { getSchedule } from "../../lib/schedules";
 
 const nuotoLibero = await getSchedule("nuoto-libero");
 import { url } from "../../lib/paths";
+import { faqDiPagina } from "../../data/faq";
 
 const corsieEsempio = [
 	{ fascia: "Mattina", orario: "8:00 – 12:00", corsie: "Quasi tutte le corsie disponibili" },
@@ -16,25 +17,14 @@ const corsieEsempio = [
 	{ fascia: "Sera", orario: "17:00 – chiusura", corsie: "Corsie condivise con corsi bambini e acqua fitness" },
 ];
 
-const faq = [
-	{
-		q: "Serve prenotare per il nuoto libero?",
-		a: "No, nessuna prenotazione: il nuoto libero è incluso nel tuo abbonamento e ti aspetta durante tutti gli orari di apertura del club, ogni giorno della settimana.",
-	},
-	{
-		q: "È garantita sempre una corsia?",
-		a: "Sì. Se hai un abbonamento attivo, una corsia libera per il nuoto è sempre garantita, senza eccezioni — al massimo condivisa con qualche altro socio, mai negata.",
-	},
-	{
-		q: "Il nuoto libero è disponibile anche d'estate?",
-		a: "Sì, da giugno ad agosto la vasca esterna si aggiunge a quella interna. L'accesso alla piscina esterna è riservato agli abbonamenti Gold e Silver (non incluso nell'abbonamento Swim).",
-	},
-];
+
+const faq = faqDiPagina("nuoto-libero");
 ---
 
 <Layout
 	title="Nuoto Libero — Ronchiverdi Sport Club"
 	description="Nuoto libero a Ronchiverdi: nuota quando vuoi, senza prenotazione, durante tutti gli orari di apertura del club, in piscina interna ed esterna."
+	image="og/nuoto-libero.jpg"
 >
 	<PageHero image="images/activities/nuoto.jpg" imageAlt="Piscina interna Ronchiverdi" eyebrow="Attività sportive">
 		<Fragment slot="title">Nuoto Libero, <em class="accent">quando vuoi tu</em></Fragment>

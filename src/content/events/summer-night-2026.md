@@ -5,8 +5,6 @@ orario: "19:30 – 24:00"
 luogo: Piscina esterna e Lounge
 image: /images/club/notturna.jpg
 summary: La festa di fine estate del club, a bordo piscina, tra cena, musica dal vivo e ultimo tuffo sotto le luci.
-ctaLabel: Prenota il tuo posto
-ctaHref: /prenota-un-tour
 ---
 
 <p>La serata con cui salutiamo l'estate: la <strong>piscina esterna resta aperta fino a mezzanotte</strong>, con le luci accese sull'acqua e la Lounge aperta per l'aperitivo.</p>

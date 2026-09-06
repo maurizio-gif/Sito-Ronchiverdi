@@ -20,10 +20,28 @@ import { url } from "../lib/paths";
 interface Props {
 	title: string;
 	description?: string;
+	/** Immagine per l'anteprima social, relativa a public/ (es. "og/tennis.jpg").
+	 *  Va usato un file 1200x630: è il formato che WhatsApp e Meta ritagliano
+	 *  senza tagliare via mezza foto. In mancanza si usa quella del club. */
+	image?: string;
 	/** Pagine di lavoro non ancora pubbliche: fuori dagli indici dei motori. */
 	noindex?: boolean;
+	/** JSON-LD aggiuntivo della pagina (es. FAQPage, Event). */
+	schema?: unknown;
 }
-const { title, description, noindex = false } = Astro.props;
+const { title, description, image, noindex = false, schema } = Astro.props;
+
+// Indirizzo canonico della pagina. Serve a dire a Google qual è l'unico
+// indirizzo buono fra le copie che il sito ha oggi (GitHub Pages, preview
+// Vercel, dominio definitivo domani): senza, sceglie lui.
+const canonical = Astro.site
+	? new URL(Astro.url.pathname, Astro.site).href
+	: Astro.url.href;
+
+const assoluto = (percorso: string) =>
+	Astro.site ? new URL(url(percorso), Astro.site).href : url(percorso);
+
+const ogImage = assoluto(image ?? "og/ronchiverdi.jpg");
 
 const structuredData = {
 	"@context": "https://schema.org",
@@ -32,11 +50,14 @@ const structuredData = {
 	description:
 		"Club sportivo a Torino: tennis, padel, nuoto, fitness, running e triathlon in 35.000 mq tra indoor e outdoor, con Young School per famiglie.",
 	url: Astro.site ? new URL(url("/"), Astro.site).toString() : undefined,
+	image: ogImage,
 	telephone: "+39 011 6612146",
+	sameAs: ["https://www.facebook.com/ronchiverdi", "https://www.instagram.com/ronchiverdi"],
 	address: {
 		"@type": "PostalAddress",
 		streetAddress: "Corso Moncalieri 466",
 		addressLocality: "Torino",
+		postalCode: "10133",
 		addressRegion: "TO",
 		addressCountry: "IT",
 	},
@@ -60,8 +81,28 @@ const structuredData = {
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
 		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<link rel="canonical" href={canonical} />
 		<title>{title}</title>
+
+		<!-- Anteprima nei social e su WhatsApp: senza questi tag un link
+		     condiviso appare come testo nudo, senza titolo né immagine. -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Ronchiverdi Sport Club" />
+		<meta property="og:locale" content="it_IT" />
+		<meta property="og:title" content={title} />
+		{description && <meta property="og:description" content={description} />}
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={title} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		{description && <meta name="twitter:description" content={description} />}
+		<meta name="twitter:image" content={ogImage} />
+
 		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+		{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 	</head>
 	<body>
 		<Nav />

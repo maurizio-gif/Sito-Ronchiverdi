@@ -8,23 +8,9 @@ import { url } from "../../lib/paths";
 // Lezioni e planning arrivano dal file unico editabile da Tina
 // (src/content/schedules/planning.json), lo stesso della pagina Planning.
 import { getSchedule } from "../../lib/schedules";
+import { faqDiPagina } from "../../data/faq";
 
 const acquaFitness = await getSchedule("acqua-fitness");
-
-const faq = [
-	{
-		q: "In quale piscina si svolgono i corsi?",
-		a: "Sempre in vasca grande: in piscina interna da autunno a fine maggio, in piscina esterna da giugno ad agosto.",
-	},
-	{
-		q: "Posso partecipare ai corsi estivi in piscina esterna?",
-		a: "L'accesso alla piscina esterna, e quindi ai corsi estivi, è riservato agli abbonamenti Gold e Silver (non incluso nell'abbonamento Swim).",
-	},
-	{
-		q: "I corsi sono adatti anche ai principianti?",
-		a: "Sì, i corsi sono adatti a tutti i livelli: gli istruttori propongono sempre varianti su misura per ogni partecipante.",
-	},
-];
 
 const facts = [
 	{
@@ -44,11 +30,14 @@ const facts = [
 	},
 ];
 
+
+const faq = faqDiPagina("acqua-fitness");
 ---
 
 <Layout
 	title="Acqua Fitness — Ronchiverdi Sport Club"
 	description="Acqua Fitness a Ronchiverdi: allenamento in acqua tutto l'anno, in piscina interna ed esterna, con corsi per ogni livello."
+	image="og/acqua-fitness.jpg"
 >
 	<PageHero image="images/activities/acqua-fitness.jpg" imageAlt="Corso di acqua fitness in piscina Ronchiverdi" eyebrow="Attività sportive">
 		<Fragment slot="title">Acqua Fitness, <em class="accent">allenati in acqua</em></Fragment>

@@ -23,10 +23,10 @@ const serviceHref = (s) => (s.data.external ? s.data.href : url(s.data.href));
 
 const clubLinks = [
 	{ href: url("/"), label: "Home" },
-	{ href: url("/il-club"), label: "Il Club" },
 	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/eventi"), label: "Eventi" },
+	{ href: url("/faq"), label: "Domande frequenti" },
 	{ openContact: true, label: "Prenota un tour" },
 ];
 
@@ -219,6 +219,13 @@ const enti = [
 
 	<div class="footer-bottom">
 		<p class="muted">© {new Date().getFullYear()} Ronchiverdi Sport Club</p>
+		<address class="footer-societa">
+			<strong>Ronchiverdi Sport Club SSD a RL</strong>
+			<span>Sede legale: Piazza Vetra 17, 20123 Milano</span>
+			<span>Sede operativa: Corso Moncalieri 466/16, 10133 Torino</span>
+			<span>P. IVA 11173030013 · La società applica il MOG</span>
+			<span>Safeguarding: <a href="mailto:safeguarding@ronchiverdi.it">safeguarding@ronchiverdi.it</a></span>
+		</address>
 	</div>
 </footer>
 
@@ -584,6 +591,29 @@ const enti = [
 	}
 	.footer-bottom .muted {
 		color: rgba(246, 239, 222, 0.5);
+	}
+	.footer-societa {
+		display: grid;
+		gap: 0.15rem;
+		font-style: normal;
+		text-align: right;
+		color: rgba(246, 239, 222, 0.5);
+		line-height: 1.5;
+	}
+	.footer-societa strong {
+		color: rgba(246, 239, 222, 0.72);
+		font-weight: 500;
+		letter-spacing: 0.02em;
+	}
+	.footer-societa a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+	@media (max-width: 700px), (orientation: portrait) {
+		.footer-societa {
+			text-align: left;
+		}
 	}
 	@media (max-width: 1100px), (orientation: portrait) {
 		.footer-grid {

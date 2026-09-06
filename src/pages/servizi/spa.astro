@@ -3,21 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
-
-const faq = [
-	{
-		q: "La Relax Zone è inclusa in tutti gli abbonamenti?",
-		a: "Sì, la Spa con Chinesis Postural Lab e Relax Zone è inclusa in tutte le formule di abbonamento: Gold, Silver, Gym e Swim.",
-	},
-	{
-		q: "Cosa comprende il percorso benessere?",
-		a: "Sauna, bagno di vapore, cascata di ghiaccio e percorso Kneipp verticale, per un'esperienza completa tra caldo e freddo.",
-	},
-	{
-		q: "È adatta anche a chi non si allena in palestra?",
-		a: "Certamente: la Relax Zone è pensata per il recupero e il benessere di tutti i soci, indipendentemente dall'attività sportiva praticata.",
-	},
-];
+import { faqDiPagina } from "../../data/faq";
 
 const services = [
 	{ title: "Sauna", desc: "Ambiente in legno e pietra che ricrea l'atmosfera tradizionale di montagna." },
@@ -38,11 +24,14 @@ const galleria = [
 	{ src: "spa-percorso", alt: "Percorso benessere tra sauna e cascata di ghiaccio", titolo: "Il percorso", nota: "Dal caldo al freddo, e ritorno" },
 	{ src: "spa-tisaneria", alt: "Angolo tisaneria della Spa Ronchiverdi", titolo: "Tisaneria", nota: "Dove il percorso si chiude", span: true },
 ];
+
+const faq = faqDiPagina("spa");
 ---
 
 <Layout
 	title="SPA — Ronchiverdi Sport Club"
 	description="La Relax Zone di Ronchiverdi: sauna, bagno di vapore, cascata di ghiaccio e percorso Kneipp per ritrovare il proprio benessere."
+	image="og/spa.jpg"
 >
 	<PageHero image="images/services/spa-hero.jpg" imageAlt="Relax Zone Ronchiverdi" eyebrow="Servizi">
 		<Fragment slot="title">SPA, <em class="accent">Relax Zone</em></Fragment>
