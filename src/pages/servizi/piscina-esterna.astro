@@ -3,26 +3,16 @@ import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import { url } from "../../lib/paths";
+import { faqDiPagina } from "../../data/faq";
 
-const faq = [
-	{
-		q: "Chi può accedere alla piscina esterna?",
-		a: "L'accesso è riservato agli abbonati Gold e Silver (non incluso nell'abbonamento Swim).",
-	},
-	{
-		q: "In che periodo dell'anno è aperta?",
-		a: "La piscina esterna è aperta nella stagione estiva, da giugno ad agosto.",
-	},
-	{
-		q: "Cosa posso fare oltre a nuotare?",
-		a: "Oltre al nuoto libero e ai corsi in acqua, trovi lettini, ombrelloni e un ampio solarium per rilassarti all'aria aperta.",
-	},
-];
+
+const faq = faqDiPagina("piscina-esterna");
 ---
 
 <Layout
 	title="Piscina Esterna — Ronchiverdi Sport Club"
 	description="La piscina esterna di Ronchiverdi: nuoto libero e relax all'aperto nel verde del club, nella stagione estiva."
+	image="og/piscina-esterna.jpg"
 >
 	<PageHero image="images/services/piscina-esterna-hero.jpg" imageAlt="Piscina esterna Ronchiverdi" eyebrow="Servizi">
 		<Fragment slot="title">Piscina <em class="accent">Esterna</em></Fragment>

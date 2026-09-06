@@ -1,0 +1,419 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { url } from "../lib/paths";
+import { faq, faqPerArea, hrefPagina, schemaFaq } from "../data/faq";
+
+// La knowledge base del club: tutte le domande frequenti in una pagina sola.
+// Le stesse risposte restano sulle pagine di attività — qui vengono raccolte
+// perché chi ha già un dubbio preciso non debba indovinare in quale pagina
+// vive, e non finisca a chiederlo in reception.
+const aree = faqPerArea();
+const totale = faq.length;
+
+const schema = schemaFaq(
+	faq,
+	"Domande frequenti — Ronchiverdi Sport Club",
+	Astro.site ? new URL(url("/faq"), Astro.site) : undefined
+);
+
+/** Testo piatto su cui lavora la ricerca: domanda + risposta, senza markup. */
+const testoRicerca = (item: (typeof faq)[number]) =>
+	`${item.q} ${(item.a ?? item.html ?? "").replace(/<[^>]+>/g, " ")}`
+		.replace(/\s+/g, " ")
+		.toLowerCase();
+---
+
+<Layout
+	title="Domande frequenti — Ronchiverdi Sport Club Torino"
+	description="Tutte le risposte su abbonamenti, orari, corsi, iscrizioni, tesseramenti e certificati medici di Ronchiverdi Sport Club a Torino, in un'unica pagina."
+	image="og/faq.jpg"
+	schema={schema}
+>
+	<header class="page-header">
+		<p class="eyebrow">Domande frequenti</p>
+		<h1>Le risposte, <em class="accent">tutte qui</em></h1>
+		<p class="lede">
+			{totale} domande su abbonamenti, orari, corsi, iscrizioni e documenti.
+			Cerca quello che ti serve: se non lo trovi, la reception risponde allo
+			<a href="tel:+390116612146">011 6612146</a>.
+		</p>
+	</header>
+
+	<div class="faq-wiki">
+		<div class="faq-wiki__tools">
+			<label class="faq-wiki__search">
+				<span class="faq-wiki__sr">Cerca tra le domande frequenti</span>
+				<svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+					><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" /><path
+						d="M13.5 13.5 17 17"
+						stroke="currentColor"
+						stroke-width="1.6"
+						stroke-linecap="round"
+					/></svg
+				>
+				<input
+					type="search"
+					id="faq-wiki-input"
+					placeholder="Cerca: certificato medico, disdetta, orari…"
+					autocomplete="off"
+				/>
+			</label>
+			<p class="faq-wiki__count" id="faq-wiki-count" role="status" aria-live="polite"></p>
+
+			<nav class="faq-wiki__index" aria-label="Aree">
+				{aree.map((a) => (
+					<a class="faq-wiki__chip" href={`#area-${a.area.replace(/\s+/g, "-").toLowerCase()}`}>{a.area}</a>
+				))}
+			</nav>
+		</div>
+
+		{aree.map((a) => (
+			<section class="faq-wiki__area" id={`area-${a.area.replace(/\s+/g, "-").toLowerCase()}`} data-area>
+				<h2 class="faq-wiki__area-title">{a.area}</h2>
+
+				{a.gruppi.map((g) => (
+					<div class="faq-wiki__group" data-group>
+						<div class="faq-wiki__group-head">
+							<h3>{g.label}</h3>
+							<a class="faq-wiki__group-link" href={hrefPagina(g.chiave)}>
+								Vai alla pagina
+								<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+									><path
+										d="M3 8h10M9 4l4 4-4 4"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/></svg
+								>
+							</a>
+						</div>
+
+						{g.items.map((item) => (
+							<details class="faq-wiki__item" id={item.id} data-item data-testo={testoRicerca(item)}>
+								<summary>
+									{item.q}
+									<span class="faq-wiki__mark" aria-hidden="true">
+										<svg width="14" height="14" viewBox="0 0 16 16" fill="none"
+											><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg
+										>
+									</span>
+								</summary>
+								<div class="faq-wiki__answer">
+									{item.a && <p>{item.a}</p>}
+									{item.html && <Fragment set:html={item.html} />}
+								</div>
+							</details>
+						))}
+					</div>
+				))}
+			</section>
+		))}
+
+		<p class="faq-wiki__empty" id="faq-wiki-empty" hidden>
+			Nessuna domanda corrisponde alla ricerca. Scrivici dal
+			<button type="button" class="faq-wiki__linkbtn" data-open-contact>modulo contatti</button>
+			o chiama la reception allo <a href="tel:+390116612146">011 6612146</a>.
+		</p>
+	</div>
+
+	<section class="final-cta">
+		<h2>Serve una risposta che non trovi?</h2>
+		<p class="lede" style="margin-inline:auto">
+			Scrivici: ti mettiamo in contatto con la persona giusta del club.
+		</p>
+		<button type="button" class="btn" data-open-contact>Contattaci</button>
+	</section>
+</Layout>
+
+<script>
+	const input = document.getElementById("faq-wiki-input") as HTMLInputElement | null;
+	const contatore = document.getElementById("faq-wiki-count");
+	const vuoto = document.getElementById("faq-wiki-empty");
+	const domande = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-item]"));
+	const gruppi = Array.from(document.querySelectorAll<HTMLElement>("[data-group]"));
+	const aree = Array.from(document.querySelectorAll<HTMLElement>("[data-area]"));
+
+	// Le stesse regole di normalizzazione applicate alla query e al testo:
+	// senza accenti chi scrive "eta" trova comunque "età".
+	const normalizza = (t: string) =>
+		t
+			.toLowerCase()
+			.normalize("NFD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.replace(/\s+/g, " ")
+			.trim();
+
+	const testoDi = new Map(domande.map((d) => [d, normalizza(d.dataset.testo || "")]));
+
+	function filtra() {
+		const query = normalizza(input?.value || "");
+		const parole = query ? query.split(" ").filter(Boolean) : [];
+
+		let visibili = 0;
+		domande.forEach((d) => {
+			const testo = testoDi.get(d) || "";
+			const ok = parole.every((p) => testo.includes(p));
+			d.hidden = !ok;
+			// Con una ricerca in corso la risposta si apre da sola: se hai
+			// cercato, vuoi leggere, non fare un secondo click.
+			d.open = ok && parole.length > 0;
+			if (ok) visibili++;
+		});
+
+		// Un gruppo o un'area senza domande visibili sparisce insieme al titolo,
+		// altrimenti la pagina resta piena di intestazioni che non aprono nulla.
+		gruppi.forEach((g) => {
+			g.hidden = !g.querySelector<HTMLElement>("[data-item]:not([hidden])");
+		});
+		aree.forEach((a) => {
+			a.hidden = !a.querySelector<HTMLElement>("[data-group]:not([hidden])");
+		});
+
+		if (vuoto) vuoto.hidden = visibili > 0 || parole.length === 0;
+		if (contatore) {
+			contatore.textContent = parole.length
+				? `${visibili} ${visibili === 1 ? "domanda trovata" : "domande trovate"}`
+				: "";
+		}
+	}
+
+	input?.addEventListener("input", filtra);
+
+	// Arrivando da /faq#id (dal link di una pagina, o da un risultato Google)
+	// la domanda va aperta: un <details> chiuso non mostrerebbe nulla.
+	function apriDaHash() {
+		const id = decodeURIComponent(location.hash.slice(1));
+		if (!id) return;
+		const target = document.getElementById(id);
+		if (target instanceof HTMLDetailsElement) {
+			target.open = true;
+			target.scrollIntoView({ block: "center" });
+		}
+	}
+	apriDaHash();
+	window.addEventListener("hashchange", apriDaHash);
+</script>
+
+<style>
+	/* Stesso intestazione di /planning: la classe .page-header è definita
+	   scoped nelle singole pagine, quindi va ripetuta qui. */
+	.page-header {
+		max-width: 44rem;
+		margin: 0 auto;
+		padding: 5rem 1.5rem 1rem;
+		text-align: center;
+	}
+	.page-header a {
+		color: inherit;
+	}
+
+	.faq-wiki {
+		max-width: 52rem;
+		margin: 0 auto 5rem;
+		padding: 0 1.5rem;
+	}
+
+	/* ── Ricerca e indice ─────────────────────────────────────────────── */
+	.faq-wiki__tools {
+		position: sticky;
+		top: 4.5rem;
+		z-index: 20;
+		padding: 1rem 0 1.25rem;
+		margin-bottom: 1rem;
+		background: linear-gradient(var(--bg) 82%, transparent);
+	}
+	.faq-wiki__search {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.85rem 1.1rem;
+		background: var(--bg-alt);
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		color: var(--text-muted);
+	}
+	.faq-wiki__search:focus-within {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.faq-wiki__search input {
+		flex: 1;
+		min-width: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		font-size: var(--text-base);
+		color: var(--text);
+	}
+	.faq-wiki__search input:focus {
+		outline: none;
+	}
+	.faq-wiki__search input::-webkit-search-cancel-button {
+		cursor: pointer;
+	}
+	.faq-wiki__sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	.faq-wiki__count {
+		margin: 0.6rem 0 0;
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		min-height: 1em;
+	}
+	.faq-wiki__index {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-top: 0.75rem;
+	}
+	.faq-wiki__chip {
+		padding: 0.3rem 0.75rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		font-size: var(--text-2xs);
+		letter-spacing: 0.02em;
+		color: var(--text-muted);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.faq-wiki__chip:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	/* ── Aree e gruppi ────────────────────────────────────────────────── */
+	.faq-wiki__area {
+		margin-top: 3rem;
+		scroll-margin-top: 12rem;
+	}
+	.faq-wiki__area-title {
+		margin: 0 0 1.25rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-2xl);
+		letter-spacing: var(--tracking-2xl);
+		line-height: var(--leading-2xl);
+	}
+	.faq-wiki__group {
+		margin-bottom: 2rem;
+	}
+	.faq-wiki__group-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--border);
+	}
+	.faq-wiki__group-head h3 {
+		margin: 0;
+		font-size: var(--text-xs);
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.faq-wiki__group-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: var(--text-2xs);
+		color: var(--text-muted);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.faq-wiki__group-link:hover {
+		color: var(--accent);
+	}
+
+	/* ── Domanda ──────────────────────────────────────────────────────── */
+	.faq-wiki__item {
+		border-bottom: 1px solid var(--border);
+		scroll-margin-top: 13rem;
+	}
+	.faq-wiki__item summary {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.9rem 0;
+		font-size: var(--text-md);
+		line-height: 1.4;
+		cursor: pointer;
+		list-style: none;
+	}
+	.faq-wiki__item summary::-webkit-details-marker {
+		display: none;
+	}
+	.faq-wiki__item summary:hover {
+		color: var(--accent);
+	}
+	.faq-wiki__mark {
+		flex: none;
+		display: grid;
+		place-items: center;
+		width: 1.6rem;
+		height: 1.6rem;
+		margin-top: 0.1rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 50%;
+		color: var(--accent);
+		transition: transform 0.2s ease;
+	}
+	.faq-wiki__item[open] .faq-wiki__mark {
+		transform: rotate(45deg);
+	}
+	.faq-wiki__answer {
+		padding: 0 2.6rem 1.1rem 0;
+		color: var(--text-muted);
+		font-size: var(--text-base);
+		line-height: 1.65;
+	}
+	.faq-wiki__answer :global(p) {
+		margin: 0 0 0.7rem;
+	}
+	.faq-wiki__answer :global(p:last-child),
+	.faq-wiki__answer :global(ul:last-child) {
+		margin-bottom: 0;
+	}
+	.faq-wiki__answer :global(ul) {
+		margin: 0 0 0.7rem;
+		padding-left: 1.1rem;
+	}
+	.faq-wiki__answer :global(li) {
+		margin-bottom: 0.3rem;
+	}
+	.faq-wiki__answer :global(a) {
+		color: var(--accent);
+	}
+
+	.faq-wiki__empty {
+		margin: 3rem 0;
+		text-align: center;
+		color: var(--text-muted);
+	}
+	.faq-wiki__linkbtn {
+		border: 0;
+		background: none;
+		padding: 0;
+		font: inherit;
+		color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+
+	@media (max-width: 700px), (orientation: portrait) {
+		.faq-wiki__tools {
+			top: 3.75rem;
+		}
+		.faq-wiki__answer {
+			padding-right: 0;
+		}
+	}
+</style>

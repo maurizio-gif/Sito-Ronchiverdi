@@ -65,6 +65,30 @@ Le collection gestite da Tina:
 Lo schema è definito in due punti che devono restare allineati:
 `tina/config.ts` (editor) e `src/content.config.ts` (validazione Astro).
 
+## Domande frequenti
+
+Le FAQ del club vivono tutte in **`src/data/faq.ts`**, non più dentro le singole
+pagine. Ogni voce dichiara la `pagina` a cui appartiene (e con `anche` le altre
+pagine su cui va mostrata); da lì:
+
+- la pagina di attività le prende con `faqDiPagina("tennis")`;
+- **`/faq`** le raccoglie tutte, raggruppate per area, con ricerca e ancore
+  stabili (`/faq#tennis-e-necessario-il-tesseramento`);
+- `Faq.astro` pubblica da solo lo structured data **FAQPage** delle domande che
+  sta mostrando — quindi una FAQ nuova entra nei rich results senza altri passi.
+
+## Immagini per le anteprime social
+
+`public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,
+Facebook, Instagram). Si rigenerano dalle foto del sito con:
+
+```sh
+node scripts/genera-og-image.mjs
+```
+
+Quando si aggiunge una pagina con un hero nuovo, va aggiunta la riga
+corrispondente nella mappa dentro lo script e rilanciato il comando.
+
 ## Totem verticale
 
 Oltre a desktop e mobile il sito è tarato su un **totem da 27" in verticale**
@@ -93,7 +117,14 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
       pertinenti, esclusi Business ed Elements
 - [ ] Layout/componenti (header, footer, navigazione)
 - [ ] Form di lead generation per verticale con attribuzione fonte (vedi audit)
-- [ ] SEO tecnico: schema LocalBusiness, slug propri, meta title/description
+- [x] SEO tecnico di base: canonical, Open Graph/Twitter, sitemap, robots,
+      structured data `SportsActivityLocation` e `FAQPage`
+- [ ] Pagine legali (privacy, cookie, regolamento, safeguarding, codice di
+      condotta) — oggi linkate dal footer ma non ancora esistenti
+- [ ] Redirect 301 dal vecchio sito Wix (~110 URL, vedi
+      `scripts/scrape_output/inventario.csv`)
+- [ ] GA4 / GTM e tag di conversione
+- [ ] Impostare `SITE_URL` al go-live: senza, robots.txt blocca i motori
 
 ## Contenuti scrapati dal vecchio sito
 

@@ -13,8 +13,8 @@ import { getHours } from "../../lib/schedules";
 const gymFloorHours = await getHours("gym-floor");
 const gymFloorTrainerHours = await getHours("gym-floor-trainer");
 import { url } from "../../lib/paths";
+import { faqDiPagina, APP_URL } from "../../data/faq";
 
-const APP_URL = "https://onelink.to/tqhpzr";
 
 const facts = [
 	{
@@ -208,53 +208,14 @@ const confronto = [
 	},
 ];
 
-const faq = [
-	{
-		q: "Quali sono gli orari di apertura della palestra?",
-		a: "La sala fitness è aperta dal lunedì al venerdì dalle 7:00 alle 22:00, il sabato, la domenica e i festivi dalle 9:00 alle 20:00. Eventuali variazioni vengono comunicate tramite l'App del Club, che è il canale ufficiale per tutti gli aggiornamenti.",
-	},
-	{
-		q: "Cosa serve per accedere alla sala fitness?",
-		a: "Per accedere alla palestra servono un abbonamento attivo, un certificato medico in corso di validità e il proprio braccialetto personale per l'ingresso. In sala pesi sono obbligatorie calzature sportive pulite, dedicate all'uso in palestra, e l'asciugamano personale da appoggiare sulle panche e sugli attrezzi: se lo dimentichi, puoi noleggiarlo in reception.",
-	},
-	{
-		q: "È sempre presente un istruttore in sala?",
-		a: "La sala fitness è accessibile durante tutto l'orario di apertura, mentre la presenza dell'istruttore è garantita dal lunedì al venerdì dalle 9:00 alle 21:30, il sabato dalle 10:00 alle 19:30 e la domenica dalle 11:00 alle 19:30. Fuori da queste fasce puoi comunque allenarti, senza la presenza continuativa di un trainer.",
-	},
-	{
-		q: "È prevista una scheda di allenamento personalizzata?",
-		a: "Sì. Il servizio fitness comprende Technogym Checkup, valutazione iniziale, programma di allenamento personalizzato e aggiornamenti periodici della scheda. Il programma viene elaborato in base agli obiettivi, alle caratteristiche fisiche e al livello di allenamento della persona, e viene aggiornato indicativamente ogni sei settimane tenendo conto dei progressi raggiunti e della frequenza di allenamento.",
-	},
-	{
-		q: "Che cos'è la consulenza iniziale?",
-		a: "È un servizio di consulenza gratuito per chi entra nel club: si parte da una conversazione sui tuoi interessi e sull'abbonamento che hai scelto, per ricevere consigli sul mix di attività più adatto agli obiettivi e al tempo che hai a disposizione. Se l'interesse è sul fitness, si prosegue con il Technogym Checkup e il primo programma di allenamento.",
-	},
-	{
-		q: "Che differenza c'è tra il programma incluso e il personal training?",
-		a: "Il programma incluso è già costruito sui tuoi obiettivi. Il personal training è un servizio extra, con un livello di dettaglio diverso: misurazioni più precise da parte del professionista, un programma calibrato sulla tua storia e linee guida che ti accompagnano per tutto il percorso.",
-	},
-	{
-		q: "I corsi di gruppo sono inclusi nell'abbonamento?",
-		html: `<p>Sì. I corsi di gruppo sono inclusi nell'abbonamento fitness, salvo eventuali attività speciali per le quali siano previste condizioni differenti. Puoi consultare il palinsesto completo nel <a href="${url("/planning")}">planning</a>.</p>`,
-	},
-	{
-		q: "Come posso prenotare i corsi di gruppo?",
-		html: `<p>Tutti i corsi devono essere prenotati tramite l'App del Club, fino a esaurimento dei posti disponibili. Puoi <a href="${APP_URL}" target="_blank" rel="noopener">scaricare l'app qui</a>.</p>`,
-	},
-	{
-		q: "Il Gym Floor è compreso in tutti gli abbonamenti?",
-		a: "Il Gym Floor è compreso negli abbonamenti Gold, Silver e Gym. L'abbonamento Swim è invece dedicato alla sola area acqua.",
-	},
-	{
-		q: "Posso allenarmi nell'area funzionale Lacertosus in autonomia?",
-		a: "Sì, negli orari in cui l'area non ospita i corsi fitness funzionali e Airbox. Gli orari dei corsi sono consultabili nel planning settimanale.",
-	},
-];
+
+const faq = faqDiPagina("gym-floor");
 ---
 
 <Layout
 	title="Gym Floor — Sala pesi e area funzionale | Ronchiverdi Sport Club"
 	description="Il Gym Floor di Ronchiverdi a Torino: sala pesi con cardio e isotonici Technogym, skill area, pesi liberi e area funzionale Lacertosus. Allenamento libero con assistenza degli istruttori e programma compreso nell'abbonamento."
+	image="og/gym-floor.jpg"
 >
 	<PageHero image="images/activities/gym-floor.jpg" imageAlt="Gym Floor Ronchiverdi con macchinari cardio e isotonici Technogym" eyebrow="Attività sportive">
 		<Fragment slot="title">Gym Floor, <em class="accent">allenati a modo tuo</em></Fragment>

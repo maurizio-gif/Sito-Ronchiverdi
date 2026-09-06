@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+import { faqDiPagina } from "../../data/faq";
 
 const facts = [
 	{
@@ -103,53 +104,14 @@ const location = [
 	},
 ];
 
-const faq = [
-	{
-		q: "Da quale età si può iniziare e come sono divise le categorie?",
-		a: "Il percorso triathlon copre tutte le età: la Young School è rivolta a bambini e ragazzi dai 6 ai 13 anni, la Triathlon Academy a ragazzi e ragazze dai 14 ai 20 anni, il Triathlon Master ai soci dai 20 anni in avanti. Il passaggio dalla Young School all'Academy è automatico, salvo eccezioni valutate con i tecnici.",
-	},
-	{
-		q: "Come vengono formati i gruppi?",
-		a: "Nella Young School i gruppi sono organizzati per età e livello di preparazione, così da proporre attività adeguate alle capacità di ciascuno. Nell'Academy gli atleti sono suddivisi in base a età, livello tecnico e obiettivi personali e agonistici.",
-	},
-	{
-		q: "È possibile fare una lezione di prova?",
-		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact>form di questa pagina</button>.</p>`,
-	},
-	{
-		q: "Bisogna avere già esperienza nel triathlon?",
-		a: "No. Nella Young School non è richiesta esperienza, ma è necessario saper nuotare e andare in bicicletta a un livello base: le attività vengono poi proposte gradualmente. Gli allenamenti Master sono aperti a tutti i soci, anche a chi non ha mai praticato triathlon, ed è possibile partecipare partendo anche da una sola disciplina tra nuoto, corsa e ciclismo.",
-	},
-	{
-		q: "Quante volte ci si allena a settimana?",
-		a: "Nella Young School sono disponibili programmi con 1, 2 o 3 allenamenti settimanali, per un totale rispettivamente di 2, 4 o 6 ore: gli allenamenti si svolgono il lunedì, mercoledì, giovedì e venerdì e ogni famiglia sceglie i giorni in base al programma acquistato. Academy e Master prevedono invece attività distribuite lungo tutta la settimana, con frequenza modulata dai tecnici in base al periodo della stagione, al livello e agli obiettivi.",
-	},
-	{
-		q: "È possibile recuperare un allenamento perso?",
-		a: "Sì. Nella Young School un allenamento non svolto può essere recuperato in un altro giorno della stessa settimana oppure in una settimana successiva, compatibilmente con il programma scelto e con l'organizzazione delle attività.",
-	},
-	{
-		q: "Quale attrezzatura è necessaria?",
-		a: "Servono abbigliamento sportivo adatto alla corsa, costume e materiale per il nuoto, la bicicletta e il casco, obbligatorio durante gli allenamenti in bici. È consigliato utilizzare una bicicletta personale: nelle prime fasi del corso Young School, in base alla disponibilità, Ronchiverdi può metterne una a disposizione. Per tutti gli atleti è disponibile un deposito dedicato alle biciclette.",
-	},
-	{
-		q: "È obbligatorio partecipare alle gare?",
-		a: "No, in nessuna delle tre categorie. Durante la stagione vengono organizzati eventi e gare di corsa, acquathlon, duathlon e triathlon con il supporto dei tecnici, e la squadra partecipa alle principali competizioni FITRI, ma la partecipazione resta una scelta: ci si può allenare con il gruppo anche senza attività agonistica.",
-	},
-	{
-		q: "Sono previsti programmi di allenamento personalizzati?",
-		a: "Sì, per Academy e Master. I tecnici predispongono una programmazione individuale in base a livello di preparazione, obiettivi personali e agonistici, calendario delle gare, periodo della stagione e — per i Master — disponibilità settimanale e impegni di lavoro e famiglia. Il programma viene aggiornato in base ai progressi.",
-	},
-	{
-		q: "Come ci si iscrive, quali documenti servono e come arrivano le comunicazioni?",
-		a: "L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto il certificato medico agonistico, obbligatorio anche per Academy e Master e per il tesseramento federale. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo di messaggistica dedicato agli atleti e alle famiglie.",
-	},
-];
+
+const faq = faqDiPagina("triathlon");
 ---
 
 <Layout
 	title="Triathlon — Ronchiverdi Sport Club"
 	description="Triathlon a Ronchiverdi, punto di riferimento a Torino: Young School dai 6 anni, Academy dai 14 e squadra Master per i soci. Tecnici federali, tre piscine e uscite in bici dal club."
+	image="og/triathlon.jpg"
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Attività sportive">
 		<Fragment slot="title">Triathlon, <em class="accent">dai 6 anni all'Ironman</em></Fragment>

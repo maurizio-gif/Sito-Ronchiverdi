@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
+import { faqDiPagina } from "../../../data/faq";
 
 const categorie = [
 	{
@@ -47,29 +48,14 @@ const documenti = [
 	"Tesseramento FIDAL, compreso nella quota della Young School",
 ];
 
-const faq = [
-	{
-		q: "Come ci si iscrive, categoria per categoria?",
-		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, all'Academy presso la Reception del Club. Per il Triathlon Master l'accesso è riservato ai soci con abbonamento Gold o Silver: in tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura.",
-	},
-	{
-		q: "Posso provare prima di iscrivermi?",
-		a: "Sì. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite. Per Academy e Master è possibile richiedere una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento.",
-	},
-	{
-		q: "Quali documenti servono?",
-		a: "Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale.",
-	},
-	{
-		q: "Cosa comprende la quota?",
-		a: "La quota della Young School comprende i tesseramenti FITRI e FIDAL. Quella dell'Academy comprende il tesseramento FITRI e ha validità annuale; gli iscritti possono inoltre frequentare il club quotidianamente, anche al di fuori degli orari di allenamento.",
-	},
-];
+
+const faq = faqDiPagina("triathlon-iscrizione");
 ---
 
 <Layout
 	title="Modalità di iscrizione — Triathlon Ronchiverdi"
 	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
+	image="og/triathlon.jpg"
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>

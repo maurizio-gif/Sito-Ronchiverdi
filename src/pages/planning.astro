@@ -8,29 +8,19 @@ import Faq from "../components/Faq.astro";
 // il file unico editabile da Tina: le sezioni qui sotto sono le stesse che
 // vedono le pagine delle singole attività.
 import { getAllSchedules, getHours } from "../lib/schedules";
+import { faqDiPagina } from "../data/faq";
 
 const gymFloor = await getHours("gym-floor");
 const sezioni = await getAllSchedules();
 
-const faq = [
-	{
-		q: "Devo prenotare per partecipare a un corso?",
-		a: "Dipende dall'attività: per il nuoto libero non serve prenotare, mentre per i corsi in sala o in acqua ti consigliamo di verificare gli orari e contattarci in caso di dubbi.",
-	},
-	{
-		q: "Gli orari mostrati sono sempre aggiornati?",
-		a: "I palinsesti Corsi Fitness e Acqua Fitness e gli orari Gym Floor sono aggiornati; il planning del Nuoto Libero è al momento una bozza in fase di aggiornamento.",
-	},
-	{
-		q: "Cosa succede se un corso non è disponibile nella fascia che mi interessa?",
-		a: "Contattaci: ti aiutiamo a trovare l'alternativa più vicina ai tuoi orari tra le diverse discipline del club.",
-	},
-];
+
+const faq = faqDiPagina("planning");
 ---
 
 <Layout
 	title="Planning — Ronchiverdi Sport Club"
 	description="Tutti i planning settimanali di Ronchiverdi Sport Club: orari Gym Floor, corsi fitness, acqua fitness e nuoto libero."
+	image="og/planning.jpg"
 >
 	<header class="page-header">
 		<p class="eyebrow">Planning</p>

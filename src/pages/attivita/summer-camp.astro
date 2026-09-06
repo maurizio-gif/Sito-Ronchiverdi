@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+import { faqDiPagina } from "../../data/faq";
 
 const facts = [
 	{
@@ -41,29 +42,14 @@ const pilastri = [
 	},
 ];
 
-const faq = [
-	{
-		q: "L'iscrizione è riservata ai soci del Club?",
-		a: "No: il Summer Camp è aperto sia ai soci sia a chi non è ancora iscritto al Club, con condizioni diverse tra le due opzioni. Scrivici per conoscere prezzi, settimane disponibili e come completare l'iscrizione.",
-	},
-	{
-		q: "Come si struttura una settimana tipo?",
-		a: "Il lunedì si parte per una nuova destinazione della macchina del tempo; da martedì a giovedì si susseguono attività a tema, sport e laboratori; il venerdì si chiude con spettacolo finale e premiazioni.",
-	},
-	{
-		q: "È previsto un potenziamento della lingua inglese?",
-		a: "Sì: durante le settimane di Summer Camp è possibile arricchire l'esperienza con un percorso di potenziamento della lingua inglese, con attività svolte durante le ore al camp e guidate da docenti madrelingua.",
-	},
-	{
-		q: "Cosa serve portare ogni giorno?",
-		a: "Costume e telo da bagno, un cambio completo, crema solare e cappellino: il resto — materiale sportivo e dei laboratori — è già a disposizione al Club.",
-	},
-];
+
+const faq = faqDiPagina("summer-camp");
 ---
 
 <Layout
 	title="Summer Camp — Ronchiverdi Sport Club"
 	description="Il Summer Camp Ronchiverdi: sport, laboratori LEGO Bricks4Kidz e lingue con The One School, per bambini dai 3 ai 12 anni."
+	image="og/summer-camp.jpg"
 >
 	<PageHero image="images/young-school-teaser.jpg" imageAlt="Bambini del Summer Camp Ronchiverdi" eyebrow="Young School">
 		<Fragment slot="title">Summer Camp, <em class="accent">un'estate da vivere</em></Fragment>

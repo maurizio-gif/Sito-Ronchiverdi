@@ -4,27 +4,16 @@ import MembershipTable from "../components/MembershipTable.astro";
 import PageHero from "../components/PageHero.astro";
 import Faq from "../components/Faq.astro";
 import { url } from "../lib/paths";
+import { faqDiPagina } from "../data/faq";
 
-const faq = [
-	{
-		q: "Il prezzo mostrato è mensile?",
-		a: "Sì, il prezzo indicato è relativo alla rata mensile di un abbonamento annuale. Per maggiori info sulle modalità di pagamento, prenota un tour o contatta la reception.",
-	},
-	{
-		q: "Cosa include l'abbonamento Swim?",
-		a: "L'abbonamento Swim ha una durata di 11 mesi (agosto escluso) e include l'accesso a nuoto libero e acqua fitness, ma non alla piscina estiva né alle altre aree del club.",
-	},
-	{
-		q: "Posso passare da un abbonamento all'altro?",
-		a: "Sì, è possibile aggiornare il proprio abbonamento in corso d'anno. Vieni in reception o contattaci per valutare insieme la formula più adatta.",
-	},
-];
 
+const faq = faqDiPagina("abbonamenti");
 ---
 
 <Layout
 	title="Abbonamenti — Ronchiverdi Sport Club"
 	description="Confronta gli abbonamenti Gym, Swim, Silver e Gold di Ronchiverdi Sport Club: gym floor, corsi fitness, acqua fitness, nuoto libero, piscina estiva, spa, padel e tennis."
+	image="og/abbonamenti.jpg"
 >
 	<PageHero image="images/club/lacertosus.jpg" imageAlt="Area Lacertosus Ronchiverdi" eyebrow="Abbonamenti">
 		<Fragment slot="title">Scegli il tuo <em class="accent">abbonamento</em></Fragment>

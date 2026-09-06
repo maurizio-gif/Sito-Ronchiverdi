@@ -9,8 +9,8 @@ import { getHours } from "../../lib/schedules";
 
 const tennisPadelHours = await getHours("tennis-padel");
 import { url } from "../../lib/paths";
+import { faqDiPagina, WANSPORT_URL } from "../../data/faq";
 
-const WANSPORT_URL = "https://wansport.com/scarica-la-nuova-app/?venue=2xia7hbqfbsgal19mxe0h8w7";
 
 const facts = [
 	{
@@ -58,49 +58,14 @@ const requisiti = [
 	},
 ];
 
-const faq = [
-	{
-		q: "È possibile prenotare un campo anche senza essere soci?",
-		a: "Sì. I campi da padel possono essere prenotati anche da utenti esterni. Non è necessario sottoscrivere alcuna tessera di iscrizione.",
-	},
-	{
-		q: "È possibile noleggiare una racchetta?",
-		a: "Sì. Chi non dispone di una racchetta può noleggiarla direttamente presso il Club al costo di 4 euro.",
-	},
-	{
-		q: "Sono disponibili corsi di gruppo?",
-		a: "Sì. È possibile organizzare lezioni di gruppo per 2, 3 o 4 persone, in base al livello e alle disponibilità dei maestri.",
-	},
-	{
-		q: "È possibile prenotare lezioni private?",
-		a: "Sì. Le lezioni individuali possono essere concordate contattando direttamente il maestro.",
-	},
-	{
-		q: "Come si prenotano i campi?",
-		html: `<p>I campi si prenotano tramite l'<strong>App Wansport</strong>, dalla quale è possibile verificare giorni, orari e disponibilità. Puoi <a href="${WANSPORT_URL}" target="_blank" rel="noopener">scaricare l'app qui</a>.</p>`,
-	},
-	{
-		q: "È disponibile uno spogliatoio dedicato?",
-		a: "Sì. È presente uno spogliatoio dedicato agli utenti di tennis e padel.",
-	},
-	{
-		q: "Esistono gruppi o chat per trovare altri giocatori?",
-		a: "Sì. Sono disponibili chat dedicate, organizzate in base al livello di gioco, per facilitare la ricerca di compagni e l'organizzazione delle partite.",
-	},
-	{
-		q: "Sono disponibili pacchetti di lezioni o di utilizzo dei campi?",
-		a: "Sì. Sono disponibili pacchetti dedicati alle lezioni e all'utilizzo dei campi, acquistabili tramite il maestro oppure presso la Reception.",
-	},
-	{
-		q: "Quali sono gli orari di utilizzo dei campi?",
-		html: "<p>I campi da tennis e padel sono disponibili dal <strong>lunedì al venerdì dalle 08:00 alle 23:00</strong> e il <strong>sabato, domenica e nei giorni festivi dalle 09:00 alle 20:00</strong>. Eventuali variazioni vengono comunicate attraverso i canali ufficiali del Club.</p>",
-	},
-];
+
+const faq = faqDiPagina("padel");
 ---
 
 <Layout
 	title="Padel — Ronchiverdi Sport Club"
 	description="Padel a Ronchiverdi: 3 campi, coperti e scoperti, aperti a soci e non soci. Corsi di gruppo, lezioni individuali e Young School Padel per ragazzi."
+	image="og/padel.jpg"
 >
 	<PageHero image="images/activities/padel.jpg" imageAlt="Ingresso tra due campi da padel coperti a Ronchiverdi" eyebrow="Attività sportive">
 		<Fragment slot="title">Padel, <em class="accent">ogni partita è un'emozione</em></Fragment>
