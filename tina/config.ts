@@ -69,6 +69,63 @@ export default defineConfig({
         ],
       },
       {
+        name: "post",
+        label: "Blog",
+        path: "src/content/posts",
+        format: "md",
+        fields: [
+          { type: "string", name: "title", label: "Titolo", isTitle: true, required: true },
+          {
+            type: "string",
+            name: "slug",
+            label: "Indirizzo (slug)",
+            required: true,
+            description:
+              "L'articolo vive su /post/<slug>. Per i 18 articoli migrati dal vecchio sito questo valore è identico all'originale: cambiarlo fa perdere il posizionamento su Google e crea un link rotto. Modificalo solo per articoli nuovi.",
+          },
+          {
+            type: "string",
+            name: "description",
+            label: "Descrizione breve",
+            required: true,
+            description: "Compare nell'elenco del blog, nell'anteprima social e come meta description.",
+            ui: { component: "textarea" },
+          },
+          { type: "image", name: "image", label: "Foto", required: true },
+          { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },
+          {
+            type: "string",
+            name: "categoria",
+            label: "Categoria",
+            required: true,
+            options: ["Allenamento", "Nuoto e acqua", "Tennis e padel", "Hyrox", "Benessere"],
+          },
+          {
+            type: "datetime",
+            name: "date",
+            label: "Data di pubblicazione",
+            description:
+              "Facoltativa. Gli articoli migrati dal vecchio sito non hanno la data originale: finché resta vuota, l'articolo non dichiara nessuna data e si ordina col campo qui sotto.",
+          },
+          {
+            type: "number",
+            name: "ordine",
+            label: "Ordine nell'elenco",
+            required: true,
+            description: "Usato solo per gli articoli senza data. Numero più basso = più in alto.",
+          },
+          {
+            type: "string",
+            name: "correlata",
+            label: "Pagina collegata",
+            required: true,
+            description: "Es. /attivita/padel — il pulsante in fondo all'articolo porta qui.",
+          },
+          { type: "string", name: "correlataLabel", label: "Testo del pulsante", required: true },
+          { type: "rich-text", name: "body", label: "Testo dell'articolo", isBody: true },
+        ],
+      },
+      {
         // Sorgente unica della tabella abbonamenti: modificandola qui si
         // aggiornano tutte le pagine che la mostrano (abbonamenti, gym
         // floor, ...). Documento singolo, non se ne creano altri.

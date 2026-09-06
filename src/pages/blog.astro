@@ -1,0 +1,217 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { url } from "../lib/paths";
+
+// /blog era anche l'indirizzo dell'indice sul vecchio sito: tenerlo qui evita
+// un redirect e conserva quello che la pagina aveva già accumulato.
+const posts = (await getCollection("posts")).sort((a, b) => {
+	// Quando la data reale c'è vince lei, dal più recente; gli altri seguono
+	// nell'ordine manuale.
+	if (a.data.date && b.data.date) return b.data.date.getTime() - a.data.date.getTime();
+	if (a.data.date) return -1;
+	if (b.data.date) return 1;
+	return a.data.ordine - b.data.ordine;
+});
+
+const categorie = [...new Set(posts.map((p) => p.data.categoria))];
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "Blog",
+	name: "Blog — Ronchiverdi Sport Club",
+	description: "Allenamento, nuoto, tennis, padel e benessere raccontati dallo staff del club.",
+	inLanguage: "it-IT",
+	url: Astro.site ? new URL(url("/blog"), Astro.site).href : undefined,
+	blogPost: posts.map((p) => ({
+		"@type": "BlogPosting",
+		headline: p.data.title,
+		description: p.data.description,
+		url: Astro.site ? new URL(url(`/post/${p.data.slug}`), Astro.site).href : undefined,
+	})),
+};
+---
+
+<Layout
+	title="Blog — Ronchiverdi Sport Club Torino"
+	description="Allenamento, nuoto, tennis, padel, Hyrox e benessere: guide e approfondimenti dello staff di Ronchiverdi Sport Club a Torino."
+	image="og/blog.jpg"
+	schema={schema}
+>
+	<header class="page-header">
+		<p class="eyebrow">Blog</p>
+		<h1>Quello che <em class="accent">sappiamo</em></h1>
+		<p class="lede">
+			Guide e approfondimenti dello staff del club: come si migliora una
+			tecnica, come si imposta un percorso, cosa succede al corpo quando ci
+			si allena — e quando ci si ferma.
+		</p>
+	</header>
+
+	<div class="blog">
+		<nav class="blog__filtri" aria-label="Categorie">
+			<button type="button" class="blog__chip is-active" data-cat="">Tutti</button>
+			{categorie.map((c) => (
+				<button type="button" class="blog__chip" data-cat={c}>{c}</button>
+			))}
+		</nav>
+
+		<div class="blog__grid">
+			{posts.map((p, i) => (
+				<article class="blog-card" data-cat={p.data.categoria}>
+					<a class="blog-card__link" href={url(`/post/${p.data.slug}`)}>
+						<span class="blog-card__media">
+							<img
+								src={url(p.data.image)}
+								alt={p.data.imageAlt}
+								loading={i < 3 ? "eager" : "lazy"}
+								width="600"
+								height="400"
+							/>
+						</span>
+						<span class="blog-card__cat">{p.data.categoria}</span>
+						<h2 class="blog-card__title">{p.data.title}</h2>
+						<p class="blog-card__desc">{p.data.description}</p>
+						<span class="blog-card__more">Leggi <span aria-hidden="true">→</span></span>
+					</a>
+				</article>
+			))}
+		</div>
+	</div>
+
+	<section class="final-cta">
+		<h2>Dalle parole ai campi</h2>
+		<p class="lede" style="margin-inline:auto">
+			Il modo più rapido per capire se il club fa per te è vederlo.
+		</p>
+		<button type="button" class="btn" data-open-contact>Prenota un tour</button>
+	</section>
+</Layout>
+
+<script>
+	const chip = Array.from(document.querySelectorAll<HTMLButtonElement>(".blog__chip"));
+	const card = Array.from(document.querySelectorAll<HTMLElement>(".blog-card"));
+
+	chip.forEach((b) =>
+		b.addEventListener("click", () => {
+			const cat = b.dataset.cat || "";
+			chip.forEach((x) => x.classList.toggle("is-active", x === b));
+			card.forEach((c) => {
+				c.hidden = !!cat && c.dataset.cat !== cat;
+			});
+		})
+	);
+</script>
+
+<style>
+	/* Come in /planning e /faq: .page-header è definita scoped nelle pagine. */
+	.page-header {
+		max-width: 44rem;
+		margin: 0 auto;
+		padding: 5rem 1.5rem 1rem;
+		text-align: center;
+	}
+
+	.blog {
+		max-width: 82rem;
+		margin: 0 auto 5rem;
+		padding: 0 1.5rem;
+	}
+	.blog__filtri {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.4rem;
+		margin: 2rem 0 3rem;
+	}
+	.blog__chip {
+		padding: 0.35rem 0.85rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		background: none;
+		font: inherit;
+		font-size: var(--text-2xs);
+		letter-spacing: 0.06em;
+		color: var(--text-muted);
+		cursor: pointer;
+	}
+	.blog__chip:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.blog__chip.is-active {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--bg);
+	}
+
+	.blog__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2.5rem 1.75rem;
+	}
+	.blog-card__link {
+		display: grid;
+		gap: 0.6rem;
+		height: 100%;
+		align-content: start;
+		text-decoration: none;
+		color: inherit;
+	}
+	.blog-card__media {
+		display: block;
+		aspect-ratio: 3 / 2;
+		overflow: hidden;
+		border-radius: var(--radius);
+		background: var(--bg-alt);
+	}
+	.blog-card__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s ease;
+	}
+	.blog-card__link:hover .blog-card__media img {
+		transform: scale(1.04);
+	}
+	.blog-card__cat {
+		font-size: var(--text-2xs);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.blog-card__title {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-lg);
+		font-weight: 500;
+		line-height: var(--leading-lg);
+		letter-spacing: var(--tracking-lg);
+	}
+	.blog-card__link:hover .blog-card__title {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.blog-card__desc {
+		margin: 0;
+		font-size: var(--text-sm);
+		line-height: 1.6;
+		color: var(--text-muted);
+	}
+	.blog-card__more {
+		font-size: var(--text-xs);
+		letter-spacing: 0.06em;
+		color: var(--accent);
+	}
+
+	@media (max-width: 1100px), (orientation: portrait) {
+		.blog__grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 700px) {
+		.blog__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

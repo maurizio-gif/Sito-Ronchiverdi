@@ -1,0 +1,247 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/PageHero.astro";
+import { url } from "../../lib/paths";
+
+// Gli indirizzi restano quelli del vecchio sito: /post/<slug>, con lo slug
+// identico all'originale. È il motivo per cui questi 18 articoli non hanno
+// bisogno di nessun redirect quando il dominio passa al sito nuovo.
+export async function getStaticPaths() {
+	const posts = await getCollection("posts");
+	return posts.map((post) => ({ params: { slug: post.data.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+
+const tutti = (await getCollection("posts")).sort((a, b) => a.data.ordine - b.data.ordine);
+// Prima gli articoli della stessa categoria: sono quelli che interessano
+// davvero a chi ha appena finito di leggere.
+const altri = tutti
+	.filter((p) => p.id !== post.id)
+	.sort((a, b) => Number(b.data.categoria === d.categoria) - Number(a.data.categoria === d.categoria))
+	.slice(0, 3);
+
+const dataLeggibile = d.date
+	? d.date.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })
+	: null;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	headline: d.title,
+	description: d.description,
+	image: Astro.site ? new URL(url(d.image), Astro.site).href : undefined,
+	inLanguage: "it-IT",
+	// datePublished solo quando la data è quella vera: dichiararne una
+	// inventata sarebbe peggio che non dichiararne nessuna.
+	...(d.date ? { datePublished: d.date.toISOString().slice(0, 10) } : {}),
+	mainEntityOfPage: Astro.site ? new URL(url(`/post/${d.slug}`), Astro.site).href : undefined,
+	author: { "@type": "Organization", name: "Ronchiverdi Sport Club" },
+	publisher: {
+		"@type": "Organization",
+		name: "Ronchiverdi Sport Club",
+		logo: {
+			"@type": "ImageObject",
+			url: Astro.site ? new URL(url("logo-ronchiverdi-sport.png"), Astro.site).href : undefined,
+		},
+	},
+};
+---
+
+<Layout title={`${d.title} | Ronchiverdi Sport Club`} description={d.description} image={d.image} schema={schema}>
+	<PageHero image={d.image} imageAlt={d.imageAlt} eyebrow={d.categoria}>
+		<Fragment slot="title">{d.title}</Fragment>
+		<Fragment slot="lede">{d.description}</Fragment>
+	</PageHero>
+
+	<article class="post">
+		<nav class="post__breadcrumb" aria-label="Percorso">
+			<a href={url("/blog")}>Blog</a>
+			<span aria-hidden="true">/</span>
+			<span>{d.categoria}</span>
+			{dataLeggibile && (
+				<>
+					<span aria-hidden="true">/</span>
+					<time datetime={d.date?.toISOString().slice(0, 10)}>{dataLeggibile}</time>
+				</>
+			)}
+		</nav>
+
+		<div class="post__body">
+			<Content />
+		</div>
+
+		<aside class="post__correlata">
+			<p class="post__correlata-label">Approfondisci sul sito</p>
+			<a class="btn" href={url(d.correlata)}>{d.correlataLabel}</a>
+			<button type="button" class="btn btn-outline" data-open-contact>Parliamone</button>
+		</aside>
+	</article>
+
+	{altri.length > 0 && (
+		<section class="post-altri">
+			<div class="post-altri__head">
+				<span class="eyebrow">Continua a leggere</span>
+				<h2>Altri articoli</h2>
+			</div>
+			<div class="post-altri__grid">
+				{altri.map((p) => (
+					<a class="post-card" href={url(`/post/${p.data.slug}`)}>
+						<span class="post-card__media">
+							<img src={url(p.data.image)} alt={p.data.imageAlt} loading="lazy" width="600" height="400" />
+						</span>
+						<span class="post-card__cat">{p.data.categoria}</span>
+						<span class="post-card__title">{p.data.title}</span>
+					</a>
+				))}
+			</div>
+		</section>
+	)}
+</Layout>
+
+<style>
+	.post {
+		max-width: 44rem;
+		margin: 0 auto;
+		padding: 3rem 1.5rem 1rem;
+	}
+	.post__breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 2.5rem;
+		font-size: var(--text-xs);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	.post__breadcrumb a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+	.post__breadcrumb a:hover {
+		text-decoration: underline;
+	}
+
+	/* Il corpo arriva da markdown, quindi gli stili vanno in :global */
+	.post__body {
+		font-size: var(--text-md);
+		line-height: 1.75;
+	}
+	.post__body :global(p) {
+		margin: 0 0 1.35rem;
+	}
+	.post__body :global(h2) {
+		margin: 3rem 0 1rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-2xl);
+		letter-spacing: var(--tracking-2xl);
+		line-height: var(--leading-2xl);
+	}
+	.post__body :global(h3) {
+		margin: 2.25rem 0 0.75rem;
+		font-size: var(--text-lg);
+		line-height: var(--leading-lg);
+	}
+	.post__body :global(ul),
+	.post__body :global(ol) {
+		margin: 0 0 1.35rem;
+		padding-left: 1.3rem;
+	}
+	.post__body :global(li) {
+		margin-bottom: 0.6rem;
+	}
+	.post__body :global(a) {
+		color: var(--accent);
+	}
+	.post__body :global(strong) {
+		font-weight: 600;
+	}
+	/* Il disclaimer sanitario in coda ad alcuni articoli */
+	.post__body :global(p:last-child) {
+		margin-bottom: 0;
+	}
+
+	.post__correlata {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		margin-top: 3.5rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border);
+	}
+	.post__correlata-label {
+		width: 100%;
+		margin: 0;
+		font-size: var(--text-xs);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.post-altri {
+		max-width: 82rem;
+		margin: 5rem auto 0;
+		padding: 3.5rem 1.5rem 5rem;
+		border-top: 1px solid var(--border);
+	}
+	.post-altri__head {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+	.post-altri__head h2 {
+		margin: 0.4rem 0 0;
+	}
+	.post-altri__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.75rem;
+	}
+	.post-card {
+		display: grid;
+		gap: 0.6rem;
+		text-decoration: none;
+		color: inherit;
+	}
+	.post-card__media {
+		display: block;
+		aspect-ratio: 3 / 2;
+		overflow: hidden;
+		border-radius: var(--radius);
+		background: var(--bg-alt);
+	}
+	.post-card__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s ease;
+	}
+	.post-card:hover .post-card__media img {
+		transform: scale(1.04);
+	}
+	.post-card__cat {
+		font-size: var(--text-2xs);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.post-card__title {
+		font-size: var(--text-md);
+		line-height: 1.35;
+	}
+	.post-card:hover .post-card__title {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	@media (max-width: 900px), (orientation: portrait) {
+		.post-altri__grid {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+	}
+</style>

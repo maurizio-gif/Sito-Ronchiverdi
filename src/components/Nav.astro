@@ -15,6 +15,7 @@ const links = [
 	{ href: url("/planning"), label: "Planning" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/eventi"), label: "Eventi" },
+	{ href: url("/blog"), label: "Blog" },
 	{ href: url("/faq"), label: "FAQ" },
 ];
 ---
@@ -251,6 +252,24 @@ const links = [
 		background: var(--bg-alt);
 		border: 1px solid var(--border);
 		color: var(--text-muted);
+	}
+	/* Fra il desktop largo e il breakpoint del menu compatto (1100px) lo
+	   spazio non basta più per logo + voci + i due pulsanti verso gli altri
+	   siti del gruppo + la CTA: la barra tracimava e "Prenota un tour" finiva
+	   fuori schermo. I due pulsanti secondari si stringono per primi, così le
+	   voci di menu e la CTA restano intere. */
+	@media (max-width: 1400px) and (min-width: 1261px) and (orientation: landscape) {
+		.nav {
+			gap: 0.85rem;
+			padding-inline: 0.9rem;
+		}
+		.nav-business {
+			gap: 0.4rem;
+		}
+		.nav-business-btn {
+			padding: 0.5rem 0.6rem;
+			letter-spacing: 0;
+		}
 	}
 	.nav-business-btn:hover {
 		background: var(--border-strong);
@@ -560,7 +579,7 @@ const links = [
 	   1080 px il pulsante "Prenota un tour" finiva fuori schermo e la pagina
 	   scorreva in orizzontale. Il menu compatto vale quindi per ogni schermo
 	   verticale, non solo per i telefoni. */
-	@media (max-width: 860px), (orientation: portrait) {
+	@media (max-width: 1260px), (orientation: portrait) {
 		.nav {
 			padding: 0.5rem 1.25rem;
 		}
