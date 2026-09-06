@@ -51,6 +51,33 @@ const events = defineCollection({
   }),
 });
 
+// Articoli del blog, migrati dal vecchio sito Wix. Lo `slug` è quello che il
+// vecchio sito aveva su /post/<slug> e va lasciato identico, accenti compresi:
+// sono indirizzi già indicizzati da Google, e cambiarli significherebbe
+// buttare via il posizionamento che hanno.
+//
+// `date` è volutamente opzionale: le date di pubblicazione originali non sono
+// state recuperate dal vecchio sito. Finché manca, l'articolo si ordina con
+// `ordine` e non dichiara nessuna data — meglio nessuna data che una
+// inventata. Appena la data reale viene inserita da Tina, compare in pagina e
+// nello structured data.
+const posts = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    image: z.string(),
+    imageAlt: z.string(),
+    categoria: z.string(),
+    date: z.coerce.date().optional(),
+    ordine: z.number(),
+    /** Pagina del sito a cui l'articolo rimanda. */
+    correlata: z.string(),
+    correlataLabel: z.string(),
+  }),
+});
+
 const trainers = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/trainers" }),
   schema: z.object({
@@ -150,4 +177,4 @@ const schedules = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, trainers, schedules };
+export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules };

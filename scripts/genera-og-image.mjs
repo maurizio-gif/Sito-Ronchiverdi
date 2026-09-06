@@ -19,6 +19,7 @@ const IMMAGINI = {
 	"images/club/notturna.jpg": "eventi",
 	"images/club/gym-specchio.jpg": "planning",
 	"images/club/reception.jpg": "faq",
+	"images/club/lounge-alt.jpg": "blog",
 	"images/activities/acqua-fitness.jpg": "acqua-fitness",
 	"images/activities/fitness.jpg": "corsi-fitness",
 	"images/activities/gym-floor.jpg": "gym-floor",
