@@ -7,7 +7,11 @@ import IconFacts from "../../components/IconFacts.astro";
 import InfoTip from "../../components/InfoTip.astro";
 import HoursTable from "../../components/HoursTable.astro";
 import MembershipTable from "../../components/MembershipTable.astro";
-import { gymFloorHours, gymFloorTrainerHours } from "../../data/schedules";
+// Orari dal file unico editabile da Tina (src/content/schedules/planning.json).
+import { getHours } from "../../lib/schedules";
+
+const gymFloorHours = await getHours("gym-floor");
+const gymFloorTrainerHours = await getHours("gym-floor-trainer");
 import { url } from "../../lib/paths";
 
 const APP_URL = "https://onelink.to/tqhpzr";
@@ -334,11 +338,11 @@ const faq = [
 		<div class="orari__tables">
 			<div class="orari__table">
 				<h3>Apertura sala</h3>
-				<HoursTable rows={gymFloorHours} />
+				<HoursTable rows={gymFloorHours.rows} />
 			</div>
 			<div class="orari__table">
 				<h3>Istruttore in sala</h3>
-				<HoursTable rows={gymFloorTrainerHours} />
+				<HoursTable rows={gymFloorTrainerHours.rows} />
 			</div>
 		</div>
 	</section>

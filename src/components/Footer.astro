@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
-import { gymFloorHours } from "../data/schedules";
+import { getHours } from "../lib/schedules";
+
+const gymFloorHours = await getHours("gym-floor");
 
 const address = "Corso Moncalieri 466, Torino";
 const mapsEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
@@ -99,7 +101,7 @@ const enti = [
 			</div>
 			<div class="find-us__item">
 				<p class="find-us__label">Orari club</p>
-				<p>{gymFloorHours.map((r) => r.label + " " + r.hours).join(" · ")}</p>
+				<p>{gymFloorHours.rows.map((r) => r.label + " " + r.hours).join(" · ")}</p>
 			</div>
 			<div class="find-us__item">
 				<p class="find-us__label">Contatti</p>

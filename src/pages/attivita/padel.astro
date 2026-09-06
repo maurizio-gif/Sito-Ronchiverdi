@@ -4,7 +4,10 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import HoursTable from "../../components/HoursTable.astro";
-import { tennisPadelHours } from "../../data/schedules";
+// Orari dal file unico editabile da Tina (src/content/schedules/planning.json).
+import { getHours } from "../../lib/schedules";
+
+const tennisPadelHours = await getHours("tennis-padel");
 import { url } from "../../lib/paths";
 
 const WANSPORT_URL = "https://wansport.com/scarica-la-nuova-app/?venue=2xia7hbqfbsgal19mxe0h8w7";
@@ -213,7 +216,7 @@ const faq = [
 			<a class="btn" href={WANSPORT_URL} target="_blank" rel="noopener">Prenota su Wansport</a>
 		</div>
 		<div class="orari__table">
-			<HoursTable rows={tennisPadelHours} />
+			<HoursTable rows={tennisPadelHours.rows} />
 		</div>
 	</section>
 

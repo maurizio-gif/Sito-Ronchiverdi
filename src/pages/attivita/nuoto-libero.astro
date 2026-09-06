@@ -3,7 +3,10 @@ import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import WeeklySchedule from "../../components/WeeklySchedule.astro";
 import Faq from "../../components/Faq.astro";
-import { nuotoLiberoLessons, nuotoLiberoSchedule } from "../../data/schedules";
+// Fasce orarie dal file unico editabile da Tina (src/content/schedules/planning.json).
+import { getSchedule } from "../../lib/schedules";
+
+const nuotoLibero = await getSchedule("nuoto-libero");
 import { url } from "../../lib/paths";
 
 const corsieEsempio = [
@@ -116,7 +119,7 @@ const faq = [
 				Orari indicativi di apertura delle corsie. <em>Bozza in fase di aggiornamento.</em>
 			</p>
 		</div>
-		<WeeklySchedule id="nuoto-libero" lessons={nuotoLiberoLessons} schedule={nuotoLiberoSchedule} />
+		<WeeklySchedule id="nuoto-libero" lessons={nuotoLibero.lessons} schedule={nuotoLibero.schedule} />
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>

@@ -5,8 +5,8 @@ import WeeklySchedule from "../../components/WeeklySchedule.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
-// Lezioni e planning arrivano dalla stessa sorgente editabile da Tina
-// (src/content/schedules/acqua-fitness.json), condivisa con la pagina Planning.
+// Lezioni e planning arrivano dal file unico editabile da Tina
+// (src/content/schedules/planning.json), lo stesso della pagina Planning.
 import { getSchedule } from "../../lib/schedules";
 
 const acquaFitness = await getSchedule("acqua-fitness");
