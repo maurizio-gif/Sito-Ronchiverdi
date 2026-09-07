@@ -38,7 +38,10 @@ const iscrizioniLinks = [
 ];
 
 const legalLinks = [
-	{ href: url("/regolamento"), label: "Regolamento" },
+	// Il vecchio link "Regolamento" puntava a una pagina mai esistita: le regole
+	// del club vivono ora nel documento unico /termini-e-condizioni, e
+	// /regolamento ci reindirizza (vedi astro.config.mjs).
+	{ href: url("/termini-e-condizioni"), label: "Termini e Condizioni" },
 	{ href: url("/privacy"), label: "Privacy" },
 	{ href: url("/nomina-safeguarding"), label: "Nomina Safeguarding" },
 	{ href: url("/codice-di-condotta"), label: "Codice di Condotta" },
