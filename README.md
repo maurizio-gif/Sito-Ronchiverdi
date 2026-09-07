@@ -119,8 +119,10 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
 - [ ] Form di lead generation per verticale con attribuzione fonte (vedi audit)
 - [x] SEO tecnico di base: canonical, Open Graph/Twitter, sitemap, robots,
       structured data `SportsActivityLocation` e `FAQPage`
-- [ ] Pagine legali (privacy, cookie, regolamento, safeguarding, codice di
-      condotta) — oggi linkate dal footer ma non ancora esistenti
+- [ ] Pagine legali — fatta la **privacy** (`/privacy`, informativa artt. 13-14
+      GDPR allineata ai trattamenti reali del sito: moduli, `/api/track`,
+      CookieYes); mancano ancora regolamento, safeguarding e codice di condotta,
+      oggi linkati dal footer ma non ancora esistenti
 - [ ] Redirect 301 dal vecchio sito Wix (~110 URL, vedi
       `scripts/scrape_output/inventario.csv`)
 - [ ] GA4 / GTM e tag di conversione
