@@ -22,10 +22,12 @@ interface Props {
 	titoloAccento: string;
 	/** Data in formato ISO (AAAA-MM-GG): mostrata come "Ultimo aggiornamento". */
 	aggiornamento: string;
-	indice: Voce[];
+	/** Indice a pastiglie. Le pagine che si costruiscono un indice proprio —
+	 *  i termini e condizioni, che lo numerano per articolo — lo omettono. */
+	indice?: Voce[];
 }
 
-const { title, description, eyebrow, titolo, titoloAccento, aggiornamento, indice } = Astro.props;
+const { title, description, eyebrow, titolo, titoloAccento, aggiornamento, indice = [] } = Astro.props;
 
 const aggiornamentoTesto = new Date(aggiornamento).toLocaleDateString("it-IT", {
 	day: "numeric",
@@ -44,10 +46,13 @@ const aggiornamentoTesto = new Date(aggiornamento).toLocaleDateString("it-IT", {
 
 	<div class="legal-page">
 		<slot name="sintesi" />
+		<slot name="ricerca" />
 
-		<nav class="legal-index" aria-label="Indice della pagina">
-			{indice.map((v) => <a class="legal-index__chip" href={v.href}>{v.label}</a>)}
-		</nav>
+		{indice.length > 0 && (
+			<nav class="legal-index" aria-label="Indice della pagina">
+				{indice.map((v) => <a class="legal-index__chip" href={v.href}>{v.label}</a>)}
+			</nav>
+		)}
 
 		<slot />
 	</div>

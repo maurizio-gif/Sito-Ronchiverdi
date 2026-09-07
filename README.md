@@ -85,7 +85,10 @@ ancore) più **`src/styles/legale.css`**, che viaggia solo con quelle pagine. Un
 pagina legale nuova si scrive quindi come solo contenuto, senza ricopiare stili.
 
 I termini e condizioni sono il documento unico che sostituisce i regolamenti
-consegnati in reception: `docs/armonizzazione-regolamenti.md` tiene traccia di
+consegnati in reception, scritto come **articolato**: la pagina genera articoli
+e punti numerati (`#art-6-9`, citabili e linkabili) dall'elenco `articoli`, con
+i rimandi interni espressi come segnaposto `{{art:id}}` e una ricerca per parole
+chiave sopra il testo. `docs/armonizzazione-regolamenti.md` tiene traccia di
 quali fonti sono confluite dove, delle contraddizioni sciolte e dei punti ancora
 da confermare con il club. Va letto prima di modificare una regola della pagina.
 

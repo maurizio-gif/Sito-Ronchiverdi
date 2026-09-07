@@ -138,11 +138,36 @@ sul sito servono:
    definitiva va letto dal consulente del club, in particolare per le clausole
    su responsabilità, rimborsi, risoluzione e recesso.
 
+## Com'è fatta la pagina
+
+Il documento è un **articolato**: `src/pages/termini-e-condizioni.astro` definisce
+l'elenco `articoli`, e da quello la pagina genera tutto il resto.
+
+- Ogni voce diventa un articolo numerato **in ordine di apparizione** (Art. 1,
+  Art. 2…), ogni sua clausola un punto `articolo.punto` con un id proprio
+  (`#art-6-9`). I numeri non si scrivono mai a mano: spostare un articolo li
+  rinumera tutti, indice compreso.
+- Il numero di ogni punto è un link: serve a citare una regola precisa —
+  «vale il punto 19.5» — e ad arrivarci direttamente. Il punto raggiunto resta
+  segnato per un paio di secondi, così chi atterra a metà documento capisce
+  dov'è.
+- I **rimandi interni** si scrivono col segnaposto `{{art:id}}` (per esempio
+  `{{art:flex}}`), risolto in fase di build nel numero e nel link giusti. Un
+  «vedi art. 12» scritto a mano diventerebbe falso al primo riordino; il
+  segnaposto verso un id inesistente fa invece fallire la build.
+- Sopra il testo c'è una **ricerca per parole chiave** che filtra i punti,
+  nasconde gli articoli rimasti vuoti, sfoltisce l'indice di conseguenza ed
+  evidenzia le parole trovate. Ignora accenti e apostrofi tipografici, quindi
+  "eta" trova "età". L'indice dei risultati non promette mai una sezione che
+  la ricerca ha appena nascosto.
+
 ## Come mantenerlo
 
-- Una regola nuova si scrive **solo** in `src/pages/termini-e-condizioni.astro`.
-  Se compare anche su un modulo cartaceo, il modulo deve rimandare alla pagina,
-  non ricopiarla.
+- Una regola nuova si scrive **solo** in `src/pages/termini-e-condizioni.astro`,
+  come clausola dell'articolo di competenza. Se compare anche su un modulo
+  cartaceo, il modulo deve rimandare alla pagina, non ricopiarla.
+- Meglio un punto in più che un punto lungo: la ricerca filtra per punto, e un
+  punto che contiene tre regole ne mostra sempre tre anche a chi ne cercava una.
 - Dati che vivono altrove (prezzi, orari, contenuti degli abbonamenti) si
   linkano, non si duplicano: è la regola che ha evitato metà delle
   incongruenze elencate sopra.

@@ -22,603 +22,697 @@ import { url } from "../lib/paths";
 // le risposte operative in /faq, i dati personali in /privacy. Qui stanno solo
 // le condizioni contrattuali e le regole d'uso: se un dato vive già altrove,
 // va linkato, non ricopiato.
+//
+// STRUTTURA: il documento è un articolato. Ogni voce di `articoli` diventa un
+// articolo numerato in ordine di apparizione, e ogni sua clausola un punto
+// "articolo.punto" con un id proprio (#art-6-8), così una regola si può citare
+// per numero e linkare direttamente. Da qui discende che:
+//   - i numeri NON si scrivono a mano: spostare un articolo li rinumera tutti;
+//   - i rimandi interni si scrivono col segnaposto {{art:id}}, risolto in fase
+//     di render nel numero giusto. Mai "vedi art. 12" a mano, che al primo
+//     riordino diventerebbe falso.
 
-const indice = [
-	{ href: "#documento", label: "Cos'è questo documento" },
-	{ href: "#iscrizione", label: "Iscrizione e accesso" },
-	{ href: "#certificato", label: "Certificato medico" },
-	{ href: "#abbonamenti", label: "Formule di abbonamento" },
-	{ href: "#flex", label: "Abbonamento Flex" },
-	{ href: "#pagamenti", label: "Pagamenti e disdetta" },
-	{ href: "#comportamento", label: "Comportamento" },
-	{ href: "#minori", label: "Minori" },
-	{ href: "#ospiti", label: "Ospiti" },
-	{ href: "#spazi", label: "Spazi e servizi" },
-	{ href: "#campi", label: "Tennis e padel" },
-	{ href: "#responsabilita", label: "Responsabilità" },
-	{ href: "#sospensione", label: "Sospensione e risoluzione" },
-	{ href: "#safeguarding", label: "Tutela dei minori" },
+/** Rende un percorso interno del sito come link, dentro le stringhe HTML. */
+const a = (percorso: string, testo: string) => `<a href="${url(percorso)}">${testo}</a>`;
+const mail = (indirizzo: string) => `<a href="mailto:${indirizzo}">${indirizzo}</a>`;
+
+interface Tabella {
+	intestazioni: string[];
+	righe: string[][];
+}
+
+interface Clausola {
+	/** Testo del punto, in HTML inline. */
+	testo: string;
+	/** Elenco puntato che completa il punto. */
+	elenco?: string[];
+	tabella?: Tabella;
+}
+
+interface Articolo {
+	id: string;
+	titolo: string;
+	/** Riquadro editoriale sopra le clausole: non è una clausola, non è numerato. */
+	nota?: string;
+	clausole: Clausola[];
+}
+
+const articoli: Articolo[] = [
+	{
+		id: "oggetto",
+		titolo: "Oggetto e ambito di applicazione",
+		nota: `<strong>Quello che non troverai qui.</strong> Cosa comprende ogni abbonamento e quanto costa sta in ${a("/abbonamenti", "Abbonamenti")} e nel listino in vigore; gli orari di corsi e attività nel ${a("/planning", "planning settimanale")}; le risposte operative nelle ${a("/faq", "domande frequenti")}; il trattamento dei dati personali nella ${a("/privacy", "Privacy Policy")}. Sono informazioni che cambiano con tempi propri: ricopiarle qui significherebbe avere prima o poi due versioni diverse della stessa cosa.`,
+		clausole: [
+			{
+				testo:
+					"Questi Termini e Condizioni regolano l'iscrizione a <strong>Ronchiverdi Sport Club S.S.D. a r.l.</strong> (di seguito “il Club”) — sede legale in Piazza Vetra 17, 20123 Milano, sede operativa in Corso Moncalieri 466/16, 10133 Torino, P. IVA e C.F. 11173030013 — e l'uso dei suoi impianti e servizi.",
+			},
+			{
+				testo:
+					"Si accettano con la sottoscrizione della domanda di iscrizione e valgono per i soci, per chi frequenta corsi e attività e, in quanto compatibili, per gli ospiti.",
+			},
+			{
+				testo:
+					"<strong>Questa è la versione ufficiale e aggiornata delle regole del Club.</strong> Dove una copia cartacea, un allegato o un estratto consegnato in precedenza dica cose diverse, vale quanto scritto qui, con la data di aggiornamento riportata in cima alla pagina.",
+			},
+			{
+				testo:
+					"Fanno eccezione le condizioni economiche del singolo contratto — importo, durata, scadenze delle rate — che restano quelle del modulo di iscrizione sottoscritto.",
+			},
+		],
+	},
+	{
+		id: "iscrizione",
+		titolo: "Iscrizione e quota associativa",
+		clausole: [
+			{ testo: "L'iscrizione al Club è riservata ai maggiorenni." },
+			{
+				testo:
+					"I ragazzi di età inferiore ai 18 anni possono iscriversi con il consenso scritto di un genitore o di chi ne esercita la tutela.",
+			},
+			{
+				testo:
+					"L'iscrizione dei ragazzi di età inferiore ai 14 anni è subordinata all'iscrizione di un genitore.",
+			},
+			{
+				testo: "Per l'iscrizione è necessario fornire:",
+				elenco: [
+					"documento d'identità in corso di validità;",
+					"codice fiscale;",
+					`certificato medico in corso di validità, secondo quanto previsto dall'{{art:certificato}};`,
+					"per gli atleti agonisti, certificato di idoneità sportiva agonistica.",
+				],
+			},
+			{ testo: "È inoltre necessario aver letto e sottoscritto questi Termini e Condizioni." },
+			{
+				testo:
+					"L'iscrizione comporta il versamento di una <strong>quota associativa di validità annuale</strong>, il cui importo è indicato nel listino in vigore.",
+			},
+			{
+				testo:
+					"Se il rinnovo non avviene entro la scadenza dell'abbonamento, per riattivare la posizione la quota di iscrizione va versata nuovamente.",
+			},
+			{
+				testo:
+					"Il Club può modificare le tariffe degli abbonamenti e dei servizi, o prevedere che servizi prima compresi nel prezzo siano pagati a parte. Per chi ha un abbonamento in corso le nuove condizioni si applicano <strong>dal rinnovo successivo</strong>; per l'abbonamento Flex vale il preavviso previsto dall'{{art:flex}}.",
+			},
+		],
+	},
+	{
+		id: "accesso",
+		titolo: "Accesso al Club",
+		clausole: [
+			{
+				testo:
+					"All'iscrizione viene consegnato un dispositivo personale di accesso — braccialetto o tessera — <strong>strettamente personale, non cedibile né trasferibile</strong>.",
+			},
+			{
+				testo:
+					"Il Club è dotato del sistema di rilevamento accessi In4You – TeamSystem: per ragioni di sicurezza e controllo è obbligatorio passare il proprio dispositivo a ogni ingresso, anche quando i varchi risultassero già aperti.",
+			},
+			{ testo: "Smarrimento o malfunzionamento del dispositivo vanno segnalati subito alla reception." },
+			{
+				testo:
+					"Alla scadenza dell'abbonamento l'accesso al Club è sospeso. Il rinnovo è a discrezione della Direzione del Club.",
+			},
+		],
+	},
+	{
+		id: "certificato",
+		titolo: "Certificato medico",
+		clausole: [
+			{
+				testo:
+					"La consegna del certificato medico è <strong>condizione indispensabile</strong> per usare gli impianti e i servizi del Club.",
+			},
+			{
+				testo:
+					"Fino al deposito del certificato il Club può sospendere la propria prestazione per inadempimento, <strong>senza che la durata del contratto venga prorogata</strong>: i giorni non utilizzati per questo motivo non vengono recuperati.",
+			},
+			{
+				testo:
+					"Il certificato deve essere di idoneità all'attività sportiva non agonistica; per gli atleti agonisti e per i tesserati che partecipano a gare è richiesto il certificato di idoneità agonistica. Il rinnovo alla scadenza è a cura del socio.",
+			},
+			{
+				testo: `Per i corsi e le scuole del Club valgono le stesse regole, con le soglie di età indicate nelle ${a("/faq", "domande frequenti")} di ciascuna attività.`,
+			},
+		],
+	},
+	{
+		id: "abbonamenti",
+		titolo: "Formule di abbonamento",
+		nota: `Le attività comprese in ciascuna formula e i relativi prezzi sono quelli pubblicati in ${a("/abbonamenti", "Abbonamenti")} e nel listino in vigore. Qui sotto restano solo le condizioni contrattuali che cambiano da una formula all'altra.`,
+		clausole: [
+			{
+				testo: "Ogni formula dà accesso alle aree e alle attività indicate di seguito:",
+				tabella: {
+					intestazioni: ["Formula", "Condizioni specifiche", "Durata"],
+					righe: [
+						[
+							"Swim",
+							"Accesso alla vasca indoor per nuoto libero e acqua fitness, e alla Relax Zone. Non comprende la piscina estiva, il solarium e le altre aree outdoor, il Gym Floor, il tennis e il padel.",
+							"11 mesi, agosto escluso per la manutenzione della vasca indoor. La quota annuale può essere suddivisa in 12 rate mensili.",
+						],
+						[
+							"Gym",
+							"Accesso alle aree palestra indoor e alla Relax Zone. Non comprende piscine, solarium, palestra esterna e le altre aree outdoor, il tennis e il padel.",
+							"Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
+						],
+						[
+							"Silver e Gold",
+							"Formule complete: area acqua, Gym Floor, corsi e Relax Zone. La differenza fra le due riguarda l'accesso ai campi da tennis, compreso nella stagione estiva solo con Gold.",
+							"Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
+						],
+						[
+							"Morning",
+							"Accesso dal lunedì al venerdì dalle 8:00 alle 13:00 e il sabato dalle 9:00 alle 13:00, con l'obbligo di lasciare gli impianti entro tali orari. Non è valido la domenica.",
+							"Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
+						],
+						[
+							"Trimestrali",
+							"Gli abbonamenti trimestrali non comprendono il sabato e la domenica nei mesi da maggio ad agosto.",
+							"Tre mesi dalla data di attivazione.",
+						],
+					],
+				},
+			},
+			{
+				testo:
+					"L'accesso ai campi da tennis e padel, dove non compreso nella formula, resta possibile alla tariffa prevista per i soci, alle condizioni dell'{{art:campi}}.",
+			},
+		],
+	},
+	{
+		id: "flex",
+		titolo: "Abbonamento Flex",
+		clausole: [
+			{
+				testo:
+					"Flex è la formula ad addebito mensile ricorrente. Alle regole generali di questo documento si aggiungono le condizioni dei punti seguenti.",
+			},
+			{ testo: "<strong>Quota di attivazione:</strong> 100,00 € (cento/00), una tantum all'attivazione." },
+			{ testo: "<strong>Quota mensile:</strong> definita al momento dell'iscrizione." },
+			{
+				testo:
+					"<strong>Periodo di attivazione:</strong> non è possibile attivare nuovi abbonamenti Flex dal 15 aprile al 31 agosto.",
+			},
+			{
+				testo:
+					"<strong>Pagamento:</strong> carta di credito o prepagata, con addebito automatico il giorno 15 di ogni mese. I ratei maturati dalla data di iscrizione alla prima scadenza si versano all'atto dell'iscrizione.",
+			},
+			{
+				testo:
+					"<strong>Addebito rifiutato:</strong> l'accesso ai servizi è sospeso fino alla comunicazione e approvazione di un nuovo metodo di pagamento valido.",
+			},
+			{
+				testo:
+					"<strong>Insoluto oltre 30 giorni:</strong> il contratto si intende risolto di diritto e l'abbonamento decaduto.",
+			},
+			{ testo: "<strong>Congelamento:</strong> non previsto." },
+			{
+				testo: `<strong>Disdetta:</strong> almeno 30 giorni prima della scadenza mensile, al desk del Club oppure via email a ${mail("abbonamentiflex@ronchiverdi.it")}. Con un preavviso inferiore la disdetta ha effetto dal mese successivo.`,
+			},
+			{
+				testo:
+					"<strong>Riattivazione dopo una disdetta:</strong> è dovuta nuovamente la quota di attivazione di 100,00 €.",
+			},
+			{
+				testo:
+					"Il Club può modificare le condizioni contrattuali del servizio Flex dandone comunicazione via email all'indirizzo fornito all'iscrizione, con un <strong>preavviso di almeno 30 giorni</strong> rispetto alla data di efficacia. Entro quella data il socio può disdire il contratto senza penali; in assenza di disdetta le modifiche si intendono accettate.",
+			},
+		],
+	},
+	{
+		id: "pagamenti",
+		titolo: "Pagamenti, durata e recesso",
+		clausole: [
+			{
+				testo:
+					"L'abbonamento dà diritto a usare i servizi previsti dalla formula scelta per tutto il suo periodo di validità.",
+			},
+			{
+				testo:
+					"<strong>L'interruzione della frequenza non libera dal pagamento</strong> dell'importo concordato e delle rate indicate sul modulo di iscrizione: quello che si acquista è il periodo, non il numero di ingressi.",
+			},
+			{
+				testo:
+					"Il <strong>congelamento</strong> dell'abbonamento non è previsto per la formula Flex; per le altre formule è possibile solo nei casi e nei modi concordati per iscritto con la Direzione.",
+			},
+			{
+				testo: `Per i contratti conclusi <strong>a distanza o fuori dai locali del Club</strong> — per esempio online — il socio ha diritto di recedere entro <strong>14 giorni</strong> dalla conclusione, senza doverne indicare il motivo, con una comunicazione esplicita alla reception o a ${mail("info@ronchiverdi.it")} (artt. 52 e seguenti del Codice del consumo).`,
+			},
+			{
+				testo:
+					"Se è stato chiesto di cominciare a usare i servizi durante i 14 giorni, in caso di recesso viene addebitata la parte di servizio effettivamente fruita fino a quel momento.",
+			},
+		],
+	},
+	{
+		id: "abbigliamento",
+		titolo: "Abbigliamento e decoro",
+		clausole: [
+			{
+				testo:
+					"In tutte le aree di attività vanno indossati scarpe e abbigliamento appropriati.",
+			},
+			{
+				testo:
+					"È vietato entrare nei locali del Club con scarpe da tennis sporche di terra rossa.",
+			},
+			{
+				testo:
+					"Nella Club House non sono ammessi accappatoi, costumi da bagno o simili. La sala Business Lounge è riservata agli eventi organizzati da Ronchiverdi, ai clienti Business e alle attività a loro dedicate.",
+			},
+		],
+	},
+	{
+		id: "divieti",
+		titolo: "Divieti",
+		clausole: [
+			{
+				testo: "All'interno del Club è vietato:",
+				elenco: [
+					"introdurre animali;",
+					"introdurre cibo e bevande dall'esterno: pasti e spuntini si acquistano e si consumano nell'area bar;",
+					"utilizzare le attrezzature sotto l'effetto di alcolici o di sostanze che alterino il comportamento;",
+					"fumare nella zona piscina, anche all'aperto;",
+					"introdurre bottiglie e oggetti di vetro negli spogliatoi, negli spazi collegati e nella zona piscina estiva;",
+					"turpiloquio, bestemmie e schiamazzi in tutte le aree del Club.",
+				],
+			},
+			{ testo: "Il personale addetto è autorizzato a intervenire per far rispettare queste regole." },
+		],
+	},
+	{
+		id: "parcheggio",
+		titolo: "Parcheggio",
+		clausole: [
+			{ testo: "Auto e motociclette vanno lasciate esclusivamente negli spazi demarcati." },
+			{
+				testo:
+					"L'accesso al passo carraio avviene dal lato sinistro, per consentire la corretta lettura del dispositivo che abilita l'ingresso.",
+			},
+		],
+	},
+	{
+		id: "minori",
+		titolo: "Minori",
+		clausole: [
+			{
+				testo:
+					"I ragazzi di età inferiore ai <strong>14 anni</strong> devono essere sempre accompagnati da un genitore, che risponde del loro comportamento.",
+			},
+			{
+				testo: `Negli spogliatoi, i bambini possono accedere a quello del genitore che li accompagna fino ai <strong>5 anni</strong> compiuti; dai 6 anni utilizzano gli spogliatoi dedicati del Kids Village. Durante le lezioni della Scuola Nuoto il Club offre un servizio di assistenza allo spogliatoio, descritto nelle ${a("/faq", "domande frequenti")}.`,
+			},
+			{
+				testo:
+					"L'accesso alla <strong>Relax Zone</strong> non è consentito ai minori di 16 anni; l'<strong>idromassaggio</strong> non è consentito ai minori di 12 anni.",
+			},
+			{
+				testo: `Il Club offre programmi e attività dedicati a bambini e ragazzi, seguiti da personale qualificato: sono pubblicati nel ${a("/planning", "planning")} e disponibili in reception.`,
+			},
+		],
+	},
+	{
+		id: "ospiti",
+		titolo: "Ospiti",
+		clausole: [
+			{
+				testo:
+					"Il socio può invitare ospiti al Club, previa registrazione alla reception e pagamento della tariffa prevista dal listino in vigore.",
+			},
+			{
+				testo:
+					"Nei periodi di elevata affluenza — weekend e stagione estiva — l'accesso degli ospiti può essere limitato o temporaneamente sospeso, per garantire il regolare svolgimento delle attività sociali e sportive. È quindi opportuno verificare la disponibilità con la reception con congruo anticipo.",
+			},
+			{
+				testo:
+					"Sui campi da tennis e padel, nella stagione estiva, non è consentito invitare ospiti dal lunedì al venerdì dalle 12:00 in poi e nei weekend.",
+			},
+			{
+				testo:
+					"Gli ospiti sono tenuti a rispettare questi stessi Termini e Condizioni; il socio che li ha invitati risponde del loro comportamento.",
+			},
+		],
+	},
+	{
+		id: "spogliatoi",
+		titolo: "Spogliatoi e armadietti",
+		clausole: [
+			{
+				testo:
+					"Gli armadietti si usano a rotazione e non possono essere occupati in modo permanente.",
+			},
+			{
+				testo:
+					"Gli armadietti trovati chiusi con lucchetto dopo le <strong>22:30</strong> vengono aperti.",
+			},
+			{ testo: "Le sacche sportive vanno collocate sopra gli armadietti." },
+			{
+				testo:
+					"Per gli oggetti di valore si consiglia di usare le cassettine di sicurezza adiacenti alla reception, tenendo presente quanto previsto dall'{{art:responsabilita}}.",
+			},
+		],
+	},
+	{
+		id: "relax-zone",
+		titolo: "Relax Zone",
+		clausole: [
+			{
+				testo:
+					"La Relax Zone non è presidiata: l'utilizzo avviene sotto la responsabilità esclusiva di chi vi accede.",
+			},
+			{
+				testo:
+					"Prima di entrare, dagli spogliatoi, è obbligatorio fare la doccia con acqua calda e sapone; servono costume da bagno, ciabatte e asciugamano o accappatoio.",
+			},
+			{ testo: "È vietato asciugare indumenti nella sauna o appoggiarli vicino alla stufa." },
+			{ testo: "Non è consentito l'accesso ai minori di 16 anni." },
+		],
+	},
+	{
+		id: "palestre",
+		titolo: "Palestre",
+		clausole: [
+			{
+				testo:
+					"In sala servono calzature sportive pulite, dedicate all'uso indoor, e l'asciugamano personale da appoggiare su panche e attrezzi.",
+			},
+			{ testo: "I bilancieri vanno scaricati dopo l'uso." },
+			{ testo: "Le <strong>bike da spinning si utilizzano solo in presenza dell'istruttore</strong>." },
+			{
+				testo:
+					"Gli istruttori sono in sala per assistenza, impostazione delle macchine e programmi di allenamento: in caso di dubbio sull'uso di un attrezzo va chiesto a loro prima di utilizzarlo.",
+			},
+		],
+	},
+	{
+		id: "piscine",
+		titolo: "Piscine e idromassaggio",
+		clausole: [
+			{
+				testo:
+					"È obbligatorio transitare nella vasca lavapiedi con le ciabatte, fare la doccia saponata prima di entrare in acqua e indossare la cuffia.",
+			},
+			{ testo: "Il nuoto libero non richiede prenotazione negli orari di apertura del Club." },
+			{ testo: "L'idromassaggio non è consentito ai minori di 12 anni." },
+		],
+	},
+	{
+		id: "locale-bici",
+		titolo: "Locale bici",
+		clausole: [
+			{
+				testo:
+					"Il locale bici non è sorvegliato e il suo utilizzo richiede la sottoscrizione di un modulo di scarico di responsabilità.",
+			},
+			{
+				testo:
+					"Il Club non risponde di danneggiamenti, manomissioni o furti delle biciclette depositate.",
+			},
+		],
+	},
+	{
+		id: "club-house",
+		titolo: "Club House e ristorante",
+		clausole: [
+			{
+				testo:
+					"Orari del servizio, turni di chiusura e modalità di prenotazione sono indicati in reception e comunicati dal ristorante.",
+			},
+			{ testo: "La cucina può prolungare il servizio oltre gli orari previsti solo su prenotazione." },
+		],
+	},
+	{
+		id: "campi",
+		titolo: "Tennis e padel",
+		clausole: [
+			{
+				testo: `Per accedere ai campi è necessario il <strong>tesseramento FITP in corso di validità</strong>, che <strong>non è compreso nell'abbonamento al Club</strong>. È invece compreso nella quota di iscrizione ai corsi di tennis, come indicato nelle ${a("/faq", "domande frequenti")} dell'attività.`,
+			},
+			{
+				testo:
+					"La prenotazione e la cancellazione dei campi avvengono <strong>esclusivamente tramite l'app Wansport</strong>. Il campo può essere occupato solo dall'inizio dell'ora prenotata. Gli importi non pagati attraverso l'app vanno saldati in reception prima dell'inizio del gioco.",
+			},
+			{
+				testo: "Cancellazioni, mancate presenze e durata seguono regole diverse per disciplina:",
+				tabella: {
+					intestazioni: ["Campo", "Cancellazione", "Mancata presenza", "Annullamento gratuito", "Frequenza e durata"],
+					righe: [
+						[
+							"Tennis",
+							"Fino a 4 ore prima dell'orario prenotato",
+							"Campo addebitato per intero a tutti i nominativi indicati nella prenotazione",
+							"Un annullamento gratuito al giorno",
+							"Stagione invernale: più prenotazioni al giorno, a pagamento. Stagione estiva: una al giorno, 1 ora per il singolo e 1 ora e 30 per il doppio",
+						],
+						[
+							"Padel",
+							"Fino a 6 ore prima dell'orario prenotato",
+							"Campo addebitato per intero al nominativo indicato nella prenotazione (obbligatorio un solo nominativo)",
+							"Un annullamento gratuito",
+							"Secondo la disponibilità dei campi in app",
+						],
+					],
+				},
+			},
+			{
+				testo:
+					"L'annullamento gratuito è quello che l'app consente al socio al momento della prenotazione, per evitare lo slittamento delle partite negli orari desiderati. Oltre quella soglia, e oltre le finestre di cancellazione indicate, il campo viene addebitato.",
+			},
+			{
+				testo:
+					"<strong>Stagione indoor.</strong> È possibile riservare una o più ore fisse per l'intera stagione (indicativamente da ottobre ad aprile). La prenotazione stagionale è valida solo dal momento del pagamento; le ore prenotate e non utilizzate <strong>non sono recuperabili né rimborsabili</strong>.",
+			},
+			{
+				testo:
+					"<strong>Stagione estiva.</strong> La prenotazione si effettua in app fino a 48 ore prima dell'orario desiderato, oppure di persona nella mezz'ora precedente l'inizio del gioco. Va confermata con la presenza di almeno uno dei giocatori <strong>15 minuti prima</strong> dell'inizio dell'ora: in caso contrario il campo si considera libero e può essere assegnato ad altri soci.",
+			},
+			{
+				testo:
+					"È vietato giocare o accedere ai campi senza maglietta o con abbigliamento non adeguato. Il personale addetto è autorizzato a intervenire.",
+			},
+		],
+	},
+	{
+		id: "responsabilita",
+		titolo: "Responsabilità e oggetti personali",
+		clausole: [
+			{
+				testo:
+					"Il Club <strong>non assume in custodia</strong> gli oggetti portati dai soci e dagli ospiti.",
+			},
+			{
+				testo:
+					"Non è prevista alcuna copertura assicurativa e il Club non risponde di smarrimenti o furti di quanto lasciato negli armadietti — fissi o a rotazione — negli spogliatoi, nelle cassettine di sicurezza adiacenti alla reception e nel locale bici, né di furti o danni ai veicoli parcheggiati nell'area del Club o a quanto contenuto in essi.",
+			},
+			{
+				testo:
+					"L'attività sportiva va svolta in base alle proprie condizioni fisiche, all'idoneità attestata dal certificato medico e alle indicazioni del personale del Club, rispettando le istruzioni d'uso di attrezzi e impianti.",
+			},
+			{
+				testo:
+					"<strong>Nessuna clausola di questo documento limita la responsabilità del Club per dolo o colpa grave, né per i danni alla persona:</strong> restano fermi i diritti inderogabili riconosciuti dalla legge, in particolare al consumatore.",
+			},
+		],
+	},
+	{
+		id: "sospensione",
+		titolo: "Sospensione e risoluzione",
+		clausole: [
+			{
+				testo: "Il Club può sospendere l'accesso o risolvere il contratto quando:",
+				elenco: [
+					"il comportamento del socio è contrario a questi Termini e Condizioni, oppure lesivo dell'immagine e dell'organizzazione del Club;",
+					"la quota associativa o il tesseramento non sono stati versati o sono scaduti;",
+					"il certificato medico non è stato depositato o è scaduto: in questo caso la sospensione non proroga la durata del contratto;",
+					"per l'abbonamento Flex, un pagamento resta insoluto per oltre 30 giorni.",
+				],
+			},
+			{
+				testo:
+					"Nei casi di risoluzione dovuti al comportamento o all'inadempimento del socio non è previsto rimborso delle somme versate, fermi restando i diritti inderogabili riconosciuti al consumatore dalla legge.",
+			},
+		],
+	},
+	{
+		id: "safeguarding",
+		titolo: "Sicurezza e tutela dei minori",
+		clausole: [
+			{
+				testo:
+					"Ronchiverdi Sport Club S.S.D. a r.l. applica il MOG — Modello Organizzativo di Gestione e controllo dell'attività sportiva — e i relativi Codici di condotta, finalizzati alla tutela dei minori e alla prevenzione di abusi, molestie, violenza di genere e di ogni forma di discriminazione, ai sensi del d.lgs. 39/2021.",
+			},
+			{
+				testo:
+					"Il Club ha nominato un Responsabile Safeguarding a garanzia della sicurezza di tutti i partecipanti.",
+			},
+			{ testo: `Le segnalazioni si inviano a ${mail("safeguarding@ronchiverdi.it")}.` },
+		],
+	},
+	{
+		id: "dati-personali",
+		titolo: "Dati personali",
+		clausole: [
+			{
+				testo: `Il trattamento dei dati personali di soci, iscritti e ospiti è descritto nella ${a("/privacy", "Privacy Policy")}, insieme ai diritti esercitabili e al modo di esercitarli.`,
+			},
+			{
+				testo: `I consensi facoltativi raccolti con la domanda di iscrizione — immagini, comunicazioni promozionali, comunicazione a terzi, dati sanitari per la valutazione dell'idoneità sportiva — sono revocabili in qualsiasi momento scrivendo a ${mail("privacy@ronchiverdi.it")}.`,
+			},
+		],
+	},
+	{
+		id: "modifiche",
+		titolo: "Modifiche, reclami e legge applicabile",
+		clausole: [
+			{
+				testo:
+					"Il Club può aggiornare questi Termini e Condizioni: la versione in vigore è sempre quella pubblicata su questa pagina, con la data di ultimo aggiornamento in cima.",
+			},
+			{
+				testo:
+					"Per gli abbonamenti in corso le modifiche si applicano dal rinnovo successivo, salvo quanto previsto per la formula Flex dall'{{art:flex}}.",
+			},
+			{
+				testo: `Per reclami e segnalazioni ci si può rivolgere alla reception o scrivere a ${mail("info@ronchiverdi.it")}.`,
+			},
+			{
+				testo:
+					"Al contratto si applica la legge italiana; per i contratti conclusi con i consumatori è competente il foro del luogo di residenza o domicilio elettivo del consumatore.",
+			},
+		],
+	},
 ];
 
-// Condizioni contrattuali specifiche per formula. Restano qui solo le regole
-// che cambiano il contratto (durata, fasce orarie, esclusioni): cosa comprende
-// ogni abbonamento e quanto costa vive nella tabella di /abbonamenti.
-const formule = [
-	{
-		nome: "Swim",
-		testo:
-			"Accesso alla vasca indoor per nuoto libero e acqua fitness, e alla Relax Zone. Non comprende la piscina estiva, il solarium e le altre aree outdoor, il Gym Floor, il tennis e il padel.",
-		durata: "11 mesi, agosto escluso per la manutenzione della vasca indoor. La quota annuale può essere suddivisa in 12 rate mensili.",
-	},
-	{
-		nome: "Gym",
-		testo:
-			"Accesso alle aree palestra indoor e alla Relax Zone. Non comprende piscine, solarium, palestra esterna e le altre aree outdoor, il tennis e il padel.",
-		durata: "Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
-	},
-	{
-		nome: "Silver e Gold",
-		testo:
-			"Sono le formule complete: comprendono l'area acqua, il Gym Floor, i corsi e la Relax Zone. La differenza fra le due riguarda l'accesso ai campi da tennis, incluso nella stagione estiva solo con Gold.",
-		durata: "Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
-	},
-	{
-		nome: "Morning",
-		testo:
-			"Accesso dal lunedì al venerdì dalle 8:00 alle 13:00 e il sabato dalle 9:00 alle 13:00, con l'obbligo di lasciare gli impianti entro tali orari. Non è valido la domenica.",
-		durata: "Annuale, salvo diversa durata indicata sul modulo di iscrizione.",
-	},
-	{
-		nome: "Trimestrali",
-		testo:
-			"Gli abbonamenti trimestrali non comprendono il sabato e la domenica nei mesi da maggio ad agosto.",
-		durata: "Tre mesi dalla data di attivazione.",
-	},
-];
+// I numeri degli articoli sono la loro posizione: si calcolano una volta sola e
+// da qui in avanti nessuno li scrive a mano.
+const numeroDi = new Map(articoli.map((art, i) => [art.id, i + 1]));
 
-// Prenotazione dei campi: le due discipline hanno finestre diverse, ed è il
-// punto in cui i regolamenti di partenza si contraddicevano di più.
-const campi = [
-	{
-		disciplina: "Tennis",
-		cancellazione: "Fino a 4 ore prima dell'orario prenotato",
-		noShow: "Campo addebitato per intero a tutti i nominativi indicati nella prenotazione",
-		annullamento: "Un annullamento gratuito al giorno",
-		frequenza:
-			"Stagione invernale: più prenotazioni al giorno, a pagamento. Stagione estiva: una al giorno, 1 ora per il singolo e 1 ora e 30 per il doppio",
-	},
-	{
-		disciplina: "Padel",
-		cancellazione: "Fino a 6 ore prima dell'orario prenotato",
-		noShow: "Campo addebitato per intero al nominativo indicato nella prenotazione (obbligatorio un solo nominativo)",
-		annullamento: "Un annullamento gratuito",
-		frequenza: "Secondo la disponibilità dei campi in app",
-	},
-];
+/** Risolve i segnaposto {{art:id}} nel numero e nel link dell'articolo. */
+function risolvi(html: string): string {
+	return html.replace(/\{\{art:([a-z-]+)\}\}/g, (_intero, id: string) => {
+		const numero = numeroDi.get(id);
+		if (!numero) throw new Error(`Rimando a un articolo inesistente: ${id}`);
+		return `<a href="#art-${numero}">art. ${numero}</a>`;
+	});
+}
 ---
 
 <Legale
 	title="Termini e Condizioni — Ronchiverdi Sport Club Torino"
-	description="Le regole di Ronchiverdi Sport Club in un documento unico: iscrizione, certificato medico, formule di abbonamento, pagamenti e disdetta, uso degli spazi, prenotazione dei campi, responsabilità e tutela dei minori."
+	description="Le regole di Ronchiverdi Sport Club in un documento unico e articolato: iscrizione, certificato medico, formule di abbonamento, pagamenti e disdetta, uso degli spazi, prenotazione dei campi, responsabilità e tutela dei minori."
 	eyebrow="Termini e condizioni"
 	titolo="Le regole del club,"
 	titoloAccento="in un posto solo"
 	aggiornamento="2026-09-07"
-	indice={indice}
 >
 	<Fragment slot="lede">
-		Iscrizione, abbonamenti, uso degli spazi e prenotazione dei campi: tutto
-		quello che vale al club, in un testo unico che sostituisce le versioni
-		precedenti del regolamento.
+		Iscrizione, abbonamenti, uso degli spazi e prenotazione dei campi:{" "}
+		{articoli.length} articoli che sostituiscono le versioni precedenti del
+		regolamento.
 	</Fragment>
 
 	<aside class="legal-summary" slot="sintesi">
 		<p class="legal-summary__title">In sintesi</p>
 		<ul>
-			<li>Vale per soci e ospiti, dal momento dell'iscrizione e per tutta la durata dell'abbonamento.</li>
-			<li>È la versione ufficiale e aggiornata: dove una copia precedente dice altro, vale questa.</li>
+			<li>Valgono per soci e ospiti, dal momento dell'iscrizione e per tutta la durata dell'abbonamento.</li>
+			<li>Sono la versione ufficiale e aggiornata: dove una copia precedente dice altro, vale questa.</li>
 			<li>Cosa comprende ogni formula e quanto costa sta in <a href={url("/abbonamenti")}>Abbonamenti</a>; gli orari nel <a href={url("/planning")}>planning</a>.</li>
 			<li>Come trattiamo i dati personali sta invece nella <a href={url("/privacy")}>Privacy Policy</a>.</li>
 		</ul>
 	</aside>
 
-	<section class="legal-section" id="documento">
-		<h2>Cos'è questo documento</h2>
-		<p>
-			Questi Termini e Condizioni regolano l'iscrizione a{" "}
-			<strong>Ronchiverdi Sport Club S.S.D. a r.l.</strong> (di seguito "il
-			Club") — sede legale in Piazza Vetra 17, 20123 Milano, sede operativa in
-			Corso Moncalieri 466/16, 10133 Torino, P. IVA e C.F. 11173030013 — e
-			l'uso dei suoi impianti e servizi.
-		</p>
-		<p>
-			Si accettano con la sottoscrizione della domanda di iscrizione e valgono
-			per i soci, per chi frequenta corsi e attività e, in quanto compatibili,
-			per gli ospiti.
-		</p>
-		<p>
-			<strong>Questa è la versione ufficiale e aggiornata delle regole del
-			Club.</strong> Dove una copia cartacea, un allegato o un estratto
-			consegnato in precedenza dica cose diverse, vale quanto scritto qui, con
-			la data di aggiornamento riportata in cima alla pagina. Fanno eccezione
-			le condizioni economiche del singolo contratto — importo, durata,
-			scadenze delle rate — che restano quelle del modulo di iscrizione
-			sottoscritto.
-		</p>
-		<div class="legal-nota">
-			<p>
-				<strong>Quello che non troverai qui.</strong> Cosa comprende ogni
-				abbonamento e quanto costa sta in <a href={url("/abbonamenti")}>Abbonamenti</a> e
-				nel listino in vigore; gli orari di corsi e attività nel{" "}
-				<a href={url("/planning")}>planning settimanale</a>; le risposte
-				operative nelle <a href={url("/faq")}>domande frequenti</a>; il
-				trattamento dei dati personali nella{" "}
-				<a href={url("/privacy")}>Privacy Policy</a>. Sono informazioni che
-				cambiano con tempi propri: ricopiarle qui significherebbe avere prima o
-				poi due versioni diverse della stessa cosa.
-			</p>
-		</div>
-	</section>
+	<div class="legal-search" slot="ricerca">
+		<label class="legal-search__field">
+			<span class="legal-search__sr">Cerca nei termini e condizioni</span>
+			<svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+				><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" /><path
+					d="M13.5 13.5 17 17"
+					stroke="currentColor"
+					stroke-width="1.6"
+					stroke-linecap="round"
+				/></svg
+			>
+			<input
+				type="search"
+				id="tc-cerca"
+				placeholder="Cerca: disdetta, certificato medico, ospiti…"
+				autocomplete="off"
+			/>
+		</label>
+		<p class="legal-search__count" id="tc-conta" role="status" aria-live="polite"></p>
+	</div>
 
-	<section class="legal-section" id="iscrizione">
-		<h2>Iscrizione, quota e accesso al Club</h2>
-
-		<h3>Chi può iscriversi</h3>
-		<ul>
-			<li>L'iscrizione è riservata ai maggiorenni.</li>
-			<li>I ragazzi di età inferiore ai 18 anni possono iscriversi con il consenso scritto di un genitore o di chi ne esercita la tutela.</li>
-			<li>L'iscrizione dei ragazzi di età inferiore ai 14 anni è subordinata all'iscrizione di un genitore.</li>
-		</ul>
-
-		<h3>Cosa serve</h3>
-		<p>
-			Documento d'identità, codice fiscale e certificato medico in corso di
-			validità; per gli atleti agonisti, certificato di idoneità sportiva
-			agonistica. È inoltre necessario aver letto e sottoscritto questi Termini
-			e Condizioni.
-		</p>
-
-		<h3>Quota associativa</h3>
-		<p>
-			L'iscrizione comporta il versamento di una quota associativa di validità
-			annuale, il cui importo è indicato nel listino in vigore. Se il rinnovo
-			non avviene entro la scadenza dell'abbonamento, per riattivare la
-			posizione la quota di iscrizione va versata nuovamente.
-		</p>
-
-		<h3>Braccialetto e tessera di accesso</h3>
-		<p>
-			All'iscrizione viene consegnato un dispositivo personale di accesso —
-			braccialetto o tessera — <strong>strettamente personale, non cedibile né
-			trasferibile</strong>. Il Club è dotato del sistema di rilevamento accessi
-			In4You – TeamSystem: per ragioni di sicurezza e controllo è obbligatorio
-			passare il proprio dispositivo a ogni ingresso, anche quando i tornelli o
-			i varchi risultassero già aperti. Smarrimento o malfunzionamento vanno
-			segnalati subito alla reception.
-		</p>
-
-		<h3>Modifiche a tariffe e servizi</h3>
-		<p>
-			Il Club può modificare le tariffe degli abbonamenti e dei servizi, o
-			prevedere che servizi prima compresi nel prezzo siano pagati a parte. Per
-			chi ha un abbonamento in corso le nuove condizioni si applicano dal
-			rinnovo successivo; per l'abbonamento Flex vale invece il preavviso
-			indicato nella sezione dedicata.
-		</p>
-	</section>
-
-	<section class="legal-section" id="certificato">
-		<h2>Certificato medico</h2>
-		<p>
-			La consegna del certificato medico è <strong>condizione indispensabile</strong>{" "}
-			per usare gli impianti e i servizi del Club. Fino al deposito del
-			certificato il Club può sospendere la propria prestazione per
-			inadempimento, <strong>senza che la durata del contratto venga
-			prorogata</strong>: i giorni non utilizzati per questo motivo non vengono
-			recuperati.
-		</p>
-		<p>
-			Il certificato deve essere di idoneità all'attività sportiva non
-			agonistica; per gli atleti agonisti e per i tesserati che partecipano a
-			gare è richiesto il certificato di idoneità agonistica. Il rinnovo alla
-			scadenza è a cura del socio.
-		</p>
-		<p>
-			Per i corsi e le scuole del Club valgono le stesse regole, con le soglie
-			di età indicate nelle <a href={url("/faq")}>domande frequenti</a> di
-			ciascuna attività.
-		</p>
-	</section>
-
-	<section class="legal-section" id="abbonamenti">
-		<h2>Formule di abbonamento</h2>
-		<div class="legal-nota">
-			<p>
-				Le attività comprese in ciascuna formula e i relativi prezzi sono
-				quelli pubblicati in <a href={url("/abbonamenti")}>Abbonamenti</a> e nel
-				listino in vigore. Qui sotto restano solo le condizioni contrattuali
-				che cambiano da una formula all'altra.
-			</p>
-		</div>
-		<div class="legal-cards">
-			{formule.map((f) => (
-				<article class="legal-card">
-					<h3>{f.nome}</h3>
-					<p>{f.testo}</p>
-					<dl>
-						<div><dt>Durata</dt><dd>{f.durata}</dd></div>
-					</dl>
-				</article>
+	<nav class="tc-indice" aria-label="Indice degli articoli">
+		<ol>
+			{articoli.map((art, i) => (
+				<li data-indice={art.id}>
+					<a href={`#art-${i + 1}`}>
+						<span class="tc-indice__num">Art. {i + 1}</span>
+						<span class="tc-indice__titolo">{art.titolo}</span>
+					</a>
+				</li>
 			))}
-		</div>
-		<p>
-			L'accesso ai campi da tennis e padel, dove non compreso nella formula,
-			resta possibile alla tariffa prevista per i soci: vedi{" "}
-			<a href="#campi">Tennis e padel</a>.
-		</p>
-	</section>
+		</ol>
+	</nav>
 
-	<section class="legal-section" id="flex">
-		<h2>Abbonamento Flex</h2>
-		<p>
-			Flex è la formula ad addebito mensile ricorrente. Alle regole generali di
-			questo documento si aggiungono le condizioni seguenti.
-		</p>
-		<ul>
-			<li><strong>Quota di attivazione:</strong> 100,00 € (cento/00), una tantum all'attivazione.</li>
-			<li><strong>Quota mensile:</strong> definita al momento dell'iscrizione.</li>
-			<li><strong>Periodo di attivazione:</strong> non è possibile attivare nuovi abbonamenti Flex dal 15 aprile al 31 agosto.</li>
-			<li><strong>Pagamento:</strong> carta di credito o prepagata, con addebito automatico il giorno 15 di ogni mese. I ratei maturati dalla data di iscrizione alla prima scadenza si versano all'atto dell'iscrizione.</li>
-			<li><strong>Addebito rifiutato:</strong> l'accesso ai servizi è sospeso fino alla comunicazione e approvazione di un nuovo metodo di pagamento valido.</li>
-			<li><strong>Insoluto oltre 30 giorni:</strong> il contratto si intende risolto di diritto e l'abbonamento decaduto.</li>
-			<li><strong>Congelamento:</strong> non previsto.</li>
-			<li>
-				<strong>Disdetta:</strong> almeno 30 giorni prima della scadenza
-				mensile, al desk del Club oppure via email a{" "}
-				<a href="mailto:abbonamentiflex@ronchiverdi.it">abbonamentiflex@ronchiverdi.it</a>.
-				Con un preavviso inferiore la disdetta ha effetto dal mese successivo.
-			</li>
-			<li><strong>Riattivazione dopo una disdetta:</strong> è dovuta nuovamente la quota di attivazione di 100,00 €.</li>
-		</ul>
-		<p>
-			Il Club può modificare le condizioni contrattuali del servizio Flex
-			dandone comunicazione via email all'indirizzo fornito all'iscrizione, con
-			un <strong>preavviso di almeno 30 giorni</strong> rispetto alla data di
-			efficacia. Entro quella data puoi disdire il contratto senza penali; in
-			assenza di disdetta le modifiche si intendono accettate.
-		</p>
-	</section>
+	<p class="tc-vuoto" id="tc-vuoto" hidden>
+		Nessun punto corrisponde alla ricerca. Prova con un'altra parola, oppure
+		chiedi in reception allo <a href="tel:+390116612146">011 6612146</a>.
+	</p>
 
-	<section class="legal-section" id="pagamenti">
-		<h2>Pagamenti, durata, disdetta e recesso</h2>
-		<p>
-			L'abbonamento dà diritto a usare i servizi previsti dalla formula scelta
-			per tutto il suo periodo di validità. <strong>L'interruzione della
-			frequenza non libera dal pagamento</strong> dell'importo concordato e
-			delle rate indicate sul modulo di iscrizione: quello che si acquista è il
-			periodo, non il numero di ingressi.
-		</p>
-		<p>
-			Il <strong>congelamento</strong> dell'abbonamento non è previsto per la
-			formula Flex; per le altre formule è possibile solo nei casi e nei modi
-			concordati per iscritto con la Direzione.
-		</p>
-		<p>
-			Alla scadenza dell'abbonamento l'accesso al Club è sospeso. Il rinnovo è
-			a discrezione della Direzione del Club.
-		</p>
-		<p>
-			Se hai sottoscritto il contratto <strong>a distanza o fuori dai locali del
-			Club</strong> — per esempio online — hai diritto di recedere entro 14
-			giorni dalla conclusione, senza doverne indicare il motivo, con una
-			comunicazione esplicita alla reception o a{" "}
-			<a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a> (artt. 52 e
-			seguenti del Codice del consumo). Se hai chiesto di cominciare a usare i
-			servizi durante quei 14 giorni, ti verrà addebitata la parte di servizio
-			effettivamente fruita fino al recesso.
-		</p>
-	</section>
+	{articoli.map((art, i) => (
+		<section class="legal-section tc-articolo" id={`art-${i + 1}`} data-articolo={art.id}>
+			<h2>
+				<span class="tc-articolo__num">Art. {i + 1}</span>
+				{art.titolo}
+			</h2>
 
-	<section class="legal-section" id="comportamento">
-		<h2>Come si sta al Club</h2>
+			{art.nota && (
+				<div class="legal-nota tc-nota">
+					<p set:html={risolvi(art.nota)} />
+				</div>
+			)}
 
-		<h3>Abbigliamento</h3>
-		<p>
-			In tutte le aree di attività vanno indossati scarpe e abbigliamento
-			appropriati. È vietato entrare nei locali del Club con scarpe da tennis
-			sporche di terra rossa. Nella Club House non sono ammessi accappatoi,
-			costumi da bagno o simili; la sala Business Lounge è riservata agli
-			eventi organizzati da Ronchiverdi, ai clienti Business e alle attività a
-			loro dedicate.
-		</p>
+			<ol class="tc-clausole">
+				{art.clausole.map((c, j) => (
+					<li class="tc-clausola" id={`art-${i + 1}-${j + 1}`}>
+						<a class="tc-clausola__num" href={`#art-${i + 1}-${j + 1}`}>{i + 1}.{j + 1}</a>
+						<div class="tc-clausola__corpo">
+							<p set:html={risolvi(c.testo)} />
+							{c.elenco && (
+								<ul>
+									{c.elenco.map((voce) => <li set:html={risolvi(voce)} />)}
+								</ul>
+							)}
+							{c.tabella && (
+								<div class="legal-table-wrap">
+									<table class="legal-table">
+										<thead>
+											<tr>{c.tabella.intestazioni.map((t) => <th scope="col">{t}</th>)}</tr>
+										</thead>
+										<tbody>
+											{c.tabella.righe.map((riga) => (
+												<tr>
+													{riga.map((cella, k) =>
+														k === 0 ? <th scope="row">{cella}</th> : <td>{cella}</td>
+													)}
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							)}
+						</div>
+					</li>
+				))}
+			</ol>
+		</section>
+	))}
 
-		<h3>Divieti</h3>
-		<ul>
-			<li>introdurre animali;</li>
-			<li>introdurre cibo e bevande dall'esterno: pasti e spuntini si acquistano e si consumano nell'area bar;</li>
-			<li>utilizzare le attrezzature sotto l'effetto di alcolici o di sostanze che alterino il comportamento;</li>
-			<li>fumare nella zona piscina, anche all'aperto;</li>
-			<li>introdurre bottiglie e oggetti di vetro negli spogliatoi, negli spazi collegati e nella zona piscina estiva;</li>
-			<li>turpiloquio, bestemmie e schiamazzi in tutte le aree del Club.</li>
-		</ul>
-		<p>
-			Il personale addetto è autorizzato a intervenire per far rispettare
-			queste regole.
-		</p>
-
-		<h3>Parcheggio</h3>
-		<p>
-			Auto e motociclette vanno lasciate solo negli spazi demarcati. L'accesso
-			al passo carraio avviene dal lato sinistro, per consentire la corretta
-			lettura del dispositivo che abilita l'ingresso.
-		</p>
-	</section>
-
-	<section class="legal-section" id="minori">
-		<h2>Minori</h2>
-		<ul>
-			<li>
-				I ragazzi di età inferiore ai <strong>14 anni</strong> devono essere
-				sempre accompagnati da un genitore, che risponde del loro
-				comportamento.
-			</li>
-			<li>
-				Negli <strong>spogliatoi</strong>, i bambini possono accedere a quello
-				del genitore che li accompagna fino ai <strong>5 anni</strong> compiuti;
-				dai 6 anni utilizzano gli spogliatoi dedicati del Kids Village. Durante
-				le lezioni della Scuola Nuoto il Club offre un servizio di assistenza
-				allo spogliatoio, descritto nelle{" "}
-				<a href={url("/faq")}>domande frequenti</a>.
-			</li>
-			<li>
-				L'accesso alla <strong>Relax Zone</strong> non è consentito ai minori
-				di 16 anni; l'<strong>idromassaggio</strong> non è consentito ai minori
-				di 12 anni.
-			</li>
-			<li>
-				Il Club offre programmi e attività dedicati a bambini e ragazzi, seguiti
-				da personale qualificato: li trovi nel{" "}
-				<a href={url("/planning")}>planning</a> e in reception.
-			</li>
-		</ul>
-	</section>
-
-	<section class="legal-section" id="ospiti">
-		<h2>Ospiti</h2>
-		<p>
-			Il socio può invitare ospiti al Club, previa registrazione alla reception
-			e pagamento della tariffa prevista dal listino in vigore.
-		</p>
-		<p>
-			Nei periodi di elevata affluenza — weekend e stagione estiva — l'accesso
-			degli ospiti può essere limitato o temporaneamente sospeso, per garantire
-			il regolare svolgimento delle attività sociali e sportive: conviene quindi
-			verificare la disponibilità con la reception con congruo anticipo. Sui
-			campi da tennis e padel, nella stagione estiva, non è consentito invitare
-			ospiti dal lunedì al venerdì dalle 12:00 in poi e nei weekend.
-		</p>
-		<p>
-			Gli ospiti sono tenuti a rispettare queste stesse regole; il socio che li
-			ha invitati risponde del loro comportamento.
-		</p>
-	</section>
-
-	<section class="legal-section" id="spazi">
-		<h2>Spazi e servizi</h2>
-
-		<h3>Spogliatoi e armadietti</h3>
-		<p>
-			Gli armadietti si usano a rotazione e non possono essere occupati in modo
-			permanente: quelli trovati chiusi con lucchetto dopo le{" "}
-			<strong>22:30</strong> vengono aperti. Le sacche sportive vanno collocate
-			sopra gli armadietti. Per gli oggetti di valore si consiglia di usare le
-			cassettine di sicurezza adiacenti alla reception, tenendo presente quanto
-			indicato in <a href="#responsabilita">Responsabilità</a>.
-		</p>
-
-		<h3>Relax Zone</h3>
-		<p>
-			La Relax Zone non è presidiata: l'utilizzo avviene sotto la responsabilità
-			esclusiva di chi vi accede. Prima di entrare, dagli spogliatoi, è
-			obbligatorio fare la doccia con acqua calda e sapone; servono costume da
-			bagno, ciabatte e asciugamano o accappatoio. È vietato asciugare indumenti
-			nella sauna o appoggiarli vicino alla stufa. Non è consentito l'accesso ai
-			minori di 16 anni.
-		</p>
-
-		<h3>Palestre</h3>
-		<p>
-			In sala servono calzature sportive pulite, dedicate all'uso indoor, e
-			l'asciugamano personale da appoggiare su panche e attrezzi. I bilancieri
-			vanno scaricati dopo l'uso. Le <strong>bike da spinning si utilizzano solo
-			in presenza dell'istruttore</strong>. Gli istruttori sono in sala per
-			assistenza, impostazione delle macchine e programmi di allenamento: in
-			caso di dubbio sull'uso di un attrezzo, chiedi a loro prima di usarlo.
-		</p>
-
-		<h3>Piscine e idromassaggio</h3>
-		<p>
-			È obbligatorio transitare nella vasca lavapiedi con le ciabatte, fare la
-			doccia saponata prima di entrare in acqua e indossare la cuffia. Il nuoto
-			libero non richiede prenotazione negli orari di apertura. L'idromassaggio
-			non è consentito ai minori di 12 anni.
-		</p>
-
-		<h3>Locale bici</h3>
-		<p>
-			Il locale bici non è sorvegliato e il suo utilizzo richiede la
-			sottoscrizione di un modulo di scarico di responsabilità. Il Club non
-			risponde di danneggiamenti, manomissioni o furti delle biciclette
-			depositate.
-		</p>
-
-		<h3>Club House e ristorante</h3>
-		<p>
-			Orari del servizio, turni di chiusura e prenotazioni sono indicati in
-			reception e comunicati dal ristorante. La cucina può prolungare il
-			servizio oltre gli orari previsti solo su prenotazione.
-		</p>
-	</section>
-
-	<section class="legal-section" id="campi">
-		<h2>Tennis e padel</h2>
-
-		<h3>Tesseramento</h3>
-		<p>
-			Per accedere ai campi è necessario il <strong>tesseramento FITP in corso
-			di validità</strong>, che <strong>non è compreso nell'abbonamento al
-			Club</strong>. È invece compreso nella quota di iscrizione ai corsi di
-			tennis, come indicato nelle <a href={url("/faq")}>domande frequenti</a> dell'attività.
-		</p>
-
-		<h3>Prenotazione</h3>
-		<p>
-			La prenotazione e la cancellazione dei campi avvengono{" "}
-			<strong>esclusivamente tramite l'app Wansport</strong>. Il campo può essere
-			occupato solo dall'inizio dell'ora prenotata. Gli importi non pagati
-			attraverso l'app vanno saldati in reception prima dell'inizio del gioco.
-		</p>
-		<div class="legal-table-wrap">
-			<table class="legal-table">
-				<thead>
-					<tr>
-						<th scope="col">Campo</th>
-						<th scope="col">Cancellazione</th>
-						<th scope="col">Mancata presenza</th>
-						<th scope="col">Annullamento gratuito</th>
-						<th scope="col">Frequenza e durata</th>
-					</tr>
-				</thead>
-				<tbody>
-					{campi.map((c) => (
-						<tr>
-							<th scope="row">{c.disciplina}</th>
-							<td>{c.cancellazione}</td>
-							<td>{c.noShow}</td>
-							<td>{c.annullamento}</td>
-							<td>{c.frequenza}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-		<p>
-			L'annullamento gratuito è quello che l'app consente al socio al momento
-			della prenotazione, per evitare lo slittamento delle partite negli orari
-			desiderati. Oltre quella soglia, e oltre le finestre di cancellazione
-			indicate, il campo viene addebitato.
-		</p>
-
-		<h3>Stagione indoor</h3>
-		<p>
-			È possibile riservare una o più ore fisse per l'intera stagione indoor
-			(indicativamente da ottobre ad aprile). La prenotazione stagionale è
-			valida solo dal momento del pagamento; le ore prenotate e non utilizzate{" "}
-			<strong>non sono recuperabili né rimborsabili</strong>.
-		</p>
-
-		<h3>Stagione estiva</h3>
-		<p>
-			La prenotazione si effettua in app fino a 48 ore prima dell'orario
-			desiderato, oppure di persona nella mezz'ora precedente l'inizio del
-			gioco. Va confermata con la presenza di almeno uno dei giocatori{" "}
-			<strong>15 minuti prima</strong> dell'inizio dell'ora: in caso contrario
-			il campo si considera libero e può essere assegnato ad altri soci.
-		</p>
-
-		<h3>Sul campo</h3>
-		<p>
-			È vietato giocare o accedere ai campi senza maglietta o con abbigliamento
-			non adeguato. Non sono consentiti turpiloquio, bestemmie e schiamazzi. Il
-			personale addetto è autorizzato a intervenire.
-		</p>
-	</section>
-
-	<section class="legal-section" id="responsabilita">
-		<h2>Responsabilità e oggetti personali</h2>
-		<p>
-			Il Club <strong>non assume in custodia</strong> gli oggetti portati dai
-			soci e dagli ospiti. Non è prevista alcuna copertura assicurativa e il
-			Club non risponde di smarrimenti o furti di quanto lasciato negli
-			armadietti — fissi o a rotazione — negli spogliatoi, nelle cassettine di
-			sicurezza adiacenti alla reception e nel locale bici, né di furti o danni
-			ai veicoli parcheggiati nell'area del Club o a quanto contenuto in essi.
-		</p>
-		<p>
-			L'attività sportiva va svolta in base alle proprie condizioni fisiche,
-			all'idoneità attestata dal certificato medico e alle indicazioni del
-			personale del Club, rispettando le istruzioni d'uso di attrezzi e
-			impianti.
-		</p>
-		<p>
-			<strong>Nessuna clausola di questo documento limita la responsabilità del
-			Club per dolo o colpa grave, né per i danni alla persona:</strong> restano
-			fermi i diritti inderogabili riconosciuti dalla legge, in particolare al
-			consumatore.
-		</p>
-	</section>
-
-	<section class="legal-section" id="sospensione">
-		<h2>Sospensione e risoluzione</h2>
-		<p>Il Club può sospendere l'accesso o risolvere il contratto quando:</p>
-		<ul>
-			<li>il comportamento del socio è contrario a queste regole, oppure lesivo dell'immagine e dell'organizzazione del Club;</li>
-			<li>la quota associativa o il tesseramento non sono stati versati o sono scaduti;</li>
-			<li>il certificato medico non è stato depositato o è scaduto (in questo caso la sospensione non proroga la durata del contratto);</li>
-			<li>per l'abbonamento Flex, un pagamento resta insoluto per oltre 30 giorni.</li>
-		</ul>
-		<p>
-			Nei casi di risoluzione dovuti al comportamento o all'inadempimento del
-			socio non è previsto rimborso delle somme versate, fermi restando i
-			diritti inderogabili riconosciuti al consumatore dalla legge.
-		</p>
-	</section>
-
-	<section class="legal-section" id="safeguarding">
-		<h2>Sicurezza e tutela dei minori</h2>
-		<p>
-			Ronchiverdi Sport Club S.S.D. a r.l. applica il MOG — Modello
-			Organizzativo di Gestione e controllo dell'attività sportiva — e i relativi
-			Codici di condotta, finalizzati alla tutela dei minori e alla prevenzione
-			di abusi, molestie, violenza di genere e di ogni forma di discriminazione,
-			ai sensi del d.lgs. 39/2021. Il Club ha nominato un Responsabile
-			Safeguarding a garanzia della sicurezza di tutti i partecipanti.
-		</p>
-		<p>
-			Le segnalazioni si inviano a{" "}
-			<a href="mailto:safeguarding@ronchiverdi.it">safeguarding@ronchiverdi.it</a>.
-		</p>
-	</section>
-
-	<section class="legal-section" id="privacy">
-		<h2>Dati personali</h2>
-		<p>
-			Il trattamento dei dati personali di soci, iscritti e ospiti è descritto
-			nella <a href={url("/privacy")}>Privacy Policy</a>, insieme ai diritti che
-			puoi esercitare e a come farlo. I consensi facoltativi raccolti con la
-			domanda di iscrizione — immagini, comunicazioni promozionali,
-			comunicazione a terzi, dati sanitari per la valutazione dell'idoneità
-			sportiva — sono revocabili in qualsiasi momento scrivendo a{" "}
-			<a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a>.
-		</p>
-	</section>
-
-	<section class="legal-section" id="modifiche">
-		<h2>Modifiche, reclami e legge applicabile</h2>
-		<p>
-			Il Club può aggiornare questi Termini e Condizioni: la versione in vigore
-			è sempre quella pubblicata su questa pagina, con la data di ultimo
-			aggiornamento in cima. Per gli abbonamenti in corso le modifiche si
-			applicano dal rinnovo successivo, salvo quanto previsto per la formula
-			Flex.
-		</p>
-		<p>
-			Per reclami e segnalazioni puoi rivolgerti alla reception o scrivere a{" "}
-			<a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a>. Al contratto
-			si applica la legge italiana; per i contratti conclusi con i consumatori è
-			competente il foro del luogo di residenza o domicilio elettivo del
-			consumatore.
-		</p>
+	<section class="legal-section">
 		<p class="legal-contatti">
 			<span>Reception: <a href="tel:+390116612146">011 6612146</a></span>
 			<span>Email: <a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></span>
@@ -626,3 +720,154 @@ const campi = [
 		</p>
 	</section>
 </Legale>
+
+<script>
+	// Ricerca per parole chiave dentro l'articolato: filtra i punti, nasconde
+	// gli articoli che restano senza punti visibili e sfoglia l'indice di
+	// conseguenza. Le parole trovate vengono evidenziate.
+	const input = document.getElementById("tc-cerca") as HTMLInputElement | null;
+	const conta = document.getElementById("tc-conta");
+	const vuoto = document.getElementById("tc-vuoto");
+	const clausole = Array.from(document.querySelectorAll<HTMLElement>(".tc-clausola"));
+	const articoli = Array.from(document.querySelectorAll<HTMLElement>(".tc-articolo"));
+	const vociIndice = Array.from(document.querySelectorAll<HTMLElement>("[data-indice]"));
+
+	// Accenti e apostrofi appiattiti uno a uno, senza cambiare la lunghezza del
+	// testo: così le posizioni trovate nella stringa normalizzata valgono anche
+	// su quella originale, e l'evidenziazione cade sui caratteri giusti.
+	const ACCENTI: Record<string, string> = {
+		à: "a", á: "a", â: "a", ä: "a", è: "e", é: "e", ê: "e", ë: "e",
+		ì: "i", í: "i", î: "i", ï: "i", ò: "o", ó: "o", ô: "o", ö: "o",
+		ù: "u", ú: "u", û: "u", ü: "u", ç: "c", "’": "'", "‘": "'",
+	};
+	const piatto = (t: string) => t.toLowerCase().replace(/[^\x00-\x7F‘’]/g, (c) => ACCENTI[c] ?? c);
+
+	/** Corpo di un punto: è lì che si cerca e si evidenzia, non sul numero. */
+	const corpoDi = (li: HTMLElement) => li.querySelector<HTMLElement>(".tc-clausola__corpo") ?? li;
+	const testoDi = new Map(clausole.map((li) => [li, piatto(corpoDi(li).textContent || "")]));
+
+	function pulisciEvidenze(radice: HTMLElement) {
+		radice.querySelectorAll("mark.tc-hit").forEach((m) => {
+			m.replaceWith(document.createTextNode(m.textContent || ""));
+		});
+		radice.normalize();
+	}
+
+	function evidenzia(radice: HTMLElement, parole: string[]) {
+		if (!parole.length) return;
+		const nodi: Text[] = [];
+		const walker = document.createTreeWalker(radice, NodeFilter.SHOW_TEXT);
+		let n = walker.nextNode();
+		while (n) {
+			nodi.push(n as Text);
+			n = walker.nextNode();
+		}
+
+		nodi.forEach((nodo) => {
+			const testo = nodo.nodeValue || "";
+			const norm = piatto(testo);
+			// Tutte le occorrenze di tutte le parole, ordinate e senza sovrapposizioni.
+			const punti: [number, number][] = [];
+			parole.forEach((p) => {
+				let da = norm.indexOf(p);
+				while (da !== -1) {
+					punti.push([da, da + p.length]);
+					da = norm.indexOf(p, da + p.length);
+				}
+			});
+			if (!punti.length) return;
+			punti.sort((x, y) => x[0] - y[0]);
+
+			const frammento = document.createDocumentFragment();
+			let cursore = 0;
+			punti.forEach(([da, aa]) => {
+				if (da < cursore) return;
+				if (da > cursore) frammento.appendChild(document.createTextNode(testo.slice(cursore, da)));
+				const mark = document.createElement("mark");
+				mark.className = "tc-hit";
+				mark.textContent = testo.slice(da, aa);
+				frammento.appendChild(mark);
+				cursore = aa;
+			});
+			if (cursore < testo.length) frammento.appendChild(document.createTextNode(testo.slice(cursore)));
+			nodo.replaceWith(frammento);
+		});
+	}
+
+	function filtra() {
+		const query = piatto((input?.value || "").trim()).replace(/\s+/g, " ");
+		const parole = query ? query.split(" ").filter(Boolean) : [];
+
+		let puntiVisibili = 0;
+		clausole.forEach((li) => {
+			const corpo = corpoDi(li);
+			pulisciEvidenze(corpo);
+			const testo = testoDi.get(li) || "";
+			const ok = parole.every((p) => testo.includes(p));
+			li.hidden = !ok;
+			if (ok) {
+				puntiVisibili++;
+				evidenzia(corpo, parole);
+			}
+		});
+
+		// Un articolo senza punti visibili sparisce con il suo titolo, e con la
+		// sua voce d'indice: un indice che porta al nulla è peggio che assente.
+		let articoliVisibili = 0;
+		const vivi = new Set<string>();
+		articoli.forEach((art) => {
+			const resta = !!art.querySelector<HTMLElement>(".tc-clausola:not([hidden])");
+			art.hidden = !resta;
+			// La nota introduttiva è commento all'articolo: con la ricerca attiva
+			// resta solo se qualche punto di quell'articolo è ancora a video.
+			const nota = art.querySelector<HTMLElement>(".tc-nota");
+			if (nota) nota.hidden = parole.length > 0;
+			if (resta) {
+				articoliVisibili++;
+				const id = art.dataset.articolo;
+				if (id) vivi.add(id);
+			}
+		});
+		vociIndice.forEach((v) => {
+			v.hidden = parole.length > 0 && !vivi.has(v.dataset.indice || "");
+		});
+
+		// Filtrando da metà documento la pagina si accorcia sotto i piedi e si
+		// finisce a fissare il footer, con i risultati rimasti più in alto. Se il
+		// primo punto trovato non è a video lo si porta in vista — solo allora,
+		// così la pagina non salta a ogni lettera digitato.
+		const primo = clausole.find((li) => !li.hidden);
+		if (parole.length && primo) {
+			const y = primo.getBoundingClientRect().top;
+			if (y < 0 || y > window.innerHeight) primo.scrollIntoView({ block: "start" });
+		}
+
+		if (vuoto) vuoto.hidden = puntiVisibili > 0 || parole.length === 0;
+		if (conta) {
+			conta.textContent = parole.length
+				? `${puntiVisibili} ${puntiVisibili === 1 ? "punto trovato" : "punti trovati"} in ${articoliVisibili} ${
+						articoliVisibili === 1 ? "articolo" : "articoli"
+					}`
+				: "";
+		}
+	}
+
+	input?.addEventListener("input", filtra);
+
+	// Arrivando da un link a un punto (#art-6-8) la ricerca in corso lo
+	// nasconderebbe: si azzera il filtro e si evidenzia il punto citato.
+	function vaiAlPunto() {
+		const id = decodeURIComponent(location.hash.slice(1));
+		if (!/^art-\d+(-\d+)?$/.test(id)) return;
+		if (input?.value) {
+			input.value = "";
+			filtra();
+		}
+		const target = document.getElementById(id);
+		if (!target) return;
+		target.classList.add("is-citato");
+		setTimeout(() => target.classList.remove("is-citato"), 2000);
+	}
+	window.addEventListener("hashchange", vaiAlPunto);
+	vaiAlPunto();
+</script>
