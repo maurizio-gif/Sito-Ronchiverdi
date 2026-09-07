@@ -1,0 +1,59 @@
+---
+// Impianto comune delle pagine legali: intestazione, data di aggiornamento,
+// indice ad ancore e contenitore del testo. Il contenuto vero arriva dalle
+// singole pagine (privacy, termini e condizioni) come slot, così l'unica cosa
+// che cambia da una pagina all'altra è quello che c'è da leggere.
+import Layout from "./Layout.astro";
+import "../styles/legale.css";
+
+interface Voce {
+	href: string;
+	label: string;
+}
+
+interface Props {
+	/** Titolo della scheda del browser e dei social. */
+	title: string;
+	description: string;
+	/** Etichetta sopra il titolo (es. "Informativa privacy"). */
+	eyebrow: string;
+	/** Titolo della pagina, spezzato per poter accentare la seconda parte. */
+	titolo: string;
+	titoloAccento: string;
+	/** Data in formato ISO (AAAA-MM-GG): mostrata come "Ultimo aggiornamento". */
+	aggiornamento: string;
+	/** Indice a pastiglie. Le pagine che si costruiscono un indice proprio —
+	 *  i termini e condizioni, che lo numerano per articolo — lo omettono. */
+	indice?: Voce[];
+}
+
+const { title, description, eyebrow, titolo, titoloAccento, aggiornamento, indice = [] } = Astro.props;
+
+const aggiornamentoTesto = new Date(aggiornamento).toLocaleDateString("it-IT", {
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+});
+---
+
+<Layout title={title} description={description}>
+	<header class="page-header">
+		<p class="eyebrow">{eyebrow}</p>
+		<h1>{titolo} <em class="accent">{titoloAccento}</em></h1>
+		<p class="lede"><slot name="lede" /></p>
+		<p class="page-header__meta">Ultimo aggiornamento: {aggiornamentoTesto}</p>
+	</header>
+
+	<div class="legal-page">
+		<slot name="sintesi" />
+		<slot name="ricerca" />
+
+		{indice.length > 0 && (
+			<nav class="legal-index" aria-label="Indice della pagina">
+				{indice.map((v) => <a class="legal-index__chip" href={v.href}>{v.label}</a>)}
+			</nav>
+		)}
+
+		<slot />
+	</div>
+</Layout>

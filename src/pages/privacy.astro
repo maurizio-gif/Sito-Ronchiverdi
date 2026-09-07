@@ -1,0 +1,468 @@
+---
+import Legale from "../layouts/Legale.astro";
+import { url } from "../lib/paths";
+
+// Informativa privacy del sito (artt. 13-14 GDPR). È la pagina che il footer e
+// il consenso obbligatorio dei form linkano da sempre come /privacy.
+//
+// Il contenuto non è un testo di repertorio: descrive i trattamenti che questo
+// sito fa davvero, cioè quelli scritti nel codice. Se cambia il codice, va
+// cambiata anche la voce corrispondente qui sotto:
+//   - src/pages/api/lead.ts      → campi salvati su Supabase dai moduli
+//   - src/lib/notificaLead.ts    → avviso email alla segreteria via SendGrid
+//   - src/pages/api/track.ts     → dati di navigazione di sessioni e pagine
+//   - src/lib/tracking.client.js → chiavi in sessionStorage/localStorage e consenso
+//   - src/layouts/Layout.astro   → banner cookie CookieYes
+//   - src/components/Footer.astro→ mappa Google incorporata
+//
+// Le regole del Club (iscrizione, abbonamenti, uso degli spazi) NON stanno qui:
+// vivono in /termini-e-condizioni, e questa pagina si limita a rimandarci.
+//
+// DA CONFERMARE CON IL CLUB PRIMA DEL GO-LIVE (valori scelti come default
+// prudenziali, non forniti dalla società):
+//   - dati societari completi di Ronchiverdi S.p.A. e perimetro esatto della
+//     contitolarità dichiarata nell'informativa del gruppo;
+//   - eventuale nomina di un DPO e suo recapito;
+//   - i tempi di conservazione della tabella `conservazione`;
+//   - se Google Analytics 4 resterà fuori dal sito, va tolta la riga GA4 dalla
+//     tabella dei cookie e la menzione fra i destinatari.
+
+const indice = [
+	{ href: "#titolare", label: "Chi tratta i dati" },
+	{ href: "#dati", label: "Quali dati raccogliamo" },
+	{ href: "#finalita", label: "Perché li trattiamo" },
+	{ href: "#minori", label: "Dati dei minori" },
+	{ href: "#cookie", label: "Cookie" },
+	{ href: "#destinatari", label: "Chi vi accede" },
+	{ href: "#conservazione", label: "Per quanto tempo" },
+	{ href: "#diritti", label: "I tuoi diritti" },
+];
+
+// Finalità del trattamento, ognuna con la sua base giuridica: è la parte che
+// l'art. 13 GDPR chiede di dichiarare in modo esplicito, una per una.
+const finalita = [
+	{
+		titolo: "Rispondere alle tue richieste",
+		testo:
+			"Ricontattarti dopo un modulo di contatto, una richiesta di prova, un'iscrizione o la prenotazione di un appuntamento o di una telefonata, e organizzare l'incontro che hai chiesto.",
+		base: "Art. 6.1.b GDPR — misure precontrattuali prese su tua richiesta.",
+		dati: "Dati anagrafici e di contatto, attività di interesse, messaggio, giorno e ora preferiti.",
+	},
+	{
+		titolo: "Gestire l'iscrizione ai corsi",
+		testo:
+			"Raccogliere i dati necessari a valutare e formalizzare l'iscrizione a corsi e attività del club, compresi quelli del minore che iscrivi.",
+		base: "Art. 6.1.b GDPR — esecuzione di un contratto o di misure precontrattuali.",
+		dati: "Dati anagrafici tuoi e dell'eventuale minore, contatti, attività e turni scelti.",
+	},
+	{
+		titolo: "Inviarti comunicazioni e novità del club",
+		testo:
+			"Newsletter, inviti a eventi e promozioni di Ronchiverdi. Solo se hai spuntato la casella facoltativa del modulo: è la casella che puoi lasciare vuota senza perdere nulla della risposta alla tua richiesta.",
+		base: "Art. 6.1.a GDPR — consenso, revocabile in ogni momento.",
+		dati: "Nome, cognome, email, cellulare.",
+	},
+	{
+		titolo: "Capire come viene usato il sito",
+		testo:
+			"Misurare pagine viste, percorsi di navigazione e provenienza delle visite (campagne, motori di ricerca, social) per capire quali contenuti servono davvero e come migliorarli.",
+		base: "Art. 6.1.a GDPR — consenso, dato tramite il banner cookie, per le statistiche non tecniche.",
+		dati: "Dati di navigazione e identificativi di sessione, elencati sopra.",
+	},
+	{
+		titolo: "Tenere il sito in piedi e al sicuro",
+		testo:
+			"Far funzionare le pagine e i moduli, prevenire invii automatici e abusi dei moduli, conservare i log tecnici del server.",
+		base: "Art. 6.1.f GDPR — legittimo interesse a erogare e proteggere il servizio.",
+		dati: "Log tecnici, identificativo di sessione, indirizzo IP trattato dai fornitori di hosting.",
+	},
+	{
+		titolo: "Adempiere agli obblighi di legge",
+		testo:
+			"Rispondere a richieste dell'autorità e conservare quanto la legge impone quando la richiesta diventa un rapporto di iscrizione o di abbonamento.",
+		base: "Art. 6.1.c GDPR — obbligo legale.",
+		dati: "I dati necessari all'adempimento richiesto.",
+	},
+];
+
+// Fornitori che trattano dati per conto del club (responsabili ex art. 28
+// GDPR). Ogni riga corrisponde a un servizio realmente collegato al sito.
+const destinatari = [
+	{
+		nome: "Vercel Inc.",
+		ruolo: "Hosting del sito ed esecuzione delle funzioni /api/lead e /api/track",
+		dove: "Stati Uniti / Unione Europea",
+	},
+	{
+		nome: "Supabase Inc.",
+		ruolo: "Database su cui vengono salvate le richieste dei moduli e le sessioni di navigazione",
+		dove: "Unione Europea",
+	},
+	{
+		nome: "Twilio SendGrid",
+		ruolo: "Invio dell'avviso email alla segreteria a ogni nuova richiesta",
+		dove: "Stati Uniti",
+	},
+	{
+		nome: "CookieYes Ltd.",
+		ruolo: "Banner e registro dei consensi sui cookie",
+		dove: "Unione Europea / Regno Unito",
+	},
+	{
+		nome: "Google Ireland Ltd.",
+		ruolo: "Mappa Google incorporata nel footer e, con il tuo consenso, statistiche Google Analytics",
+		dove: "Unione Europea / Stati Uniti",
+	},
+];
+
+const cookie = [
+	{
+		nome: "cookieyes-consent",
+		tipo: "Necessario",
+		chi: "CookieYes",
+		durata: "1 anno",
+		scopo: "Ricorda le scelte fatte sul banner, così non ti viene richiesto a ogni pagina.",
+	},
+	{
+		nome: "rv_session, rv_last_touch",
+		tipo: "Necessario (archiviazione di sessione)",
+		chi: "Ronchiverdi",
+		durata: "Fino alla chiusura della scheda",
+		scopo:
+			"Identificano la visita in corso e la sua provenienza, per collegare la richiesta che invii al modulo che l'ha generata.",
+	},
+	{
+		nome: "rv_first_touch, rv_visitor",
+		tipo: "Statistico",
+		chi: "Ronchiverdi",
+		durata: "90 giorni",
+		scopo:
+			"Ricordano da quale campagna o ricerca sei arrivato la prima volta. Vengono scritti solo se acconsenti alle statistiche o al marketing: senza consenso restano nella sola scheda aperta.",
+	},
+	{
+		nome: "_ga, _ga_*",
+		tipo: "Statistico",
+		chi: "Google Analytics 4",
+		durata: "Fino a 2 anni",
+		scopo:
+			"Misurano visite e comportamento in forma aggregata. Vengono installati solo dopo il tuo consenso alle statistiche.",
+	},
+];
+
+const conservazione = [
+	{
+		cosa: "Richieste inviate dai moduli",
+		quanto: "24 mesi dall'ultimo contatto, salvo che la richiesta diventi un'iscrizione o un abbonamento",
+	},
+	{
+		cosa: "Dati di un rapporto di iscrizione o abbonamento",
+		quanto: "Per la durata del rapporto e poi nei termini di legge (10 anni per gli obblighi fiscali e contabili)",
+	},
+	{
+		cosa: "Consenso a comunicazioni e novità",
+		quanto: "Fino alla revoca e comunque non oltre 24 mesi dall'ultimo contatto",
+	},
+	{ cosa: "Dati di navigazione (sessioni e pagine viste)", quanto: "26 mesi" },
+	{ cosa: "Prova del consenso ai cookie", quanto: "12 mesi" },
+	{ cosa: "Log tecnici del server", quanto: "Il tempo previsto dal fornitore di hosting" },
+];
+---
+
+<Legale
+	title="Privacy Policy — Ronchiverdi Sport Club Torino"
+	description="Come Ronchiverdi Sport Club tratta i dati personali raccolti dal sito: moduli di contatto, cookie, statistiche di navigazione, tempi di conservazione e diritti dell'interessato."
+	eyebrow="Informativa privacy"
+	titolo="I tuoi dati,"
+	titoloAccento="in chiaro"
+	aggiornamento="2026-09-07"
+	indice={indice}
+>
+	<Fragment slot="lede">
+		Cosa raccogliamo quando compili un modulo o navighi su questo sito, perché
+		lo facciamo e come puoi fermarci. Ai sensi degli articoli 13 e 14 del
+		Regolamento (UE) 2016/679.
+	</Fragment>
+
+	<aside class="legal-summary" slot="sintesi">
+		<p class="legal-summary__title">In sintesi</p>
+		<ul>
+			<li>Raccogliamo i dati che scrivi nei moduli, per ricontattarti e organizzare quello che hai chiesto.</li>
+			<li>Non vendiamo i tuoi dati e non li cediamo a terzi per finalità commerciali loro.</li>
+			<li>Le comunicazioni promozionali partono solo se hai spuntato la casella facoltativa, e puoi disdirle quando vuoi.</li>
+			<li>I cookie non necessari partono solo dopo il tuo consenso sul banner, che puoi cambiare in qualsiasi momento.</li>
+			<li>Le regole del Club — iscrizione, abbonamenti, uso degli spazi — stanno nei <a href={url("/termini-e-condizioni")}>Termini e Condizioni</a>.</li>
+		</ul>
+	</aside>
+
+	<section class="legal-section" id="titolare">
+		<h2>Chi tratta i tuoi dati</h2>
+		<p>
+			Il titolare del trattamento è <strong>Ronchiverdi Sport Club S.S.D. a r.l.</strong>,
+			sede legale in Piazza Vetra 17, 20123 Milano, sede operativa in Corso
+			Moncalieri 466/16, 10133 Torino, P. IVA e C.F. 11173030013.
+		</p>
+		<p>
+			Per le iniziative promozionali del gruppo, i dati raccolti dai moduli di
+			questo sito sono trattati in contitolarità con <strong>Ronchiverdi S.p.A.</strong>{" "}
+			ai sensi dell'art. 26 GDPR: i contitolari hanno definito fra loro
+			responsabilità e ambiti del trattamento, e puoi chiederne il contenuto
+			essenziale ai recapiti qui sotto.
+		</p>
+		<p class="legal-contatti">
+			<span>Privacy: <a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a></span>
+			<span>Info: <a href="mailto:info@ronchiverdi.it">info@ronchiverdi.it</a></span>
+			<span>Telefono: <a href="tel:+390116612146">011 6612146</a></span>
+			<span>Posta: Corso Moncalieri 466/16, 10133 Torino</span>
+		</p>
+	</section>
+
+	<section class="legal-section" id="dati">
+		<h2>Quali dati raccogliamo</h2>
+
+		<h3>Dati che ci dai tu</h3>
+		<p>
+			Sono i dati dei moduli del sito — il modulo contatti, i moduli di
+			iscrizione a tennis, scuola nuoto e triathlon, le richieste a Chinesis e
+			la consulenza con il Fitness Manager:
+		</p>
+		<ul>
+			<li>nome, cognome, email e numero di cellulare;</li>
+			<li>data di nascita, quando il modulo la chiede;</li>
+			<li>nome, cognome e data di nascita del minore che vuoi iscrivere;</li>
+			<li>attività di interesse, settore, tipo di richiesta e testo del messaggio o oggetto dell'appuntamento;</li>
+			<li>giorno e ora scelti per un appuntamento in sede o una telefonata;</li>
+			<li>i consensi che hai dato: quello obbligatorio a questa informativa e quello facoltativo alle comunicazioni promozionali.</li>
+		</ul>
+		<p>
+			Non chiediamo e non vogliamo dati particolari (art. 9 GDPR): niente
+			informazioni su salute, certificati medici o altro va scritto nel campo
+			messaggio. Il certificato medico richiesto per l'attività sportiva si
+			consegna in segreteria, fuori da questo sito e con un'informativa
+			dedicata.
+		</p>
+
+		<h3>Dati raccolti automaticamente mentre navighi</h3>
+		<p>
+			A ogni pagina vista il sito registra sui propri server alcune
+			informazioni tecniche sulla visita:
+		</p>
+		<ul>
+			<li>un identificativo casuale della sessione e della pagina vista, con orario, titolo e pagina di provenienza;</li>
+			<li>la pagina di atterraggio, il sito che ti ha portato qui e i parametri di campagna presenti nel link (UTM e identificativi di click come <code>gclid</code> o <code>fbclid</code>);</li>
+			<li>tipo di dispositivo, browser, lingua e risoluzione dello schermo;</li>
+			<li>paese, regione e città stimati dal fornitore di hosting. <strong>Il tuo indirizzo IP non viene salvato</strong>: conserviamo solo la localizzazione approssimativa che il fornitore ha già ricavato da esso.</li>
+		</ul>
+		<p>
+			Se poi compili un modulo, questi dati di provenienza vengono allegati
+			alla richiesta: è così che sappiamo da dove arriva chi ci scrive.
+		</p>
+	</section>
+
+	<section class="legal-section" id="finalita">
+		<h2>Perché li trattiamo, e con quale base giuridica</h2>
+		<div class="legal-cards">
+			{finalita.map((f) => (
+				<article class="legal-card">
+					<h3>{f.titolo}</h3>
+					<p>{f.testo}</p>
+					<dl>
+						<div><dt>Dati</dt><dd>{f.dati}</dd></div>
+						<div><dt>Base giuridica</dt><dd>{f.base}</dd></div>
+					</dl>
+				</article>
+			))}
+		</div>
+		<p>
+			Compilare i moduli è libero, ma i campi contrassegnati come obbligatori
+			servono davvero: senza nome, cognome, email e cellulare non possiamo
+			ricontattarti, e la richiesta non parte. La casella delle comunicazioni
+			promozionali è invece facoltativa e lasciarla vuota non cambia nulla
+			della risposta che riceverai.
+		</p>
+		<p>
+			Non prendiamo decisioni automatizzate né facciamo profilazione che
+			produca effetti giuridici su di te (art. 22 GDPR).
+		</p>
+	</section>
+
+	<section class="legal-section" id="minori">
+		<h2>Se il modulo riguarda un minore</h2>
+		<p>
+			Alcuni moduli di iscrizione chiedono nome, cognome e data di nascita del
+			bambino o della bambina da iscrivere. Quei dati vanno inseriti da chi
+			esercita la responsabilità genitoriale o la tutela, che compilando il
+			modulo dichiara di poterlo fare e risponde della loro esattezza.
+		</p>
+		<p>
+			Il sito non è destinato all'uso diretto da parte di minori di 14 anni.
+			Se ti accorgi che un minore ci ha inviato i propri dati senza il
+			consenso di chi ne ha la responsabilità, scrivici a{" "}
+			<a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a>: li
+			cancelliamo.
+		</p>
+	</section>
+
+	<section class="legal-section" id="cookie">
+		<h2>Cookie e tecnologie simili</h2>
+		<p>
+			Alla prima visita un banner ti chiede quali categorie accettare. I
+			cookie necessari servono a far funzionare il sito e partono sempre;
+			statistici e di marketing partono <strong>solo dopo il tuo consenso</strong>,
+			e finché non lo dai restano bloccati. Puoi cambiare idea quando vuoi:
+		</p>
+		<p>
+			<button type="button" class="btn btn-outline cky-banner-element">Modifica il consenso ai cookie</button>
+		</p>
+		<div class="legal-table-wrap">
+			<table class="legal-table">
+				<thead>
+					<tr>
+						<th scope="col">Cookie o archiviazione</th>
+						<th scope="col">Categoria</th>
+						<th scope="col">Gestito da</th>
+						<th scope="col">Durata</th>
+						<th scope="col">A cosa serve</th>
+					</tr>
+				</thead>
+				<tbody>
+					{cookie.map((c) => (
+						<tr>
+							<th scope="row"><code>{c.nome}</code></th>
+							<td>{c.tipo}</td>
+							<td>{c.chi}</td>
+							<td>{c.durata}</td>
+							<td>{c.scopo}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+		<p>
+			La mappa Google incorporata nel footer viene caricata da Google, che può
+			registrare la richiesta con il tuo indirizzo IP: è un contenuto di terza
+			parte, soggetto alla{" "}
+			<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">privacy policy di Google</a>.
+		</p>
+		<p>
+			Puoi anche bloccare o cancellare i cookie dalle impostazioni del tuo
+			browser. Bloccando quelli necessari, però, alcune parti del sito — i
+			moduli in particolare — potrebbero smettere di funzionare.
+		</p>
+	</section>
+
+	<section class="legal-section" id="destinatari">
+		<h2>Chi può accedere ai tuoi dati</h2>
+		<p>
+			All'interno del club i dati sono visibili al personale di segreteria,
+			commerciale e tecnico autorizzato, per la sola parte necessaria al
+			proprio lavoro. All'esterno, li trattano per nostro conto i fornitori di
+			servizi tecnologici nominati responsabili del trattamento ai sensi
+			dell'art. 28 GDPR:
+		</p>
+		<div class="legal-table-wrap">
+			<table class="legal-table">
+				<thead>
+					<tr>
+						<th scope="col">Fornitore</th>
+						<th scope="col">Cosa fa</th>
+						<th scope="col">Dove tratta i dati</th>
+					</tr>
+				</thead>
+				<tbody>
+					{destinatari.map((d) => (
+						<tr>
+							<th scope="row">{d.nome}</th>
+							<td>{d.ruolo}</td>
+							<td>{d.dove}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+		<p>
+			I dati possono inoltre essere comunicati a consulenti, professionisti e
+			autorità pubbliche quando la legge lo impone. <strong>Non vendiamo i tuoi
+			dati e non li cediamo a terzi perché li usino per finalità commerciali
+			proprie.</strong> L'elenco aggiornato dei responsabili del trattamento è
+			disponibile su richiesta ai recapiti indicati sopra.
+		</p>
+		<p>
+			Alcuni fornitori hanno sede o infrastrutture fuori dallo Spazio economico
+			europeo. In quel caso il trasferimento avviene sulla base di una
+			decisione di adeguatezza della Commissione europea o delle clausole
+			contrattuali tipo previste dall'art. 46 GDPR, con le garanzie
+			supplementari del caso.
+		</p>
+	</section>
+
+	<section class="legal-section" id="conservazione">
+		<h2>Per quanto tempo li conserviamo</h2>
+		<div class="legal-table-wrap">
+			<table class="legal-table">
+				<thead>
+					<tr>
+						<th scope="col">Dati</th>
+						<th scope="col">Conservazione</th>
+					</tr>
+				</thead>
+				<tbody>
+					{conservazione.map((c) => (
+						<tr>
+							<th scope="row">{c.cosa}</th>
+							<td>{c.quanto}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+		<p>
+			Scaduto il termine i dati vengono cancellati o resi anonimi in modo
+			irreversibile, salvo che un obbligo di legge — fiscale, contabile o di
+			difesa in giudizio — ne imponga la conservazione ancora per un periodo.
+		</p>
+	</section>
+
+	<section class="legal-section" id="diritti">
+		<h2>I tuoi diritti</h2>
+		<p>In qualsiasi momento puoi chiederci di:</p>
+		<ul>
+			<li><strong>sapere</strong> se trattiamo dati che ti riguardano e ottenerne copia (art. 15);</li>
+			<li><strong>correggerli</strong> o completarli se sono sbagliati o incompleti (art. 16);</li>
+			<li><strong>cancellarli</strong>, quando non abbiamo più motivo di tenerli (art. 17);</li>
+			<li><strong>limitarne</strong> il trattamento mentre verifichiamo una tua contestazione (art. 18);</li>
+			<li><strong>riceverli</strong> in un formato leggibile da un computer o farli trasferire a un altro titolare (art. 20);</li>
+			<li><strong>opporti</strong> al trattamento fondato sul legittimo interesse, e in ogni caso al marketing diretto (art. 21).</li>
+		</ul>
+		<p>
+			Se un trattamento si basa sul tuo consenso, puoi <strong>revocarlo quando
+			vuoi</strong> senza dover spiegare perché e senza che questo tocchi la
+			liceità di quanto fatto prima. Per le comunicazioni promozionali basta il
+			link di disiscrizione in fondo a ogni email, oppure una riga a{" "}
+			<a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a>.
+		</p>
+		<p>
+			Per esercitare i tuoi diritti scrivi a{" "}
+			<a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a> o alla
+			sede operativa di Corso Moncalieri 466/16, 10133 Torino. Ti rispondiamo
+			entro un mese, prorogabile di due mesi per richieste particolarmente
+			complesse, dandotene comunque notizia.
+		</p>
+		<p>
+			Se ritieni che il trattamento violi la normativa, hai diritto di proporre
+			reclamo al <strong>Garante per la protezione dei dati personali</strong>{" "}
+			(Piazza Venezia 11, 00187 Roma —{" "}
+			<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>)
+			o di rivolgerti all'autorità giudiziaria.
+		</p>
+	</section>
+
+	<section class="legal-section" id="modifiche">
+		<h2>Modifiche a questa informativa</h2>
+		<p>
+			Quando cambiano i servizi del sito o le modalità di trattamento,
+			aggiorniamo questa pagina e la data di ultimo aggiornamento in cima. Se
+			la modifica è sostanziale te lo segnaliamo con evidenza, e ti chiediamo
+			un nuovo consenso quando serve.
+		</p>
+	</section>
+</Legale>

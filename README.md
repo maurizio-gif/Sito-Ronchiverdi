@@ -77,6 +77,25 @@ pagine su cui va mostrata); da lì:
 - `Faq.astro` pubblica da solo lo structured data **FAQPage** delle domande che
   sta mostrando — quindi una FAQ nuova entra nei rich results senza altri passi.
 
+## Pagine legali
+
+`/privacy` e `/termini-e-condizioni` usano lo stesso impianto:
+**`src/layouts/Legale.astro`** (intestazione, data di aggiornamento, indice ad
+ancore) più **`src/styles/legale.css`**, che viaggia solo con quelle pagine. Una
+pagina legale nuova si scrive quindi come solo contenuto, senza ricopiare stili.
+
+I termini e condizioni sono il documento unico che sostituisce i regolamenti
+consegnati in reception, scritto come **articolato**: la pagina genera articoli
+e punti numerati (`#art-6-9`, citabili e linkabili) dall'elenco `articoli`, con
+i rimandi interni espressi come segnaposto `{{art:id}}` e una ricerca per parole
+chiave sopra il testo. `docs/armonizzazione-regolamenti.md` tiene traccia di
+quali fonti sono confluite dove, delle contraddizioni sciolte e dei punti ancora
+da confermare con il club. Va letto prima di modificare una regola della pagina.
+
+La regola che tiene insieme tutto: i dati che vivono altrove — prezzi e
+contenuti degli abbonamenti in `/abbonamenti`, orari in `/planning`, risposte
+operative in `/faq` — si linkano, non si ricopiano.
+
 ## Immagini per le anteprime social
 
 `public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,
@@ -119,8 +138,12 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
 - [ ] Form di lead generation per verticale con attribuzione fonte (vedi audit)
 - [x] SEO tecnico di base: canonical, Open Graph/Twitter, sitemap, robots,
       structured data `SportsActivityLocation` e `FAQPage`
-- [ ] Pagine legali (privacy, cookie, regolamento, safeguarding, codice di
-      condotta) — oggi linkate dal footer ma non ancora esistenti
+- [ ] Pagine legali — fatte la **privacy** (`/privacy`, informativa artt. 13-14
+      GDPR allineata ai trattamenti reali del sito: moduli, `/api/track`,
+      CookieYes) e i **termini e condizioni** (`/termini-e-condizioni`, documento
+      unico che armonizza i quattro regolamenti in circolazione — vedi
+      `docs/armonizzazione-regolamenti.md`); mancano ancora nomina safeguarding
+      e codice di condotta, oggi linkati dal footer ma non ancora esistenti
 - [ ] Redirect 301 dal vecchio sito Wix (~110 URL, vedi
       `scripts/scrape_output/inventario.csv`)
 - [ ] GA4 / GTM e tag di conversione

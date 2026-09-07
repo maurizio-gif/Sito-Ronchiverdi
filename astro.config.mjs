@@ -58,6 +58,13 @@ if (!sitoProduzione) {
 export default defineConfig({
 	site,
 	base: isVercel ? '/' : '/Sito-Ronchiverdi',
+	// Il footer ha linkato a lungo /regolamento, indirizzo che non ha mai avuto
+	// una pagina: le regole del club stanno nel documento unico dei termini e
+	// condizioni. Il redirect serve a chi ha salvato o citato il vecchio
+	// indirizzo, e a non lasciare un 404 in giro per i motori di ricerca.
+	redirects: {
+		'/regolamento': '/termini-e-condizioni',
+	},
 	integrations: [
 		sitemap({
 			// Le pagine marcate noindex nel Layout non devono comparire in sitemap:
