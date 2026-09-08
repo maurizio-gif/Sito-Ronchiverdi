@@ -5,6 +5,7 @@ import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
+import { corsiNuoto as programs } from "../../data/scuolaNuoto";
 
 const facts = [
 	{
@@ -21,45 +22,6 @@ const facts = [
 		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
 		label: "Esperienza",
 		html: "<strong>Oltre trent'anni</strong> al fianco di bambini e ragazzi, con istruttori qualificati.",
-	},
-];
-
-const programs = [
-	{
-		ageLabel: "3–18 mesi · 19–36 mesi",
-		title: "Acquaticità Neonatale e Avanzata",
-		percorso: "Percorso in acqua accompagnato da un genitore, che entra in vasca insieme al bambino: è l'unico corso in cui è previsto.",
-		obiettivi: ["Sviluppo psicomotorio precoce", "Ambientamento acquatico", "Gestione della respirazione e del galleggiamento"],
-		durata: "40 minuti",
-		vasca: "Vasca di ambientamento · 32°C",
-		image: "images/activities/acquaticita-baby.jpg",
-	},
-	{
-		ageLabel: "3–5 anni",
-		title: "Baby",
-		percorso: "Corsi mirati all'autonomia acquatica e alla scoperta ludica dei movimenti base, per introdurre in forma ludica i primi elementi dei quattro stili.",
-		obiettivi: ["Autonomia acquatica", "Scoperta ludica dei movimenti base", "Primi elementi dei quattro stili"],
-		durata: "40 minuti",
-		vasca: "Vasca di ambientamento · 32°C",
-		image: "images/activities/scuola-nuoto-young.jpg",
-	},
-	{
-		ageLabel: "6–8 anni",
-		title: "Open",
-		percorso: "Corsi strutturati in livelli (1 e 2) per consolidare le capacità natatorie e proseguire nell'apprendimento tecnico dei quattro stili.",
-		obiettivi: ["Livello 1 e Livello 2", "Consolidamento delle capacità natatorie", "Apprendimento tecnico dei quattro stili"],
-		durata: "40 minuti",
-		vasca: "Vasca grande 25 m · 28°C",
-		image: "images/activities/nuoto-open.jpg",
-	},
-	{
-		ageLabel: "9–14 anni",
-		title: "Propaganda",
-		percorso: "Corso avanzato con obiettivi tecnici specifici, per chi vuole affinare la tecnica e avvicinarsi al mondo agonistico.",
-		obiettivi: ["Perfezionamento dei quattro stili", "Esercitazioni su partenze e tecniche di gara", "Introduzione alla preparazione pre-agonistica"],
-		durata: "60 minuti",
-		vasca: "Vasca grande 25 m · 28°C",
-		image: "images/activities/nuoto-propaganda.jpg",
 	},
 ];
 
@@ -160,7 +122,7 @@ const faq = faqDiPagina("scuola-nuoto");
 							</span>
 						</div>
 						<div class="program-card__cta">
-							<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Modalità di iscrizione</a>
+							<a class="btn" href={url(`/attivita/scuola-nuoto/iscrizione/${p.slug}`)}>Quote e iscrizione</a>
 							<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
 						</div>
 					</div>
