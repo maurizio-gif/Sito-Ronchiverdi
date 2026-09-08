@@ -112,42 +112,41 @@ const nome = corso.titleLungo ?? corso.title;
 								<span class="listino__periodo">{r.periodo}</span>
 								{r.dettaglio && <span class="listino__dettaglio">{r.dettaglio}</span>}
 							</td>
-							<td class="listino__prezzo" data-etichetta="Non soci">{euro(r.prezzoNonSoci)}</td>
-							<td class="listino__prezzo listino__prezzo--soci" data-etichetta="Soci del club">{euro(r.prezzoSoci)}</td>
+							<td class="listino__prezzo" data-etichetta="Non soci">
+								<a
+									class="listino__link"
+									href={STORE_NON_SOCI}
+									target="_blank"
+									rel="noopener"
+									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino non soci, ${euro(r.prezzoNonSoci)}`}
+								>
+									{euro(r.prezzoNonSoci)}
+									<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								</a>
+							</td>
+							<td class="listino__prezzo listino__prezzo--soci" data-etichetta="Soci del club">
+								<a
+									class="listino__link"
+									href={STORE_SOCI}
+									target="_blank"
+									rel="noopener"
+									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino soci del club, ${euro(r.prezzoSoci)}`}
+								>
+									{euro(r.prezzoSoci)}
+									<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								</a>
+							</td>
 						</tr>
 					))}
 				</tbody>
 			</table>
 		</div>
 
-		<div class="isc-cards listino-cta">
-			<article class="isc-card">
-				<span class="isc-card__label">Non soci</span>
-				<p class="isc-card__desc">
-					Il listino per chi non ha un abbonamento Ronchiverdi. Sul portale
-					scegli la riga <strong>{corso.title}</strong> con la formula che preferisci.
-				</p>
-				<a class="btn isc-card__btn" href={STORE_NON_SOCI} target="_blank" rel="noopener">
-					Iscriviti
-					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-				</a>
-			</article>
-			<article class="isc-card">
-				<span class="isc-card__label">Soci del club</span>
-				<p class="isc-card__desc">
-					Il listino riservato a chi ha un abbonamento Ronchiverdi attivo. Sul
-					portale scegli la riga <strong>{corso.title}</strong> con la formula che preferisci.
-				</p>
-				<a class="btn isc-card__btn" href={STORE_SOCI} target="_blank" rel="noopener">
-					Iscriviti
-					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-				</a>
-			</article>
-		</div>
-
-		<p class="isc-note isc-note--center">
-			Listino aggiornato a {listinoAggiornatoAl}. I prezzi ufficiali sono quelli
-			del portale InforYou.
+		<p class="isc-note isc-note--center listino-nota">
+			Tocca il prezzo per andare al listino corrispondente su InforYou, dove
+			scegli la riga <strong>{corso.title}</strong> con la formula che ti serve.
+			Listino aggiornato a {listinoAggiornatoAl}: i prezzi ufficiali sono quelli
+			del portale.
 		</p>
 	</section>
 
@@ -287,9 +286,33 @@ const nome = corso.titleLungo ?? corso.title;
 		.listino__prezzo--soci {
 			color: var(--accent);
 		}
+		/* Il prezzo è il link: si clicca il numero che si sta guardando, senza
+		   scendere a cercare un pulsante in fondo alla pagina. */
+		.listino__link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
+			color: inherit;
+			text-decoration: none;
+			border-bottom: 1px solid transparent;
+			transition: border-color 0.16s ease, color 0.16s ease;
+		}
+		.listino__link svg {
+			flex-shrink: 0;
+			opacity: 0.55;
+		}
+		.listino__link:hover,
+		.listino__link:focus-visible {
+			color: var(--accent);
+			border-bottom-color: currentColor;
+		}
+		.listino__link:hover svg,
+		.listino__link:focus-visible svg {
+			opacity: 1;
+		}
 
-		.listino-cta {
-			margin-top: 0.5rem;
+		.listino-nota strong {
+			color: var(--text);
 		}
 
 		.corso-azioni {
@@ -380,6 +403,13 @@ const nome = corso.titleLungo ?? corso.title;
 			}
 			.listino__prezzo {
 				text-align: left;
+			}
+			/* Col dito il prezzo da solo è un bersaglio da 23 px: il padding lo
+			   porta a una quarantina senza spostare il testo, perché i margini
+			   negativi lo riassorbono. */
+			.listino__link {
+				padding: 0.55rem 0.3rem;
+				margin: -0.55rem -0.3rem;
 			}
 			.listino__prezzo::before {
 				content: attr(data-etichetta);
