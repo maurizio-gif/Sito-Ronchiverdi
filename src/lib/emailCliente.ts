@@ -1,0 +1,333 @@
+// Email che il sito manda a chi compila un form: la conferma di quello che
+// ha appena chiesto e, per gli appuntamenti, il promemoria un'ora prima.
+//
+// Sono cosa diversa da notificaLead.ts, che avvisa la segreteria: lì basta un
+// testo semplice letto da chi lavora le richieste, qui il messaggio lo legge
+// un cliente e porta due azioni (annulla, sposta) che devono essere evidenti.
+//
+// Mittente e casella di risposta sono gli stessi del pannello (voucher e
+// comunicazioni ai soci): chi riceve vede sempre lo stesso indirizzo. Il
+// mittente dev'essere verificato su SendGrid, altrimenti l'invio viene
+// rifiutato con 403 — non "finisce in spam", proprio non parte.
+
+const ENDPOINT = "https://api.sendgrid.com/v3/mail/send";
+
+const MITTENTE_EMAIL = import.meta.env.SENDGRID_FROM_EMAIL ?? "digital@ronchiverdi.it";
+const MITTENTE_NOME = import.meta.env.SENDGRID_FROM_NAME ?? "Ronchiverdi Sport Club";
+const RISPOSTE_A = import.meta.env.EMAIL_REPLY_TO ?? "info@ronchiverdi.it";
+
+const INDIRIZZO_CLUB = "Corso Moncalieri 466, Torino";
+const TELEFONO_CLUB = "011 6612146";
+
+export type TipoAppuntamento = "appuntamento" | "telefonata";
+
+export type DatiAppuntamento = {
+	nome: string | null;
+	email: string;
+	cellulare: string | null;
+	azione: string | null;
+	data: string | null; // YYYY-MM-DD
+	ora: string | null; // HH:MM
+	attivita: string | null;
+	token: string;
+};
+
+/**
+ * Indirizzo pubblico del sito, per i link dentro le email.
+ *
+ * Stessa scala di astro.config.mjs: SITE_URL quando il dominio definitivo è
+ * configurato, altrimenti l'indirizzo stabile del progetto Vercel. Un link in
+ * un'email vive per giorni, quindi VERCEL_URL (che cambia a ogni deployment)
+ * si usa solo come ultima spiaggia — meglio un link che scade fra due
+ * deployment che nessun link.
+ */
+export function indirizzoSito(): string {
+	const esplicito = import.meta.env.SITE_URL;
+	if (esplicito) return String(esplicito).replace(/\/+$/, "");
+	const vercel = import.meta.env.VERCEL_PROJECT_PRODUCTION_URL ?? import.meta.env.VERCEL_URL;
+	if (vercel) return `https://${vercel}`;
+	return "https://www.ronchiverdi.it";
+}
+
+export function linkGestione(token: string): string {
+	return `${indirizzoSito()}/appuntamento?t=${encodeURIComponent(token)}`;
+}
+
+/** "sabato 12 settembre 2026" — la data come la direbbe una persona. */
+export function dataLunga(giorno: string): string {
+	const [a, m, g] = giorno.split("-").map(Number);
+	if (!a || !m || !g) return giorno;
+	return new Intl.DateTimeFormat("it-IT", {
+		weekday: "long",
+		day: "numeric",
+		month: "long",
+		year: "numeric",
+		timeZone: "Europe/Rome",
+	}).format(new Date(Date.UTC(a, m - 1, g, 12)));
+}
+
+function esc(s: string): string {
+	return s
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;");
+}
+
+/**
+ * Impaginazione comune. Tabelle e stili in linea, non per gusto: Outlook e
+ * Gmail scartano i fogli di stile e buona parte del CSS moderno, e un layout
+ * a flexbox arriva a destinazione come una colonna di testo sfasata.
+ */
+function impagina(titolo: string, corpo: string): string {
+	return `<!doctype html>
+<html lang="it">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>${esc(titolo)}</title></head>
+<body style="margin:0;padding:0;background:#f8f2e5;">
+	<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f2e5;padding:32px 16px;">
+		<tr><td align="center">
+			<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fffdf6;border:1px solid rgba(28,28,24,0.12);border-radius:12px;">
+				<tr><td style="padding:32px 32px 8px;">
+					<p style="margin:0 0 4px;font-family:Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#8b6c14;">Ronchiverdi Sport Club</p>
+					<h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.2;color:#1c1c18;font-weight:normal;">${esc(titolo)}</h1>
+				</td></tr>
+				<tr><td style="padding:8px 32px 32px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#4a4a42;">
+					${corpo}
+				</td></tr>
+			</table>
+			<p style="max-width:560px;margin:16px auto 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#4a4a42;text-align:center;">
+				Ronchiverdi Sport Club · ${esc(INDIRIZZO_CLUB)} · ${esc(TELEFONO_CLUB)}
+			</p>
+		</td></tr>
+	</table>
+</body>
+</html>`;
+}
+
+function bottone(href: string, etichetta: string): string {
+	return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px 0 4px;"><tr><td style="background:#8b6c14;border-radius:8px;">
+		<a href="${esc(href)}" style="display:inline-block;padding:13px 26px;font-family:Helvetica,Arial,sans-serif;font-size:13px;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;color:#f6efde;text-decoration:none;">${esc(etichetta)}</a>
+	</td></tr></table>`;
+}
+
+/** Riquadro con i dati dell'appuntamento: quando, dove, per cosa. */
+function riquadro(righe: [string, string][]): string {
+	const celle = righe
+		.map(
+			([k, v]) =>
+				`<tr><td style="padding:6px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#4a4a42;width:110px;vertical-align:top;">${esc(k)}</td>
+				 <td style="padding:6px 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;color:#1c1c18;font-weight:bold;">${esc(v)}</td></tr>`
+		)
+		.join("");
+	return `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0;padding:16px 18px;background:#f8f2e5;border-radius:8px;">${celle}</table>`;
+}
+
+function etichettaTipo(azione: string | null): string {
+	return azione === "telefonata" ? "telefonata" : "visita in sede";
+}
+
+function righeAppuntamento(d: DatiAppuntamento): [string, string][] {
+	const righe: [string, string][] = [];
+	if (d.data) righe.push(["Quando", `${dataLunga(d.data)}${d.ora ? ` alle ${d.ora}` : ""}`]);
+	if (d.azione === "telefonata") {
+		righe.push(["Come", `Ti chiamiamo noi${d.cellulare ? ` al ${d.cellulare}` : ""}`]);
+	} else {
+		righe.push(["Dove", INDIRIZZO_CLUB]);
+	}
+	if (d.attivita) righe.push(["Argomento", d.attivita]);
+	return righe;
+}
+
+function saluto(nome: string | null): string {
+	return nome ? `Ciao ${nome},` : "Ciao,";
+}
+
+// ── I quattro messaggi ────────────────────────────────────────────────────
+
+function contenutoConfermaMessaggio(nome: string | null): { oggetto: string; html: string; testo: string } {
+	const oggetto = "Abbiamo ricevuto il tuo messaggio";
+	const html = impagina(
+		"Messaggio ricevuto",
+		`<p style="margin:0 0 14px;">${esc(saluto(nome))}</p>
+		 <p style="margin:0 0 14px;">grazie per averci scritto: la tua richiesta è arrivata allo staff del club e ti rispondiamo il prima possibile, di solito nel giro di pochi minuti negli orari di segreteria.</p>
+		 <p style="margin:0;">Se nel frattempo hai bisogno di noi, ci trovi allo <strong style="color:#1c1c18;">${esc(TELEFONO_CLUB)}</strong>.</p>`
+	);
+	const testo = `${saluto(nome)}
+
+grazie per averci scritto: la tua richiesta è arrivata allo staff del club e ti rispondiamo il prima possibile, di solito nel giro di pochi minuti negli orari di segreteria.
+
+Se nel frattempo hai bisogno di noi, ci trovi allo ${TELEFONO_CLUB}.
+
+Ronchiverdi Sport Club · ${INDIRIZZO_CLUB}
+`;
+	return { oggetto, html, testo };
+}
+
+function contenutoConfermaAppuntamento(d: DatiAppuntamento) {
+	const tipo = etichettaTipo(d.azione);
+	const quando = d.data ? `${dataLunga(d.data)}${d.ora ? ` alle ${d.ora}` : ""}` : "";
+	const oggetto =
+		d.azione === "telefonata"
+			? `Ti chiamiamo ${quando}`
+			: `Ti aspettiamo ${quando}`;
+	const link = linkGestione(d.token);
+
+	const html = impagina(
+		d.azione === "telefonata" ? "Telefonata confermata" : "Appuntamento confermato",
+		`<p style="margin:0 0 14px;">${esc(saluto(d.nome))}</p>
+		 <p style="margin:0 0 4px;">la tua ${esc(tipo)} è confermata.</p>
+		 ${riquadro(righeAppuntamento(d))}
+		 <p style="margin:0 0 4px;">Ti serve cambiare? Da qui puoi spostare l'appuntamento a un altro orario o annullarlo, senza chiamare.</p>
+		 ${bottone(link, "Sposta o annulla")}
+		 <p style="margin:14px 0 0;font-size:13px;">Se il pulsante non funziona, copia questo indirizzo nel browser:<br /><a href="${esc(link)}" style="color:#8b6c14;">${esc(link)}</a></p>`
+	);
+
+	const dettagli = righeAppuntamento(d)
+		.map(([k, v]) => `${k}: ${v}`)
+		.join("\n");
+	const testo = `${saluto(d.nome)}
+
+la tua ${tipo} è confermata.
+
+${dettagli}
+
+Ti serve cambiare? Da questo indirizzo puoi spostare l'appuntamento a un altro orario o annullarlo, senza chiamare:
+${link}
+
+Ronchiverdi Sport Club · ${INDIRIZZO_CLUB} · ${TELEFONO_CLUB}
+`;
+	return { oggetto, html, testo };
+}
+
+function contenutoPromemoria(d: DatiAppuntamento) {
+	const tipo = etichettaTipo(d.azione);
+	const link = linkGestione(d.token);
+	const oggetto =
+		d.azione === "telefonata"
+			? `Ti chiamiamo fra un'ora${d.ora ? `, alle ${d.ora}` : ""}`
+			: `Ti aspettiamo fra un'ora${d.ora ? `, alle ${d.ora}` : ""}`;
+
+	const html = impagina(
+		"Promemoria",
+		`<p style="margin:0 0 14px;">${esc(saluto(d.nome))}</p>
+		 <p style="margin:0 0 4px;">ti ricordiamo la tua ${esc(tipo)} di oggi, fra circa un'ora.</p>
+		 ${riquadro(righeAppuntamento(d))}
+		 ${
+				d.azione === "telefonata"
+					? `<p style="margin:0 0 4px;">Se in questo momento non puoi rispondere, spostala qui: troviamo un orario migliore.</p>`
+					: `<p style="margin:0 0 4px;">Se ti è successo qualcosa e non riesci a venire, avvisaci da qui: liberi il posto in un secondo.</p>`
+			}
+		 ${bottone(link, "Sposta o annulla")}
+		 <p style="margin:14px 0 0;font-size:13px;">Se il pulsante non funziona, copia questo indirizzo nel browser:<br /><a href="${esc(link)}" style="color:#8b6c14;">${esc(link)}</a></p>`
+	);
+
+	const dettagli = righeAppuntamento(d)
+		.map(([k, v]) => `${k}: ${v}`)
+		.join("\n");
+	const testo = `${saluto(d.nome)}
+
+ti ricordiamo la tua ${tipo} di oggi, fra circa un'ora.
+
+${dettagli}
+
+Se non riesci, puoi spostarla o annullarla da qui:
+${link}
+
+Ronchiverdi Sport Club · ${INDIRIZZO_CLUB} · ${TELEFONO_CLUB}
+`;
+	return { oggetto, html, testo };
+}
+
+// ── Invio ─────────────────────────────────────────────────────────────────
+
+/**
+ * Non lancia mai. Chi chiama ha già salvato la richiesta su Supabase: un
+ * problema col servizio di posta non deve diventare un errore in faccia a chi
+ * ha appena compilato il form.
+ */
+async function invia(a: string, oggetto: string, html: string, testo: string): Promise<boolean> {
+	const apiKey = import.meta.env.SENDGRID_API_KEY;
+	if (!apiKey) {
+		console.log("Email al cliente non inviata: SENDGRID_API_KEY non configurata");
+		return false;
+	}
+
+	try {
+		const risposta = await fetch(ENDPOINT, {
+			method: "POST",
+			headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+			body: JSON.stringify({
+				personalizations: [{ to: [{ email: a }] }],
+				from: { email: MITTENTE_EMAIL, name: MITTENTE_NOME },
+				reply_to: { email: RISPOSTE_A },
+				subject: oggetto,
+				content: [
+					// L'ordine conta per la specifica MIME: prima il testo, poi l'HTML.
+					{ type: "text/plain", value: testo },
+					{ type: "text/html", value: html },
+				],
+			}),
+		});
+
+		// SendGrid risponde 202 quando ha accettato il messaggio in coda.
+		if (!risposta.ok) {
+			console.error("Email al cliente rifiutata da SendGrid:", risposta.status, await risposta.text());
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.error("Email al cliente non inviata:", e);
+		return false;
+	}
+}
+
+/** Conferma di una richiesta appena arrivata dal form. */
+export async function confermaAlCliente(d: DatiAppuntamento): Promise<boolean> {
+	if (!d.email) return false;
+	const eAppuntamento = d.azione === "appuntamento" || d.azione === "telefonata";
+	const { oggetto, html, testo } =
+		eAppuntamento && d.data ? contenutoConfermaAppuntamento(d) : contenutoConfermaMessaggio(d.nome);
+	return invia(d.email, oggetto, html, testo);
+}
+
+/** Promemoria di un'ora prima. */
+export async function promemoriaAlCliente(d: DatiAppuntamento): Promise<boolean> {
+	if (!d.email || !d.data) return false;
+	const { oggetto, html, testo } = contenutoPromemoria(d);
+	return invia(d.email, oggetto, html, testo);
+}
+
+/**
+ * Conferma dello spostamento o dell'annullamento fatto dal cliente. Serve a
+ * chiudere il cerchio: chi clicca "annulla" deve trovare in casella la prova
+ * che è andata, altrimenti richiama la segreteria per sincerarsene.
+ */
+export async function esitoModificaAlCliente(
+	d: DatiAppuntamento,
+	tipoModifica: "spostato" | "annullato"
+): Promise<boolean> {
+	if (!d.email) return false;
+
+	if (tipoModifica === "annullato") {
+		const tipo = etichettaTipo(d.azione);
+		const oggetto = `${d.azione === "telefonata" ? "Telefonata" : "Appuntamento"} annullato`;
+		const html = impagina(
+			"Appuntamento annullato",
+			`<p style="margin:0 0 14px;">${esc(saluto(d.nome))}</p>
+			 <p style="margin:0 0 14px;">la tua ${esc(tipo)} è stata annullata: non devi fare altro.</p>
+			 <p style="margin:0;">Quando vuoi riprovare ci trovi sul sito o allo <strong style="color:#1c1c18;">${esc(TELEFONO_CLUB)}</strong>.</p>`
+		);
+		const testo = `${saluto(d.nome)}
+
+la tua ${tipo} è stata annullata: non devi fare altro.
+
+Quando vuoi riprovare ci trovi sul sito o allo ${TELEFONO_CLUB}.
+`;
+		return invia(d.email, oggetto, html, testo);
+	}
+
+	// Spostato: stessa forma della conferma iniziale, con l'orario nuovo.
+	const { html, testo } = contenutoConfermaAppuntamento(d);
+	const quando = d.data ? `${dataLunga(d.data)}${d.ora ? ` alle ${d.ora}` : ""}` : "";
+	return invia(d.email, `Nuovo orario: ${quando}`, html, testo);
+}

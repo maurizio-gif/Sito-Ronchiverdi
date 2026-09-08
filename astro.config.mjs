@@ -69,7 +69,7 @@ export default defineConfig({
 		sitemap({
 			// Le pagine marcate noindex nel Layout non devono comparire in sitemap:
 			// dichiararle e poi negarle è un segnale contraddittorio per Google.
-			filter: (pagina) => !/\/(anteprima|admin)(\/|$)/.test(pagina),
+			filter: (pagina) => !/\/(anteprima|admin|appuntamento)(\/|$)/.test(pagina),
 		}),
 	],
 	// Serve sempre, anche nella build per GitHub Pages: senza adapter, l'unica

@@ -1,0 +1,328 @@
+---
+// Pagina che si apre dal link nelle email di conferma e di promemoria:
+// permette a chi ha prenotato di spostare o annullare da solo, senza
+// telefonare. Il token nell'indirizzo è l'unica credenziale — vedi
+// src/lib/appuntamento.ts — quindi la pagina non va indicizzata e non va
+// linkata da nessuna parte del sito.
+import Layout from "../layouts/Layout.astro";
+import { dataLunga } from "../lib/emailCliente";
+import {
+	creaClient,
+	eGestibile,
+	eGiaPassato,
+	leggiAppuntamento,
+	tokenValido,
+	type Appuntamento,
+} from "../lib/appuntamento";
+
+export const prerender = false;
+
+const token = Astro.url.searchParams.get("t");
+
+let appuntamento: Appuntamento | null = null;
+let problema: "link" | "passato" | "annullato" | "server" | null = null;
+
+if (!tokenValido(token)) {
+	problema = "link";
+} else {
+	const supabase = creaClient();
+	if (!supabase) {
+		problema = "server";
+	} else {
+		appuntamento = await leggiAppuntamento(supabase, token);
+		if (!appuntamento || !eGestibile(appuntamento)) {
+			appuntamento = null;
+			problema = "link";
+		} else if (appuntamento.annullatoIl) {
+			problema = "annullato";
+		} else if (eGiaPassato(appuntamento)) {
+			problema = "passato";
+		}
+	}
+}
+
+const eTelefonata = appuntamento?.azione === "telefonata";
+const quando = appuntamento?.data
+	? `${dataLunga(appuntamento.data)}${appuntamento.ora ? ` alle ${appuntamento.ora}` : ""}`
+	: "";
+---
+
+<Layout
+	title="Il tuo appuntamento — Ronchiverdi Sport Club"
+	description="Sposta o annulla il tuo appuntamento al Ronchiverdi Sport Club."
+	noindex={true}
+>
+	<main class="app-page">
+		{problema === "link" && (
+			<section class="app-card app-card--avviso">
+				<span class="eyebrow">Appuntamento</span>
+				<h1>Questo link non è più valido</h1>
+				<p>
+					Può succedere se l'appuntamento è già stato gestito o se il link è
+					stato copiato solo in parte. Chiamaci allo{" "}
+					<a href="tel:+390116612146">011 6612146</a>: sistemiamo in un minuto.
+				</p>
+			</section>
+		)}
+
+		{problema === "server" && (
+			<section class="app-card app-card--avviso">
+				<span class="eyebrow">Appuntamento</span>
+				<h1>Non riusciamo a leggere il tuo appuntamento</h1>
+				<p>
+					Riprova fra qualche minuto. Se hai fretta chiamaci allo{" "}
+					<a href="tel:+390116612146">011 6612146</a>.
+				</p>
+			</section>
+		)}
+
+		{problema === "annullato" && appuntamento && (
+			<section class="app-card app-card--avviso">
+				<span class="eyebrow">Appuntamento</span>
+				<h1>Questo appuntamento è già annullato</h1>
+				<p>Era previsto per {quando}. Se vuoi fissarne un altro, siamo qui.</p>
+				<button type="button" class="btn" data-open-contact>Prenota un nuovo appuntamento</button>
+			</section>
+		)}
+
+		{problema === "passato" && appuntamento && (
+			<section class="app-card app-card--avviso">
+				<span class="eyebrow">Appuntamento</span>
+				<h1>Questo appuntamento è già passato</h1>
+				<p>Era previsto per {quando}. Se vuoi fissarne un altro, siamo qui.</p>
+				<button type="button" class="btn" data-open-contact>Prenota un nuovo appuntamento</button>
+			</section>
+		)}
+
+		{!problema && appuntamento && (
+			<section
+				class="app-card"
+				id="gestione"
+				data-token={appuntamento.token}
+				data-tipo={eTelefonata ? "telefonata" : "appuntamento"}
+				data-data={appuntamento.data}
+				data-ora={appuntamento.ora}
+			>
+				<span class="eyebrow">Il tuo appuntamento</span>
+				<h1>{eTelefonata ? "Ti chiamiamo noi" : "Ti aspettiamo al club"}</h1>
+
+				<dl class="app-dati">
+					<div>
+						<dt>Quando</dt>
+						<dd>{quando}</dd>
+					</div>
+					<div>
+						<dt>{eTelefonata ? "Come" : "Dove"}</dt>
+						<dd>
+							{eTelefonata
+								? `Ti chiamiamo noi${appuntamento.cellulare ? ` al ${appuntamento.cellulare}` : ""}`
+								: "Corso Moncalieri 466, Torino"}
+						</dd>
+					</div>
+					{appuntamento.attivita && (
+						<div>
+							<dt>Argomento</dt>
+							<dd>{appuntamento.attivita}</dd>
+						</div>
+					)}
+				</dl>
+
+				<div class="app-azioni" data-azioni>
+					<button type="button" class="btn" data-apri="sposta">Sposta a un altro orario</button>
+					<button type="button" class="btn btn-outline" data-apri="annulla">Annulla</button>
+				</div>
+
+				<div class="app-pannello" data-pannello="sposta" hidden>
+					<h2>Scegli il nuovo orario</h2>
+					<p class="app-pannello__nota">
+						Sono gli stessi orari che trovi in prenotazione: quelli già occupati
+						non compaiono.
+					</p>
+					<div class="lf__picker">
+						<div class="lf__daystrip" data-giorni></div>
+						<div class="lf__slots" data-slots hidden></div>
+					</div>
+					<div class="app-pannello__azioni">
+						<button type="button" class="btn" data-conferma="sposta" disabled>Conferma il nuovo orario</button>
+						<button type="button" class="app-link" data-chiudi>Lascia com'è</button>
+					</div>
+				</div>
+
+				<div class="app-pannello" data-pannello="annulla" hidden>
+					<h2>Vuoi annullare?</h2>
+					<p class="app-pannello__nota">
+						Liberi subito il posto per qualcun altro. Se invece ti serve solo un
+						altro orario, puoi <button type="button" class="app-link" data-apri="sposta">spostare l'appuntamento</button>.
+					</p>
+					<div class="app-pannello__azioni">
+						<button type="button" class="btn" data-conferma="annulla">Sì, annulla</button>
+						<button type="button" class="app-link" data-chiudi>No, lo tengo</button>
+					</div>
+				</div>
+
+				<p class="app-errore" data-errore hidden role="alert"></p>
+
+				<div class="app-esito" data-esito hidden>
+					<h2 data-esito-titolo></h2>
+					<p data-esito-testo></p>
+					<a class="btn btn-outline" href="/">Torna al sito</a>
+				</div>
+
+				<p class="app-aiuto">
+					Preferisci parlarne con noi? Chiamaci allo{" "}
+					<a href="tel:+390116612146">011 6612146</a>.
+				</p>
+			</section>
+		)}
+	</main>
+
+	<script>
+		import { initGestioneAppuntamento } from "../lib/gestioneAppuntamento.client.js";
+		const root = document.getElementById("gestione");
+		if (root) initGestioneAppuntamento(root);
+	</script>
+
+	<style>
+		.app-page {
+			max-width: 44rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 6rem;
+		}
+		.app-card {
+			padding: 2.5rem;
+			border: 1px solid var(--border-strong);
+			border-radius: var(--radius);
+			background: var(--bg-alt);
+		}
+		.app-card h1 {
+			margin: 0 0 1rem;
+			font-family: var(--font-serif);
+			font-size: var(--text-2xl);
+			line-height: var(--leading-2xl);
+			letter-spacing: var(--tracking-2xl);
+		}
+		.app-card p {
+			margin: 0 0 1rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-base);
+			line-height: 1.65;
+			color: var(--text-muted);
+		}
+		.app-card a {
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		.app-dati {
+			margin: 0 0 1.75rem;
+			padding: 0;
+		}
+		.app-dati > div {
+			padding: 0.85rem 0;
+			border-top: 1px solid var(--border-strong);
+		}
+		.app-dati > div:last-child {
+			border-bottom: 1px solid var(--border-strong);
+		}
+		.app-dati dt {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.app-dati dd {
+			margin: 0.2rem 0 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			color: var(--text);
+		}
+
+		.app-azioni {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+		}
+		.app-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+
+		.app-pannello {
+			margin-top: 2rem;
+			padding-top: 1.75rem;
+			border-top: 1px solid var(--border-strong);
+		}
+		.app-pannello h2 {
+			margin: 0 0 0.5rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+		}
+		.app-pannello__nota {
+			margin: 0 0 1.25rem;
+			font-size: var(--text-sm);
+		}
+		.app-pannello__azioni {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+			margin-top: 1.5rem;
+		}
+		.app-pannello__azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+
+		/* Un pulsante che deve sembrare un link: sta dentro una frase, o
+		   accanto all'azione principale come ripensamento. */
+		.app-link {
+			padding: 0;
+			border: none;
+			background: none;
+			font: inherit;
+			font-weight: 600;
+			color: var(--text);
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+			cursor: pointer;
+		}
+		.app-link:hover {
+			color: var(--accent);
+		}
+
+		.app-errore {
+			margin: 1.25rem 0 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: #a33327;
+		}
+
+		.app-esito {
+			margin-top: 2rem;
+			padding-top: 1.75rem;
+			border-top: 1px solid var(--border-strong);
+		}
+		.app-esito h2 {
+			margin: 0 0 0.5rem;
+			font-family: var(--font-serif);
+			font-size: var(--text-xl);
+		}
+
+		.app-aiuto {
+			margin: 2rem 0 0 !important;
+			font-size: var(--text-sm) !important;
+		}
+
+		@media (max-width: 640px) {
+			.app-page {
+				padding: 3rem 1.25rem 4rem;
+			}
+			.app-card {
+				padding: 1.75rem 1.25rem;
+			}
+		}
+	</style>
+</Layout>
