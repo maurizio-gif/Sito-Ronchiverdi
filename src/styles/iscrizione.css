@@ -3,9 +3,12 @@
    quindi il foglio viaggia solo con loro.
 
    Sta qui per lo stesso motivo di legale.css: due pagine con lo stesso
-   impianto e due fogli di stile separati divergono al primo ritocco. Le
-   sezioni sono larghe, il testo no — i paragrafi restano dentro una misura
-   leggibile invece di correre per tutta la colonna. */
+   impianto e due fogli di stile separati divergono al primo ritocco.
+
+   Le sezioni sono larghe, i testi di lettura no: titoli e occhielli restano
+   dentro una misura leggibile invece di correre per tutta la colonna. Fanno
+   eccezione le note di servizio (.isc-note), che sono frasi corte: limitate
+   andrebbero a capo dopo mezza riga, sotto blocchi larghi il doppio. */
 
 /* ── Impianto delle sezioni ─────────────────────────────────────────── */
 .isc-section {
@@ -53,7 +56,6 @@
 }
 
 .isc-note {
-	max-width: 42rem;
 	margin: 1.25rem 0 0;
 	font-family: var(--font-sans);
 	font-size: var(--text-sm);
