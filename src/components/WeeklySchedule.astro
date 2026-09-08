@@ -38,11 +38,15 @@ const modalId = `planning-modal-${id}`;
 						schedule[day.key].map((slot) => {
 							const lesson = lessons[slot.id];
 							return (
-								<button type="button" class="planning-slot" data-schedule={id} data-lesson={slot.id}>
-									<span class="planning-slot__time">
-										{slot.time}
-										{slot.note && <em class="planning-slot__note">{slot.note}</em>}
-									</span>
+								<button
+									type="button"
+									class="planning-slot"
+									data-schedule={id}
+									data-lesson={slot.id}
+									data-time={slot.time}
+									data-note={slot.note}
+								>
+									<span class="planning-slot__time">{slot.time}</span>
 									<span class="planning-slot__name">{lesson.name}</span>
 									{slot.trainer && <span class="planning-slot__trainer">{slot.trainer}</span>}
 								</button>
@@ -60,6 +64,7 @@ const modalId = `planning-modal-${id}`;
 	<div class="planning-modal__panel" role="dialog" aria-modal="true" aria-labelledby={`${modalId}-title`}>
 		<button type="button" class="planning-modal__close" data-planning-close={id} aria-label="Chiudi">&times;</button>
 		<h3 id={`${modalId}-title`}></h3>
+		<p class="planning-modal__meta" id={`${modalId}-meta`}></p>
 		<p id={`${modalId}-desc`}></p>
 	</div>
 </div>
@@ -68,12 +73,19 @@ const modalId = `planning-modal-${id}`;
 	const modal = document.getElementById(modalId);
 	const titleEl = document.getElementById(`${modalId}-title`);
 	const descEl = document.getElementById(`${modalId}-desc`);
+	const metaEl = document.getElementById(`${modalId}-meta`);
 	let lastFocused = null;
 
-	function openModal(lessonId) {
-		const lesson = lessons[lessonId];
+	// Oltre alla lezione, la scheda dice su quale fascia si è cliccato e la
+	// nota di quella fascia: per il nuoto libero è il numero di corsie, che
+	// cambia di ora in ora ed è la cosa che si va davvero a cercare.
+	function openModal(btn) {
+		const lesson = lessons[btn.dataset.lesson];
 		if (!lesson) return;
 		titleEl.textContent = lesson.name;
+		const meta = [btn.dataset.time, btn.dataset.note].filter(Boolean).join(" · ");
+		metaEl.textContent = meta;
+		metaEl.hidden = !meta;
 		descEl.textContent = lesson.description;
 		lastFocused = document.activeElement;
 		modal.classList.add("open");
@@ -89,7 +101,7 @@ const modalId = `planning-modal-${id}`;
 	}
 
 	document.querySelectorAll(`.planning-slot[data-schedule="${id}"]`).forEach((btn) => {
-		btn.addEventListener("click", () => openModal(btn.dataset.lesson));
+		btn.addEventListener("click", () => openModal(btn));
 	});
 
 	document.querySelectorAll(`[data-planning-close="${id}"]`).forEach((el) => {
@@ -182,11 +194,6 @@ const modalId = `planning-modal-${id}`;
 		color: var(--text-muted);
 		font-variant-numeric: tabular-nums;
 	}
-	.planning-slot__note {
-		font-style: italic;
-		font-weight: 500;
-		color: var(--accent);
-	}
 	.planning-slot__trainer {
 		font-family: var(--font-sans);
 		font-size: var(--text-2xs);
@@ -257,8 +264,18 @@ const modalId = `planning-modal-${id}`;
 		transition-duration: 0.05s;
 	}
 	.planning-modal__panel h3 {
-		margin: 0 0 0.85rem;
+		margin: 0 0 0.5rem;
 		font-size: var(--text-xl);
+	}
+	/* Orario e nota della fascia su cui si è cliccato: è il dato specifico,
+	   e sta davanti alla descrizione della lezione, che è sempre uguale. */
+	.planning-modal__panel .planning-modal__meta {
+		margin: 0 0 0.85rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-base);
+		font-weight: 600;
+		color: var(--accent);
+		font-variant-numeric: tabular-nums;
 	}
 	.planning-modal__panel p {
 		margin: 0;

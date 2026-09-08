@@ -10,13 +10,6 @@ const nuotoLibero = await getSchedule("nuoto-libero");
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
 
-const corsieEsempio = [
-	{ fascia: "Mattina", orario: "8:00 – 12:00", corsie: "Quasi tutte le corsie disponibili" },
-	{ fascia: "Pranzo", orario: "12:00 – 14:00", corsie: "Corsie condivise con acqua fitness" },
-	{ fascia: "Pomeriggio", orario: "14:00 – 17:00", corsie: "Ampia disponibilità di corsie" },
-	{ fascia: "Sera", orario: "17:00 – chiusura", corsie: "Corsie condivise con corsi bambini e acqua fitness" },
-];
-
 
 const faq = faqDiPagina("nuoto-libero");
 ---
@@ -74,42 +67,14 @@ const faq = faqDiPagina("nuoto-libero");
 		</div>
 	</section>
 
-	<section class="lanes-section">
-		<div class="lanes-section__head">
-			<span class="eyebrow">Corsie disponibili</span>
-			<h2>Quante corsie sono disponibili ora?</h2>
-			<p class="lede" style="margin-inline:0">
-				Disponibilità di massima per fascia oraria, prima ancora di arrivare in vasca. <em>Dati indicativi di esempio.</em>
-			</p>
-		</div>
-		<div class="lanes-table-wrap">
-			<table class="lanes-table">
-				<thead>
-					<tr>
-						<th>Fascia</th>
-						<th>Orario</th>
-						<th>Corsie</th>
-					</tr>
-				</thead>
-				<tbody>
-					{corsieEsempio.map((c) => (
-						<tr>
-							<td class="lanes-table__fascia">{c.fascia}</td>
-							<td class="lanes-table__orario">{c.orario}</td>
-							<td class="lanes-table__corsie">{c.corsie}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	</section>
-
 	<section class="planning-section">
 		<div class="planning-section__head">
 			<span class="eyebrow">Planning settimanale</span>
 			<h2>Le fasce orarie del nuoto libero</h2>
 			<p class="lede" style="margin-inline:0">
-				Orari indicativi di apertura delle corsie. <em>Bozza in fase di aggiornamento.</em>
+				Le fasce della vasca grande indoor: tocca un orario per sapere quante
+				corsie sono riservate al nuoto libero: le altre sono occupate da corsi
+				e scuola nuoto. <em>Orari indicativi, che possono subire variazioni.</em>
 			</p>
 		</div>
 		<WeeklySchedule id="nuoto-libero" lessons={nuotoLibero.lessons} schedule={nuotoLibero.schedule} />
@@ -239,65 +204,6 @@ const faq = faqDiPagina("nuoto-libero");
 			.split__content .lede {
 				margin-inline: auto;
 			}
-		}
-
-		.lanes-section {
-			max-width: 58rem;
-			margin: 0 auto;
-			padding: 1rem 1.5rem 5rem;
-		}
-		.lanes-section__head {
-			text-align: center;
-			margin-bottom: 2.5rem;
-		}
-		.lanes-section__head .lede {
-			max-width: none;
-			margin-top: 0.5rem;
-		}
-		.lanes-section__head em {
-			font-style: italic;
-			color: var(--accent);
-		}
-		.lanes-table-wrap {
-			overflow-x: auto;
-		}
-		.lanes-table {
-			width: 100%;
-			min-width: 30rem;
-			border-collapse: collapse;
-		}
-		.lanes-table th {
-			padding: 0.75rem 1rem;
-			border-bottom: 1px solid var(--border-strong);
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-weight: 600;
-			letter-spacing: 0.06em;
-			text-transform: uppercase;
-			color: var(--text-muted);
-			text-align: left;
-		}
-		.lanes-table td {
-			padding: 1rem;
-			border-bottom: 1px solid var(--border);
-			font-family: var(--font-sans);
-			font-size: var(--text-sm);
-		}
-		.lanes-table tr:last-child td {
-			border-bottom: none;
-		}
-		.lanes-table__fascia {
-			font-weight: 600;
-			color: var(--text);
-			white-space: nowrap;
-		}
-		.lanes-table__orario {
-			color: var(--text-muted);
-			font-variant-numeric: tabular-nums;
-			white-space: nowrap;
-		}
-		.lanes-table__corsie {
-			color: var(--text-muted);
 		}
 
 		.planning-section {
