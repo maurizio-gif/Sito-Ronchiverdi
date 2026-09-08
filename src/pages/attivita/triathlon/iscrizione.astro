@@ -220,9 +220,13 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			border-radius: 16px;
 			padding: 1.9rem 1.75rem 2rem;
 		}
+		/* Il nome del percorso è in serif come nelle card di nuoto e tennis. */
 		.cat-card h3 {
 			margin: 0.3rem 0 0.9rem;
+			font-family: var(--font-serif);
 			font-size: var(--text-xl);
+			line-height: var(--leading-lg);
+			font-weight: 400;
 		}
 		.cat-card__desc {
 			font-family: var(--font-sans);
@@ -264,7 +268,9 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		.cat-card__link:hover {
 			color: var(--accent);
 		}
-		@media (max-width: 900px), (orientation: portrait) {
+		/* Stessa soglia del resto delle pagine di iscrizione: la pagina cambia
+		   impaginazione tutta insieme. */
+		@media (max-width: 860px), (orientation: portrait) {
 			.cat-grid {
 				grid-template-columns: 1fr;
 			}
