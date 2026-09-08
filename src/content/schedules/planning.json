@@ -719,12 +719,12 @@
     {
       "id": "nuoto-libero",
       "title": "Nuoto Libero",
-      "note": "Bozza in fase di aggiornamento.",
+      "note": "Corsie della vasca grande indoor. Orari indicativi, che possono subire variazioni. Aggiornato al 09/09/2026.",
       "lessons": [
         {
           "id": "nuoto-libero",
           "name": "Nuoto Libero",
-          "description": "Accesso libero alla vasca, senza prenotazione: nuota quando vuoi, per tutta la durata della fascia oraria indicata."
+          "description": "Accesso libero alla vasca grande indoor, senza prenotazione. Le corsie indicate qui sopra sono quelle riservate al nuoto libero in questa fascia: le altre sono occupate da corsi e scuola nuoto."
         }
       ],
       "days": [
@@ -732,12 +732,49 @@
           "day": "lunedi",
           "slots": [
             {
-              "time": "7.00 – 12.00",
-              "lesson": "nuoto-libero"
+              "time": "7.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             },
             {
-              "time": "14.00 – 22.00",
-              "lesson": "nuoto-libero"
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 13.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "13.00 – 13.45",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "13.45 – 15.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "15.00 – 17.00",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "17.00 – 19.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "19.00 – 20.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "20.00 – 21.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -745,12 +782,44 @@
           "day": "martedi",
           "slots": [
             {
-              "time": "7.00 – 12.00",
-              "lesson": "nuoto-libero"
+              "time": "7.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             },
             {
-              "time": "14.00 – 22.00",
-              "lesson": "nuoto-libero"
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 12.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "12.30 – 14.30",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "14.30 – 15.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "15.30 – 19.45",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "19.45 – 20.30",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "20.30 – 21.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -758,12 +827,54 @@
           "day": "mercoledi",
           "slots": [
             {
-              "time": "7.00 – 12.00",
-              "lesson": "nuoto-libero"
+              "time": "7.00 – 7.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             },
             {
-              "time": "14.00 – 22.00",
-              "lesson": "nuoto-libero"
+              "time": "7.30 – 8.30",
+              "lesson": "nuoto-libero",
+              "note": "4 corsie"
+            },
+            {
+              "time": "8.30 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "4 corsie"
+            },
+            {
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 13.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "13.00 – 13.45",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "13.45 – 15.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "15.00 – 19.00",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "19.00 – 20.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "20.00 – 21.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -771,12 +882,44 @@
           "day": "giovedi",
           "slots": [
             {
-              "time": "7.00 – 12.00",
-              "lesson": "nuoto-libero"
+              "time": "7.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             },
             {
-              "time": "14.00 – 22.00",
-              "lesson": "nuoto-libero"
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 12.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "12.30 – 14.30",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "15.00 – 19.00",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "19.00 – 19.45",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "19.45 – 20.30",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "20.30 – 21.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -784,12 +927,44 @@
           "day": "venerdi",
           "slots": [
             {
-              "time": "7.00 – 12.00",
-              "lesson": "nuoto-libero"
+              "time": "7.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             },
             {
-              "time": "14.00 – 22.00",
-              "lesson": "nuoto-libero"
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 12.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "12.30 – 14.30",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "14.30 – 15.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "15.30 – 19.00",
+              "lesson": "nuoto-libero",
+              "note": "2 corsie"
+            },
+            {
+              "time": "19.00 – 20.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "20.00 – 21.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -797,8 +972,29 @@
           "day": "sabato",
           "slots": [
             {
-              "time": "9.00 – 20.00",
-              "lesson": "nuoto-libero"
+              "time": "9.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 13.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "13.00 – 14.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "14.00 – 19.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         },
@@ -806,8 +1002,19 @@
           "day": "domenica",
           "slots": [
             {
-              "time": "9.00 – 20.00",
-              "lesson": "nuoto-libero"
+              "time": "9.00 – 11.00",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
+            },
+            {
+              "time": "11.00 – 12.00",
+              "lesson": "nuoto-libero",
+              "note": "3 corsie"
+            },
+            {
+              "time": "12.00 – 19.30",
+              "lesson": "nuoto-libero",
+              "note": "5 corsie"
             }
           ]
         }
