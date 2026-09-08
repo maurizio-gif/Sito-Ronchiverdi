@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import MembershipTable from "../components/MembershipTable.astro";
+import TriplePack from "../components/TriplePack.astro";
 import PageHero from "../components/PageHero.astro";
 import Faq from "../components/Faq.astro";
 import { url } from "../lib/paths";
@@ -39,6 +40,8 @@ const faq = faqDiPagina("abbonamenti");
 		</div>
 	</section>
 
+	<TriplePack />
+
 	<Faq items={faq} />
 
 	<section class="final-cta">
@@ -52,7 +55,9 @@ const faq = faqDiPagina("abbonamenti");
 
 	<style>
 		.su-misura {
-			padding: 0 1.5rem 5rem;
+			/* Senza padding sotto: lo stacco dal riquadro del Triple Pack, che
+			   segue, lo mette il suo padding-top. Sommati farebbero 160px. */
+			padding: 0 1.5rem;
 		}
 		.su-misura__box {
 			max-width: 46rem;

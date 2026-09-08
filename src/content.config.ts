@@ -97,7 +97,12 @@ const trainers = defineCollection({
 // Tabella abbonamenti: sorgente unica usata da tutte le pagine che la
 // mostrano (abbonamenti, gym floor, ...). Modificarla qui — o da Tina —
 // la aggiorna ovunque.
-const accessLevel = z.enum(["full", "rate", "none"]);
+// "seasonal" e' l'accesso compreso solo in una parte dell'anno: il tennis e'
+// nel Gold quando i campi sono scoperti, mentre d'inverno, coperti e
+// riscaldati, le ore si pagano a tariffa agevolata. Tenerlo distinto da
+// "rate" e' il punto: col pallino di "rate" il listino diceva che il tennis
+// non e' compreso, che e' falso per meta' dell'anno.
+const accessLevel = z.enum(["full", "seasonal", "rate", "none"]);
 
 const memberships = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/memberships" }),

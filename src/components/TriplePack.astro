@@ -1,0 +1,68 @@
+---
+// Il Triple Pack: tre sedute di personal training che si aggiungono al
+// momento dell'iscrizione.
+//
+// Un componente e non due blocchi ricopiati: compare sia negli Abbonamenti
+// (dove si sceglie la formula) sia in Personal Training (dove si sceglie il
+// trainer), e sono i due momenti in cui la domanda «come parto?» viene in
+// mente. Due copie avrebbero preso strade diverse alla prima correzione di
+// testo.
+interface Props {
+	/** Se assente, il pulsante apre il modulo di contatto: passalo solo per un link diretto. */
+	ctaHref?: string;
+	ctaLabel?: string;
+}
+const { ctaHref, ctaLabel = "Chiedi informazioni sul Triple Pack" } = Astro.props;
+---
+
+<section class="triple">
+	<div class="triple__box">
+		<span class="eyebrow">Per iniziare</span>
+		<h2>Triple <em class="accent">Pack</em></h2>
+		<p class="lede triple__lede">
+			Tre sedute di <strong>personal training</strong> che puoi aggiungere al momento
+			dell&apos;iscrizione: servono ad affrontare nel modo giusto l&apos;inizio del tuo
+			percorso di allenamento al club, con un trainer accanto dalle prime sedute.
+		</p>
+		{ctaHref ? (
+			<a class="btn" href={ctaHref}>{ctaLabel}</a>
+		) : (
+			<button type="button" class="btn" data-interest="club-adulti" data-open-contact>{ctaLabel}</button>
+		)}
+	</div>
+</section>
+
+<style>
+	/* Ritmo verticale proprio, simmetrico, invece di appoggiarsi al padding
+	   della sezione precedente: il componente compare in due pagine con
+	   vicini diversi, e un padding-top a zero — buono negli Abbonamenti, dove
+	   sopra c'e' il box delle formule — su Personal Training incollava il
+	   riquadro alla fascia dei "facts", con 160px sotto e niente sopra. */
+	.triple {
+		padding: 5rem 1.5rem;
+	}
+	/* Stesse misure del box "Formule su misura" negli Abbonamenti: i due
+	   riquadri si leggono in sequenza sulla stessa pagina, e due larghezze
+	   diverse li farebbero sembrare due componenti scollegati. */
+	.triple__box {
+		max-width: 46rem;
+		margin: 0 auto;
+		padding: 3rem 2rem;
+		text-align: center;
+		background: var(--bg-alt);
+		border: 1px solid var(--border);
+		border-radius: var(--radius, 12px);
+	}
+	.triple__box h2 {
+		margin: 0.4rem 0 0.8rem;
+	}
+	.triple__lede {
+		margin-inline: auto;
+		margin-bottom: 2rem;
+	}
+	.triple__box .btn {
+		cursor: pointer;
+		font-family: var(--font-sans);
+		border: none;
+	}
+</style>

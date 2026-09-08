@@ -175,6 +175,7 @@ export default defineConfig({
                   required: true,
                   options: [
                     { value: "full", label: "Incluso" },
+                    { value: "seasonal", label: "Incluso in stagione (asterisco)" },
                     { value: "rate", label: "Tariffa agevolata" },
                     { value: "none", label: "Non incluso" },
                   ],

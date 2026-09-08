@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import IconFacts from "../../components/IconFacts.astro";
+import TriplePack from "../../components/TriplePack.astro";
 import prefissi from "../../data/prefissi-telefonici";
 import { url } from "../../lib/paths";
 
@@ -86,6 +87,8 @@ const facts = [
 	</section>
 
 	<IconFacts eyebrow="Perché il personal training" title="Cosa comprende il servizio" items={facts} />
+
+	<TriplePack ctaHref="#consulenza-fitness-manager" ctaLabel="Parlane con il Fitness Manager" />
 
 	<section class="team">
 		<div class="team__head">

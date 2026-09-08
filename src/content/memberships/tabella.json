@@ -48,13 +48,13 @@
     },
     {
       "label": "Padel",
-      "note": "Tre campi, coperti e scoperti, aperti anche ai non soci: prenoti su Wansport, da solo o in gruppo. Con l'abbonamento hai la tariffa agevolata.",
-      "access": {"gold": "rate", "silver": "rate", "gym": "none", "swim": "none"}
+      "note": "Tre campi, coperti e scoperti, aperti anche ai non soci: prenoti su Wansport, da solo o in gruppo. Con un abbonamento in corso — qualunque sia — hai la tariffa agevolata.",
+      "access": {"gold": "rate", "silver": "rate", "gym": "rate", "swim": "rate"}
     },
     {
       "label": "Tennis",
-      "note": "Nove campi in terra rossa, sei coperti e riscaldati da ottobre a marzo. Nella stagione estiva i campi sono compresi nell'abbonamento Gold; le ore invernali, i corsi e le lezioni si acquistano a parte.",
-      "access": {"gold": "rate", "silver": "none", "gym": "none", "swim": "none"}
+      "note": "Nove campi in terra rossa. Da aprile a settembre, coi campi scoperti, il gioco è compreso nell'abbonamento Gold. Da ottobre a marzo sei campi vengono coperti e riscaldati, e le ore si pagano a tariffa agevolata. Corsi e lezioni si acquistano sempre a parte.",
+      "access": {"gold": "seasonal", "silver": "none", "gym": "none", "swim": "none"}
     }
   ]
 }
