@@ -52,6 +52,8 @@ export interface CorsoNuoto {
 	vasca: string;
 	image: string;
 	imageAlt: string;
+	/** Le voci prese dalla scheda del prodotto sul portale. */
+	dettagli?: { label: string; valore: string }[];
 	listino: RigaListino[];
 }
 
