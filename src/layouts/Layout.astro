@@ -116,6 +116,23 @@ const structuredData = {
 			initTracking();
 		</script>
 		<script>
+			// Regola del sito: un link che porta fuori si apre in una scheda
+			// nuova. Nei file .astro l'attributo è scritto a mano, ma i
+			// contenuti Markdown arrivano da TinaCMS e chi scrive lì non può
+			// aggiungerlo: questo passaggio vale anche per quelli, e per il
+			// giorno in cui qualcuno se ne dimentica.
+			//
+			// Il confronto è con l'host corrente, così vale in locale, sulle
+			// preview e in produzione senza doverlo aggiornare. Restano fuori
+			// i link che un target ce l'hanno già: se qualcuno ha scelto
+			// diversamente, la scelta resta sua.
+			document.querySelectorAll('a[href^="http"]:not([target])').forEach((a) => {
+				if (a.host === location.host) return;
+				a.target = "_blank";
+				a.rel = a.rel ? a.rel + " noopener" : "noopener";
+			});
+		</script>
+		<script>
 			const obs = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {

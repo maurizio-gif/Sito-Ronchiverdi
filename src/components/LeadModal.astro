@@ -647,6 +647,16 @@ import { leadActivityMap } from "../data/leadActivities";
 		opacity: 0.35;
 		cursor: not-allowed;
 	}
+	/* Giorno senza orari: si distingue a colpo d'occhio ma resta cliccabile,
+	   perché chi lo sceglie trova l'invito a scriverci. */
+	.lf__day.is-unavailable {
+		opacity: 0.5;
+		border-style: dashed;
+	}
+	.lf__day.is-unavailable.is-selected {
+		opacity: 1;
+		border-style: solid;
+	}
 	.lf__day.is-selected {
 		background: var(--accent);
 		border-color: var(--accent);
@@ -724,6 +734,17 @@ import { leadActivityMap } from "../data/leadActivities";
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
 		color: var(--text-muted);
+	}
+	/* Vicolo cieco evitato: al posto degli orari, il motivo e la via d'uscita. */
+	.lf__picker-fallback {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.9rem;
+	}
+	.lf__picker-fallback-btn {
+		cursor: pointer;
+		font-family: var(--font-sans);
 	}
 
 	/* ── Campi di testo (messaggio, dati di contatto) ─────────────────── */
