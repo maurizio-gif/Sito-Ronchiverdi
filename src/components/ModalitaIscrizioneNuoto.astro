@@ -1,0 +1,104 @@
+---
+// Le informative dell'iscrizione alla scuola nuoto: procedura, pagamento e
+// primo giorno.
+//
+// Stanno in un componente perché compaiono su tutte le pagine dei corsi (e
+// sull'hub): chi legge la pagina dell'Acquaticità deve trovare lì tutto
+// quello che gli serve, senza essere mandato altrove. Ripetere il testo in
+// cinque file, invece, significherebbe aggiornarlo in cinque punti — e
+// prima o poi dimenticarne uno.
+import { TELEFONO_CLUB } from "../data/scuolaNuoto";
+
+interface Props {
+	/** Il corso di cui si sta parlando, per i testi che lo nominano. */
+	corso?: string;
+}
+
+const { corso } = Astro.props;
+
+const procedura = [
+	{
+		title: "Crea l'account",
+		desc: "L'account va intestato al bambino, non al genitore.",
+	},
+	{
+		title: corso ? `Iscrivi al corso ${corso}` : "Iscrivi al corso",
+		desc: "Dal listino qui sopra arrivi alla scheda giusta: scegli la formula e completa il pagamento online.",
+	},
+	{
+		title: "Carica i documenti",
+		desc: "Certificato medico e regolamento firmato, dalla tua area personale.",
+	},
+];
+
+const pagamento = [
+	{ title: "Soluzione unica", desc: "L'intero importo al momento dell'iscrizione." },
+	{ title: "3 rate mensili", desc: "Tramite PayPal, senza costi aggiuntivi." },
+	{ title: "8 rate", desc: "Per importi superiori a €2.000, da concordare in sede." },
+];
+
+const primoGiorno = [
+	{
+		title: "Arriva 20 minuti prima",
+		desc: "Il tempo di cambiarsi con calma e presentarsi in vasca all'orario di inizio.",
+	},
+	{
+		title: "Braccialetto badge",
+		desc: "Serve per passare i tornelli e, per sicurezza, va indossato sempre, sin dalla prima lezione. Chi ne è sprovvisto lo acquista a <strong>10,00 €</strong>; chi ce l'ha già da corsi precedenti lo fa vidimare alla reception nella settimana prima dell'inizio.",
+	},
+];
+---
+
+<section class="isc-section">
+	<div class="isc-head">
+		<span class="eyebrow">Tre passaggi</span>
+		<h2>Come ci si iscrive</h2>
+	</div>
+	<ol class="isc-steps">
+		{procedura.map((s, i) => (
+			<li class="isc-step">
+				<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+				<h3>{s.title}</h3>
+				<p>{s.desc}</p>
+			</li>
+		))}
+	</ol>
+	<p class="isc-note">
+		Il bambino ha già ricevuto le credenziali in passato e sono state smarrite?
+		Chiamaci allo <a href={`tel:+39${TELEFONO_CLUB.replace(/\s/g, "")}`}>{TELEFONO_CLUB}</a>: le recuperiamo noi.
+	</p>
+</section>
+
+<section class="isc-section isc-section--alt">
+	<div class="isc-duo">
+		<div>
+			<div class="isc-head isc-head--left">
+				<span class="eyebrow">Pagamento</span>
+				<h2>Come si paga</h2>
+			</div>
+			<dl class="isc-list">
+				{pagamento.map((p) => (
+					<div class="isc-list__row">
+						<dt>{p.title}</dt>
+						<dd>{p.desc}</dd>
+					</div>
+				))}
+			</dl>
+			<p class="isc-note">In assenza di regolare pagamento non è possibile partecipare alle lezioni.</p>
+		</div>
+		<div>
+			<div class="isc-head isc-head--left">
+				<span class="eyebrow">Prima lezione</span>
+				<h2>Cosa serve sapere</h2>
+			</div>
+			<dl class="isc-list">
+				{primoGiorno.map((p) => (
+					<div class="isc-list__row">
+						<dt>{p.title}</dt>
+						<dd set:html={p.desc} />
+					</div>
+				))}
+			</dl>
+		</div>
+	</div>
+</section>
