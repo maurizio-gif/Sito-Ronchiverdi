@@ -28,6 +28,7 @@ const clubLinks = [
 	{ href: url("/eventi"), label: "Eventi" },
 	{ href: url("/blog"), label: "Blog" },
 	{ href: url("/faq"), label: "Domande frequenti" },
+	{ href: url("/lavora-con-noi"), label: "Lavora con noi" },
 	{ openContact: true, label: "Prenota un tour" },
 ];
 
@@ -205,6 +206,23 @@ const enti = [
 				))}
 			</div>
 		</div>
+	</section>
+
+	<section class="footer-lavora" aria-label="Lavora con noi">
+		<div>
+			<p class="footer-heading">Lavora con noi</p>
+			<h2 class="footer-lavora__titolo">
+				Il club cerca persone <em class="accent accent-dark">tutto l'anno</em>
+			</h2>
+			<p class="footer-lavora__testo">
+				Tecnici sportivi e istruttori, reception, commerciale, Spa, Club House,
+				manutenzione: non pubblichiamo posizioni aperte, ma leggiamo tutte le
+				candidature che arrivano e le teniamo per quando si apre qualcosa.
+			</p>
+		</div>
+		<a class="btn btn-outline btn-outline-dark" href={url("/lavora-con-noi")}>
+			Invia la candidatura
+		</a>
 	</section>
 
 	<section class="legal" aria-label="Documenti e informative">
@@ -541,6 +559,39 @@ const enti = [
 		}
 	}
 
+	/* Lavora con noi: sta fra le federazioni e i documenti legali perché è
+	   l'ultima cosa che si legge scendendo, e chi scende fino in fondo al
+	   footer o cerca l'indirizzo o cerca proprio noi. */
+	.footer-lavora {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2rem;
+		max-width: 82rem;
+		margin: 3rem auto 0;
+		padding-top: 2.5rem;
+		border-top: 1px solid rgba(246, 239, 222, 0.14);
+	}
+	.footer-lavora__titolo {
+		margin: 0.6rem 0 0.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-xl);
+		font-weight: 400;
+		letter-spacing: var(--tracking-lg);
+		line-height: var(--leading-lg);
+		color: var(--text-on-dark);
+	}
+	.footer-lavora__testo {
+		max-width: 44rem;
+		margin: 0;
+		font-size: var(--text-sm);
+		line-height: 1.65;
+		color: rgba(246, 239, 222, 0.62);
+	}
+	.footer-lavora .btn {
+		flex: none;
+	}
+
 	.legal {
 		max-width: 82rem;
 		margin: 3rem auto 0;
@@ -617,6 +668,13 @@ const enti = [
 	@media (max-width: 700px), (orientation: portrait) {
 		.footer-societa {
 			text-align: left;
+		}
+		/* Il bottone va sotto il testo e prende tutta la riga: di fianco, su
+		   telefono, resterebbe schiacciato contro il bordo. */
+		.footer-lavora {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1.25rem;
 		}
 	}
 	@media (max-width: 1100px), (orientation: portrait) {
