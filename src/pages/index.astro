@@ -552,6 +552,14 @@ const clubGallery = [
 		}
 		.hero-title-dark {
 			font-family: var(--font-serif);
+			/* Stessa curva di --text-4xl (6vw, cap 4.5rem) ma con il minimo
+			   alzato da 2.5 a 3.4rem. Serve al telefono: sotto gli 800px di
+			   larghezza il termine in vw non arriva mai al minimo, quindi il
+			   titolo dell'hero restava fisso a 40px su qualunque schermo
+			   stretto — piccolo, in una schermata che è tutta sua. Alzando il
+			   solo minimo la curva resta continua (niente salto a un
+			   breakpoint) e gli altri h1 del sito non si muovono. */
+			font-size: clamp(3.4rem, 6vw, 4.5rem);
 			color: var(--text-on-dark);
 			margin: 0 0 1rem;
 			text-shadow: 0 10px 34px rgba(0, 0, 0, 0.6), 0 3px 10px rgba(0, 0, 0, 0.55),
@@ -559,9 +567,12 @@ const clubGallery = [
 		}
 		/* Su schermo stretto il titolo va su tre righe fisse — "Benvenuti al /
 		   Ronchiverdi / Sport Club" — invece di andare a capo dove capita
-		   spezzando il nome del club. Sopra i 640px resta una riga sola che si
-		   dispone da sé. */
-		@media (max-width: 640px) {
+		   spezzando il nome del club.
+		   La soglia è 800px e non 640 perché è lì che la riga unica smette di
+		   starci alla misura del titolo: appena sotto, andando a capo da sola,
+		   lasciava "Club" orfano su una riga tutta sua. Sopra gli 800px la
+		   riga unica ci sta e si dispone da sé. */
+		@media (max-width: 800px) {
 			.hero-title-riga {
 				display: block;
 			}

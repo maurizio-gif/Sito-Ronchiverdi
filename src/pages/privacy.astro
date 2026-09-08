@@ -9,6 +9,7 @@ import { url } from "../lib/paths";
 // sito fa davvero, cioè quelli scritti nel codice. Se cambia il codice, va
 // cambiata anche la voce corrispondente qui sotto:
 //   - src/pages/api/lead.ts      → campi salvati su Supabase dai moduli
+//   - src/pages/api/candidatura.ts → campi e curriculum di chi si candida
 //   - src/lib/notificaLead.ts    → avviso email alla segreteria via SendGrid
 //   - src/pages/api/track.ts     → dati di navigazione di sessioni e pagine
 //   - src/lib/tracking.client.js → chiavi in sessionStorage/localStorage e consenso
@@ -63,6 +64,13 @@ const finalita = [
 		dati: "Nome, cognome, email, cellulare.",
 	},
 	{
+		titolo: "Valutare la tua candidatura",
+		testo:
+			"Se ti candidi da Lavora con noi, leggere quello che hai scritto e il tuo curriculum, ricontattarti e tenere la candidatura per le posizioni che si aprono.",
+		base: "Art. 6.1.b GDPR — misure precontrattuali prese su tua richiesta; il consenso che spunti nel modulo copre la conservazione della candidatura anche dopo la valutazione.",
+		dati: "Dati anagrafici e di contatto, città, area e disponibilità, i due testi liberi e il file del curriculum.",
+	},
+	{
 		titolo: "Capire come viene usato il sito",
 		testo:
 			"Misurare pagine viste, percorsi di navigazione e provenienza delle visite (campagne, motori di ricerca, social) per capire quali contenuti servono davvero e come migliorarli.",
@@ -95,7 +103,8 @@ const destinatari = [
 	},
 	{
 		nome: "Supabase Inc.",
-		ruolo: "Database su cui vengono salvate le richieste dei moduli e le sessioni di navigazione",
+		ruolo:
+			"Database delle richieste dai moduli, delle candidature e delle sessioni di navigazione, e archivio privato dei curriculum",
 		dove: "Unione Europea",
 	},
 	{
@@ -161,6 +170,10 @@ const conservazione = [
 	{
 		cosa: "Consenso a comunicazioni e novità",
 		quanto: "Fino alla revoca e comunque non oltre 24 mesi dall'ultimo contatto",
+	},
+	{
+		cosa: "Candidature e curriculum ricevuti da Lavora con noi",
+		quanto: "24 mesi dall'invio, salvo che diventino un rapporto di lavoro o di collaborazione",
 	},
 	{ cosa: "Dati di navigazione (sessioni e pagine viste)", quanto: "26 mesi" },
 	{ cosa: "Prova del consenso ai cookie", quanto: "12 mesi" },
@@ -239,6 +252,22 @@ const conservazione = [
 			messaggio. Il certificato medico richiesto per l'attività sportiva si
 			consegna in segreteria, fuori da questo sito e con un'informativa
 			dedicata.
+		</p>
+
+		<h3>Se ti candidi per lavorare con noi</h3>
+		<p>
+			Il modulo di <a href={url("/lavora-con-noi")}>Lavora con noi</a> raccoglie,
+			oltre ai tuoi dati di contatto, la città, l'area per cui ti candidi, la
+			disponibilità, i due testi liberi in cui racconti di te e del tuo percorso
+			e il <strong>file del curriculum</strong> che alleghi.
+		</p>
+		<p>
+			Il curriculum finisce in un archivio privato, non raggiungibile da un
+			indirizzo pubblico: lo apre solo il personale del club autorizzato, dal
+			pannello interno. <strong>La candidatura non viaggia per email</strong> —
+			né i tuoi dati né il curriculum — e non la comunichiamo a terzi.
+			Scrivi nel modulo solo quello che serve a valutarti: non chiediamo dati
+			particolari (art. 9 GDPR) e non è il posto per informazioni sulla salute.
 		</p>
 
 		<h3>Dati raccolti automaticamente mentre navighi</h3>

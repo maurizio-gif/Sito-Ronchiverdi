@@ -73,6 +73,10 @@ const links = [
 	</div>
 	<button type="button" class="btn nav-cta" data-open-contact>Prenota un tour</button>
 
+	<!-- Solo mobile: al centro della barra, perché lì "Prenota un tour" è nascosto
+	     e il contatto resterebbe dietro all'hamburger. -->
+	<button type="button" class="btn nav-contatta" data-open-contact>Contattaci</button>
+
 	<button class="nav-hamburger" id="nav-hamburger" aria-label="Apri il menu" aria-expanded="false" aria-controls="nav-mobile">
 		<span></span>
 		<span></span>
@@ -145,6 +149,10 @@ const links = [
 	// un link che porta via dalla pagina come gli altri, apre il modal sopra
 	// lo stesso overlay, quindi va incluso esplicitamente insieme alle <a>.
 	mobileMenu?.querySelectorAll("a, .nav-mobile-cta").forEach((el) => el.addEventListener("click", closeMenu));
+
+	// "Contattaci" sta nella barra, che resta sopra all'overlay: se il menu è
+	// aperto va chiuso, altrimenti il modal si aprirebbe dietro al drawer.
+	document.querySelector(".nav-contatta")?.addEventListener("click", closeMenu);
 
 	function closeOtherDropdowns(item) {
 		document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {
@@ -236,6 +244,10 @@ const links = [
 		padding: 0.6rem 1.4rem;
 		font-size: var(--text-xs);
 		flex-shrink: 0;
+	}
+
+	.nav-contatta {
+		display: none;
 	}
 
 	.nav-business {
@@ -537,9 +549,11 @@ const links = [
 		border-color: var(--accent);
 		color: var(--text-on-dark);
 	}
+	/* I due indirizzi del gruppo stanno affiancati e non in colonna: sono
+	   scorciatoie verso altri siti, non voci di questo menu, e in colonna
+	   pesavano come le pagine del club sopra di loro. Mezza riga per uno. */
 	.nav-mobile-business {
 		display: flex;
-		flex-direction: column;
 		gap: 0.6rem;
 		margin-top: 1.5rem;
 		opacity: 0;
@@ -551,9 +565,18 @@ const links = [
 		transform: translateY(0);
 	}
 	.nav-mobile-business-btn {
+		/* Mezza riga ciascuno, a prescindere da quanto è lunga l'etichetta:
+		   flex-basis 0 impedisce che "Ronchiverdi Business" si prenda più
+		   spazio di "Ristorante Elements". Il padding orizzontale è ridotto
+		   rispetto alla versione in colonna — su 390px di schermo, a mezza
+		   riga, 1,4rem per lato non lascerebbero posto al testo — e le due
+		   parole vanno a capo al centro, con i bottoni che restano alti
+		   uguali perché il flex li allunga entrambi. */
+		flex: 1 1 0;
 		text-align: center;
-		padding: 0.7rem 1.4rem;
+		padding: 0.7rem 0.7rem;
 		font-size: var(--text-2xs);
+		line-height: 1.35;
 		background: var(--bg-alt);
 		border: 1px solid var(--border);
 		color: var(--text-muted);
@@ -598,6 +621,25 @@ const links = [
 		.nav-hamburger {
 			display: flex;
 		}
+		/* Centrato sulla barra, non nel flusso: così resta al centro dello
+		   schermo qualunque sia la larghezza di logo e hamburger. .nav è
+		   sticky, quindi è già un contenitore posizionato. */
+		.nav-contatta {
+			display: block;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			padding: 0.55rem 1.1rem;
+			font-size: var(--text-2xs);
+			white-space: nowrap;
+		}
+	}
+
+	/* Sotto i 360 px logo + pulsante + hamburger si toccherebbero. */
+	@media (max-width: 359px) {
+		.nav-contatta {
+			padding: 0.5rem 0.75rem;
+		}
 	}
 
 	/* Totem verticale: stessa struttura del menu compatto, ma alla scala di uno
@@ -615,6 +657,10 @@ const links = [
 			width: 4rem;
 			height: 4rem;
 			gap: 0.5rem;
+		}
+		.nav-contatta {
+			padding: 1rem 2rem;
+			font-size: var(--text-sm);
 		}
 		.nav-hamburger span {
 			width: 2.4rem;

@@ -8,7 +8,6 @@ import { faq, faqPerArea, hrefPagina, schemaFaq } from "../data/faq";
 // perché chi ha già un dubbio preciso non debba indovinare in quale pagina
 // vive, e non finisca a chiederlo in reception.
 const aree = faqPerArea();
-const totale = faq.length;
 
 const schema = schemaFaq(
 	faq,
@@ -33,8 +32,8 @@ const testoRicerca = (item: (typeof faq)[number]) =>
 		<p class="eyebrow">Domande frequenti</p>
 		<h1>Le risposte, <em class="accent">tutte qui</em></h1>
 		<p class="lede">
-			{totale} domande su abbonamenti, orari, corsi, iscrizioni e documenti.
-			Cerca quello che ti serve: se non lo trovi, la reception risponde allo
+			Domande su abbonamenti, orari, corsi, iscrizioni e documenti. Cerca
+			quello che ti serve: se non lo trovi, la reception risponde allo{" "}
 			<a href="tel:+390116612146">011 6612146</a>.
 		</p>
 	</header>

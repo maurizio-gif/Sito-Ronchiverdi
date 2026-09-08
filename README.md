@@ -96,6 +96,39 @@ La regola che tiene insieme tutto: i dati che vivono altrove — prezzi e
 contenuti degli abbonamenti in `/abbonamenti`, orari in `/planning`, risposte
 operative in `/faq` — si linkano, non si ricopiano.
 
+## Lavora con noi
+
+`/lavora-con-noi` raccoglie candidature spontanee: il club non pubblica
+posizioni aperte, quindi la pagina elenca le **aree** in cui cerca persone
+(`src/data/lavoraConNoi.ts`) e apre un modulo con due campi lunghi e il
+curriculum allegato.
+
+Il file **non passa dal nostro server**: una function Vercel accetta 4,5 MB nel
+corpo della richiesta e il modulo ne promette 5, quindi l'invio è in tre passi.
+
+1. `POST /api/candidatura/upload` firma il caricamento con la service_role key
+   e restituisce percorso, URL firmata e content-type;
+2. il browser fa `PUT` di quel file direttamente sul bucket privato
+   `candidature-cv`;
+3. `POST /api/candidatura` salva il testo del modulo e il percorso — dopo aver
+   verificato che l'oggetto esista davvero e pesi quanto dichiara: il percorso
+   arriva dal client, e "difficile da indovinare" non è un controllo d'accesso.
+
+Formati e limiti stanno in `src/lib/candidature.ts` e sono ripetuti nel bucket
+(vedi la migration): se cambiano in un posto vanno cambiati anche nell'altro, o
+il modulo accetta un file che poi lo storage rifiuta.
+
+Tabella e bucket: **`scripts/sql/2026-09-08-candidature.sql`**, da eseguire dal
+SQL Editor di Supabase. Le candidature le legge il pannello
+(APP-RONCHIVERDI, sezione *Curriculum*), che scarica il CV con una URL firmata:
+il bucket resta privato e non è raggiungibile da un indirizzo pubblico.
+
+A differenza delle richieste dai moduli, **una candidatura non manda nessuna
+email**: vive solo nel pannello. I dati di chi si candida e il rimando al suo
+curriculum non hanno ragione di finire anche in una casella di posta, dove
+restano per sempre e nessuno li cancella. Il rovescio è che nessuno viene
+avvisato: la sezione Curriculum va aperta.
+
 ## Immagini per le anteprime social
 
 `public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,
@@ -144,6 +177,8 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
       unico che armonizza i quattro regolamenti in circolazione — vedi
       `docs/armonizzazione-regolamenti.md`); mancano ancora nomina safeguarding
       e codice di condotta, oggi linkati dal footer ma non ancora esistenti
+- [x] **Lavora con noi** (`/lavora-con-noi`): aree e ruoli, modulo con CV su
+      bucket privato, candidature lette dal pannello nella sezione Curriculum
 - [ ] Redirect 301 dal vecchio sito Wix (~110 URL, vedi
       `scripts/scrape_output/inventario.csv`)
 - [ ] GA4 / GTM e tag di conversione
