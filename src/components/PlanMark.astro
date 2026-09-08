@@ -1,10 +1,14 @@
 ---
 interface Props {
-	status: "full" | "rate" | "none";
+	status: "full" | "seasonal" | "rate" | "none";
 }
 const { status } = Astro.props;
+
+// L'etichetta e' quello che legge chi usa uno screen reader: l'asterisco per
+// lui non esiste, quindi la condizione va detta per intero qui.
 const labels = {
 	full: "Incluso",
+	seasonal: "Incluso da aprile a settembre; da ottobre a marzo a tariffa agevolata",
 	rate: "Incluso, tariffa agevolata",
 	none: "Non incluso",
 };
@@ -15,6 +19,14 @@ const labels = {
 		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 			<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 		</svg>
+	)}
+	{status === "seasonal" && (
+		<>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+			<span class="mark__ast" aria-hidden="true">*</span>
+		</>
 	)}
 	{status === "rate" && <span class="mark__dot" aria-hidden="true"></span>}
 	{status === "none" && (
@@ -36,6 +48,24 @@ const labels = {
 	}
 	.mark--full {
 		background: var(--accent-tint);
+		color: var(--accent);
+	}
+	.mark--seasonal {
+		background: var(--accent-tint);
+		color: var(--accent);
+		/* Ancora per l'asterisco, che sporge dal cerchio. */
+		position: relative;
+	}
+	/* Fuori dal cerchio e non dentro: dentro finirebbe sopra il braccio della
+	   spunta, e un asterisco che si legge a meta' non rimanda a niente. */
+	.mark__ast {
+		position: absolute;
+		top: -2px;
+		right: -4px;
+		font-family: var(--font-serif);
+		font-size: var(--text-md);
+		font-weight: 700;
+		line-height: 1;
 		color: var(--accent);
 	}
 	.mark--rate {

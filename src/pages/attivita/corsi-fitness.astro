@@ -124,7 +124,16 @@ const courses = [
 		categoria: "Attivazione",
 		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="14.5" r="4" stroke="currentColor" stroke-width="1.5" /><path d="M12 6.5v2M5.5 14.5h-2M20.5 14.5h-2M7 9 5.5 7.5M17 9l1.5-1.5M3.5 19.5h17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
 	},
-].map((c) => ({ ...c, ...corsiFitness.lessons[c.id] }));
+]
+	.map((c) => ({ ...c, ...corsiFitness.lessons[c.id] }))
+	// Alfabetico sul nome mostrato, non sull'id: in una griglia di diciotto
+	// card si cerca un corso per come si chiama. L'ordinamento sta qui e non
+	// nell'elenco qui sopra, che resta raggruppato per tema — cosi' aggiungere
+	// un corso non obbliga a incastrarlo nel punto giusto dell'array.
+	//
+	// localeCompare con "it" e non un confronto fra stringhe: ordina le
+	// accentate al posto giusto invece di spedirle in fondo.
+	.sort((a, b) => a.name.localeCompare(b.name, "it"));
 
 const faq = faqDiPagina("corsi-fitness");
 ---

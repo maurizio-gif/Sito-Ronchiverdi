@@ -83,6 +83,11 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 
 	<p class="compare-legend">
 		<span class="legend-item"><PlanMark status="full" /> incluso</span>
+		{/* La condizione per intero sta nel tooltip della riga: qui basta che
+		    l'asterisco rimandi a qualcosa, o resterebbe un simbolo muto. */}
+		<span class="legend-item">
+			<PlanMark status="seasonal" /> incluso da aprile a settembre, poi a tariffa agevolata
+		</span>
 		<span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>
 		<span class="legend-item"><PlanMark status="none" /> non incluso</span>
 	</p>
@@ -269,5 +274,10 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+	/* Il segno stagionale porta l'asterisco fuori dal cerchio: senza questo
+	   spazio finirebbe attaccato al testo della voce accanto. */
+	.legend-item :global(.mark--seasonal) {
+		margin-right: 0.2rem;
 	}
 </style>
