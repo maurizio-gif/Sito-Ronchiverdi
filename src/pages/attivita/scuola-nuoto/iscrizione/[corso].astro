@@ -6,17 +6,21 @@
 // Le quattro pagine escono da un file solo, dai dati in src/data/scuolaNuoto.ts:
 // quattro file separati sarebbero divergenti al primo ritocco.
 //
-// Quello che vale per tutti — procedura, pagamento, badge, contatti — resta
-// sull'hub (/attivita/scuola-nuoto/iscrizione) e qui è richiamato con un
-// link: ripeterlo quattro volte significherebbe aggiornarlo in quattro punti.
+// Le informative (procedura, pagamento, primo giorno) stanno qui dentro e non
+// dietro un link: chi arriva sulla pagina del suo corso deve trovarci tutto,
+// senza essere rimbalzato altrove. Il testo vive una volta sola nel componente
+// ModalitaIscrizioneNuoto, che le quattro pagine e l'hub includono.
 import Layout from "../../../../layouts/Layout.astro";
 import PageHero from "../../../../components/PageHero.astro";
 import { url } from "../../../../lib/paths";
+import Faq from "../../../../components/Faq.astro";
+import ModalitaIscrizioneNuoto from "../../../../components/ModalitaIscrizioneNuoto.astro";
+import { faqDiPagina } from "../../../../data/faq";
 import {
-	STORE_NON_SOCI,
-	STORE_SOCI,
+	TELEFONO_CLUB,
 	corsiNuoto,
 	euro,
+	linkProdotto,
 	listinoAggiornatoAl,
 	type CorsoNuoto,
 } from "../../../../data/scuolaNuoto";
@@ -32,6 +36,7 @@ interface Props {
 
 const { corso } = Astro.props;
 const nome = corso.titleLungo ?? corso.title;
+const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
 
 <Layout
@@ -115,7 +120,7 @@ const nome = corso.titleLungo ?? corso.title;
 							<td class="listino__prezzo" data-etichetta="Non soci">
 								<a
 									class="listino__link"
-									href={STORE_NON_SOCI}
+									href={linkProdotto(r.idNonSoci)}
 									target="_blank"
 									rel="noopener"
 									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino non soci, ${euro(r.prezzoNonSoci)}`}
@@ -127,7 +132,7 @@ const nome = corso.titleLungo ?? corso.title;
 							<td class="listino__prezzo listino__prezzo--soci" data-etichetta="Soci del club">
 								<a
 									class="listino__link"
-									href={STORE_SOCI}
+									href={linkProdotto(r.idSoci)}
 									target="_blank"
 									rel="noopener"
 									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino soci del club, ${euro(r.prezzoSoci)}`}
@@ -143,28 +148,31 @@ const nome = corso.titleLungo ?? corso.title;
 		</div>
 
 		<p class="isc-note isc-note--center listino-nota">
-			Tocca il prezzo per andare al listino corrispondente su InforYou, dove
-			scegli la riga <strong>{corso.title}</strong> con la formula che ti serve.
-			Listino aggiornato a {listinoAggiornatoAl}: i prezzi ufficiali sono quelli
-			del portale.
+			Tocca il prezzo per aprire la scheda di quella formula sul portale
+			InforYou, dove si completa l'iscrizione. Listino aggiornato a
+			{" "}{listinoAggiornatoAl}: i prezzi ufficiali sono quelli del portale.
 		</p>
 	</section>
 
+	<ModalitaIscrizioneNuoto corso={corso.title} />
+
 	<section class="isc-section isc-contatti">
 		<div class="isc-head">
-			<span class="eyebrow">Prima di iscriverti</span>
-			<h2>Come funziona il resto</h2>
+			<span class="eyebrow">Segreteria</span>
+			<h2>Parlane con noi</h2>
 			<p class="isc-head__lede">
-				Creazione dell'account, documenti da caricare, modalità di pagamento,
-				braccialetto badge e primo giorno di corso valgono per tutti i corsi
-				della scuola nuoto: sono raccolti in una pagina sola.
+				Orari, disponibilità di posti, prove gratuite, recuperi e documenti:
+				risponde lo staff della Young School Nuoto, dal <strong>lunedì al
+				venerdì, 10:00–13:00 e 16:00–18:00</strong>.
 			</p>
 		</div>
 		<div class="corso-azioni">
-			<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Procedura e documenti</a>
-			<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Richiedi informazioni</button>
+			<button type="button" class="btn" data-open-contact data-interest="scuola-nuoto">Richiedi informazioni</button>
+			<a class="btn btn-outline" href={`tel:+39${TELEFONO_CLUB.replace(/\s/g, "")}`}>{TELEFONO_CLUB}</a>
 		</div>
 	</section>
+
+	<Faq items={faq} />
 
 	<section class="altri-corsi">
 		<div class="isc-head">

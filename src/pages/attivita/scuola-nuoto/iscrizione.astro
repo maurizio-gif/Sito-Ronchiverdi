@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
+import ModalitaIscrizioneNuoto from "../../../components/ModalitaIscrizioneNuoto.astro";
 import { faqDiPagina } from "../../../data/faq";
 import { url } from "../../../lib/paths";
 import { corsiNuoto, euro, prezzoDa } from "../../../data/scuolaNuoto";
@@ -10,38 +11,6 @@ import "../../../styles/iscrizione.css";
 // La pagina ha un solo compito: portare al portale InforYou, dove l'iscrizione
 // si completa davvero. Tutto il resto (procedura, pagamento, badge) serve a
 // togliere i dubbi che fermano prima del clic, quindi sta sotto le due card.
-
-const procedura = [
-	{
-		title: "Crea l'account",
-		desc: "L'account va intestato al bambino, non al genitore.",
-	},
-	{
-		title: "Iscrivi al corso",
-		desc: "Scegli il corso e completa il pagamento direttamente online.",
-	},
-	{
-		title: "Carica i documenti",
-		desc: "Certificato medico e regolamento firmato, dalla tua area personale.",
-	},
-];
-
-const pagamento = [
-	{ title: "Soluzione unica", desc: "L'intero importo al momento dell'iscrizione." },
-	{ title: "3 rate mensili", desc: "Tramite PayPal, senza costi aggiuntivi." },
-	{ title: "8 rate", desc: "Per importi superiori a €2.000, da concordare in sede." },
-];
-
-const primoGiorno = [
-	{
-		title: "Arriva 20 minuti prima",
-		desc: "Il tempo di cambiarsi con calma e presentarsi in vasca all'orario di inizio.",
-	},
-	{
-		title: "Braccialetto badge",
-		desc: "Serve per passare i tornelli e, per sicurezza, va indossato sempre, sin dalla prima lezione. Chi ne è sprovvisto lo acquista a <strong>10,00 €</strong>; chi ce l'ha già da corsi precedenti lo fa vidimare alla reception nella settimana prima dell'inizio.",
-	},
-];
 
 const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
@@ -93,60 +62,7 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 		</p>
 	</section>
 
-	<section class="isc-section">
-		<div class="isc-head">
-			<span class="eyebrow">Tre passaggi</span>
-			<h2>Come funziona</h2>
-		</div>
-		<ol class="isc-steps">
-			{procedura.map((s, i) => (
-				<li class="isc-step">
-					<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-					<h3>{s.title}</h3>
-					<p>{s.desc}</p>
-				</li>
-			))}
-		</ol>
-		<p class="isc-note">
-			Il bambino ha già ricevuto le credenziali in passato e sono state
-			smarrite? Chiamaci allo <a href="tel:+390116612146">011 6612146</a>: le
-			recuperiamo noi.
-		</p>
-	</section>
-
-	<section class="isc-section isc-section--alt">
-		<div class="isc-duo">
-			<div class="isc-duo__col">
-				<div class="isc-head isc-head--left">
-					<span class="eyebrow">Pagamento</span>
-					<h2>Come si paga</h2>
-				</div>
-				<dl class="isc-list">
-					{pagamento.map((p) => (
-						<div class="isc-list__row">
-							<dt>{p.title}</dt>
-							<dd>{p.desc}</dd>
-						</div>
-					))}
-				</dl>
-				<p class="isc-note">In assenza di regolare pagamento non è possibile partecipare alle lezioni.</p>
-			</div>
-			<div class="isc-duo__col">
-				<div class="isc-head isc-head--left">
-					<span class="eyebrow">Prima lezione</span>
-					<h2>Cosa serve sapere</h2>
-				</div>
-				<dl class="isc-list">
-					{primoGiorno.map((p) => (
-						<div class="isc-list__row">
-							<dt>{p.title}</dt>
-							<dd set:html={p.desc} />
-						</div>
-					))}
-				</dl>
-			</div>
-		</div>
-	</section>
+	<ModalitaIscrizioneNuoto />
 
 	<section class="isc-section isc-contatti">
 		<div class="isc-head">

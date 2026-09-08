@@ -14,16 +14,25 @@
 // prezzo.
 //
 // ── I link ────────────────────────────────────────────────────────────────
-// Si può portare solo alla categoria, non alla singola riga: l'indirizzo del
-// prodotto (/store/2/product/201) esiste mentre si naviga dentro InforYou, ma
-// aperto da fuori ignora l'id e mostra sempre il primo prodotto della
-// categoria — verificato su più prodotti. Se TeamSystem darà un indirizzo
-// diretto per prodotto, basterà aggiungerlo qui accanto al prezzo.
+// Ogni prezzo porta alla sua riga di listino: /store/2/product/<id> apre la
+// scheda di quel prodotto in una finestra sopra il catalogo del portale.
+// Gli id stanno accanto al prezzo perché sono la stessa informazione: se
+// cambia il listino si aggiornano insieme, e un id spaiato si nota subito.
 
-export const STORE_NON_SOCI = "https://inforyou.teamsystem.com/ronchiverdi/store/2/category/2";
-export const STORE_SOCI = "https://inforyou.teamsystem.com/ronchiverdi/store/2/category/10";
+const STORE_BASE = "https://inforyou.teamsystem.com/ronchiverdi/store/2";
+
+export const STORE_NON_SOCI = `${STORE_BASE}/category/2`;
+export const STORE_SOCI = `${STORE_BASE}/category/10`;
+
+/** La scheda di un singolo prodotto sul portale. */
+export function linkProdotto(id: number): string {
+	return `${STORE_BASE}/product/${id}`;
+}
 
 export const listinoAggiornatoAl = "settembre 2026";
+
+/** Il numero della segreteria, usato nelle informative dell'iscrizione. */
+export const TELEFONO_CLUB = "011 6612146";
 
 export interface RigaListino {
 	/** Come la chiama il club sul portale: "Quadrimestrale", "Stagionale". */
@@ -34,6 +43,10 @@ export interface RigaListino {
 	dettaglio?: string;
 	prezzoNonSoci: number;
 	prezzoSoci: number;
+	/** Id del prodotto sul portale, listino non soci (categoria 2). */
+	idNonSoci: number;
+	/** Id del prodotto sul portale, listino soci (categoria 10). */
+	idSoci: number;
 }
 
 export interface CorsoNuoto {
@@ -70,8 +83,14 @@ export const corsiNuoto: CorsoNuoto[] = [
 		image: "images/activities/acquaticita-baby.jpg",
 		imageAlt: "Bambino in vasca con un genitore durante il corso di acquaticità a Ronchiverdi",
 		listino: [
-			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 415, prezzoSoci: 365 },
-			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 600, prezzoSoci: 550 },
+			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 415,
+				prezzoSoci: 365,
+				idNonSoci: 195,
+				idSoci: 205 },
+			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 600,
+				prezzoSoci: 550,
+				idNonSoci: 196,
+				idSoci: 206 },
 		],
 	},
 	{
@@ -90,8 +109,14 @@ export const corsiNuoto: CorsoNuoto[] = [
 		image: "images/activities/scuola-nuoto-young.jpg",
 		imageAlt: "Bambini del corso Baby in vasca con l'istruttrice a Ronchiverdi",
 		listino: [
-			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 420, prezzoSoci: 370 },
-			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 610, prezzoSoci: 560 },
+			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 420,
+				prezzoSoci: 370,
+				idNonSoci: 197,
+				idSoci: 207 },
+			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 610,
+				prezzoSoci: 560,
+				idNonSoci: 198,
+				idSoci: 208 },
 		],
 	},
 	{
@@ -110,8 +135,14 @@ export const corsiNuoto: CorsoNuoto[] = [
 		image: "images/activities/nuoto-open.jpg",
 		imageAlt: "Bambini del corso Open con la tavoletta nella vasca grande di Ronchiverdi",
 		listino: [
-			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 415, prezzoSoci: 365 },
-			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 600, prezzoSoci: 550 },
+			{ formula: "Quadrimestrale", periodo: "21 settembre – 31 gennaio", prezzoNonSoci: 415,
+				prezzoSoci: 365,
+				idNonSoci: 199,
+				idSoci: 209 },
+			{ formula: "Stagionale", periodo: "21 settembre – 5 giugno", prezzoNonSoci: 600,
+				prezzoSoci: 550,
+				idNonSoci: 253,
+				idSoci: 210 },
 		],
 	},
 	{
@@ -136,6 +167,8 @@ export const corsiNuoto: CorsoNuoto[] = [
 				dettaglio: "1 lezione a settimana",
 				prezzoNonSoci: 490,
 				prezzoSoci: 440,
+				idNonSoci: 201,
+				idSoci: 211,
 			},
 			{
 				formula: "Stagionale",
@@ -143,6 +176,8 @@ export const corsiNuoto: CorsoNuoto[] = [
 				dettaglio: "1 lezione a settimana",
 				prezzoNonSoci: 705,
 				prezzoSoci: 655,
+				idNonSoci: 202,
+				idSoci: 212,
 			},
 			{
 				formula: "Quadrimestrale",
@@ -150,6 +185,8 @@ export const corsiNuoto: CorsoNuoto[] = [
 				dettaglio: "2 lezioni a settimana",
 				prezzoNonSoci: 690,
 				prezzoSoci: 640,
+				idNonSoci: 203,
+				idSoci: 213,
 			},
 			{
 				formula: "Stagionale",
@@ -157,6 +194,8 @@ export const corsiNuoto: CorsoNuoto[] = [
 				dettaglio: "2 lezioni a settimana",
 				prezzoNonSoci: 890,
 				prezzoSoci: 840,
+				idNonSoci: 204,
+				idSoci: 214,
 			},
 		],
 	},
