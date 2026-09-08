@@ -607,7 +607,7 @@ const links = [
 			padding: 0.5rem 1.25rem;
 		}
 		.nav-logo img {
-			height: 56px;
+			height: 64px;
 		}
 		.nav-links {
 			display: none;
@@ -621,18 +621,13 @@ const links = [
 		.nav-hamburger {
 			display: flex;
 		}
-		/* Centrato sulla barra, non nel flusso: così resta al centro dello
-		   schermo qualunque sia la larghezza di logo e hamburger. .nav è
-		   sticky, quindi è già un contenitore posizionato. */
-		/* Alto quanto l'hamburger, così i due comandi della barra si leggono
-		   come una coppia e il marchio resta l'elemento più grande.
-		   La min-height di 44px dei bottoni qui non vale: nella barra il
-		   pulsante deve stare alla misura dell'icona che gli sta di fianco. */
+		/* Il marchio si prende tutta la sinistra: pulsante e hamburger stanno
+		   insieme a destra, non più con la CTA centrata sulla barra.
+		   Il pulsante è alto quanto l'hamburger, così i due comandi si leggono
+		   come una coppia — qui la min-height di 44px dei bottoni non vale. */
 		.nav-contatta {
 			display: inline-flex;
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
+			margin-left: auto;
 			min-height: 40px;
 			height: 40px;
 			padding: 0 1.1rem;
@@ -646,7 +641,7 @@ const links = [
 	   torna alla misura di prima, il pulsante stringe. */
 	@media (max-width: 359px) {
 		.nav-logo img {
-			height: 46px;
+			height: 52px;
 		}
 		.nav-contatta {
 			padding: 0 0.75rem;
