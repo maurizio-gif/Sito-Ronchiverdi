@@ -69,6 +69,10 @@ a {
   color: var(--accent-on-dark);
 }
 
+/* L'interlinea mancava, quindi il lede girava a "normal" (~1.2): su schermo
+   stretto, dove diventa un blocco di otto righe sopra al corpo del testo che
+   respira a 1.75, sembrava impaginato con un'altra regola. A 1.5 le righe del
+   lede cadono alla stessa distanza di quelle del testo sotto. */
 .lede {
   font-family: var(--font-sans);
   max-width: 32rem;
@@ -76,6 +80,7 @@ a {
   color: var(--text-muted);
   font-size: var(--text-md);
   font-weight: 400;
+  line-height: 1.5;
 }
 .lede.lede-dark {
   color: rgba(246, 239, 222, 0.8);
