@@ -32,8 +32,11 @@ export function initLeadForm(root, options) {
 	// ora e durata, nessun dato di chi ha prenotato.
 	var ENDPOINT_DISPONIBILITA = "https://app-ronchiverdi.vercel.app/api/disponibilita";
 
-	// Regole di prenotazione, diverse per i due tipi. Il weekend chiude un'ora
-	// prima. Il preavviso minimo evita di proporre un orario che il club non
+	// Regole di prenotazione, diverse per i due tipi. Il sabato si ricevono
+	// solo nel pomeriggio e la domenica non si prendono appuntamenti: un
+	// giorno senza fascia non produce slot, e nella striscia dei giorni resta
+	// disegnato ma non selezionabile, come un giorno tutto occupato.
+	// Il preavviso minimo evita di proporre un orario che il club non
 	// farebbe in tempo a onorare, e l'orizzonte è volutamente corto sulla
 	// telefonata: una chiamata si fissa per i prossimi giorni, non fra due
 	// settimane.
@@ -44,7 +47,8 @@ export function initLeadForm(root, options) {
 	// l'agenda calcola più lunghi o più corti.
 	var ORARI_CLUB = {
 		feriali: { apre: "10:00", chiude: "19:00" },
-		weekend: { apre: "10:00", chiude: "18:00" },
+		sabato: { apre: "14:30", chiude: "18:00" },
+		domenica: null,
 	};
 
 	var DISPONIBILITA = {
@@ -380,6 +384,16 @@ export function initLeadForm(root, options) {
 		);
 	}
 
+	// Il sottotitolo del passo messaggio cambia se ci si arriva da un giorno
+	// senza orari: lì abbiamo promesso una risposta in pochi minuti, e la
+	// promessa va ripetuta dove si scrive, non lasciata alle spalle.
+	function setSubMessaggio(testo) {
+		var sub = getStep("3-messaggio").querySelector(".lf__sub");
+		if (!sub) return;
+		if (!sub.dataset.originale) sub.dataset.originale = sub.textContent;
+		sub.textContent = testo || sub.dataset.originale;
+	}
+
 	// ── STEP 2-SCELTA · Come possiamo aiutarti ──────────────────────────
 	// Selettore scoperto allo step: ".lf__choice" torna anche nello step
 	// 2-settore-tennis (stesso stile, scelta diversa) e i due listener non
@@ -389,6 +403,7 @@ export function initLeadForm(root, options) {
 			var azione = btn.dataset.azione;
 			state.azione = azione;
 			if (azione === "messaggio") {
+				setSubMessaggio(null);
 				showStep("3-messaggio");
 			} else {
 				buildPicker(azione);
@@ -749,16 +764,19 @@ export function initLeadForm(root, options) {
 		return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
 	}
 
-	// Sabato e domenica il club chiude un'ora prima: la fascia dipende dal
-	// giorno, non è più una sola per tutta la settimana.
+	// La fascia dipende dal giorno: feriali per intero, sabato solo il
+	// pomeriggio, domenica niente (null).
 	function fasciaDelGiorno(tipo, date) {
 		var dow = date.getDay(); // 0 = domenica, 6 = sabato
 		var orari = regoleDi(tipo).orari;
-		return dow === 0 || dow === 6 ? orari.weekend : orari.feriali;
+		if (dow === 0) return orari.domenica;
+		if (dow === 6) return orari.sabato;
+		return orari.feriali;
 	}
 
 	function slotsInRange(tipo, date) {
 		var fascia = fasciaDelGiorno(tipo, date);
+		if (!fascia) return []; // giorno di chiusura
 		var passo = regoleDi(tipo).passoMinuti;
 		var start = parseHHMM(fascia.apre);
 		var end = parseHHMM(fascia.chiude);
@@ -899,7 +917,13 @@ export function initLeadForm(root, options) {
 			var btn = document.createElement("button");
 			btn.type = "button";
 			btn.className = "lf__day";
-			if (!slotsGiorno.length) btn.disabled = true;
+			// Un giorno senza orari non viene disabilitato: si vede che è
+			// diverso, ma resta cliccabile perché chi lo sceglie deve poter
+			// scrivere lo stesso invece di trovare un vicolo cieco.
+			if (!slotsGiorno.length) {
+				btn.classList.add("is-unavailable");
+				btn.setAttribute("aria-describedby", P + "-slots-" + tipo);
+			}
 
 			var dow = document.createElement("span");
 			dow.className = "lf__day-dow";
@@ -932,9 +956,32 @@ export function initLeadForm(root, options) {
 			slotsEl.innerHTML = "";
 
 			if (!slots.length) {
-				var vuoto = document.createElement("p");
-				vuoto.className = "lf__picker-empty";
-				vuoto.textContent = "Nessun orario disponibile per questo giorno.";
+				var vuoto = document.createElement("div");
+				vuoto.className = "lf__picker-fallback";
+
+				var testo = document.createElement("p");
+				testo.className = "lf__picker-empty";
+				testo.textContent =
+					"Per questo giorno non ci sono orari disponibili. Scrivici lo stesso: leggiamo la richiesta e ti ricontattiamo nel giro di pochi minuti.";
+
+				var vai = document.createElement("button");
+				vai.type = "button";
+				vai.className = "btn btn-outline lf__picker-fallback-btn";
+				vai.textContent = "Scrivici un messaggio";
+				vai.addEventListener("click", function () {
+					// Cambia percorso, non solo schermata: la richiesta deve
+					// partire come messaggio, senza giorno e ora appesi.
+					state.azione = "messaggio";
+					state.dataScelta = null;
+					state.oraScelta = null;
+					setSubMessaggio(
+						"Scrivici qui: leggiamo la richiesta e ti ricontattiamo nel giro di pochi minuti."
+					);
+					showStep("3-messaggio");
+				});
+
+				vuoto.appendChild(testo);
+				vuoto.appendChild(vai);
 				slotsEl.appendChild(vuoto);
 				return;
 			}
