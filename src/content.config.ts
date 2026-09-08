@@ -182,4 +182,41 @@ const schedules = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules };
+// Listino dei corsi della scuola nuoto: sorgente unica
+// (src/content/listini/scuola-nuoto.json) editabile da Tina. I prezzi
+// cambiano ogni stagione e li aggiorna la segreteria, quindi non stanno nel
+// codice. Gli id sono quelli dei prodotti sul portale InforYou: servono a
+// mandare ogni prezzo alla sua scheda.
+const listini = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/listini" }),
+  schema: z.object({
+    aggiornatoAl: z.string(),
+    corsi: z.array(
+      z.object({
+        slug: z.string(),
+        title: z.string(),
+        titleLungo: z.string().optional(),
+        ageLabel: z.string(),
+        percorso: z.string(),
+        obiettivi: z.array(z.string()),
+        durata: z.string(),
+        vasca: z.string(),
+        image: z.string(),
+        imageAlt: z.string(),
+        listino: z.array(
+          z.object({
+            formula: z.string(),
+            periodo: z.string(),
+            dettaglio: z.string().optional(),
+            prezzoNonSoci: z.number(),
+            prezzoSoci: z.number(),
+            idNonSoci: z.number(),
+            idSoci: z.number(),
+          })
+        ),
+      })
+    ),
+  }),
+});
+
+export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules, listini };

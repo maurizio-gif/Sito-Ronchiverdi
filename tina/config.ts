@@ -186,6 +186,100 @@ export default defineConfig({
         ],
       },
       {
+        // Listino della scuola nuoto: un documento solo, con i quattro corsi e
+        // le loro quote. I prezzi cambiano ogni stagione e li aggiorna la
+        // segreteria, quindi vivono qui e non nel codice.
+        //
+        // Gli "id prodotto" sono i numeri con cui il portale InforYou
+        // identifica ogni riga di listino: sono quelli che mandano il prezzo
+        // sul sito alla scheda giusta. Si leggono dall'indirizzo della scheda
+        // sul portale (.../store/2/product/205 -> 205).
+        name: "listinoNuoto",
+        label: "Listino scuola nuoto",
+        path: "src/content/listini",
+        format: "json",
+        ui: { allowedActions: { create: false, delete: false } },
+        fields: [
+          {
+            type: "string",
+            name: "aggiornatoAl",
+            label: "Listino aggiornato a",
+            description:
+              "Compare sotto la tabella, per far vedere di quando sono i prezzi. Es. \"settembre 2026\".",
+            required: true,
+          },
+          {
+            type: "object",
+            name: "corsi",
+            label: "Corsi",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.title }) },
+            fields: [
+              {
+                type: "string",
+                name: "slug",
+                label: "Codice (nell'indirizzo della pagina)",
+                description:
+                  "Da non cambiare: è l'indirizzo della pagina del corso. Cambiandolo, i link già in giro non funzionano più.",
+                required: true,
+              },
+              { type: "string", name: "title", label: "Nome del corso", required: true },
+              { type: "string", name: "titleLungo", label: "Nome esteso (per il titolo della pagina)" },
+              { type: "string", name: "ageLabel", label: "Età", required: true },
+              {
+                type: "string",
+                name: "percorso",
+                label: "Descrizione",
+                ui: { component: "textarea" },
+                required: true,
+              },
+              { type: "string", name: "obiettivi", label: "Obiettivi", list: true },
+              { type: "string", name: "durata", label: "Durata della lezione", required: true },
+              { type: "string", name: "vasca", label: "Vasca", required: true },
+              { type: "image", name: "image", label: "Foto", required: true },
+              { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },
+              {
+                type: "object",
+                name: "listino",
+                label: "Quote",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: [item?.formula, item?.dettaglio].filter(Boolean).join(" · "),
+                  }),
+                },
+                fields: [
+                  { type: "string", name: "formula", label: "Formula (es. Quadrimestrale)", required: true },
+                  { type: "string", name: "periodo", label: "Periodo (es. 21 settembre – 31 gennaio)", required: true },
+                  {
+                    type: "string",
+                    name: "dettaglio",
+                    label: "Dettaglio",
+                    description: "Serve a distinguere due quote altrimenti uguali, es. \"2 lezioni a settimana\".",
+                  },
+                  { type: "number", name: "prezzoNonSoci", label: "Prezzo non soci (€)", required: true },
+                  { type: "number", name: "prezzoSoci", label: "Prezzo soci (€)", required: true },
+                  {
+                    type: "number",
+                    name: "idNonSoci",
+                    label: "Id prodotto InforYou · non soci",
+                    description: "Il numero in fondo all'indirizzo della scheda sul portale.",
+                    required: true,
+                  },
+                  {
+                    type: "number",
+                    name: "idSoci",
+                    label: "Id prodotto InforYou · soci",
+                    description: "Il numero in fondo all'indirizzo della scheda sul portale.",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
         // Planning del club: un unico documento con gli orari di apertura e
         // tutti i palinsesti settimanali. È la sorgente usata da ogni pagina
         // (Planning, Acqua Fitness, Corsi Fitness, Nuoto Libero, Gym Floor,

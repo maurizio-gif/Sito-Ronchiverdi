@@ -5,7 +5,7 @@ import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
-import { corsiNuoto as programs } from "../../data/scuolaNuoto";
+import { getCorsiNuoto } from "../../lib/scuolaNuoto";
 
 const facts = [
 	{
@@ -60,6 +60,7 @@ const corredo = [
 ];
 
 
+const programs = await getCorsiNuoto();
 const faq = faqDiPagina("scuola-nuoto");
 ---
 

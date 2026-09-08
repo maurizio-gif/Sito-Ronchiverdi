@@ -5,13 +5,14 @@ import Faq from "../../../components/Faq.astro";
 import ModalitaIscrizioneNuoto from "../../../components/ModalitaIscrizioneNuoto.astro";
 import { faqDiPagina } from "../../../data/faq";
 import { url } from "../../../lib/paths";
-import { corsiNuoto, euro, prezzoDa } from "../../../data/scuolaNuoto";
+import { euro, getCorsiNuoto, prezzoDa } from "../../../lib/scuolaNuoto";
 import "../../../styles/iscrizione.css";
 
 // La pagina ha un solo compito: portare al portale InforYou, dove l'iscrizione
 // si completa davvero. Tutto il resto (procedura, pagamento, badge) serve a
 // togliere i dubbi che fermano prima del clic, quindi sta sotto le due card.
 
+const corsiNuoto = await getCorsiNuoto();
 const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
 
