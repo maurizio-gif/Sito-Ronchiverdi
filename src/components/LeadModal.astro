@@ -56,6 +56,11 @@ import { leadActivityMap } from "../data/leadActivities";
 		display: flex;
 		flex-direction: column;
 		max-height: 92vh;
+		/* Su mobile la barra del browser entra e esce dallo schermo: 92vh
+		   misura la finestra "piena", quindi il fondo del pannello finisce
+		   sotto la barra. dvh misura l'altezza davvero visibile in quel
+		   momento; i browser che non la conoscono usano la riga sopra. */
+		max-height: 92dvh;
 		overflow-y: auto;
 		box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.4);
 	}
@@ -398,13 +403,26 @@ import { leadActivityMap } from "../data/leadActivities";
 	}
 
 	/* ── Riga azioni ─────────────────────────────────────────────────── */
+	/* Il pannello scorre tutto insieme: senza questo il pulsante di
+	   avanzamento scorre via col contenuto e su una schermata lunga (l'elenco
+	   delle attività, il calendario) resta sotto il bordo, da cercare
+	   scorrendo. Appoggiata al fondo è sempre a portata di pollice.
+	   `order` la tiene dopo il messaggio d'errore, che nel markup viene dopo
+	   di lei: così l'errore compare appena sopra il pulsante invece che
+	   nascosto sotto la barra. */
 	.lf__actions {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		padding-top: 0.4rem;
-		border-top: 1px solid var(--border);
+		position: sticky;
+		bottom: 0;
+		z-index: 2;
+		order: 1;
+		margin: 0 -2rem -2rem;
+		padding: 0.9rem 2rem;
+		background: var(--bg);
+		border-top: 1px solid var(--border-strong);
 	}
 	.lf__actions > .lf__next:only-child {
 		margin-left: auto;
@@ -1001,6 +1019,18 @@ import { leadActivityMap } from "../data/leadActivities";
 		.lf__day {
 			width: 3.4rem;
 			padding: 0.55rem 0.3rem;
+		}
+
+		/* Stessa barra, con i margini del padding ridotto del body e lo spazio
+		   per la barra di sistema dei telefoni senza tasto. */
+		.lf__actions {
+			margin: 0 -1.2rem -1.6rem;
+			padding: 0.9rem 1.2rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+		}
+		/* Il pulsante è il bersaglio principale: a tutta larghezza si prende
+		   senza mirare. Il "torna indietro" resta un link accanto. */
+		.lf__actions .lf__next {
+			flex: 1;
 		}
 	}
 </style>
