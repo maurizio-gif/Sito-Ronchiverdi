@@ -81,8 +81,16 @@ a {
   color: rgba(246, 239, 222, 0.8);
 }
 
+/* Area toccabile: 44 px è il minimo che si tocca comodamente col pollice.
+   Su desktop i bottoni erano già più alti, su smartphone il corpo del testo
+   si rimpicciolisce e restavano sui 41 px — la min-height li tiene su
+   ovunque, e il flex centra l'etichetta nello spazio in più. */
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  text-align: center;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: var(--text-xs);

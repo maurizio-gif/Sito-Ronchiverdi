@@ -93,6 +93,7 @@ import { leadActivityMap } from "../data/leadActivities";
 	}
 	.lf__close {
 		flex-shrink: 0;
+		position: relative;
 		width: 2rem;
 		height: 2rem;
 		display: flex;
@@ -105,6 +106,13 @@ import { leadActivityMap } from "../data/leadActivities";
 		color: var(--text-muted);
 		cursor: pointer;
 		transition: border-color 0.18s ease, color 0.18s ease, transform 0.1s ease-out;
+	}
+	/* Il cerchio resta piccolo, ma l'area che risponde al dito arriva a 44px:
+	   sul telefono la X si prende male se il bersaglio è solo il disegno. */
+	.lf__close::after {
+		content: "";
+		position: absolute;
+		inset: -6px;
 	}
 	.lf__close:hover {
 		border-color: var(--accent);
