@@ -1,0 +1,408 @@
+---
+// Una pagina di iscrizione per ogni corso della scuola nuoto: chi arriva
+// dall'Acquaticità vede il listino dell'Acquaticità e basta, senza gli altri
+// prezzi intorno.
+//
+// Le quattro pagine escono da un file solo, dai dati in src/data/scuolaNuoto.ts:
+// quattro file separati sarebbero divergenti al primo ritocco.
+//
+// Quello che vale per tutti — procedura, pagamento, badge, contatti — resta
+// sull'hub (/attivita/scuola-nuoto/iscrizione) e qui è richiamato con un
+// link: ripeterlo quattro volte significherebbe aggiornarlo in quattro punti.
+import Layout from "../../../../layouts/Layout.astro";
+import PageHero from "../../../../components/PageHero.astro";
+import { url } from "../../../../lib/paths";
+import {
+	STORE_NON_SOCI,
+	STORE_SOCI,
+	corsiNuoto,
+	euro,
+	listinoAggiornatoAl,
+	type CorsoNuoto,
+} from "../../../../data/scuolaNuoto";
+import "../../../../styles/iscrizione.css";
+
+export function getStaticPaths() {
+	return corsiNuoto.map((corso) => ({ params: { corso: corso.slug }, props: { corso } }));
+}
+
+interface Props {
+	corso: CorsoNuoto;
+}
+
+const { corso } = Astro.props;
+const nome = corso.titleLungo ?? corso.title;
+---
+
+<Layout
+	title={`Iscrizione ${corso.title} — Scuola Nuoto Ronchiverdi`}
+	description={`Quote e modalità di iscrizione al corso ${corso.title} (${corso.ageLabel}) della Young School Nuoto Ronchiverdi: prezzi soci e non soci, formule quadrimestrale e stagionale.`}
+	image="og/scuola-nuoto-iscrizione.jpg"
+>
+	<PageHero image={corso.image} imageAlt={corso.imageAlt} eyebrow="Scuola Nuoto · Iscrizione">
+		<Fragment slot="title">{nome}</Fragment>
+		<Fragment slot="lede">{corso.percorso}</Fragment>
+		<div class="header-cta">
+			<a class="btn" href="#listino">Vedi le quote</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
+		</div>
+	</PageHero>
+
+	<section class="isc-section">
+		<div class="isc-head">
+			<span class="eyebrow">{corso.ageLabel}</span>
+			<h2>Com'è fatto il corso</h2>
+		</div>
+		<div class="corso-griglia">
+			<div class="corso-box">
+				<h3>Obiettivi</h3>
+				<ul class="corso-punti">
+					{corso.obiettivi.map((o) => (
+						<li>
+							<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+							<span>{o}</span>
+						</li>
+					))}
+				</ul>
+			</div>
+			<div class="corso-box">
+				<h3>In pratica</h3>
+				<dl class="isc-list">
+					<div class="isc-list__row">
+						<dt>Età</dt>
+						<dd>{corso.ageLabel}</dd>
+					</div>
+					<div class="isc-list__row">
+						<dt>Durata della lezione</dt>
+						<dd>{corso.durata}</dd>
+					</div>
+					<div class="isc-list__row">
+						<dt>Dove</dt>
+						<dd>{corso.vasca}</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="listino">
+		<div class="isc-head">
+			<span class="eyebrow">Quote {corso.title}</span>
+			<h2>Quanto costa</h2>
+			<p class="isc-head__lede">
+				La quota d'iscrizione è compresa: non ci sono costi aggiuntivi. Con un
+				abbonamento Ronchiverdi attivo vale il listino soci.
+			</p>
+		</div>
+
+		<div class="listino-wrap">
+			<table class="listino">
+				<thead>
+					<tr>
+						<th>Formula</th>
+						<th>Non soci</th>
+						<th>Soci del club</th>
+					</tr>
+				</thead>
+				<tbody>
+					{corso.listino.map((r) => (
+						<tr>
+							<td class="listino__formula">
+								<strong>{r.formula}</strong>
+								<span class="listino__periodo">{r.periodo}</span>
+								{r.dettaglio && <span class="listino__dettaglio">{r.dettaglio}</span>}
+							</td>
+							<td class="listino__prezzo" data-etichetta="Non soci">{euro(r.prezzoNonSoci)}</td>
+							<td class="listino__prezzo listino__prezzo--soci" data-etichetta="Soci del club">{euro(r.prezzoSoci)}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="isc-cards listino-cta">
+			<article class="isc-card">
+				<span class="isc-card__label">Non soci</span>
+				<p class="isc-card__desc">
+					Il listino per chi non ha un abbonamento Ronchiverdi. Sul portale
+					scegli la riga <strong>{corso.title}</strong> con la formula che preferisci.
+				</p>
+				<a class="btn isc-card__btn" href={STORE_NON_SOCI} target="_blank" rel="noopener">
+					Iscriviti
+					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+				</a>
+			</article>
+			<article class="isc-card">
+				<span class="isc-card__label">Soci del club</span>
+				<p class="isc-card__desc">
+					Il listino riservato a chi ha un abbonamento Ronchiverdi attivo. Sul
+					portale scegli la riga <strong>{corso.title}</strong> con la formula che preferisci.
+				</p>
+				<a class="btn isc-card__btn" href={STORE_SOCI} target="_blank" rel="noopener">
+					Iscriviti
+					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+				</a>
+			</article>
+		</div>
+
+		<p class="isc-note isc-note--center">
+			Listino aggiornato a {listinoAggiornatoAl}. I prezzi ufficiali sono quelli
+			del portale InforYou.
+		</p>
+	</section>
+
+	<section class="isc-section isc-contatti">
+		<div class="isc-head">
+			<span class="eyebrow">Prima di iscriverti</span>
+			<h2>Come funziona il resto</h2>
+			<p class="isc-head__lede">
+				Creazione dell'account, documenti da caricare, modalità di pagamento,
+				braccialetto badge e primo giorno di corso valgono per tutti i corsi
+				della scuola nuoto: sono raccolti in una pagina sola.
+			</p>
+		</div>
+		<div class="corso-azioni">
+			<a class="btn" href={url("/attivita/scuola-nuoto/iscrizione")}>Procedura e documenti</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Richiedi informazioni</button>
+		</div>
+	</section>
+
+	<section class="altri-corsi">
+		<div class="isc-head">
+			<span class="eyebrow">Gli altri corsi</span>
+			<h2>Non è questo il corso giusto?</h2>
+		</div>
+		<div class="altri-corsi__lista">
+			{corsiNuoto
+				.filter((c) => c.slug !== corso.slug)
+				.map((c) => (
+					<a class="altro-corso" href={url(`/attivita/scuola-nuoto/iscrizione/${c.slug}`)}>
+						<span class="altro-corso__nome">{c.title}</span>
+						<span class="altro-corso__eta">{c.ageLabel}</span>
+					</a>
+				))}
+		</div>
+	</section>
+
+	<style>
+		.header-cta {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+			margin-top: 0;
+		}
+
+		.corso-griglia {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem;
+		}
+		.corso-box h3 {
+			margin: 0 0 1rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+		}
+		.corso-punti {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.7rem;
+		}
+		.corso-punti li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.6rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.corso-punti svg {
+			flex-shrink: 0;
+			margin-top: 0.3em;
+			color: var(--accent);
+		}
+
+		/* ── Listino ──────────────────────────────────────────────────── */
+		.listino-wrap {
+			overflow-x: auto;
+			margin-bottom: 2rem;
+		}
+		.listino {
+			width: 100%;
+			min-width: 30rem;
+			border-collapse: collapse;
+		}
+		.listino th {
+			padding: 0 0.75rem 0.85rem;
+			border-bottom: 1px solid var(--border-strong);
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			text-align: right;
+		}
+		.listino th:first-child {
+			text-align: left;
+		}
+		.listino td {
+			padding: 1rem 0.75rem;
+			border-bottom: 1px solid var(--border);
+			vertical-align: top;
+		}
+		.listino tr:last-child td {
+			border-bottom: none;
+		}
+		.listino__formula {
+			display: flex;
+			flex-direction: column;
+			gap: 0.15rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-base);
+			color: var(--text);
+		}
+		.listino__periodo,
+		.listino__dettaglio {
+			font-size: var(--text-2xs);
+			color: var(--text-muted);
+		}
+		.listino__dettaglio {
+			color: var(--accent);
+			font-weight: 600;
+		}
+		.listino__prezzo {
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+			color: var(--text-muted);
+			text-align: right;
+			white-space: nowrap;
+			font-variant-numeric: tabular-nums;
+		}
+		.listino__prezzo--soci {
+			color: var(--accent);
+		}
+
+		.listino-cta {
+			margin-top: 0.5rem;
+		}
+
+		.corso-azioni {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.corso-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+		.corso-azioni a.btn {
+			cursor: pointer;
+		}
+
+		/* ── Gli altri corsi ──────────────────────────────────────────── */
+		.altri-corsi {
+			max-width: 72rem;
+			margin: 0 auto;
+			padding: 0 1.5rem 5rem;
+		}
+		.altri-corsi__lista {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+		}
+		.altro-corso {
+			display: flex;
+			flex-direction: column;
+			gap: 0.2rem;
+			padding: 1.1rem 1.3rem;
+			border: 1px solid var(--border-strong);
+			border-radius: var(--radius);
+			text-decoration: none;
+			transition: border-color 0.16s ease, background 0.16s ease;
+		}
+		.altro-corso:hover {
+			border-color: var(--accent);
+			background: var(--bg-alt);
+		}
+		.altro-corso__nome {
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+			color: var(--text);
+		}
+		.altro-corso__eta {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			color: var(--text-muted);
+		}
+
+		/* Su schermo stretto la tabella non si scorre in orizzontale: la
+		   colonna "soci" — quella che interessa di più a chi è già socio —
+		   finirebbe fuori campo e nessuno la cercherebbe. Ogni formula diventa
+		   un blocco con i due prezzi affiancati e la loro etichetta. */
+		@media (max-width: 620px) {
+			.listino-wrap {
+				overflow-x: visible;
+			}
+			.listino {
+				min-width: 0;
+			}
+			.listino thead {
+				display: none;
+			}
+			.listino tbody,
+			.listino tr,
+			.listino td {
+				display: block;
+			}
+			.listino tr {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.5rem 1rem;
+				padding: 1.1rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+			.listino td {
+				padding: 0;
+				border: none;
+			}
+			.listino td.listino__formula {
+				display: flex;
+				flex-direction: column;
+				grid-column: 1 / -1;
+			}
+			.listino__prezzo {
+				text-align: left;
+			}
+			.listino__prezzo::before {
+				content: attr(data-etichetta);
+				display: block;
+				font-size: var(--text-2xs);
+				font-weight: 600;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+			}
+		}
+
+		@media (max-width: 860px), (orientation: portrait) {
+			.corso-griglia {
+				grid-template-columns: minmax(0, 1fr);
+				gap: 2.5rem;
+			}
+			.altri-corsi__lista {
+				grid-template-columns: minmax(0, 1fr);
+			}
+			.altri-corsi {
+				padding: 0 1.25rem 3rem;
+			}
+		}
+	</style>
+</Layout>
