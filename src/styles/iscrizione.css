@@ -1,0 +1,212 @@
+/* Impianto grafico condiviso delle pagine "Modalità di iscrizione" (scuola
+   nuoto, tennis, e le altre che seguiranno). Ogni pagina lo importa da sé,
+   quindi il foglio viaggia solo con loro.
+
+   Sta qui per lo stesso motivo di legale.css: due pagine con lo stesso
+   impianto e due fogli di stile separati divergono al primo ritocco. Le
+   sezioni sono larghe, il testo no — i paragrafi restano dentro una misura
+   leggibile invece di correre per tutta la colonna. */
+
+/* ── Impianto delle sezioni ─────────────────────────────────────────── */
+.isc-section {
+	max-width: 72rem;
+	margin: 0 auto;
+	padding: 4rem 1.5rem;
+	scroll-margin-top: 5rem;
+}
+/* La banda sabbia va a tutta larghezza: il contenuto resta incolonnato. */
+.isc-section--alt {
+	max-width: none;
+	background: var(--bg-alt);
+}
+.isc-section--alt > * {
+	max-width: 72rem;
+	margin: 0 auto;
+}
+
+.isc-head {
+	max-width: 42rem;
+	margin: 0 auto 2.25rem;
+	text-align: center;
+}
+.isc-head--left {
+	margin-inline: 0;
+	margin-bottom: 1.5rem;
+	text-align: left;
+}
+.isc-head h2 {
+	margin: 0;
+	font-size: var(--text-2xl);
+	letter-spacing: var(--tracking-2xl);
+	line-height: var(--leading-2xl);
+}
+.isc-head--left h2 {
+	font-size: var(--text-xl);
+	line-height: var(--leading-lg);
+}
+.isc-head__lede {
+	margin: 0.9rem 0 0;
+	font-family: var(--font-sans);
+	font-size: var(--text-md);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+
+.isc-note {
+	max-width: 42rem;
+	margin: 1.25rem 0 0;
+	font-family: var(--font-sans);
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+.isc-note--center {
+	margin-inline: auto;
+	text-align: center;
+}
+.isc-note a {
+	color: var(--text);
+	font-weight: 600;
+}
+
+/* ── Le porte d'ingresso ────────────────────────────────────────────── */
+.isc-cards {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.25rem;
+}
+.isc-card {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.7rem;
+	padding: 2rem;
+	border: 1px solid var(--border-strong);
+	border-radius: var(--radius);
+	background: var(--bg-alt);
+}
+.isc-card__label {
+	font-family: var(--font-serif);
+	font-size: var(--text-xl);
+	line-height: var(--leading-lg);
+	color: var(--text);
+}
+.isc-card__desc {
+	margin: 0;
+	font-family: var(--font-sans);
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+/* Il bottone si stacca dal testo e resta in basso anche se le due card hanno
+   descrizioni di lunghezza diversa. */
+.isc-card__btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: auto;
+	padding-top: 0.75rem;
+	cursor: pointer;
+}
+
+/* ── I passaggi numerati ────────────────────────────────────────────── */
+.isc-steps {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.isc-step {
+	padding: 1.6rem 1.5rem;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--bg);
+}
+.isc-step__num {
+	display: block;
+	font-family: var(--font-serif);
+	font-size: var(--text-xl);
+	line-height: 1;
+	color: var(--accent);
+}
+.isc-step h3 {
+	margin: 0.75rem 0 0.4rem;
+	font-family: var(--font-sans);
+	font-size: var(--text-md);
+	font-weight: 600;
+}
+.isc-step p {
+	margin: 0;
+	font-family: var(--font-sans);
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+
+/* ── Due colonne di dettagli ────────────────────────────────────────── */
+.isc-duo {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 3rem;
+}
+.isc-list {
+	margin: 0;
+	padding: 0;
+}
+.isc-list__row {
+	padding: 0.9rem 0;
+	border-top: 1px solid var(--border-strong);
+}
+.isc-list__row:last-child {
+	border-bottom: 1px solid var(--border-strong);
+}
+.isc-list dt {
+	font-family: var(--font-sans);
+	font-size: var(--text-base);
+	font-weight: 600;
+	color: var(--text);
+}
+.isc-list dd {
+	margin: 0.25rem 0 0;
+	font-family: var(--font-sans);
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+
+/* ── Contatti ───────────────────────────────────────────────────────── */
+.isc-contatti {
+	text-align: center;
+}
+.isc-contatti .btn {
+	cursor: pointer;
+	font-family: var(--font-sans);
+	border: none;
+}
+
+@media (max-width: 860px), (orientation: portrait) {
+	.isc-section {
+		padding: 3rem 1.25rem;
+	}
+	.isc-cards,
+	.isc-duo,
+	.isc-steps {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.isc-duo {
+		gap: 2.5rem;
+	}
+	.isc-steps {
+		gap: 0.75rem;
+	}
+	/* Su schermo stretto l'etichetta andava a capo dentro il bottone: meno
+	   padding e larghezza piena, così resta su una riga ed è un bersaglio
+	   comodo da toccare. */
+	.isc-card__btn {
+		align-self: stretch;
+		justify-content: center;
+		padding-inline: 1.1rem;
+	}
+}
