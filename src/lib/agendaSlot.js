@@ -17,7 +17,13 @@
 // visitatori. Sta su un dominio diverso dal sito (il pannello è un'app Next
 // su Vercel) e risponde con CORS aperto: espone solo giorno, ora e durata,
 // nessun dato di chi ha prenotato.
-export var ENDPOINT_DISPONIBILITA = "https://app-ronchiverdi.vercel.app/api/disponibilita";
+//
+// L'indirizzo è il dominio personalizzato del pannello, non l'alias
+// *.vercel.app: quello è coperto dalla Vercel Authentication, e se un giorno
+// la protezione arrivasse a coprire anche le route API il calendario del sito
+// smetterebbe di sapere cosa è occupato — in silenzio, perché una chiamata
+// fallita qui vale "niente occupato" (vedi caricaOccupati).
+export var ENDPOINT_DISPONIBILITA = "https://crm.ronchiverdi.it/api/disponibilita";
 
 // Il sabato si ricevono solo nel pomeriggio e la domenica non si prendono
 // appuntamenti: un giorno senza fascia (null) non produce orari.
