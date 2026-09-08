@@ -537,9 +537,11 @@ const links = [
 		border-color: var(--accent);
 		color: var(--text-on-dark);
 	}
+	/* I due indirizzi del gruppo stanno affiancati e non in colonna: sono
+	   scorciatoie verso altri siti, non voci di questo menu, e in colonna
+	   pesavano come le pagine del club sopra di loro. Mezza riga per uno. */
 	.nav-mobile-business {
 		display: flex;
-		flex-direction: column;
 		gap: 0.6rem;
 		margin-top: 1.5rem;
 		opacity: 0;
@@ -551,9 +553,18 @@ const links = [
 		transform: translateY(0);
 	}
 	.nav-mobile-business-btn {
+		/* Mezza riga ciascuno, a prescindere da quanto è lunga l'etichetta:
+		   flex-basis 0 impedisce che "Ronchiverdi Business" si prenda più
+		   spazio di "Ristorante Elements". Il padding orizzontale è ridotto
+		   rispetto alla versione in colonna — su 390px di schermo, a mezza
+		   riga, 1,4rem per lato non lascerebbero posto al testo — e le due
+		   parole vanno a capo al centro, con i bottoni che restano alti
+		   uguali perché il flex li allunga entrambi. */
+		flex: 1 1 0;
 		text-align: center;
-		padding: 0.7rem 1.4rem;
+		padding: 0.7rem 0.7rem;
 		font-size: var(--text-2xs);
+		line-height: 1.35;
 		background: var(--bg-alt);
 		border: 1px solid var(--border);
 		color: var(--text-muted);
