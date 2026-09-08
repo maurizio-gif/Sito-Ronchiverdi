@@ -18,23 +18,27 @@ import ModalitaIscrizioneNuoto from "../../../../components/ModalitaIscrizioneNu
 import { faqDiPagina } from "../../../../data/faq";
 import {
 	TELEFONO_CLUB,
-	corsiNuoto,
 	euro,
+	getCorsiNuoto,
+	prezzoDa,
+	getListinoAggiornatoAl,
 	linkProdotto,
-	listinoAggiornatoAl,
 	type CorsoNuoto,
-} from "../../../../data/scuolaNuoto";
+} from "../../../../lib/scuolaNuoto";
 import "../../../../styles/iscrizione.css";
 
-export function getStaticPaths() {
-	return corsiNuoto.map((corso) => ({ params: { corso: corso.slug }, props: { corso } }));
+export async function getStaticPaths() {
+	const corsi = await getCorsiNuoto();
+	return corsi.map((corso) => ({ params: { corso: corso.slug }, props: { corso, corsi } }));
 }
 
 interface Props {
 	corso: CorsoNuoto;
+	corsi: CorsoNuoto[];
 }
 
-const { corso } = Astro.props;
+const { corso, corsi } = Astro.props;
+const listinoAggiornatoAl = await getListinoAggiornatoAl();
 const nome = corso.titleLungo ?? corso.title;
 const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
@@ -180,12 +184,21 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			<h2>Non è questo il corso giusto?</h2>
 		</div>
 		<div class="altri-corsi__lista">
-			{corsiNuoto
+			{corsi
 				.filter((c) => c.slug !== corso.slug)
 				.map((c) => (
 					<a class="altro-corso" href={url(`/attivita/scuola-nuoto/iscrizione/${c.slug}`)}>
-						<span class="altro-corso__nome">{c.title}</span>
-						<span class="altro-corso__eta">{c.ageLabel}</span>
+						<span class="altro-corso__media">
+							<img src={url(c.image)} alt="" loading="lazy" />
+						</span>
+						<span class="altro-corso__testi">
+							<span class="altro-corso__eta">{c.ageLabel}</span>
+							<span class="altro-corso__nome">{c.title}</span>
+							<span class="altro-corso__prezzo">da {euro(prezzoDa(c))}</span>
+						</span>
+						<span class="altro-corso__freccia" aria-hidden="true">
+							<svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						</span>
 					</a>
 				))}
 		</div>
@@ -338,40 +351,96 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 		}
 
 		/* ── Gli altri corsi ──────────────────────────────────────────── */
+		/* Stacco netto da quello che c'è sopra: qui finisce la pagina del corso
+		   e comincia un'altra domanda ("e se non fosse questo?"), quindi non
+		   deve sembrare la coda della sezione precedente. */
 		.altri-corsi {
 			max-width: 72rem;
 			margin: 0 auto;
-			padding: 0 1.5rem 5rem;
+			padding: 5rem 1.5rem 6rem;
+			border-top: 1px solid var(--border-strong);
 		}
 		.altri-corsi__lista {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 1rem;
+			gap: 1.25rem;
 		}
 		.altro-corso {
 			display: flex;
-			flex-direction: column;
-			gap: 0.2rem;
-			padding: 1.1rem 1.3rem;
+			align-items: center;
+			gap: 1rem;
+			padding: 0.9rem 1.1rem 0.9rem 0.9rem;
 			border: 1px solid var(--border-strong);
 			border-radius: var(--radius);
+			background: var(--bg);
 			text-decoration: none;
-			transition: border-color 0.16s ease, background 0.16s ease;
+			transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease,
+				box-shadow 0.16s ease;
 		}
 		.altro-corso:hover {
 			border-color: var(--accent);
 			background: var(--bg-alt);
+			transform: translateY(-2px);
+			box-shadow: 0 12px 24px -14px rgba(28, 28, 24, 0.45);
+		}
+		/* La foto del corso fa riconoscere la card prima di leggerla: sono le
+		   stesse immagini delle card sulla pagina della scuola nuoto. */
+		.altro-corso__media {
+			flex: 0 0 auto;
+			width: 56px;
+			height: 56px;
+			border-radius: 50%;
+			overflow: hidden;
+			background: var(--bg-alt);
+		}
+		.altro-corso__media img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+		.altro-corso__testi {
+			display: flex;
+			flex-direction: column;
+			gap: 0.1rem;
+			min-width: 0;
 		}
 		.altro-corso__nome {
-			font-family: var(--font-sans);
-			font-size: var(--text-md);
-			font-weight: 600;
+			font-family: var(--font-serif);
+			font-size: var(--text-lg);
+			line-height: 1.15;
 			color: var(--text);
 		}
 		.altro-corso__eta {
 			font-family: var(--font-sans);
 			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.altro-corso__prezzo {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
 			color: var(--text-muted);
+		}
+		.altro-corso__freccia {
+			margin-left: auto;
+			flex-shrink: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background: var(--bg-alt);
+			color: var(--text);
+			transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+		}
+		.altro-corso:hover .altro-corso__freccia {
+			background: var(--accent);
+			color: var(--text-on-dark);
+			transform: translateX(2px);
 		}
 
 		/* Su schermo stretto la tabella non si scorre in orizzontale: la
@@ -439,7 +508,7 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 				grid-template-columns: minmax(0, 1fr);
 			}
 			.altri-corsi {
-				padding: 0 1.25rem 3rem;
+				padding: 3rem 1.25rem 4rem;
 			}
 		}
 	</style>

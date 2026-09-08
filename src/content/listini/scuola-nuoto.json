@@ -1,0 +1,167 @@
+{
+  "aggiornatoAl": "settembre 2026",
+  "corsi": [
+    {
+      "slug": "acquaticita",
+      "title": "Acquaticità",
+      "titleLungo": "Acquaticità Neonatale e Avanzata",
+      "ageLabel": "3–18 mesi · 19–36 mesi",
+      "percorso": "Percorso in acqua accompagnato da un genitore, che entra in vasca insieme al bambino: è l'unico corso in cui è previsto.",
+      "obiettivi": [
+        "Sviluppo psicomotorio precoce",
+        "Ambientamento acquatico",
+        "Gestione della respirazione e del galleggiamento"
+      ],
+      "durata": "40 minuti",
+      "vasca": "Vasca di ambientamento · 32°C",
+      "image": "images/activities/acquaticita-baby.jpg",
+      "imageAlt": "Bambino in vasca con un genitore durante il corso di acquaticità a Ronchiverdi",
+      "listino": [
+        {
+          "formula": "Quadrimestrale",
+          "periodo": "21 settembre – 31 gennaio",
+          "dettaglio": "",
+          "prezzoNonSoci": 415,
+          "prezzoSoci": 365,
+          "idNonSoci": 195,
+          "idSoci": 205
+        },
+        {
+          "formula": "Stagionale",
+          "periodo": "21 settembre – 5 giugno",
+          "dettaglio": "",
+          "prezzoNonSoci": 600,
+          "prezzoSoci": 550,
+          "idNonSoci": 196,
+          "idSoci": 206
+        }
+      ]
+    },
+    {
+      "slug": "baby",
+      "title": "Baby",
+      "titleLungo": "",
+      "ageLabel": "3–5 anni",
+      "percorso": "Corsi mirati all'autonomia acquatica e alla scoperta ludica dei movimenti base, per introdurre in forma ludica i primi elementi dei quattro stili.",
+      "obiettivi": [
+        "Autonomia acquatica",
+        "Scoperta ludica dei movimenti base",
+        "Primi elementi dei quattro stili"
+      ],
+      "durata": "40 minuti",
+      "vasca": "Vasca di ambientamento · 32°C",
+      "image": "images/activities/scuola-nuoto-young.jpg",
+      "imageAlt": "Bambini del corso Baby in vasca con l'istruttrice a Ronchiverdi",
+      "listino": [
+        {
+          "formula": "Quadrimestrale",
+          "periodo": "21 settembre – 31 gennaio",
+          "dettaglio": "",
+          "prezzoNonSoci": 420,
+          "prezzoSoci": 370,
+          "idNonSoci": 197,
+          "idSoci": 207
+        },
+        {
+          "formula": "Stagionale",
+          "periodo": "21 settembre – 5 giugno",
+          "dettaglio": "",
+          "prezzoNonSoci": 610,
+          "prezzoSoci": 560,
+          "idNonSoci": 198,
+          "idSoci": 208
+        }
+      ]
+    },
+    {
+      "slug": "open",
+      "title": "Open",
+      "titleLungo": "",
+      "ageLabel": "6–8 anni",
+      "percorso": "Corsi strutturati in livelli (1 e 2) per consolidare le capacità natatorie e proseguire nell'apprendimento tecnico dei quattro stili.",
+      "obiettivi": [
+        "Livello 1 e Livello 2",
+        "Consolidamento delle capacità natatorie",
+        "Apprendimento tecnico dei quattro stili"
+      ],
+      "durata": "40 minuti",
+      "vasca": "Vasca grande 25 m · 28°C",
+      "image": "images/activities/nuoto-open.jpg",
+      "imageAlt": "Bambini del corso Open con la tavoletta nella vasca grande di Ronchiverdi",
+      "listino": [
+        {
+          "formula": "Quadrimestrale",
+          "periodo": "21 settembre – 31 gennaio",
+          "dettaglio": "",
+          "prezzoNonSoci": 415,
+          "prezzoSoci": 365,
+          "idNonSoci": 199,
+          "idSoci": 209
+        },
+        {
+          "formula": "Stagionale",
+          "periodo": "21 settembre – 5 giugno",
+          "dettaglio": "",
+          "prezzoNonSoci": 600,
+          "prezzoSoci": 550,
+          "idNonSoci": 253,
+          "idSoci": 210
+        }
+      ]
+    },
+    {
+      "slug": "propaganda",
+      "title": "Propaganda",
+      "titleLungo": "",
+      "ageLabel": "9–14 anni",
+      "percorso": "Corso avanzato con obiettivi tecnici specifici, per chi vuole affinare la tecnica e avvicinarsi al mondo agonistico.",
+      "obiettivi": [
+        "Perfezionamento dei quattro stili",
+        "Esercitazioni su partenze e tecniche di gara",
+        "Introduzione alla preparazione pre-agonistica"
+      ],
+      "durata": "60 minuti",
+      "vasca": "Vasca grande 25 m · 28°C",
+      "image": "images/activities/nuoto-propaganda.jpg",
+      "imageAlt": "Ragazzi del corso Propaganda in allenamento nella vasca grande di Ronchiverdi",
+      "listino": [
+        {
+          "formula": "Quadrimestrale",
+          "periodo": "21 settembre – 31 gennaio",
+          "dettaglio": "1 lezione a settimana",
+          "prezzoNonSoci": 490,
+          "prezzoSoci": 440,
+          "idNonSoci": 201,
+          "idSoci": 211
+        },
+        {
+          "formula": "Stagionale",
+          "periodo": "21 settembre – 5 giugno",
+          "dettaglio": "1 lezione a settimana",
+          "prezzoNonSoci": 705,
+          "prezzoSoci": 655,
+          "idNonSoci": 202,
+          "idSoci": 212
+        },
+        {
+          "formula": "Quadrimestrale",
+          "periodo": "21 settembre – 31 gennaio",
+          "dettaglio": "2 lezioni a settimana",
+          "prezzoNonSoci": 690,
+          "prezzoSoci": 640,
+          "idNonSoci": 203,
+          "idSoci": 213
+        },
+        {
+          "formula": "Stagionale",
+          "periodo": "21 settembre – 5 giugno",
+          "dettaglio": "2 lezioni a settimana",
+          "prezzoNonSoci": 890,
+          "prezzoSoci": 840,
+          "idNonSoci": 204,
+          "idSoci": 214
+        }
+      ]
+    }
+  ]
+}
