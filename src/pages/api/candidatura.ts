@@ -9,7 +9,6 @@
 // scripts/sql/2026-09-08-candidature.sql.
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CV_BUCKET, CV_MAX_BYTE, percorsoValido } from "../../lib/candidature";
-import { notificaCandidatura } from "../../lib/notificaCandidatura";
 
 export const prerender = false;
 
@@ -150,22 +149,10 @@ export async function POST({ request }: { request: Request }) {
 		return json({ ok: false, error: "db_error" }, 500);
 	}
 
-	// Avviso alla casella che legge le candidature. Errore ingoiato dentro
-	// notificaCandidatura: la candidatura è già salvata, e un problema col
-	// servizio di posta non deve diventare un errore in faccia a chi si è
-	// appena candidato.
-	await notificaCandidatura({
-		nome,
-		cognome,
-		email,
-		cellulare,
-		citta: str(body.citta, 120),
-		areaLabel: str(body.areaLabel, 120),
-		disponibilita: str(body.disponibilita, 60),
-		presentazione,
-		esperienza: str(body.esperienza, MAX_TESTO),
-		cvNome: cv?.nome ?? null,
-	});
-
+	// Nessun avviso email, a differenza delle richieste dal sito (vedi
+	// notificaLead): una candidatura vive solo nel pannello, sezione
+	// Curriculum. Il motivo è che i dati di chi si candida — e il rimando al
+	// suo curriculum — non hanno ragione di finire anche in una casella di
+	// posta, dove restano per sempre e nessuno li cancella.
 	return json({ ok: true }, 200);
 }

@@ -123,6 +123,12 @@ SQL Editor di Supabase. Le candidature le legge il pannello
 (APP-RONCHIVERDI, sezione *Curriculum*), che scarica il CV con una URL firmata:
 il bucket resta privato e non è raggiungibile da un indirizzo pubblico.
 
+A differenza delle richieste dai moduli, **una candidatura non manda nessuna
+email**: vive solo nel pannello. I dati di chi si candida e il rimando al suo
+curriculum non hanno ragione di finire anche in una casella di posta, dove
+restano per sempre e nessuno li cancella. Il rovescio è che nessuno viene
+avvisato: la sezione Curriculum va aperta.
+
 ## Immagini per le anteprime social
 
 `public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,
