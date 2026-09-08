@@ -26,13 +26,13 @@ const faq = faqDiPagina("tennis-iscrizione");
 	<PageHero
 		image="images/attivita/tennis-hero.jpg"
 		imageAlt="Scambio sui campi da tennis in terra rossa di Ronchiverdi"
-		eyebrow="Tennis"
+		eyebrow="Tennis · Iscrizione"
 	>
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Che tu voglia iscrivere tuo figlio alla Young School o riprendere a giocare da adulto, si parte sempre da una lezione di prova.</Fragment>
 		<div class="header-cta">
 			<a class="btn" href="#iscriviti">Iscriviti online</a>
-			<button type="button" class="btn btn-outline" data-open-contact>Richiedi una prova gratuita</button>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-tennis">Richiedi una prova gratuita</button>
 		</div>
 	</PageHero>
 
@@ -77,7 +77,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 				il settore tennis.
 			</p>
 		</div>
-		<button type="button" class="btn" data-open-contact>Contattaci</button>
+		<button type="button" class="btn" data-open-contact data-interest="corsi-tennis">Contattaci</button>
 	</section>
 
 	<Faq items={faq} />
@@ -85,7 +85,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 	<section class="final-cta">
 		<h2>Pronto a iniziare?</h2>
 		<p class="lede" style="margin-inline:auto">Contattaci: ti aiutiamo a organizzare la tua lezione di prova.</p>
-		<button type="button" class="btn" data-open-contact>Contattaci</button>
+		<button type="button" class="btn" data-open-contact data-interest="corsi-tennis">Contattaci</button>
 	</section>
 
 	<style>
