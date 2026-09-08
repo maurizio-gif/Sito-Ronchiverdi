@@ -222,11 +222,12 @@ const listini = defineCollection({
   }),
 });
 
-// Listino del tennis: stessa idea di quello del nuoto, ma i percorsi hanno
-// una forma loro (voce + frequenza invece di formula + periodo), quindi vive
-// in una collection separata invece di piegare quella del nuoto.
-const listiniTennis = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/listini-tennis" }),
+// Listini degli altri sport (tennis, padel, triathlon): stessa idea di quello
+// del nuoto, ma i percorsi hanno una forma loro — voce e frequenza invece di
+// formula e periodo — quindi vivono in una collection separata, un documento
+// per sport, invece di piegare quella del nuoto.
+const listiniSport = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/listini-sport" }),
   schema: z.object({
     aggiornatoAl: z.string(),
     percorsi: z.array(
@@ -257,4 +258,4 @@ const listiniTennis = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules, listini, listiniTennis };
+export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules, listini, listiniSport };

@@ -5,14 +5,15 @@ import Faq from "../../../components/Faq.astro";
 import { faqDiPagina } from "../../../data/faq";
 import { url } from "../../../lib/paths";
 import ModalitaIscrizioneTennis from "../../../components/ModalitaIscrizioneTennis.astro";
-import { euro, getPercorsiTennis, prezzoDaTennis } from "../../../lib/tennis";
+import { euro } from "../../../lib/formato";
+import { getPercorsi, prezzoDa } from "../../../lib/listiniSport";
 import "../../../styles/iscrizione.css";
 
 // Stesso impianto della pagina di iscrizione alla scuola nuoto: prima le due
 // porte del portale InforYou, poi i passaggi e i documenti. Qui però il
 // percorso comincia da una lezione di prova, che resta la seconda CTA.
 
-const percorsi = await getPercorsiTennis();
+const percorsi = await getPercorsi("tennis");
 
 const faq = faqDiPagina("tennis-iscrizione");
 ---
@@ -50,7 +51,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 				<a class="percorso-card" href={url(`/attivita/tennis/iscrizione/${p.slug}`)}>
 					<span class="percorso-card__eta">{p.eyebrow}</span>
 					<span class="percorso-card__nome">{p.title}</span>
-					<span class="percorso-card__prezzo">da {euro(prezzoDaTennis(p))}</span>
+					<span class="percorso-card__prezzo">da {euro(prezzoDa(p))}</span>
 					<span class="percorso-card__vai">
 						Quote e iscrizione
 						<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>

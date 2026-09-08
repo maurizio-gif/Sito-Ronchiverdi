@@ -1,0 +1,51 @@
+{
+  "aggiornatoAl": "settembre 2026",
+  "percorsi": [
+    {
+      "slug": "young",
+      "title": "Padel Young",
+      "eyebrow": "10–17 anni",
+      "descrizione": "Un carnet di dieci lezioni da un'ora, una alla settimana, in gruppi da massimo quattro ragazzi: abbastanza piccoli perché il maestro segua ognuno, abbastanza per giocare in doppio.",
+      "punti": [
+        "10 lezioni da 60 minuti, una alla settimana",
+        "Gruppi di massimo 4 ragazzi",
+        "Dai 10 ai 17 anni"
+      ],
+      "image": "images/activities/padel-racchetta.jpg",
+      "imageAlt": "Presa della racchetta da padel durante una lezione a Ronchiverdi",
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "10–17 anni"
+        },
+        {
+          "label": "Lezioni",
+          "valore": "10 da 60 minuti"
+        },
+        {
+          "label": "Gruppi",
+          "valore": "Massimo 4 ragazzi"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
+      ],
+      "listino": [
+        {
+          "voce": "Carnet 10 lezioni",
+          "dettaglio": "1 volta a settimana",
+          "nota": "Per i non soci la quota comprende l'iscrizione di € 50",
+          "prezzoNonSoci": 180,
+          "prezzoSoci": 130,
+          "idNonSoci": 250,
+          "idSoci": 252
+        }
+      ]
+    }
+  ]
+}

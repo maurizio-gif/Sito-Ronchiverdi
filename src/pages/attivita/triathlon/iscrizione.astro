@@ -4,6 +4,9 @@ import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
 import { faqDiPagina } from "../../../data/faq";
+import ListinoCorsi from "../../../components/ListinoCorsi.astro";
+import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
+import "../../../styles/iscrizione.css";
 
 const categorie = [
 	{
@@ -49,6 +52,10 @@ const documenti = [
 ];
 
 
+// Sul portale è in vendita la sola Young School: Academy e Master si
+// iscrivono in reception, e restano descritte nelle card qui sopra.
+const young = await getPercorso("triathlon");
+const aggiornatoAl = await getListinoAggiornatoAl("triathlon");
 const faq = faqDiPagina("triathlon-iscrizione");
 ---
 
@@ -88,6 +95,24 @@ const faq = faqDiPagina("triathlon-iscrizione");
 				</article>
 			))}
 		</div>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="listino">
+		<div class="isc-head">
+			<span class="eyebrow">Quote {young.title}</span>
+			<h2>Quanto costa la Young School</h2>
+			<p class="isc-head__lede">
+				La quota comprende i tesseramenti FITRI e FIDAL. Con un abbonamento
+				Ronchiverdi attivo vale il listino soci. Academy e Master si iscrivono
+				in reception: per quelli, scrivici.
+			</p>
+		</div>
+		<ListinoCorsi
+			colonna="Frequenza"
+			righe={young.listino}
+			dettagli={young.dettagli}
+			aggiornatoAl={aggiornatoAl}
+		/>
 	</section>
 
 	<section class="info-section">

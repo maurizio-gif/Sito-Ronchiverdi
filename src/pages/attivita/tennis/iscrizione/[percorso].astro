@@ -12,18 +12,18 @@ import Faq from "../../../../components/Faq.astro";
 import ModalitaIscrizioneTennis from "../../../../components/ModalitaIscrizioneTennis.astro";
 import { url } from "../../../../lib/paths";
 import { faqDiPagina } from "../../../../data/faq";
+import ListinoCorsi from "../../../../components/ListinoCorsi.astro";
+import { euro } from "../../../../lib/formato";
 import {
-	euro,
-	getListinoTennisAggiornatoAl,
-	getPercorsiTennis,
-	linkProdotto,
-	prezzoDaTennis,
-	type PercorsoTennis,
-} from "../../../../lib/tennis";
+	getListinoAggiornatoAl,
+	getPercorsi,
+	prezzoDa,
+	type PercorsoSport,
+} from "../../../../lib/listiniSport";
 import "../../../../styles/iscrizione.css";
 
 export async function getStaticPaths() {
-	const percorsi = await getPercorsiTennis();
+	const percorsi = await getPercorsi("tennis");
 	return percorsi.map((percorso) => ({
 		params: { percorso: percorso.slug },
 		props: { percorso, percorsi },
@@ -31,12 +31,12 @@ export async function getStaticPaths() {
 }
 
 interface Props {
-	percorso: PercorsoTennis;
-	percorsi: PercorsoTennis[];
+	percorso: PercorsoSport;
+	percorsi: PercorsoSport[];
 }
 
 const { percorso, percorsi } = Astro.props;
-const aggiornatoAl = await getListinoTennisAggiornatoAl();
+const aggiornatoAl = await getListinoAggiornatoAl("tennis");
 const faq = faqDiPagina("tennis-iscrizione");
 ---
 
@@ -79,75 +79,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 			</p>
 		</div>
 
-		<div class="listino-wrap">
-			<table class="listino">
-				<thead>
-					<tr>
-						<th>Corso</th>
-						<th>Non soci</th>
-						<th>Soci del club</th>
-					</tr>
-				</thead>
-				<tbody>
-					{percorso.listino.map((r) => (
-						<tr>
-							<td class="listino__formula">
-								<strong>{r.voce}</strong>
-								<span class="listino__periodo">{r.dettaglio}</span>
-								{r.nota && <span class="listino__dettaglio">{r.nota}</span>}
-							</td>
-							<td data-etichetta="Non soci">
-								<a
-									class="prezzo-box"
-									href={linkProdotto(r.idNonSoci)}
-									target="_blank"
-									rel="noopener"
-									aria-label={`Iscriviti a ${r.voce}, ${r.dettaglio}${r.nota ? `, ${r.nota}` : ""}, listino non soci, ${euro(r.prezzoNonSoci)}`}
-								>
-									<span class="prezzo-box__etichetta">Non soci</span>
-									<span class="prezzo-box__cifra">{euro(r.prezzoNonSoci)}</span>
-									<span class="prezzo-box__cta">
-										Iscriviti
-										<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-									</span>
-								</a>
-							</td>
-							<td data-etichetta="Soci del club">
-								<a
-									class="prezzo-box prezzo-box--soci"
-									href={linkProdotto(r.idSoci)}
-									target="_blank"
-									rel="noopener"
-									aria-label={`Iscriviti a ${r.voce}, ${r.dettaglio}${r.nota ? `, ${r.nota}` : ""}, listino soci del club, ${euro(r.prezzoSoci)}`}
-								>
-									<span class="prezzo-box__etichetta">Soci del club</span>
-									<span class="prezzo-box__cifra">{euro(r.prezzoSoci)}</span>
-									<span class="prezzo-box__cta">
-										Iscriviti
-										<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-									</span>
-								</a>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-
-
-		{percorso.dettagli && (
-			<ul class="isc-dettagli">
-				{percorso.dettagli.map((d) => (
-					<li><b>{d.label}</b> {d.valore}</li>
-				))}
-			</ul>
-		)}
-
-		<p class="isc-note isc-note--center listino-nota">
-			Tocca il prezzo per aprire la scheda di quel corso sul portale InforYou,
-			dove si completa l'iscrizione. Listino aggiornato a {aggiornatoAl}: i
-			prezzi ufficiali sono quelli del portale.
-		</p>
+		<ListinoCorsi righe={percorso.listino} dettagli={percorso.dettagli} aggiornatoAl={aggiornatoAl} />
 	</section>
 
 	<ModalitaIscrizioneTennis />
@@ -184,7 +116,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 						<span class="altro-percorso__testi">
 							<span class="altro-percorso__eta">{p.eyebrow}</span>
 							<span class="altro-percorso__nome">{p.title}</span>
-							<span class="altro-percorso__prezzo">da {euro(prezzoDaTennis(p))}</span>
+							<span class="altro-percorso__prezzo">da {euro(prezzoDa(p))}</span>
 						</span>
 						<span class="altro-percorso__freccia" aria-hidden="true">
 							<svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>

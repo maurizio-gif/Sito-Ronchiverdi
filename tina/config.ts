@@ -293,13 +293,13 @@ export default defineConfig({
         ],
       },
       {
-        // Listino del tennis: i tre percorsi della Young School con le loro
-        // quote. Stessa logica del listino nuoto — gli "id prodotto" sono i
-        // numeri che il portale InforYou usa per ogni riga, e si leggono in
+        // Listini dei corsi per sport: un documento per tennis, padel e
+        // triathlon. Stessa logica del listino nuoto — gli "id prodotto" sono
+        // i numeri che il portale InforYou usa per ogni riga, e si leggono in
         // fondo all'indirizzo della scheda (.../store/2/product/222 -> 222).
-        name: "listinoTennis",
-        label: "Listino tennis",
-        path: "src/content/listini-tennis",
+        name: "listinoSport",
+        label: "Listini corsi (tennis, padel, triathlon)",
+        path: "src/content/listini-sport",
         format: "json",
         ui: { allowedActions: { create: false, delete: false } },
         fields: [

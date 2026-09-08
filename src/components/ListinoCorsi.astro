@@ -1,0 +1,109 @@
+---
+// La tabella delle quote, con i box cliccabili e i dettagli della scheda sul
+// portale. La usano tutte le pagine di iscrizione — nuoto, tennis, padel,
+// triathlon — così il listino è disegnato e corretto in un posto solo.
+//
+// Ogni prezzo porta alla scheda del suo prodotto su InforYou, che si apre in
+// una scheda nuova come tutti i link fuori dal sito.
+import { euro } from "../lib/formato";
+
+export interface RigaListino {
+	/** Nome della voce: "RonchiRed", "Quadrimestrale", "Carnet 10 lezioni". */
+	voce: string;
+	/** Frequenza o periodo: la riga sotto il nome. */
+	dettaglio?: string;
+	/** Quello che distingue due righe altrimenti uguali. */
+	nota?: string;
+	prezzoNonSoci: number;
+	prezzoSoci: number;
+	idNonSoci: number;
+	idSoci: number;
+}
+
+interface Props {
+	righe: RigaListino[];
+	/** Voci prese dalla scheda del prodotto sul portale. */
+	dettagli?: { label: string; valore: string }[];
+	/** Il mese del listino, per la riga in fondo. */
+	aggiornatoAl: string;
+	/** Intestazione della prima colonna. */
+	colonna?: string;
+}
+
+const { righe, dettagli, aggiornatoAl, colonna = "Corso" } = Astro.props;
+
+const STORE_BASE = "https://inforyou.teamsystem.com/ronchiverdi/store/2";
+const scheda = (id: number) => `${STORE_BASE}/product/${id}`;
+
+const etichetta = (r: RigaListino) =>
+	[r.voce, r.dettaglio, r.nota].filter(Boolean).join(", ");
+---
+
+<div class="listino-wrap">
+	<table class="listino">
+		<thead>
+			<tr>
+				<th>{colonna}</th>
+				<th>Non soci</th>
+				<th>Soci del club</th>
+			</tr>
+		</thead>
+		<tbody>
+			{righe.map((r) => (
+				<tr>
+					<td class="listino__formula">
+						<strong>{r.voce}</strong>
+						{r.dettaglio && <span class="listino__periodo">{r.dettaglio}</span>}
+						{r.nota && <span class="listino__dettaglio">{r.nota}</span>}
+					</td>
+					<td data-etichetta="Non soci">
+						<a
+							class="prezzo-box"
+							href={scheda(r.idNonSoci)}
+							target="_blank"
+							rel="noopener"
+							aria-label={`Iscriviti a ${etichetta(r)}, listino non soci, ${euro(r.prezzoNonSoci)}`}
+						>
+							<span class="prezzo-box__etichetta">Non soci</span>
+							<span class="prezzo-box__cifra">{euro(r.prezzoNonSoci)}</span>
+							<span class="prezzo-box__cta">
+								Iscriviti
+								<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+							</span>
+						</a>
+					</td>
+					<td data-etichetta="Soci del club">
+						<a
+							class="prezzo-box prezzo-box--soci"
+							href={scheda(r.idSoci)}
+							target="_blank"
+							rel="noopener"
+							aria-label={`Iscriviti a ${etichetta(r)}, listino soci del club, ${euro(r.prezzoSoci)}`}
+						>
+							<span class="prezzo-box__etichetta">Soci del club</span>
+							<span class="prezzo-box__cifra">{euro(r.prezzoSoci)}</span>
+							<span class="prezzo-box__cta">
+								Iscriviti
+								<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+							</span>
+						</a>
+					</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>
+
+{dettagli && dettagli.length > 0 && (
+	<ul class="isc-dettagli">
+		{dettagli.map((d) => (
+			<li><b>{d.label}</b> {d.valore}</li>
+		))}
+	</ul>
+)}
+
+<p class="isc-note isc-note--center">
+	Tocca il prezzo per aprire la scheda di quella formula sul portale InforYou,
+	dove si completa l'iscrizione. Listino aggiornato a {aggiornatoAl}: i prezzi
+	ufficiali sono quelli del portale.
+</p>

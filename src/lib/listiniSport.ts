@@ -1,6 +1,6 @@
-// I tre percorsi della Young School Tennis e le loro quote.
+// I listini dei corsi per sport: tennis, padel, triathlon.
 //
-// I contenuti stanno in src/content/listini-tennis/tennis.json, editabile da
+// I contenuti stanno in src/content/listini-sport/<sport>.json, editabili da
 // Tina: i prezzi cambiano ogni stagione e li aggiorna la segreteria.
 //
 // Il portale distingue le due platee con due categorie (3 non soci, 13 soci)
@@ -13,14 +13,14 @@ export { euro } from "./formato";
 
 const STORE_BASE = "https://inforyou.teamsystem.com/ronchiverdi/store/2";
 
-export const STORE_TENNIS_NON_SOCI = `${STORE_BASE}/category/3`;
-export const STORE_TENNIS_SOCI = `${STORE_BASE}/category/13`;
+export const STORE_NON_SOCI_TENNIS = `${STORE_BASE}/category/3`;
+export const STORE_SOCI_TENNIS = `${STORE_BASE}/category/13`;
 
 export function linkProdotto(id: number): string {
 	return `${STORE_BASE}/product/${id}`;
 }
 
-export interface RigaTennis {
+export interface RigaSport {
 	/** Il nome del livello o del percorso: RonchiRed, Competizione, ... */
 	voce: string;
 	/** Quante volte a settimana. */
@@ -33,7 +33,7 @@ export interface RigaTennis {
 	idSoci: number;
 }
 
-export interface PercorsoTennis {
+export interface PercorsoSport {
 	slug: string;
 	title: string;
 	eyebrow: string;
@@ -43,24 +43,32 @@ export interface PercorsoTennis {
 	imageAlt: string;
 	/** Le voci prese dalla scheda del prodotto sul portale. */
 	dettagli?: { label: string; valore: string }[];
-	listino: RigaTennis[];
+	listino: RigaSport[];
 }
 
-async function documento() {
-	const entry = await getEntry("listiniTennis", "tennis");
-	if (!entry) throw new Error("Manca src/content/listini-tennis/tennis.json");
+export type Sport = "tennis" | "padel" | "triathlon";
+
+async function documento(sport: Sport) {
+	const entry = await getEntry("listiniSport", sport);
+	if (!entry) throw new Error(`Manca src/content/listini-sport/${sport}.json`);
 	return entry.data;
 }
 
-export async function getPercorsiTennis(): Promise<PercorsoTennis[]> {
-	return (await documento()).percorsi as PercorsoTennis[];
+export async function getPercorsi(sport: Sport): Promise<PercorsoSport[]> {
+	return (await documento(sport)).percorsi as PercorsoSport[];
 }
 
-export async function getListinoTennisAggiornatoAl(): Promise<string> {
-	return (await documento()).aggiornatoAl;
+export async function getListinoAggiornatoAl(sport: Sport): Promise<string> {
+	return (await documento(sport)).aggiornatoAl;
+}
+
+/** Comodo dove serve un solo percorso, come padel e triathlon. */
+export async function getPercorso(sport: Sport, slug?: string): Promise<PercorsoSport> {
+	const percorsi = await getPercorsi(sport);
+	return slug ? (percorsi.find((p) => p.slug === slug) ?? percorsi[0]) : percorsi[0];
 }
 
 /** Il prezzo più basso del percorso: serve alle card, per dire "da € 630". */
-export function prezzoDaTennis(p: PercorsoTennis): number {
+export function prezzoDa(p: PercorsoSport): number {
 	return Math.min(...p.listino.map((r) => r.prezzoSoci));
 }

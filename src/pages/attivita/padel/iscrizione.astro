@@ -1,0 +1,156 @@
+---
+// Iscrizione al padel dei ragazzi. Sul portale c'è una voce sola — il carnet
+// da dieci lezioni — quindi qui non servono pagine per percorso come per
+// nuoto e tennis: una pagina, con il listino e tutte le informative.
+import Layout from "../../../layouts/Layout.astro";
+import PageHero from "../../../components/PageHero.astro";
+import Faq from "../../../components/Faq.astro";
+import ListinoCorsi from "../../../components/ListinoCorsi.astro";
+import { faqDiPagina } from "../../../data/faq";
+import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
+import "../../../styles/iscrizione.css";
+
+const percorso = await getPercorso("padel");
+const aggiornatoAl = await getListinoAggiornatoAl("padel");
+const faq = faqDiPagina("padel");
+
+const procedura = [
+	{
+		title: "Prova il campo",
+		desc: "Se non hai mai giocato, si comincia da una prova con il maestro: serve a capire il livello e a formare i gruppi.",
+	},
+	{
+		title: "Iscriviti online",
+		desc: "Dal listino qui sopra arrivi alla scheda del carnet: scegli il tuo listino e completa il pagamento.",
+	},
+	{
+		title: "Carica i documenti",
+		desc: "Certificato medico e regolamento firmato, dalla tua area personale sul portale.",
+	},
+];
+---
+
+<Layout
+	title="Iscrizione Padel Young — Ronchiverdi Sport Club"
+	description="Quote e modalità di iscrizione al padel per ragazzi dai 10 ai 17 anni a Ronchiverdi: carnet da dieci lezioni, prezzi soci e non soci, iscrizione online."
+	image="og/padel.jpg"
+>
+	<PageHero image={percorso.image} imageAlt={percorso.imageAlt} eyebrow="Padel · Iscrizione">
+		<Fragment slot="title">{percorso.title}</Fragment>
+		<Fragment slot="lede">{percorso.descrizione}</Fragment>
+		<div class="header-cta">
+			<a class="btn" href="#listino">Vedi le quote</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-padel">Contattaci</button>
+		</div>
+	</PageHero>
+
+	<section class="isc-section">
+		<div class="isc-head">
+			<span class="eyebrow">{percorso.eyebrow}</span>
+			<h2>Com'è fatto il corso</h2>
+		</div>
+		<ul class="pd-punti">
+			{percorso.punti.map((p) => (
+				<li>
+					<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					<span>{p}</span>
+				</li>
+			))}
+		</ul>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="listino">
+		<div class="isc-head">
+			<span class="eyebrow">Quote {percorso.title}</span>
+			<h2>Quanto costa</h2>
+			<p class="isc-head__lede">
+				Un carnet di dieci lezioni. Con un abbonamento Ronchiverdi attivo vale
+				il listino soci; per i non soci la quota comprende l'iscrizione.
+			</p>
+		</div>
+		<ListinoCorsi
+			colonna="Formula"
+			righe={percorso.listino}
+			dettagli={percorso.dettagli}
+			aggiornatoAl={aggiornatoAl}
+		/>
+	</section>
+
+	<section class="isc-section">
+		<div class="isc-head">
+			<span class="eyebrow">Tre passaggi</span>
+			<h2>Come ci si iscrive</h2>
+		</div>
+		<ol class="isc-steps">
+			{procedura.map((s, i) => (
+				<li class="isc-step">
+					<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+					<h3>{s.title}</h3>
+					<p>{s.desc}</p>
+				</li>
+			))}
+		</ol>
+		<p class="isc-note">
+			L'account va intestato al ragazzo, non al genitore. Se le credenziali sono
+			state smarrite, chiamaci allo <a href="tel:+390116612146">011 6612146</a>: le recuperiamo noi.
+		</p>
+	</section>
+
+	<section class="isc-section isc-contatti">
+		<div class="isc-head">
+			<span class="eyebrow">Settore padel</span>
+			<h2>Parlane con noi</h2>
+			<p class="isc-head__lede">
+				Per capire il livello, sapere quando parte il prossimo gruppo o
+				organizzare una prova, scrivici: ti risponde il maestro.
+			</p>
+		</div>
+		<div class="pd-azioni">
+			<button type="button" class="btn" data-open-contact data-interest="corsi-padel">Richiedi informazioni</button>
+		</div>
+	</section>
+
+	<Faq items={faq} />
+
+	<style>
+		.header-cta {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+			margin-top: 0;
+		}
+		.pd-punti {
+			max-width: 46rem;
+			margin: 0 auto;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.8rem;
+		}
+		.pd-punti li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.7rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.pd-punti svg {
+			flex-shrink: 0;
+			margin-top: 0.35em;
+			color: var(--accent);
+		}
+		.pd-azioni {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.pd-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+	</style>
+</Layout>
