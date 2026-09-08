@@ -14,6 +14,7 @@ import Layout from "../../../../layouts/Layout.astro";
 import PageHero from "../../../../components/PageHero.astro";
 import { url } from "../../../../lib/paths";
 import Faq from "../../../../components/Faq.astro";
+import ListinoCorsi from "../../../../components/ListinoCorsi.astro";
 import ModalitaIscrizioneNuoto from "../../../../components/ModalitaIscrizioneNuoto.astro";
 import { faqDiPagina } from "../../../../data/faq";
 import {
@@ -104,75 +105,20 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			</p>
 		</div>
 
-		<div class="listino-wrap">
-			<table class="listino">
-				<thead>
-					<tr>
-						<th>Formula</th>
-						<th>Non soci</th>
-						<th>Soci del club</th>
-					</tr>
-				</thead>
-				<tbody>
-					{corso.listino.map((r) => (
-						<tr>
-							<td class="listino__formula">
-								<strong>{r.formula}</strong>
-								<span class="listino__periodo">{r.periodo}</span>
-								{r.dettaglio && <span class="listino__dettaglio">{r.dettaglio}</span>}
-							</td>
-							<td data-etichetta="Non soci">
-								<a
-									class="prezzo-box"
-									href={linkProdotto(r.idNonSoci)}
-									target="_blank"
-									rel="noopener"
-									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino non soci, ${euro(r.prezzoNonSoci)}`}
-								>
-									<span class="prezzo-box__etichetta">Non soci</span>
-									<span class="prezzo-box__cifra">{euro(r.prezzoNonSoci)}</span>
-									<span class="prezzo-box__cta">
-										Iscriviti
-										<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-									</span>
-								</a>
-							</td>
-							<td data-etichetta="Soci del club">
-								<a
-									class="prezzo-box prezzo-box--soci"
-									href={linkProdotto(r.idSoci)}
-									target="_blank"
-									rel="noopener"
-									aria-label={`Iscriviti a ${corso.title} ${r.formula}${r.dettaglio ? `, ${r.dettaglio}` : ""}, listino soci del club, ${euro(r.prezzoSoci)}`}
-								>
-									<span class="prezzo-box__etichetta">Soci del club</span>
-									<span class="prezzo-box__cifra">{euro(r.prezzoSoci)}</span>
-									<span class="prezzo-box__cta">
-										Iscriviti
-										<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-									</span>
-								</a>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-
-
-		{corso.dettagli && (
-			<ul class="isc-dettagli">
-				{corso.dettagli.map((d) => (
-					<li><b>{d.label}</b> {d.valore}</li>
-				))}
-			</ul>
-		)}
-
-		<p class="isc-note isc-note--center listino-nota">
-			Tocca il prezzo per aprire la scheda di quella formula sul portale
-			InforYou, dove si completa l'iscrizione. Listino aggiornato a
-			{" "}{listinoAggiornatoAl}: i prezzi ufficiali sono quelli del portale.
-		</p>
+		<ListinoCorsi
+			colonna="Formula"
+			righe={corso.listino.map((r) => ({
+				voce: r.formula,
+				dettaglio: r.periodo,
+				nota: r.dettaglio,
+				prezzoNonSoci: r.prezzoNonSoci,
+				prezzoSoci: r.prezzoSoci,
+				idNonSoci: r.idNonSoci,
+				idSoci: r.idSoci,
+			}))}
+			dettagli={corso.dettagli}
+			aggiornatoAl={listinoAggiornatoAl}
+		/>
 	</section>
 
 	<ModalitaIscrizioneNuoto corso={corso.title} />

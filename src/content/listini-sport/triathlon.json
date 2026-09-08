@@ -1,0 +1,66 @@
+{
+  "aggiornatoAl": "settembre 2026",
+  "percorsi": [
+    {
+      "slug": "young-school",
+      "title": "Young School Triathlon",
+      "eyebrow": "5–13 anni",
+      "descrizione": "Nuoto, bici e corsa in un percorso solo, per bambini e ragazzi dai 5 ai 13 anni. Gli allenamenti sono dal lunedì al venerdì, con gruppi divisi per età e livello: la frequenza si sceglie in base a quanto si vuole fare.",
+      "punti": [
+        "Gruppi divisi per età e livello, dal lunedì al venerdì",
+        "Tesseramenti FITRI e FIDAL compresi, più la t-shirt Ronchiverdi",
+        "Dal 14 settembre 2026 all'11 giugno 2027"
+      ],
+      "image": "images/activities/triathlon-young.jpg",
+      "imageAlt": "Ragazzi della Young School Triathlon di Ronchiverdi in allenamento",
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "5–13 anni"
+        },
+        {
+          "label": "Periodo",
+          "valore": "14 settembre 2026 – 11 giugno 2027"
+        },
+        {
+          "label": "Quando",
+          "valore": "Dal lunedì al venerdì, per gruppi di età e livello"
+        },
+        {
+          "label": "Compreso",
+          "valore": "Tesseramenti FITRI e FIDAL, t-shirt Ronchiverdi"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
+      ],
+      "listino": [
+        {
+          "voce": "Young School Triathlon",
+          "dettaglio": "1 volta a settimana",
+          "prezzoNonSoci": 700,
+          "prezzoSoci": 650,
+          "idNonSoci": 215,
+          "idSoci": 219
+        },
+        {
+          "voce": "Young School Triathlon",
+          "dettaglio": "2 volte a settimana",
+          "prezzoNonSoci": 920,
+          "prezzoSoci": 910,
+          "idNonSoci": 216,
+          "idSoci": 220
+        },
+        {
+          "voce": "Young School Triathlon",
+          "dettaglio": "3 volte a settimana",
+          "prezzoNonSoci": 1070,
+          "prezzoSoci": 1020,
+          "idNonSoci": 217,
+          "idSoci": 221
+        }
+      ]
+    }
+  ]
+}
