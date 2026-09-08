@@ -4,6 +4,7 @@
 // Supabase con la service_role key, mai esposta al client.
 import { createClient } from "@supabase/supabase-js";
 import { notificaLead } from "../../lib/notificaLead";
+import { confermaAlCliente } from "../../lib/emailCliente";
 
 export const prerender = false;
 
@@ -82,7 +83,7 @@ export async function POST({ request }: { request: Request }) {
 		consent_advertisement: body.consent_advertisement === true,
 	};
 
-	const { error } = await supabase.from("form_contatti").insert({
+	const { data: inserito, error } = await supabase.from("form_contatti").insert({
 		origine: str(body.origine) ?? "lead-modal",
 		pagina: str(body.pagina),
 		cta: str(body.cta),
@@ -113,7 +114,9 @@ export async function POST({ request }: { request: Request }) {
 		minore_cognome: str(body.minoreCognome),
 		minore_data_nascita: str(body.minoreDataNascita),
 		...tracking,
-	});
+	})
+	.select("id, token_gestione")
+	.single();
 
 	if (error) {
 		console.error("Errore inserimento form_contatti:", error.message);
@@ -124,6 +127,23 @@ export async function POST({ request }: { request: Request }) {
 	// notificaLead: la richiesta è già salvata, e un problema col servizio di
 	// posta non deve diventare un errore in faccia a chi ha compilato il form.
 	await notificaLead(body);
+
+	// Conferma a chi ha compilato. Per un appuntamento porta il link che
+	// permette di spostarlo o annullarlo da solo: senza, l'unico modo per
+	// disdire è telefonare, e chi non telefona non si presenta e basta.
+	// Stesso trattamento degli errori: la richiesta è già salva.
+	if (inserito?.token_gestione) {
+		await confermaAlCliente({
+			nome,
+			email,
+			cellulare,
+			azione: str(body.azione),
+			data: str(body.dataScelta),
+			ora: str(body.oraScelta),
+			attivita: str(body.attivitaLabel),
+			token: String(inserito.token_gestione),
+		});
+	}
 
 	// Marca la sessione come convertita, così il tasso di conversione per
 	// campagna si legge direttamente da campagne_rendimento. Non è bloccante:
