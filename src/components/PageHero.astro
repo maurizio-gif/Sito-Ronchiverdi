@@ -74,6 +74,34 @@ const hasExtra = Astro.slots.has("default");
 		animation: page-hero-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 		animation-delay: 180ms;
 	}
+	/* Il gruppo di pulsanti in coda all'hero. La regola sta qui, nel
+	   componente che possiede lo slot, e non ricopiata in ogni pagina: era
+	   già identica in sei pagine, e ogni hero che ne aggiungeva uno la
+	   riscriveva. Le pagine che la definiscono ancora in locale vincono per
+	   specificità — gli stili scoped di Astro aggiungono una classe — quindi
+	   nessuna cambia aspetto.
+
+	   margin-top: 0 perché la spaziatura la mette già .page-hero__extra: due
+	   margini sommati staccherebbero il pulsante dal testo di un'interlinea
+	   intera. */
+	.page-hero__extra :global(.header-cta) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 0;
+	}
+	/* ...ma solo se i pulsanti sono la prima cosa nello slot. Quando c'è
+	   qualcosa sopra — la Scuola Nuoto ci mette il banner con le date dei
+	   corsi — il margine di .page-hero__extra è già stato consumato da
+	   quell'elemento, e senza questa regola il pulsante gli resta incollato
+	   con zero pixel in mezzo.
+
+	   1.25rem e non i 1.75 dello slot: sopra c'è un elemento che appartiene
+	   allo stesso blocco, non il corpo del testo, e distanziarlo come un
+	   paragrafo lo staccherebbe dal gruppo a cui si riferisce. */
+	.page-hero__extra :global(.header-cta:not(:first-child)) {
+		margin-top: 1.25rem;
+	}
 	@keyframes page-hero-in {
 		from {
 			opacity: 0;
