@@ -44,6 +44,21 @@ const categorie = [
 	},
 ];
 
+const procedura = [
+	{
+		title: "Scegli la categoria",
+		desc: "Young School dai 6 ai 13 anni, Academy dai 14 ai 20, Master dai 20 in su: se hai dubbi sul gruppo giusto, chiedi a noi.",
+	},
+	{
+		title: "Prova un allenamento",
+		desc: "Nella Young School la prima settimana è di prove gratuite; per Academy e Master la lezione di prova si concorda su richiesta.",
+	},
+	{
+		title: "Completa l'iscrizione",
+		desc: "Per la Young School dal listino qui sopra, sul portale InforYou; per Academy e Master alla Reception del Club.",
+	},
+];
+
 const documenti = [
 	"Certificato medico in corso di validità per la Young School; dai 12 anni è richiesto il certificato medico agonistico",
 	"Certificato medico agonistico in corso di validità per Academy e Master, obbligatorio anche per il tesseramento federale",
@@ -64,18 +79,19 @@ const faq = faqDiPagina("triathlon-iscrizione");
 	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
 	image="og/triathlon.jpg"
 >
-	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon">
+	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon · Iscrizione">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
 		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
 		<div class="header-cta">
-			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
+			<a class="btn" href="#listino">Vedi le quote</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="triathlon-young">Contattaci</button>
 		</div>
 	</PageHero>
 
-	<section class="cat-section">
-		<div class="cat-section__head">
+	<section class="isc-section">
+		<div class="isc-head">
 			<span class="eyebrow">Le tre categorie</span>
-			<h2>Come ci si iscrive</h2>
+			<h2>I tre percorsi</h2>
 		</div>
 		<div class="cat-grid">
 			{categorie.map((c) => (
@@ -100,7 +116,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 	<section class="isc-section isc-section--alt" id="listino">
 		<div class="isc-head">
 			<span class="eyebrow">Quote {young.title}</span>
-			<h2>Quanto costa la Young School</h2>
+			<h2>Quanto costa</h2>
 			<p class="isc-head__lede">
 				La quota comprende i tesseramenti FITRI e FIDAL. Con un abbonamento
 				Ronchiverdi attivo vale il listino soci. Academy e Master si iscrivono
@@ -115,23 +131,61 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		/>
 	</section>
 
-	<section class="info-section">
-		<h2>Documenti e tesseramenti</h2>
-		<ul class="plain-list">
-			{documenti.map((d) => <li>{d}</li>)}
-		</ul>
-		<p class="note">Il certificato medico va consegnato prima dell'inizio dell'attività: senza, non è possibile partecipare agli allenamenti.</p>
+	<section class="isc-section">
+		<div class="isc-head">
+			<span class="eyebrow">Tre passaggi</span>
+			<h2>Come ci si iscrive</h2>
+		</div>
+		<ol class="isc-steps">
+			{procedura.map((s, i) => (
+				<li class="isc-step">
+					<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+					<h3>{s.title}</h3>
+					<p>{s.desc}</p>
+				</li>
+			))}
+		</ol>
+		<p class="isc-note">
+			Academy e Master non si iscrivono online: si passa dalla Reception del
+			Club, oppure ci si scrive e organizziamo tutto noi.
+		</p>
 	</section>
 
-	<section class="info-section">
-		<h2>Prova prima di iscriverti</h2>
-		<p>Nella Young School la <strong>prima settimana di attività</strong> è dedicata alle lezioni di prova gratuite: i ragazzi conoscono i tecnici e sperimentano nuoto, ciclismo e corsa. Per <strong>Academy</strong> e <strong>Master</strong> la lezione di prova si concorda su richiesta.</p>
+	<section class="isc-section isc-section--alt">
+		<div class="isc-duo">
+			<div>
+				<div class="isc-head isc-head--left">
+					<span class="eyebrow">Documenti</span>
+					<h2>Cosa serve preparare</h2>
+				</div>
+				<ul class="plain-list">
+					{documenti.map((d) => <li>{d}</li>)}
+				</ul>
+				<p class="isc-note">Il certificato medico va consegnato prima dell'inizio dell'attività: senza, non è possibile partecipare agli allenamenti.</p>
+			</div>
+			<div>
+				<div class="isc-head isc-head--left">
+					<span class="eyebrow">Prima di decidere</span>
+					<h2>Prova prima di iscriverti</h2>
+				</div>
+				<p class="isc-testo">Nella Young School la <strong>prima settimana di attività</strong> è dedicata alle lezioni di prova gratuite: i ragazzi conoscono i tecnici e sperimentano nuoto, ciclismo e corsa.</p>
+				<p class="isc-testo">Per <strong>Academy</strong> e <strong>Master</strong> la lezione di prova si concorda su richiesta.</p>
+			</div>
+		</div>
 	</section>
 
-	<section class="info-section contacts-section">
-		<h2>Contatti</h2>
-		<p>Per organizzare la lezione di prova, chiedere informazioni sui percorsi o completare l'iscrizione, compila il modulo di contatto: ti risponde il settore triathlon.</p>
-		<button type="button" class="btn" data-open-contact>Contattaci</button>
+	<section class="isc-section isc-contatti">
+		<div class="isc-head">
+			<span class="eyebrow">Settore triathlon</span>
+			<h2>Parlane con noi</h2>
+			<p class="isc-head__lede">
+				Per organizzare la lezione di prova, chiedere informazioni sui percorsi
+				o completare l'iscrizione, scrivici: ti risponde il settore triathlon.
+			</p>
+		</div>
+		<div class="tri-azioni">
+			<button type="button" class="btn" data-open-contact data-interest="triathlon-young">Richiedi informazioni</button>
+		</div>
 	</section>
 
 	<Faq items={faq} />
@@ -140,7 +194,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		<h2>Pronto a partire?</h2>
 		<p class="lede" style="margin-inline:auto">Scrivici: ti aiutiamo a capire quale percorso è adatto e a organizzare la prova.</p>
 		<div class="final-cta__buttons">
-			<button type="button" class="btn" data-open-contact>Contattaci</button>
+			<button type="button" class="btn" data-open-contact data-interest="triathlon-young">Contattaci</button>
 			<a class="btn btn-outline" href={url("/attivita/triathlon")}>Torna al triathlon</a>
 		</div>
 	</section>
@@ -153,16 +207,6 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			margin-top: 0;
 		}
 
-		.cat-section {
-			max-width: 84rem;
-			margin: 0 auto;
-			padding: 4.5rem 1.5rem 2rem;
-		}
-		.cat-section__head {
-			max-width: 42rem;
-			margin: 0 auto 2.75rem;
-			text-align: center;
-		}
 		.cat-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
@@ -226,26 +270,6 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			}
 		}
 
-		.info-section {
-			max-width: 68rem;
-			margin: 0 auto;
-			padding: 2.25rem 1.5rem;
-			border-top: 1px solid var(--border);
-		}
-		.info-section h2 {
-			font-size: var(--text-lg);
-			margin-bottom: 1rem;
-		}
-		.info-section p {
-			font-family: var(--font-sans);
-			color: var(--text-muted);
-			line-height: 1.65;
-			margin: 0 0 0.85rem;
-		}
-		.note {
-			font-size: var(--text-sm);
-			font-style: italic;
-		}
 		.plain-list {
 			list-style: none;
 			margin: 0 0 1rem;
@@ -264,10 +288,15 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			left: 0;
 			color: var(--accent);
 		}
-		.contacts-section .btn {
+		.tri-azioni {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.tri-azioni .btn {
 			cursor: pointer;
 			font-family: var(--font-sans);
-			border: none;
 		}
 
 		.final-cta {

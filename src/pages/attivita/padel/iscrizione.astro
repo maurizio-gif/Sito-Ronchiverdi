@@ -5,6 +5,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
+import { url } from "../../../lib/paths";
 import ListinoCorsi from "../../../components/ListinoCorsi.astro";
 import { faqDiPagina } from "../../../data/faq";
 import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
@@ -96,6 +97,45 @@ const procedura = [
 		</p>
 	</section>
 
+	<section class="isc-section isc-section--alt">
+		<div class="isc-duo">
+			<div>
+				<div class="isc-head isc-head--left">
+					<span class="eyebrow">Documenti</span>
+					<h2>Cosa serve preparare</h2>
+				</div>
+				<dl class="isc-list">
+					<div class="isc-list__row">
+						<dt>Certificato medico</dt>
+						<dd>Di idoneità sportiva non agonistica, richiesto sopra i 6 anni. Si carica nell'area personale del portale.</dd>
+					</div>
+					<div class="isc-list__row">
+						<dt>Regolamento firmato</dt>
+						<dd>Si scarica dal portale al momento dell'iscrizione e si ricarica firmato.</dd>
+					</div>
+				</dl>
+				<p class="isc-note">I documenti vanno caricati prima della prima lezione.</p>
+			</div>
+			<div>
+				<div class="isc-head isc-head--left">
+					<span class="eyebrow">Pagamento</span>
+					<h2>Come si paga</h2>
+				</div>
+				<dl class="isc-list">
+					<div class="isc-list__row">
+						<dt>Soluzione unica</dt>
+						<dd>L'intero importo del carnet al momento dell'iscrizione.</dd>
+					</div>
+					<div class="isc-list__row">
+						<dt>3 rate mensili</dt>
+						<dd>Tramite PayPal, senza costi aggiuntivi.</dd>
+					</div>
+				</dl>
+				<p class="isc-note">In assenza di regolare pagamento non è possibile partecipare alle lezioni.</p>
+			</div>
+		</div>
+	</section>
+
 	<section class="isc-section isc-contatti">
 		<div class="isc-head">
 			<span class="eyebrow">Settore padel</span>
@@ -111,6 +151,15 @@ const procedura = [
 	</section>
 
 	<Faq items={faq} />
+
+	<section class="final-cta">
+		<h2>Pronto a scendere in campo?</h2>
+		<p class="lede" style="margin-inline:auto">Scrivici: ti diciamo quando parte il prossimo gruppo e organizziamo la prova.</p>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="corsi-padel">Contattaci</button>
+			<a class="btn btn-outline" href={url("/attivita/padel")}>Torna al padel</a>
+		</div>
+	</section>
 
 	<style>
 		.header-cta {
@@ -149,6 +198,28 @@ const procedura = [
 			gap: 1rem;
 		}
 		.pd-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+
+		.final-cta {
+			padding: 6rem 1.5rem;
+			text-align: center;
+			background: var(--bg-alt);
+		}
+		.final-cta h2 {
+			margin-bottom: 1rem;
+		}
+		.final-cta .lede {
+			margin-bottom: 2rem;
+		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.final-cta__buttons .btn {
 			cursor: pointer;
 			font-family: var(--font-sans);
 		}

@@ -386,3 +386,12 @@
 		padding-right: 0;
 	}
 }
+
+/* Paragrafo dentro una colonna di dettagli, dove non c'è un elenco. */
+.isc-testo {
+	margin: 0 0 0.9rem;
+	font-family: var(--font-sans);
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	color: var(--text-muted);
+}
