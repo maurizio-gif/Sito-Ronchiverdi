@@ -1,0 +1,456 @@
+---
+// Una pagina di iscrizione per ogni percorso della scuola tennis: livelli
+// colore, competizione, alto livello. Chi arriva dal suo percorso vede il suo
+// listino e basta, con le informative sulla stessa pagina — nessun rimando
+// altrove.
+//
+// Le tre pagine escono da un file solo, dai dati in
+// src/content/listini-tennis/tennis.json (editabile da Tina).
+import Layout from "../../../../layouts/Layout.astro";
+import PageHero from "../../../../components/PageHero.astro";
+import Faq from "../../../../components/Faq.astro";
+import ModalitaIscrizioneTennis from "../../../../components/ModalitaIscrizioneTennis.astro";
+import { url } from "../../../../lib/paths";
+import { faqDiPagina } from "../../../../data/faq";
+import {
+	euro,
+	getListinoTennisAggiornatoAl,
+	getPercorsiTennis,
+	linkProdotto,
+	prezzoDaTennis,
+	type PercorsoTennis,
+} from "../../../../lib/tennis";
+import "../../../../styles/iscrizione.css";
+
+export async function getStaticPaths() {
+	const percorsi = await getPercorsiTennis();
+	return percorsi.map((percorso) => ({
+		params: { percorso: percorso.slug },
+		props: { percorso, percorsi },
+	}));
+}
+
+interface Props {
+	percorso: PercorsoTennis;
+	percorsi: PercorsoTennis[];
+}
+
+const { percorso, percorsi } = Astro.props;
+const aggiornatoAl = await getListinoTennisAggiornatoAl();
+const faq = faqDiPagina("tennis-iscrizione");
+---
+
+<Layout
+	title={`Iscrizione ${percorso.title} — Tennis Ronchiverdi`}
+	description={`Quote e modalità di iscrizione al percorso ${percorso.title} della Young School Tennis Ronchiverdi: prezzi soci e non soci, frequenze settimanali e iscrizione online.`}
+	image="og/tennis.jpg"
+>
+	<PageHero image={percorso.image} imageAlt={percorso.imageAlt} eyebrow="Tennis · Iscrizione">
+		<Fragment slot="title">{percorso.title}</Fragment>
+		<Fragment slot="lede">{percorso.descrizione}</Fragment>
+		<div class="header-cta">
+			<a class="btn" href="#listino">Vedi le quote</a>
+			<button type="button" class="btn btn-outline" data-open-contact data-interest="corsi-tennis">Contattaci</button>
+		</div>
+	</PageHero>
+
+	<section class="isc-section">
+		<div class="isc-head">
+			<span class="eyebrow">{percorso.eyebrow}</span>
+			<h2>Com'è fatto il percorso</h2>
+		</div>
+		<ul class="tn-punti">
+			{percorso.punti.map((p) => (
+				<li>
+					<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					<span>{p}</span>
+				</li>
+			))}
+		</ul>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="listino">
+		<div class="isc-head">
+			<span class="eyebrow">Quote {percorso.title}</span>
+			<h2>Quanto costa</h2>
+			<p class="isc-head__lede">
+				La quota comprende il tesseramento FITP. Con un abbonamento Ronchiverdi
+				attivo vale il listino soci.
+			</p>
+		</div>
+
+		<div class="listino-wrap">
+			<table class="listino">
+				<thead>
+					<tr>
+						<th>Corso</th>
+						<th>Non soci</th>
+						<th>Soci del club</th>
+					</tr>
+				</thead>
+				<tbody>
+					{percorso.listino.map((r) => (
+						<tr>
+							<td class="listino__formula">
+								<strong>{r.voce}</strong>
+								<span class="listino__periodo">{r.dettaglio}</span>
+								{r.nota && <span class="listino__dettaglio">{r.nota}</span>}
+							</td>
+							<td class="listino__prezzo" data-etichetta="Non soci">
+								<a
+									class="listino__link"
+									href={linkProdotto(r.idNonSoci)}
+									target="_blank"
+									rel="noopener"
+									aria-label={`Iscriviti a ${r.voce}, ${r.dettaglio}${r.nota ? `, ${r.nota}` : ""}, listino non soci, ${euro(r.prezzoNonSoci)}`}
+								>
+									{euro(r.prezzoNonSoci)}
+									<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								</a>
+							</td>
+							<td class="listino__prezzo listino__prezzo--soci" data-etichetta="Soci del club">
+								<a
+									class="listino__link"
+									href={linkProdotto(r.idSoci)}
+									target="_blank"
+									rel="noopener"
+									aria-label={`Iscriviti a ${r.voce}, ${r.dettaglio}${r.nota ? `, ${r.nota}` : ""}, listino soci del club, ${euro(r.prezzoSoci)}`}
+								>
+									{euro(r.prezzoSoci)}
+									<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+								</a>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+
+		<p class="isc-note isc-note--center listino-nota">
+			Tocca il prezzo per aprire la scheda di quel corso sul portale InforYou,
+			dove si completa l'iscrizione. Listino aggiornato a {aggiornatoAl}: i
+			prezzi ufficiali sono quelli del portale.
+		</p>
+	</section>
+
+	<ModalitaIscrizioneTennis />
+
+	<section class="isc-section isc-contatti">
+		<div class="isc-head">
+			<span class="eyebrow">Settore tennis</span>
+			<h2>Parlane con noi</h2>
+			<p class="isc-head__lede">
+				Per capire da quale livello partire, organizzare la lezione di prova o
+				chiedere informazioni sui gruppi, scrivici: risponde il settore tennis.
+			</p>
+		</div>
+		<div class="tn-azioni">
+			<button type="button" class="btn" data-open-contact data-interest="corsi-tennis">Richiedi una prova gratuita</button>
+		</div>
+	</section>
+
+	<Faq items={faq} />
+
+	<section class="altri-percorsi">
+		<div class="isc-head">
+			<span class="eyebrow">Gli altri percorsi</span>
+			<h2>Non è questo il tuo percorso?</h2>
+		</div>
+		<div class="altri-percorsi__lista">
+			{percorsi
+				.filter((p) => p.slug !== percorso.slug)
+				.map((p) => (
+					<a class="altro-percorso" href={url(`/attivita/tennis/iscrizione/${p.slug}`)}>
+						<span class="altro-percorso__media">
+							<img src={url(p.image)} alt="" loading="lazy" />
+						</span>
+						<span class="altro-percorso__testi">
+							<span class="altro-percorso__eta">{p.eyebrow}</span>
+							<span class="altro-percorso__nome">{p.title}</span>
+							<span class="altro-percorso__prezzo">da {euro(prezzoDaTennis(p))}</span>
+						</span>
+						<span class="altro-percorso__freccia" aria-hidden="true">
+							<svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						</span>
+					</a>
+				))}
+		</div>
+	</section>
+
+	<style>
+		.header-cta {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+			margin-top: 0;
+		}
+
+		.tn-punti {
+			max-width: 46rem;
+			margin: 0 auto;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.8rem;
+		}
+		.tn-punti li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.7rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.tn-punti svg {
+			flex-shrink: 0;
+			margin-top: 0.35em;
+			color: var(--accent);
+		}
+
+		/* ── Listino ──────────────────────────────────────────────────── */
+		.listino-wrap {
+			overflow-x: auto;
+			margin-bottom: 1rem;
+		}
+		.listino {
+			width: 100%;
+			min-width: 32rem;
+			border-collapse: collapse;
+		}
+		.listino th {
+			padding: 0 0.75rem 0.85rem;
+			border-bottom: 1px solid var(--border-strong);
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			text-align: right;
+		}
+		.listino th:first-child {
+			text-align: left;
+		}
+		.listino td {
+			padding: 1rem 0.75rem;
+			border-bottom: 1px solid var(--border);
+			vertical-align: top;
+		}
+		.listino tr:last-child td {
+			border-bottom: none;
+		}
+		.listino__formula {
+			display: flex;
+			flex-direction: column;
+			gap: 0.15rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-base);
+			color: var(--text);
+		}
+		.listino__periodo,
+		.listino__dettaglio {
+			font-size: var(--text-2xs);
+			color: var(--text-muted);
+		}
+		.listino__dettaglio {
+			color: var(--accent);
+			font-weight: 600;
+		}
+		.listino__prezzo {
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+			color: var(--text-muted);
+			text-align: right;
+			white-space: nowrap;
+			font-variant-numeric: tabular-nums;
+		}
+		.listino__prezzo--soci {
+			color: var(--accent);
+		}
+		.listino__link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
+			color: inherit;
+			text-decoration: none;
+			border-bottom: 1px solid transparent;
+			transition: border-color 0.16s ease, color 0.16s ease;
+		}
+		.listino__link svg {
+			flex-shrink: 0;
+			opacity: 0.55;
+		}
+		.listino__link:hover,
+		.listino__link:focus-visible {
+			color: var(--accent);
+			border-bottom-color: currentColor;
+		}
+		.listino__link:hover svg,
+		.listino__link:focus-visible svg {
+			opacity: 1;
+		}
+
+		.tn-azioni {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.tn-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
+
+		/* ── Gli altri percorsi ───────────────────────────────────────── */
+		.altri-percorsi {
+			max-width: 72rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 6rem;
+			border-top: 1px solid var(--border-strong);
+		}
+		.altri-percorsi__lista {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
+		}
+		.altro-percorso {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			padding: 0.9rem 1.1rem 0.9rem 0.9rem;
+			border: 1px solid var(--border-strong);
+			border-radius: var(--radius);
+			background: var(--bg);
+			text-decoration: none;
+			transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease,
+				box-shadow 0.16s ease;
+		}
+		.altro-percorso:hover {
+			border-color: var(--accent);
+			background: var(--bg-alt);
+			transform: translateY(-2px);
+			box-shadow: 0 12px 24px -14px rgba(28, 28, 24, 0.45);
+		}
+		.altro-percorso__media {
+			flex: 0 0 auto;
+			width: 56px;
+			height: 56px;
+			border-radius: 50%;
+			overflow: hidden;
+			background: var(--bg-alt);
+		}
+		.altro-percorso__media img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+		.altro-percorso__testi {
+			display: flex;
+			flex-direction: column;
+			gap: 0.1rem;
+			min-width: 0;
+		}
+		.altro-percorso__nome {
+			font-family: var(--font-serif);
+			font-size: var(--text-lg);
+			line-height: 1.15;
+			color: var(--text);
+		}
+		.altro-percorso__eta {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.altro-percorso__prezzo {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			color: var(--text-muted);
+		}
+		.altro-percorso__freccia {
+			margin-left: auto;
+			flex-shrink: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background: var(--bg-alt);
+			color: var(--text);
+			transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+		}
+		.altro-percorso:hover .altro-percorso__freccia {
+			background: var(--accent);
+			color: var(--text-on-dark);
+			transform: translateX(2px);
+		}
+
+		/* Su schermo stretto la tabella non si scorre in orizzontale: la colonna
+		   soci finirebbe fuori campo e nessuno la cercherebbe. Ogni corso
+		   diventa un blocco con i due prezzi affiancati e la loro etichetta. */
+		@media (max-width: 620px) {
+			.listino-wrap {
+				overflow-x: visible;
+			}
+			.listino {
+				min-width: 0;
+			}
+			.listino thead {
+				display: none;
+			}
+			.listino tbody,
+			.listino tr,
+			.listino td {
+				display: block;
+			}
+			.listino tr {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.5rem 1rem;
+				padding: 1.1rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+			.listino td {
+				padding: 0;
+				border: none;
+			}
+			.listino td.listino__formula {
+				display: flex;
+				flex-direction: column;
+				grid-column: 1 / -1;
+			}
+			.listino__prezzo {
+				text-align: left;
+			}
+			.listino__link {
+				padding: 0.55rem 0.3rem;
+				margin: -0.55rem -0.3rem;
+			}
+			.listino__prezzo::before {
+				content: attr(data-etichetta);
+				display: block;
+				font-size: var(--text-2xs);
+				font-weight: 600;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+			}
+		}
+
+		@media (max-width: 860px), (orientation: portrait) {
+			.altri-percorsi__lista {
+				grid-template-columns: minmax(0, 1fr);
+			}
+			.altri-percorsi {
+				padding: 3rem 1.25rem 4rem;
+			}
+		}
+	</style>
+</Layout>

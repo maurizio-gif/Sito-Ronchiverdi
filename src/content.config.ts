@@ -219,4 +219,36 @@ const listini = defineCollection({
   }),
 });
 
-export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules, listini };
+// Listino del tennis: stessa idea di quello del nuoto, ma i percorsi hanno
+// una forma loro (voce + frequenza invece di formula + periodo), quindi vive
+// in una collection separata invece di piegare quella del nuoto.
+const listiniTennis = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/listini-tennis" }),
+  schema: z.object({
+    aggiornatoAl: z.string(),
+    percorsi: z.array(
+      z.object({
+        slug: z.string(),
+        title: z.string(),
+        eyebrow: z.string(),
+        descrizione: z.string(),
+        punti: z.array(z.string()),
+        image: z.string(),
+        imageAlt: z.string(),
+        listino: z.array(
+          z.object({
+            voce: z.string(),
+            dettaglio: z.string(),
+            nota: z.string().optional(),
+            prezzoNonSoci: z.number(),
+            prezzoSoci: z.number(),
+            idNonSoci: z.number(),
+            idSoci: z.number(),
+          })
+        ),
+      })
+    ),
+  }),
+});
+
+export const collections = { pages, activities, services, memberships, events, posts, trainers, schedules, listini, listiniTennis };
