@@ -33,7 +33,7 @@ const faq = faqDiPagina("planning");
 	<section class="planning-section">
 		<div class="planning-section__head">
 			<h2>{gymFloor.title}</h2>
-			<p class="lede" style="margin-inline:0">Orari di apertura della sala pesi.</p>
+			<p class="lede">Orari di apertura della sala pesi.</p>
 		</div>
 		<HoursTable rows={gymFloor.rows} />
 	</section>
@@ -42,7 +42,7 @@ const faq = faqDiPagina("planning");
 		<section class="planning-section">
 			<div class="planning-section__head">
 				<h2>{sezione.title}</h2>
-				<p class="lede" style="margin-inline:0">
+				<p class="lede">
 					Il palinsesto settimanale. Clicca su una lezione per leggerne la descrizione.{sezione.note && <em> {sezione.note}</em>}
 				</p>
 			</div>
@@ -72,17 +72,29 @@ const faq = faqDiPagina("planning");
 			padding: 3.5rem 1.5rem;
 			border-top: 1px solid var(--border);
 		}
+		/* Le intestazioni stanno sopra griglie larghe e simmetriche: allineate
+		   a sinistra su 88rem restavano appese a un angolo, e sotto la Gym
+		   Floor — che ha una tabella stretta invece di una griglia — la
+		   sezione sembrava tutta spostata. Centrate come nelle pagine delle
+		   attività, che usano lo stesso componente. */
 		.planning-section__head {
-			max-width: 88rem;
+			max-width: 44rem;
 			margin: 0 auto 1.75rem;
 			padding: 0 0.25rem;
+			text-align: center;
 		}
 		.planning-section__head h2 {
 			margin: 0 0 0.4rem;
 		}
 		.planning-section__head .lede {
 			max-width: none;
+			margin-bottom: 0;
 			color: var(--text-muted);
+		}
+		/* La tabella degli orari è stretta: sotto un'intestazione centrata va
+		   centrata anche lei, o resta appoggiata al bordo sinistro. */
+		.planning-section :global(.hours-table) {
+			margin-inline: auto;
 		}
 		.planning-section__head em {
 			font-style: italic;
