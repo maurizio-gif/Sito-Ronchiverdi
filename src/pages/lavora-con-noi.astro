@@ -19,7 +19,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 
 <Layout
 	title="Lavora con noi — Ronchiverdi Sport Club Torino"
-	description="Ronchiverdi Sport Club cerca tecnici sportivi, istruttori, reception, commerciali, Spa, Club House e manutenzione. Nessuna posizione aperta pubblicata: manda una candidatura spontanea con il tuo curriculum."
+	description="Ronchiverdi Sport Club cerca tecnici sportivi, istruttori, reception, commerciali, Young School e manutenzione. Nessuna posizione aperta pubblicata: manda una candidatura spontanea con il tuo curriculum."
 >
 	<header class="page-header">
 		<p class="eyebrow">Lavora con noi</p>
@@ -191,14 +191,17 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 	/* Stessa intestazione delle altre pagine interne: .page-header è scoped
 	   nelle singole pagine, quindi va ripetuta qui. */
 	.page-header {
-		max-width: 46rem;
+		max-width: 54rem;
 		margin: 0 auto;
 		padding: 5rem 1.5rem 1rem;
 		text-align: center;
 	}
+	.page-header .lede {
+		max-width: 44rem;
+	}
 
 	.lcn {
-		max-width: 62rem;
+		max-width: 82rem;
 		margin: 0 auto 5rem;
 		padding: 0 1.5rem;
 	}
@@ -231,7 +234,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 
 	/* ── Aree e ruoli ─────────────────────────────────────────────────── */
 	.lcn-sezione-head {
-		max-width: 42rem;
+		max-width: 52rem;
 		margin: 0 auto 2rem;
 		text-align: center;
 	}
@@ -243,7 +246,8 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 		line-height: var(--leading-2xl);
 	}
 	.lcn-sezione-head .lede {
-		margin: 0;
+		max-width: 44rem;
+		margin: 0 auto;
 	}
 
 	.lcn-aree,
@@ -300,8 +304,15 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 
 	/* ── Modulo ───────────────────────────────────────────────────────── */
 	.lcn-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
 		max-width: 44rem;
 		margin: 0 auto;
+	}
+	/* In colonna flex il pulsante si stirerebbe per tutta la larghezza. */
+	.lcn-form > .btn {
+		align-self: start;
 	}
 
 	/* L'input file di sistema non si può disegnare: si nasconde e si comanda

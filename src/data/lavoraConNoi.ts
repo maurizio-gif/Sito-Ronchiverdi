@@ -7,7 +7,9 @@
 //
 // Aggiungere un'area: una voce qui, e basta. La chiave finisce su Supabase
 // insieme all'etichetta, quindi resta leggibile anche se poi l'elenco cambia:
-// per questo una chiave già usata non va riciclata per un'altra cosa.
+// per questo una chiave già usata non va riciclata per un'altra cosa — valgono
+// anche le aree tolte dall'elenco ("spa-benessere" e "club-house"), che
+// restano nelle candidature gia' arrivate.
 
 export interface AreaLavoro {
 	/** Chiave salvata su Supabase: stabile, non cambiarla dopo il go-live. */
@@ -65,24 +67,6 @@ export const AREE: AreaLavoro[] = [
 			"Fitness manager",
 			"Social media e contenuti",
 		],
-	},
-	{
-		chiave: "spa-benessere",
-		label: "Spa e benessere",
-		descrizione:
-			"La Relax Zone e gli spazi di Chinesis Postural Lab, dove il club rallenta.",
-		ruoli: [
-			"Operatore/operatrice benessere",
-			"Massaggiatore/massaggiatrice sportivo",
-			"Chinesiologo/a e rieducazione funzionale",
-		],
-	},
-	{
-		chiave: "club-house",
-		label: "Club House e ristorazione",
-		descrizione:
-			"Bar, sala e cucina: il posto in cui si finisce dopo l'allenamento.",
-		ruoli: ["Barista", "Cameriere/a di sala", "Aiuto cuoco/a", "Responsabile di sala"],
 	},
 	{
 		chiave: "manutenzione",

@@ -771,6 +771,31 @@ import { leadActivityMap } from "../data/leadActivities";
 		resize: vertical;
 		min-height: 7rem;
 	}
+	/* Il select di sistema non eredita nulla dai campi di testo: senza questo
+	   resta alto la meta' e rompe il ritmo del modulo. Il selettore figlio
+	   lascia fuori .lf__tel-prefisso, che ha gia' il suo stile. */
+	.lf__field > select {
+		font-family: var(--font-sans);
+		font-size: var(--text-base);
+		font-weight: 400;
+		color: var(--text);
+		background: var(--lf-card);
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius);
+		padding: 0.65rem 2rem 0.65rem 0.8rem;
+		width: 100%;
+		cursor: pointer;
+		-webkit-appearance: none;
+		appearance: none;
+		background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%234a4a42' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 0.8rem center;
+		transition: border-color 0.16s ease;
+	}
+	.lf__field > select:focus {
+		outline: none;
+		border-color: var(--accent);
+	}
 	.lf__input--error {
 		border-color: #a33327 !important;
 	}
