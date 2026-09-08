@@ -240,6 +240,19 @@ export default defineConfig({
               { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },
               {
                 type: "object",
+                name: "dettagli",
+                label: "Dettagli dalla scheda del portale",
+                description:
+                  "Le voci che compaiono sotto la tabella delle quote: età, frequenza, certificato medico, pagamento.",
+                list: true,
+                ui: { itemProps: (item) => ({ label: [item?.label, item?.valore].filter(Boolean).join(": ") }) },
+                fields: [
+                  { type: "string", name: "label", label: "Voce", required: true },
+                  { type: "string", name: "valore", label: "Valore", required: true },
+                ],
+              },
+              {
+                type: "object",
                 name: "listino",
                 label: "Quote",
                 list: true,
@@ -324,6 +337,19 @@ export default defineConfig({
               { type: "string", name: "punti", label: "Punti chiave", list: true },
               { type: "image", name: "image", label: "Foto", required: true },
               { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },
+              {
+                type: "object",
+                name: "dettagli",
+                label: "Dettagli dalla scheda del portale",
+                description:
+                  "Le voci che compaiono sotto la tabella delle quote: età, frequenza, certificato medico, pagamento.",
+                list: true,
+                ui: { itemProps: (item) => ({ label: [item?.label, item?.valore].filter(Boolean).join(": ") }) },
+                fields: [
+                  { type: "string", name: "label", label: "Voce", required: true },
+                  { type: "string", name: "valore", label: "Valore", required: true },
+                ],
+              },
               {
                 type: "object",
                 name: "listino",

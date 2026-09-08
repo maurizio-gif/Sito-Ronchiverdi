@@ -203,6 +203,9 @@ const listini = defineCollection({
         vasca: z.string(),
         image: z.string(),
         imageAlt: z.string(),
+        dettagli: z
+          .array(z.object({ label: z.string(), valore: z.string() }))
+          .optional(),
         listino: z.array(
           z.object({
             formula: z.string(),
@@ -235,6 +238,9 @@ const listiniTennis = defineCollection({
         punti: z.array(z.string()),
         image: z.string(),
         imageAlt: z.string(),
+        dettagli: z
+          .array(z.object({ label: z.string(), valore: z.string() }))
+          .optional(),
         listino: z.array(
           z.object({
             voce: z.string(),

@@ -35,6 +35,32 @@
           "idNonSoci": 196,
           "idSoci": 206
         }
+      ],
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "3–18 mesi · 19–36 mesi"
+        },
+        {
+          "label": "Durata lezione",
+          "valore": "40 minuti"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "1 volta a settimana"
+        },
+        {
+          "label": "Vasca",
+          "valore": "Vasca di ambientamento · 32°C"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
       ]
     },
     {
@@ -71,6 +97,32 @@
           "idNonSoci": 198,
           "idSoci": 208
         }
+      ],
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "3–5 anni"
+        },
+        {
+          "label": "Durata lezione",
+          "valore": "40 minuti"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "1 volta a settimana"
+        },
+        {
+          "label": "Vasca",
+          "valore": "Vasca di ambientamento · 32°C"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
       ]
     },
     {
@@ -106,6 +158,32 @@
           "prezzoSoci": 550,
           "idNonSoci": 253,
           "idSoci": 210
+        }
+      ],
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "6–8 anni"
+        },
+        {
+          "label": "Durata lezione",
+          "valore": "40 minuti"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "1 volta a settimana"
+        },
+        {
+          "label": "Vasca",
+          "valore": "Vasca grande 25 m · 28°C"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
         }
       ]
     },
@@ -160,6 +238,32 @@
           "prezzoSoci": 840,
           "idNonSoci": 204,
           "idSoci": 214
+        }
+      ],
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "9–14 anni"
+        },
+        {
+          "label": "Durata lezione",
+          "valore": "60 minuti"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "1 o 2 volte a settimana"
+        },
+        {
+          "label": "Vasca",
+          "valore": "Vasca grande 25 m · 28°C"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
         }
       ]
     }

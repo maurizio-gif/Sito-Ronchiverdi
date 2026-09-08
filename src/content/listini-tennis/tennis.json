@@ -14,16 +14,114 @@
       "image": "images/activities/tennis-young.jpg",
       "imageAlt": "Ragazzi della scuola tennis Ronchiverdi in campo con il maestro",
       "listino": [
-        { "voce": "RonchiRed", "dettaglio": "1 volta a settimana", "prezzoNonSoci": 680, "prezzoSoci": 630, "idNonSoci": 222, "idSoci": 236 },
-        { "voce": "RonchiRed", "dettaglio": "2 volte a settimana", "prezzoNonSoci": 1025, "prezzoSoci": 975, "idNonSoci": 223, "idSoci": 237 },
-        { "voce": "RonchiOrange", "dettaglio": "1 volta a settimana", "prezzoNonSoci": 1075, "prezzoSoci": 1025, "idNonSoci": 224, "idSoci": 238 },
-        { "voce": "RonchiOrange", "dettaglio": "2 volte a settimana", "prezzoNonSoci": 1435, "prezzoSoci": 1385, "idNonSoci": 225, "idSoci": 239 },
-        { "voce": "RonchiGreen", "dettaglio": "2 volte a settimana", "nota": "45 minuti di tennis", "prezzoNonSoci": 1500, "prezzoSoci": 1450, "idNonSoci": 226, "idSoci": 240 },
-        { "voce": "RonchiGreen", "dettaglio": "3 volte a settimana", "nota": "45 minuti di tennis", "prezzoNonSoci": 2025, "prezzoSoci": 1975, "idNonSoci": 227, "idSoci": 241 },
-        { "voce": "RonchiGreen", "dettaglio": "2 volte a settimana", "nota": "60 minuti di tennis", "prezzoNonSoci": 1755, "prezzoSoci": 1705, "idNonSoci": 228, "idSoci": 242 },
-        { "voce": "RonchiGreen", "dettaglio": "3 volte a settimana", "nota": "60 minuti di tennis", "prezzoNonSoci": 2450, "prezzoSoci": 2400, "idNonSoci": 229, "idSoci": 244 },
-        { "voce": "RonchiYellow", "dettaglio": "2 volte a settimana", "nota": "90 minuti di tennis", "prezzoNonSoci": 2230, "prezzoSoci": 2180, "idNonSoci": 230, "idSoci": 243 },
-        { "voce": "RonchiYellow", "dettaglio": "3 volte a settimana", "nota": "90 minuti di tennis", "prezzoNonSoci": 3000, "prezzoSoci": 2950, "idNonSoci": 231, "idSoci": 245 }
+        {
+          "voce": "RonchiRed",
+          "dettaglio": "1 volta a settimana",
+          "prezzoNonSoci": 680,
+          "prezzoSoci": 630,
+          "idNonSoci": 222,
+          "idSoci": 236
+        },
+        {
+          "voce": "RonchiRed",
+          "dettaglio": "2 volte a settimana",
+          "prezzoNonSoci": 1025,
+          "prezzoSoci": 975,
+          "idNonSoci": 223,
+          "idSoci": 237
+        },
+        {
+          "voce": "RonchiOrange",
+          "dettaglio": "1 volta a settimana",
+          "prezzoNonSoci": 1075,
+          "prezzoSoci": 1025,
+          "idNonSoci": 224,
+          "idSoci": 238
+        },
+        {
+          "voce": "RonchiOrange",
+          "dettaglio": "2 volte a settimana",
+          "prezzoNonSoci": 1435,
+          "prezzoSoci": 1385,
+          "idNonSoci": 225,
+          "idSoci": 239
+        },
+        {
+          "voce": "RonchiGreen",
+          "dettaglio": "2 volte a settimana",
+          "nota": "45 minuti di tennis",
+          "prezzoNonSoci": 1500,
+          "prezzoSoci": 1450,
+          "idNonSoci": 226,
+          "idSoci": 240
+        },
+        {
+          "voce": "RonchiGreen",
+          "dettaglio": "3 volte a settimana",
+          "nota": "45 minuti di tennis",
+          "prezzoNonSoci": 2025,
+          "prezzoSoci": 1975,
+          "idNonSoci": 227,
+          "idSoci": 241
+        },
+        {
+          "voce": "RonchiGreen",
+          "dettaglio": "2 volte a settimana",
+          "nota": "60 minuti di tennis",
+          "prezzoNonSoci": 1755,
+          "prezzoSoci": 1705,
+          "idNonSoci": 228,
+          "idSoci": 242
+        },
+        {
+          "voce": "RonchiGreen",
+          "dettaglio": "3 volte a settimana",
+          "nota": "60 minuti di tennis",
+          "prezzoNonSoci": 2450,
+          "prezzoSoci": 2400,
+          "idNonSoci": 229,
+          "idSoci": 244
+        },
+        {
+          "voce": "RonchiYellow",
+          "dettaglio": "2 volte a settimana",
+          "nota": "90 minuti di tennis",
+          "prezzoNonSoci": 2230,
+          "prezzoSoci": 2180,
+          "idNonSoci": 230,
+          "idSoci": 243
+        },
+        {
+          "voce": "RonchiYellow",
+          "dettaglio": "3 volte a settimana",
+          "nota": "90 minuti di tennis",
+          "prezzoNonSoci": 3000,
+          "prezzoSoci": 2950,
+          "idNonSoci": 231,
+          "idSoci": 245
+        }
+      ],
+      "dettagli": [
+        {
+          "label": "Età",
+          "valore": "Da 4 a 16 anni, per livello"
+        },
+        {
+          "label": "Gruppi",
+          "valore": "4/6 bambini per campo (Red)"
+        },
+        {
+          "label": "In campo",
+          "valore": "Da 45 a 90 minuti di tennis, più 45 di preparazione atletica"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Richiesto sopra i 6 anni"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
       ]
     },
     {
@@ -39,10 +137,60 @@
       "image": "images/activities/tennis.jpg",
       "imageAlt": "Allenamento del settore competizione sui campi in terra rossa di Ronchiverdi",
       "listino": [
-        { "voce": "Competizione", "dettaglio": "2 volte a settimana", "prezzoNonSoci": 2365, "prezzoSoci": 2315, "idNonSoci": 232, "idSoci": 246 },
-        { "voce": "Competizione", "dettaglio": "3 volte a settimana", "prezzoNonSoci": 3390, "prezzoSoci": 3340, "idNonSoci": 233, "idSoci": 247 },
-        { "voce": "Competizione", "dettaglio": "4 volte a settimana", "prezzoNonSoci": 4370, "prezzoSoci": 4320, "idNonSoci": 234, "idSoci": 248 },
-        { "voce": "Competizione", "dettaglio": "5 volte a settimana", "prezzoNonSoci": 5130, "prezzoSoci": 5080, "idNonSoci": 235, "idSoci": 249 }
+        {
+          "voce": "Competizione",
+          "dettaglio": "2 volte a settimana",
+          "prezzoNonSoci": 2365,
+          "prezzoSoci": 2315,
+          "idNonSoci": 232,
+          "idSoci": 246
+        },
+        {
+          "voce": "Competizione",
+          "dettaglio": "3 volte a settimana",
+          "prezzoNonSoci": 3390,
+          "prezzoSoci": 3340,
+          "idNonSoci": 233,
+          "idSoci": 247
+        },
+        {
+          "voce": "Competizione",
+          "dettaglio": "4 volte a settimana",
+          "prezzoNonSoci": 4370,
+          "prezzoSoci": 4320,
+          "idNonSoci": 234,
+          "idSoci": 248
+        },
+        {
+          "voce": "Competizione",
+          "dettaglio": "5 volte a settimana",
+          "prezzoNonSoci": 5130,
+          "prezzoSoci": 5080,
+          "idNonSoci": 235,
+          "idSoci": 249
+        }
+      ],
+      "dettagli": [
+        {
+          "label": "A chi si rivolge",
+          "valore": "Atleti agonisti, o pronti a un lavoro più strutturato"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "Da 2 a 5 volte a settimana"
+        },
+        {
+          "label": "Il lavoro",
+          "valore": "Sviluppo tecnico, fisico, tattico e mentale"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Agonistico"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
       ]
     },
     {
@@ -58,11 +206,68 @@
       "image": "images/attivita/tennis-hero.jpg",
       "imageAlt": "Scambio sui campi da tennis in terra rossa di Ronchiverdi",
       "listino": [
-        { "voce": "Alto Livello", "dettaglio": "3 volte a settimana", "prezzoNonSoci": 3745, "prezzoSoci": 3695, "idNonSoci": 410, "idSoci": 415 },
-        { "voce": "Alto Livello", "dettaglio": "4 volte a settimana", "prezzoNonSoci": 4800, "prezzoSoci": 4750, "idNonSoci": 411, "idSoci": 416 },
-        { "voce": "Alto Livello", "dettaglio": "5 volte a settimana", "prezzoNonSoci": 6075, "prezzoSoci": 6025, "idNonSoci": 412, "idSoci": 417 },
-        { "voce": "Alto Livello", "dettaglio": "6 volte a settimana", "prezzoNonSoci": 7530, "prezzoSoci": 7480, "idNonSoci": 413, "idSoci": 418 },
-        { "voce": "Alto Livello", "dettaglio": "7 volte a settimana", "prezzoNonSoci": 9135, "prezzoSoci": 9085, "idNonSoci": 414, "idSoci": 419 }
+        {
+          "voce": "Alto Livello",
+          "dettaglio": "3 volte a settimana",
+          "prezzoNonSoci": 3745,
+          "prezzoSoci": 3695,
+          "idNonSoci": 410,
+          "idSoci": 415
+        },
+        {
+          "voce": "Alto Livello",
+          "dettaglio": "4 volte a settimana",
+          "prezzoNonSoci": 4800,
+          "prezzoSoci": 4750,
+          "idNonSoci": 411,
+          "idSoci": 416
+        },
+        {
+          "voce": "Alto Livello",
+          "dettaglio": "5 volte a settimana",
+          "prezzoNonSoci": 6075,
+          "prezzoSoci": 6025,
+          "idNonSoci": 412,
+          "idSoci": 417
+        },
+        {
+          "voce": "Alto Livello",
+          "dettaglio": "6 volte a settimana",
+          "prezzoNonSoci": 7530,
+          "prezzoSoci": 7480,
+          "idNonSoci": 413,
+          "idSoci": 418
+        },
+        {
+          "voce": "Alto Livello",
+          "dettaglio": "7 volte a settimana",
+          "prezzoNonSoci": 9135,
+          "prezzoSoci": 9085,
+          "idNonSoci": 414,
+          "idSoci": 419
+        }
+      ],
+      "dettagli": [
+        {
+          "label": "A chi si rivolge",
+          "valore": "Atleti agonisti con una programmazione quotidiana"
+        },
+        {
+          "label": "Frequenza",
+          "valore": "Da 3 a 7 volte a settimana"
+        },
+        {
+          "label": "Il lavoro",
+          "valore": "Sviluppo tecnico, fisico, tattico e mentale"
+        },
+        {
+          "label": "Certificato medico",
+          "valore": "Agonistico"
+        },
+        {
+          "label": "Pagamento",
+          "valore": "Unica soluzione o 3 rate mensili con PayPal"
+        }
       ]
     }
   ]

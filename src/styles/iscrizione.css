@@ -212,3 +212,177 @@
 		padding-inline: 1.1rem;
 	}
 }
+
+/* ── Listino ────────────────────────────────────────────────────────────
+   Usato dalle pagine dei corsi (nuoto) e dei percorsi (tennis): stessa
+   tabella, stesso box di prezzo, un posto solo da ritoccare. */
+.listino-wrap {
+	overflow-x: auto;
+	margin-bottom: 1rem;
+}
+.listino {
+	width: 100%;
+	min-width: 34rem;
+	border-collapse: collapse;
+}
+.listino th {
+	padding: 0 0.75rem 0.85rem;
+	border-bottom: 1px solid var(--border-strong);
+	font-family: var(--font-sans);
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	text-align: center;
+}
+.listino th:first-child {
+	text-align: left;
+}
+.listino td {
+	padding: 0.75rem;
+	border-bottom: 1px solid var(--border);
+	vertical-align: middle;
+}
+.listino tr:last-child td {
+	border-bottom: none;
+}
+.listino__formula {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	font-family: var(--font-sans);
+	font-size: var(--text-base);
+	color: var(--text);
+	padding-right: 1.5rem;
+}
+.listino__periodo,
+.listino__dettaglio {
+	font-size: var(--text-2xs);
+	color: var(--text-muted);
+}
+.listino__dettaglio {
+	color: var(--accent);
+	font-weight: 600;
+}
+
+/* Il prezzo è un box: si vede che si preme, senza doverci passare sopra
+   col mouse per scoprirlo — che su un telefono non si può fare. */
+.prezzo-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.1rem;
+	padding: 0.7rem 0.9rem;
+	border: 1px solid var(--border-strong);
+	border-radius: var(--radius);
+	background: var(--bg);
+	text-decoration: none;
+	transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease,
+		box-shadow 0.16s ease;
+}
+.prezzo-box:hover,
+.prezzo-box:focus-visible {
+	border-color: var(--accent);
+	transform: translateY(-2px);
+	box-shadow: 0 10px 20px -12px rgba(28, 28, 24, 0.5);
+}
+.prezzo-box__etichetta {
+	font-family: var(--font-sans);
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+}
+.prezzo-box__cifra {
+	font-family: var(--font-sans);
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: var(--text);
+	font-variant-numeric: tabular-nums;
+	line-height: 1.1;
+}
+.prezzo-box__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	margin-top: 0.15rem;
+	font-family: var(--font-sans);
+	font-size: var(--text-2xs);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--accent);
+}
+/* Il listino soci è quello che il socio cerca: si stacca dall'altro. */
+.prezzo-box--soci {
+	background: var(--bg-alt);
+}
+.prezzo-box--soci .prezzo-box__cifra {
+	color: var(--accent);
+}
+
+/* ── Dettagli dalla scheda del portale ──────────────────────────────── */
+.isc-dettagli {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.isc-dettagli li {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.35rem;
+	padding: 0.45rem 0.8rem;
+	border: 1px solid var(--border-strong);
+	border-radius: 999px;
+	font-family: var(--font-sans);
+	font-size: var(--text-2xs);
+	color: var(--text);
+	background: var(--bg);
+}
+.isc-dettagli b {
+	font-weight: 600;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+@media (max-width: 620px) {
+	/* La colonna soci non deve finire fuori campo: ogni riga diventa un
+	   blocco con i due box affiancati. */
+	.listino-wrap {
+		overflow-x: visible;
+	}
+	.listino {
+		min-width: 0;
+	}
+	.listino thead {
+		display: none;
+	}
+	.listino tbody,
+	.listino tr,
+	.listino td {
+		display: block;
+	}
+	.listino tr {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.6rem 0.75rem;
+		padding: 1.1rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+	.listino td {
+		padding: 0;
+		border: none;
+	}
+	.listino td.listino__formula {
+		display: flex;
+		flex-direction: column;
+		grid-column: 1 / -1;
+		padding-right: 0;
+	}
+}
