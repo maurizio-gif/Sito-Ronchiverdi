@@ -280,6 +280,93 @@ export default defineConfig({
         ],
       },
       {
+        // Listino del tennis: i tre percorsi della Young School con le loro
+        // quote. Stessa logica del listino nuoto — gli "id prodotto" sono i
+        // numeri che il portale InforYou usa per ogni riga, e si leggono in
+        // fondo all'indirizzo della scheda (.../store/2/product/222 -> 222).
+        name: "listinoTennis",
+        label: "Listino tennis",
+        path: "src/content/listini-tennis",
+        format: "json",
+        ui: { allowedActions: { create: false, delete: false } },
+        fields: [
+          {
+            type: "string",
+            name: "aggiornatoAl",
+            label: "Listino aggiornato a",
+            description: "Compare sotto la tabella. Es. \"settembre 2026\".",
+            required: true,
+          },
+          {
+            type: "object",
+            name: "percorsi",
+            label: "Percorsi",
+            list: true,
+            ui: { itemProps: (item) => ({ label: item?.title }) },
+            fields: [
+              {
+                type: "string",
+                name: "slug",
+                label: "Codice (nell'indirizzo della pagina)",
+                description:
+                  "Da non cambiare: è l'indirizzo della pagina. Cambiandolo, i link già in giro non funzionano più.",
+                required: true,
+              },
+              { type: "string", name: "title", label: "Nome del percorso", required: true },
+              { type: "string", name: "eyebrow", label: "Sopratitolo (es. Young School · 6–16 anni)", required: true },
+              {
+                type: "string",
+                name: "descrizione",
+                label: "Descrizione",
+                ui: { component: "textarea" },
+                required: true,
+              },
+              { type: "string", name: "punti", label: "Punti chiave", list: true },
+              { type: "image", name: "image", label: "Foto", required: true },
+              { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },
+              {
+                type: "object",
+                name: "listino",
+                label: "Quote",
+                list: true,
+                ui: {
+                  itemProps: (item) => ({
+                    label: [item?.voce, item?.dettaglio].filter(Boolean).join(" · "),
+                  }),
+                },
+                fields: [
+                  { type: "string", name: "voce", label: "Corso (es. RonchiRed)", required: true },
+                  { type: "string", name: "dettaglio", label: "Frequenza (es. 2 volte a settimana)", required: true },
+                  {
+                    type: "string",
+                    name: "nota",
+                    label: "Nota",
+                    description:
+                      "Serve a distinguere due quote altrimenti uguali, es. \"60 minuti di tennis\".",
+                  },
+                  { type: "number", name: "prezzoNonSoci", label: "Prezzo non soci (€)", required: true },
+                  { type: "number", name: "prezzoSoci", label: "Prezzo soci (€)", required: true },
+                  {
+                    type: "number",
+                    name: "idNonSoci",
+                    label: "Id prodotto InforYou · non soci",
+                    description: "Il numero in fondo all'indirizzo della scheda sul portale.",
+                    required: true,
+                  },
+                  {
+                    type: "number",
+                    name: "idSoci",
+                    label: "Id prodotto InforYou · soci",
+                    description: "Il numero in fondo all'indirizzo della scheda sul portale.",
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
         // Planning del club: un unico documento con gli orari di apertura e
         // tutti i palinsesti settimanali. È la sorgente usata da ogni pagina
         // (Planning, Acqua Fitness, Corsi Fitness, Nuoto Libero, Gym Floor,

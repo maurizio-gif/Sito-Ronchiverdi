@@ -3,62 +3,16 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { faqDiPagina } from "../../../data/faq";
+import { url } from "../../../lib/paths";
+import ModalitaIscrizioneTennis from "../../../components/ModalitaIscrizioneTennis.astro";
+import { euro, getPercorsiTennis, prezzoDaTennis } from "../../../lib/tennis";
 import "../../../styles/iscrizione.css";
 
 // Stesso impianto della pagina di iscrizione alla scuola nuoto: prima le due
 // porte del portale InforYou, poi i passaggi e i documenti. Qui però il
 // percorso comincia da una lezione di prova, che resta la seconda CTA.
 
-// Il negozio InforYou distingue le due platee: categorie diverse, listini diversi.
-const percorsi = [
-	{
-		label: "Non soci",
-		desc: "Il listino dedicato a chi non ha un abbonamento Ronchiverdi.",
-		href: "https://inforyou.teamsystem.com/ronchiverdi/store/2/category/3",
-	},
-	{
-		label: "Soci del club",
-		desc: "Il listino riservato a chi ha un abbonamento Ronchiverdi attivo.",
-		href: "https://inforyou.teamsystem.com/ronchiverdi/store/2/category/13",
-	},
-];
-
-const procedura = [
-	{
-		title: "Prenota la prova",
-		desc: "Gratuita. Indica età e livello per la Young School, la tua disponibilità se giochi da adulto.",
-	},
-	{
-		title: "Trova il tuo gruppo",
-		desc: "In base al livello emerso durante la prova ti inseriamo nel gruppo o ti abbiniamo al maestro più adatto.",
-	},
-	{
-		title: "Perfeziona l'iscrizione",
-		desc: "Dal portale online, oppure in reception con lo staff del settore tennis.",
-	},
-];
-
-const documenti = [
-	{
-		title: "Certificato medico",
-		desc: "Di idoneità sportiva non agonistica; agonistica per chi entra nel Settore Agonistico o ha già la tessera atleta.",
-	},
-	{
-		title: "Tesseramento FITP",
-		desc: "Non agonistico, incluso nella quota d'iscrizione.",
-	},
-];
-
-const calendario = [
-	{
-		title: "Young School",
-		desc: "Dal <strong>14 settembre 2026</strong> al <strong>4 giugno 2027</strong>.",
-	},
-	{
-		title: "Summer Tennis",
-		desc: "In estate l'attività continua, con iscrizione settimanale.",
-	},
-];
+const percorsi = await getPercorsiTennis();
 
 const faq = faqDiPagina("tennis-iscrizione");
 ---
@@ -83,80 +37,34 @@ const faq = faqDiPagina("tennis-iscrizione");
 
 	<section class="isc-section" id="iscriviti">
 		<div class="isc-head">
-			<span class="eyebrow">Iscrizione online</span>
-			<h2>Due percorsi, un solo portale</h2>
+			<span class="eyebrow">Quote e iscrizione</span>
+			<h2>Parti dal tuo percorso</h2>
 			<p class="isc-head__lede">
-				L'iscrizione si completa su InforYou, il portale del club. Scegli la
-				voce che ti riguarda: cambia il listino, non la procedura.
+				Ogni percorso ha il suo listino, con il tesseramento FITP compreso e un
+				prezzo dedicato ai soci del club. Apri il tuo per vedere le quote per
+				frequenza e il link all'iscrizione online.
 			</p>
 		</div>
-		<div class="isc-cards">
+		<div class="percorsi-cards">
 			{percorsi.map((p) => (
-				<article class="isc-card">
-					<span class="isc-card__label">{p.label}</span>
-					<p class="isc-card__desc">{p.desc}</p>
-					<a class="btn isc-card__btn" href={p.href} target="_blank" rel="noopener">
-						Iscrizione e pagamento
-						<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-					</a>
-				</article>
+				<a class="percorso-card" href={url(`/attivita/tennis/iscrizione/${p.slug}`)}>
+					<span class="percorso-card__eta">{p.eyebrow}</span>
+					<span class="percorso-card__nome">{p.title}</span>
+					<span class="percorso-card__prezzo">da {euro(prezzoDaTennis(p))}</span>
+					<span class="percorso-card__vai">
+						Quote e iscrizione
+						<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</span>
+				</a>
 			))}
 		</div>
-	</section>
-
-	<section class="isc-section" id="come-funziona">
-		<div class="isc-head">
-			<span class="eyebrow">Tre passaggi</span>
-			<h2>Come funziona</h2>
-		</div>
-		<ol class="isc-steps">
-			{procedura.map((s, i) => (
-				<li class="isc-step">
-					<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-					<h3>{s.title}</h3>
-					<p>{s.desc}</p>
-				</li>
-			))}
-		</ol>
-		<p class="isc-note">
-			La lezione di prova è gratuita e si organizza dal <button type="button" class="isc-link" data-open-contact>modulo di contatto</button>:
-			ti risponde il settore tennis.
+		<p class="isc-note isc-note--center">
+			Il prezzo indicato è il più basso del percorso, riservato ai soci: dentro
+			trovi tutte le frequenze, per soci e non soci.
 		</p>
 	</section>
 
-	<section class="isc-section isc-section--alt">
-		<div class="isc-duo">
-			<div>
-				<div class="isc-head isc-head--left">
-					<span class="eyebrow">Documenti</span>
-					<h2>Cosa serve preparare</h2>
-				</div>
-				<dl class="isc-list">
-					{documenti.map((d) => (
-						<div class="isc-list__row">
-							<dt>{d.title}</dt>
-							<dd>{d.desc}</dd>
-						</div>
-					))}
-				</dl>
-				<p class="isc-note">Tesseramento e certificato vanno completati prima dell'inizio dei corsi.</p>
-			</div>
-			<div>
-				<div class="isc-head isc-head--left">
-					<span class="eyebrow">Calendario</span>
-					<h2>Quando si comincia</h2>
-				</div>
-				<dl class="isc-list">
-					{calendario.map((c) => (
-						<div class="isc-list__row">
-							<dt>{c.title}</dt>
-							<dd set:html={c.desc} />
-						</div>
-					))}
-				</dl>
-			</div>
-		</div>
-	</section>
+	<ModalitaIscrizioneTennis />
 
 	<section class="isc-section isc-contatti">
 		<div class="isc-head">
@@ -180,6 +88,63 @@ const faq = faqDiPagina("tennis-iscrizione");
 	</section>
 
 	<style>
+		.percorsi-cards {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+		}
+		.percorso-card {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+			padding: 1.5rem 1.4rem;
+			border: 1px solid var(--border-strong);
+			border-radius: var(--radius);
+			background: var(--bg-alt);
+			text-decoration: none;
+			transition: border-color 0.16s ease, transform 0.16s ease;
+		}
+		.percorso-card:hover {
+			border-color: var(--accent);
+			transform: translateY(-2px);
+		}
+		.percorso-card__eta {
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.percorso-card__nome {
+			font-family: var(--font-serif);
+			font-size: var(--text-xl);
+			line-height: var(--leading-lg);
+			color: var(--text);
+		}
+		.percorso-card__prezzo {
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+		}
+		.percorso-card__vai {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin-top: 0.9rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--text);
+		}
+		@media (max-width: 900px) {
+			.percorsi-cards {
+				grid-template-columns: minmax(0, 1fr);
+			}
+		}
+
 		.header-cta {
 			display: flex;
 			gap: 1rem;

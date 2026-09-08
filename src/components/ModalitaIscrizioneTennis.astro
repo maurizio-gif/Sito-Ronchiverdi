@@ -1,0 +1,118 @@
+---
+// Le informative dell'iscrizione al tennis: come si arriva al gruppo giusto,
+// documenti e tesseramento, calendario.
+//
+// Stanno in un componente perché compaiono su tutte le pagine dei percorsi e
+// sull'hub: chi legge la pagina dei livelli colore deve trovarci tutto quello
+// che gli serve, senza essere mandato altrove. Ripetere il testo in quattro
+// file significherebbe aggiornarlo in quattro punti.
+const procedura = [
+	{
+		title: "Prenota la prova",
+		desc: "Gratuita. Serve a capire da quale livello partire: i gruppi si formano per capacità, non solo per età.",
+	},
+	{
+		title: "Trova il tuo gruppo",
+		desc: "In base al livello emerso durante la prova ti indichiamo il corso e la frequenza più adatti.",
+	},
+	{
+		title: "Iscriviti online",
+		desc: "Dal listino qui sopra arrivi alla scheda del corso: scegli la frequenza e completa il pagamento.",
+	},
+];
+
+const documenti = [
+	{
+		title: "Certificato medico",
+		desc: "Di idoneità sportiva non agonistica; agonistica per chi entra nel Settore Competizione o ha già la tessera atleta.",
+	},
+	{
+		title: "Tesseramento FITP",
+		desc: "Non agonistico, compreso nella quota d'iscrizione.",
+	},
+];
+
+const calendario = [
+	{
+		title: "Stagione",
+		desc: "Dal <strong>14 settembre 2026</strong> al <strong>4 giugno 2027</strong>.",
+	},
+	{
+		title: "Summer Tennis",
+		desc: "In estate l'attività continua, con iscrizione settimanale.",
+	},
+];
+---
+
+<section class="isc-section">
+	<div class="isc-head">
+		<span class="eyebrow">Tre passaggi</span>
+		<h2>Come ci si iscrive</h2>
+	</div>
+	<ol class="isc-steps">
+		{procedura.map((s, i) => (
+			<li class="isc-step">
+				<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+				<h3>{s.title}</h3>
+				<p>{s.desc}</p>
+			</li>
+		))}
+	</ol>
+	<p class="isc-note">
+		La lezione di prova è gratuita e si organizza dal
+		{" "}<button type="button" class="isc-link" data-open-contact data-interest="corsi-tennis">modulo di contatto</button>: ti risponde il settore tennis.
+	</p>
+</section>
+
+<section class="isc-section isc-section--alt">
+	<div class="isc-duo">
+		<div>
+			<div class="isc-head isc-head--left">
+				<span class="eyebrow">Documenti</span>
+				<h2>Cosa serve preparare</h2>
+			</div>
+			<dl class="isc-list">
+				{documenti.map((d) => (
+					<div class="isc-list__row">
+						<dt>{d.title}</dt>
+						<dd>{d.desc}</dd>
+					</div>
+				))}
+			</dl>
+			<p class="isc-note">Tesseramento e certificato vanno completati prima dell'inizio dei corsi.</p>
+		</div>
+		<div>
+			<div class="isc-head isc-head--left">
+				<span class="eyebrow">Calendario</span>
+				<h2>Quando si comincia</h2>
+			</div>
+			<dl class="isc-list">
+				{calendario.map((c) => (
+					<div class="isc-list__row">
+						<dt>{c.title}</dt>
+						<dd set:html={c.desc} />
+					</div>
+				))}
+			</dl>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Apre la stessa modale del resto del sito, ma dentro una frase: deve
+	   sembrare un link, non un pulsante. */
+	.isc-link {
+		padding: 0;
+		border: none;
+		background: none;
+		font: inherit;
+		font-weight: 600;
+		color: var(--text);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+		cursor: pointer;
+	}
+	.isc-link:hover {
+		color: var(--accent);
+	}
+</style>

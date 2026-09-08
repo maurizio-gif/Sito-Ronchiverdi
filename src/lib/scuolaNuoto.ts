@@ -10,6 +10,8 @@
 
 import { getEntry } from "astro:content";
 
+export { euro } from "./formato";
+
 // ── Il portale ────────────────────────────────────────────────────────────
 // Ogni prezzo porta alla sua riga di listino: /store/2/product/<id> apre la
 // scheda di quel prodotto in una finestra sopra il catalogo. Gli id stanno
@@ -76,9 +78,4 @@ export async function getListinoAggiornatoAl(): Promise<string> {
 /** Il prezzo più basso del corso: serve alle card, per dire "da € 365". */
 export function prezzoDa(corso: CorsoNuoto): number {
 	return Math.min(...corso.listino.map((r) => r.prezzoSoci));
-}
-
-/** "€ 415" — senza decimali, che nel listino sono sempre zero. */
-export function euro(n: number): string {
-	return `€ ${n.toLocaleString("it-IT")}`;
 }
