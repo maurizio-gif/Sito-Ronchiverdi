@@ -362,6 +362,21 @@ export default defineConfig({
                 },
                 fields: [
                   { type: "string", name: "voce", label: "Corso (es. RonchiRed)", required: true },
+                  {
+                    // Solo i livelli colore della scuola tennis lo usano: dove
+                    // resta vuoto la riga del listino non ha barra colorata.
+                    type: "string",
+                    name: "colore",
+                    label: "Colore del gruppo",
+                    description:
+                      "Colora la riga del listino, per riconoscere il livello a colpo d'occhio. Lasciare vuoto dove i corsi non hanno un colore.",
+                    options: [
+                      { value: "#b23a2e", label: "Rosso (Red)" },
+                      { value: "#c8791f", label: "Arancione (Orange)" },
+                      { value: "#4f7a4a", label: "Verde (Green)" },
+                      { value: "#c9a227", label: "Giallo (Yellow)" },
+                    ],
+                  },
                   { type: "string", name: "dettaglio", label: "Frequenza (es. 2 volte a settimana)", required: true },
                   {
                     type: "string",

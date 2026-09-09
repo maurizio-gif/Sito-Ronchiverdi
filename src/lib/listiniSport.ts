@@ -20,6 +20,8 @@ export const STORE_SOCI_TENNIS = linkCategoria(13);
 export interface RigaSport {
 	/** Il nome del livello o del percorso: RonchiRed, Competizione, ... */
 	voce: string;
+	/** Colore del gruppo, dove i corsi ne hanno uno (i livelli del tennis). */
+	colore?: string;
 	/** Quante volte a settimana. */
 	dettaglio: string;
 	/** Quello che distingue due righe altrimenti uguali (durata della lezione). */

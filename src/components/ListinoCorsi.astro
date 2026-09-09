@@ -11,6 +11,12 @@ import { linkProdotto } from "../lib/portale";
 export interface RigaListino {
 	/** Nome della voce: "RonchiRed", "Quadrimestrale", "Carnet 10 lezioni". */
 	voce: string;
+	/**
+	 * Colore del gruppo, dove i corsi ne hanno uno (i livelli della scuola
+	 * tennis): tinge la barra e il pallino della riga, così il livello si
+	 * riconosce a colpo d'occhio. Le altre righe restano senza.
+	 */
+	colore?: string;
 	/** Frequenza o periodo: la riga sotto il nome. */
 	dettaglio?: string;
 	/** Quello che distingue due righe altrimenti uguali. */
@@ -51,8 +57,14 @@ const etichetta = (r: RigaListino) =>
 		<tbody>
 			{righe.map((r) => (
 				<tr>
-					<td class="listino__formula">
-						<strong>{r.voce}</strong>
+					<td
+						class:list={["listino__formula", { "listino__formula--colore": r.colore }]}
+						style={r.colore ? `--riga-colore: ${r.colore}` : undefined}
+					>
+						<strong class:list={{ "listino__voce": r.colore }}>
+							{r.colore && <span class="listino__pallina" aria-hidden="true" />}
+							{r.voce}
+						</strong>
 						{r.dettaglio && <span class="listino__periodo">{r.dettaglio}</span>}
 						{r.nota && <span class="listino__dettaglio">{r.nota}</span>}
 					</td>

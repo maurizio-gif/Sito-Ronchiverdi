@@ -75,7 +75,8 @@ const faq = faqDiPagina("tennis-iscrizione");
 			<h2>Quanto costa</h2>
 			<p class="isc-head__lede">
 				La quota comprende il tesseramento FITP. Con un abbonamento Ronchiverdi
-				attivo vale il listino soci.
+				attivo vale il listino soci. L'iscrizione si completa solo dopo la
+				lezione di prova e il via libera dello staff tecnico.
 			</p>
 		</div>
 
@@ -98,7 +99,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 		</div>
 	</section>
 
-	<Faq items={faq} />
+	<Faq items={faq} misura="72rem" />
 
 	<section class="altri-percorsi">
 		<div class="isc-head">
@@ -135,7 +136,7 @@ const faq = faqDiPagina("tennis-iscrizione");
 		}
 
 		.tn-punti {
-			max-width: 46rem;
+			max-width: var(--isc-testo);
 			margin: 0 auto;
 			padding: 0;
 			list-style: none;
