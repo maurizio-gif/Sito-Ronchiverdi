@@ -143,8 +143,6 @@ const redirectSport = {
 	'/portfolio-collections/my-portfolio/group-class': '/attivita/corsi-fitness',
 	// Orari e prenotazioni: il planning è la pagina che risponde a entrambe.
 	'/orari': '/planning',
-	'/orari-club': '/planning',
-	'/reservations': '/planning',
 	'/book-online': '/planning',
 	// Indici e doppioni della home Wix, senza contenuto proprio.
 	'/sport': '/',
@@ -186,7 +184,6 @@ const redirectEventi = {
 	'/event-details/tennis-vibes-spritz-iscriviti-entro-giovedi-6-giugno': '/eventi',
 	// Oronero è un format di eventi del club, non un servizio: sta con gli
 	// eventi e non sul sito Business.
-	'/oronero': '/eventi',
 	// Bozza vuota, si chiamava "Ronchiverdi Summer".
 	'/copia-di-event': '/eventi',
 	// "Experiences" erano i servizi prenotabili di Wix, mai compilati.
@@ -194,7 +191,6 @@ const redirectEventi = {
 	'/experience-details': '/eventi',
 	// Landing di raccolta contatti legate a singoli eventi.
 	'/lead-eventi': '/eventi',
-	'/lead-eventi-elements': '/eventi',
 	'/copia-di-lead-eventi': '/eventi',
 };
 
@@ -209,18 +205,26 @@ const redirectContatti = {
 	'/privacy-lead-eventi': '/privacy',
 };
 
-// Business ed Elements: fuori dal perimetro di questo progetto, vivono sul
-// sito Business. Gli unici indirizzi di destinazione usati sono quelli che il
-// sito già conosce (vedi Nav, Footer e src/content/services/): le pagine più
-// profonde del vecchio sito — carta dei vini, martini lounge, i vari menu —
-// vengono raccolte sulla pagina del ristorante invece di indovinare un
-// percorso che su quel sito potrebbe non esistere.
+// Business ed Elements: fuori dal perimetro di questo progetto. La metà
+// business del vecchio sito resta su Wix e si sposta su un sottodominio suo,
+// quindi questi indirizzi non hanno un corrispondente qui: se ne vanno.
+//
+// Le pagine più profonde del vecchio sito — carta dei vini, martini lounge, i
+// vari menu — vengono raccolte sulla pagina del ristorante invece di
+// indovinare un percorso che su quel sito potrebbe non esistere. Gli unici
+// percorsi presupposti esistenti sono quelli che il sito già linka (vedi Nav,
+// Footer e src/content/services/), e vanno verificati sul sottodominio prima
+// del cambio DNS.
+//
+// Senza `www`: è la forma standard per un sottodominio ed è quella che si
+// collega su Wix. Chi digita www.business.ronchiverdi.it va coperto con un
+// redirect lato DNS/Wix, non da qui.
 //
 // ATTENZIONE: business.ronchiverdi.it oggi non risolve. Questi redirect
 // funzionano solo dal momento in cui il sottodominio esiste, che è comunque
 // un prerequisito del cambio DNS — finché il dominio del club sta su Wix
 // nessuno arriva a questi indirizzi passando da qui.
-const BUSINESS = 'https://www.business.ronchiverdi.it';
+const BUSINESS = 'https://business.ronchiverdi.it';
 
 const redirectBusiness = {
 	'/business': BUSINESS,
@@ -238,13 +242,26 @@ const redirectBusiness = {
 	'/menu-provvisorio': `${BUSINESS}/elements`,
 	'/martini-lounge': `${BUSINESS}/elements`,
 	'/martini-lounge-pool': `${BUSINESS}/elements`,
+
+	// Erano classificate col club, ma guardando il contenuto appartengono al
+	// business: la prenotazione è quella dei tavoli del ristorante, gli
+	// "orari club" sono gli orari del ristorante, e il modulo lead è quello
+	// di Elements. Oronero e Ronchi Viaggi stavano nella colonna business
+	// della home di Wix, e il club ha confermato che è lì che vanno.
+	'/reservations': `${BUSINESS}/elements`,
+	'/orari-club': `${BUSINESS}/elements`,
+	'/lead-eventi-elements': `${BUSINESS}/elements`,
+	'/oronero': BUSINESS,
+	'/ronchi-viaggi': BUSINESS,
 };
 
-// Servizi chiusi o mai partiti, senza un corrispondente nel club di oggi:
-// l'agenzia viaggi e il campus riservato agli studenti SAA. Chi li cerca
-// merita almeno la pagina che dice cos'è il club adesso.
+// Servizi chiusi o mai partiti, senza un corrispondente nel club di oggi: il
+// campus riservato agli studenti SAA. Chi li cerca merita almeno la pagina che
+// dice cos'è il club adesso.
+//
+// L'agenzia viaggi stava qui: è passata fra i redirect business, perché nella
+// home del vecchio sito era nella colonna business e il servizio ci vive.
 const redirectDismessi = {
-	'/ronchi-viaggi': '/',
 	'/saa-flex': '/abbonamenti',
 	'/saauniversitywellness': '/abbonamenti',
 };
