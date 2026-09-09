@@ -19,6 +19,12 @@ function testo(v: unknown): string | null {
 /** Cosa ha chiesto la persona, in una riga da mettere nell'oggetto. */
 function tipoRichiesta(body: CampiLead): string {
 	const azione = testo(body.azione);
+	// Chi arriva dal banco (guest register) va distinto in oggetto: la
+	// segreteria deve vedere subito che quella persona era in sede, non che
+	// ha scritto dal sito.
+	if (testo(body.origine) === "walk-in") {
+		return azione === "appuntamento" ? "Walk-in · tour prenotato" : "Walk-in · registrazione";
+	}
 	if (azione === "appuntamento") return "Appuntamento in sede";
 	if (azione === "telefonata") return "Richiesta di telefonata";
 	if (azione === "messaggio") return "Messaggio";
@@ -38,6 +44,7 @@ function righe(body: CampiLead): string[] {
 
 	const voci: [string, string | null][] = [
 		["Attività", testo(body.attivitaLabel)],
+		["Operatore al banco", testo(body.operatore)],
 		["Settore", testo(body.settore)],
 		["Nome", nome || null],
 		["Email", testo(body.email)],

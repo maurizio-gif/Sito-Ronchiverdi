@@ -5,6 +5,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { notificaLead } from "../../lib/notificaLead";
 import { confermaAlCliente } from "../../lib/emailCliente";
+import { risolviOperatore } from "../../lib/operatori";
 
 export const prerender = false;
 
@@ -50,6 +51,14 @@ export async function POST({ request }: { request: Request }) {
 
 	const supabase = createClient(supabaseUrl, serviceRoleKey);
 	const dettagli = Array.isArray(body.dettagli) ? body.dettagli.filter((d) => typeof d === "string") : null;
+
+	// Operatore di segreteria che ha raccolto un walk-in al banco. La pagina
+	// guest register manda uno slug, non l'email: le email dello staff non
+	// stanno nel sorgente di una pagina pubblica. Qui lo slug torna a essere
+	// l'email, che è il modo in cui il CRM identifica le persone dello staff
+	// (vedi opportunita.assegnato_a). Uno slug che non corrisponde a nessun
+	// operatore abilitato viene ignorato: la richiesta resta valida, senza firma.
+	const operatore = await risolviOperatore(str(body.operatore));
 
 	// Provenienza: campi calcolati dal client (src/lib/tracking.client.js) e
 	// spediti insieme al form. Tutti opzionali — un lead resta valido anche se
@@ -106,6 +115,7 @@ export async function POST({ request }: { request: Request }) {
 		cellulare,
 		privacy: body.privacy === true,
 		marketing: body.marketing === true,
+		operatore,
 		settore: str(body.settore),
 		// Data di nascita di chi compila: la chiede il form della consulenza
 		// col Fitness Manager. Resta nulla per tutti gli altri percorsi.
