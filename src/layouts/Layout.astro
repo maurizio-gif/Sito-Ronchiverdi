@@ -15,6 +15,7 @@ import "@fontsource/cormorant-garamond/700.css";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import LeadModal from "../components/LeadModal.astro";
+import AccountModal from "../components/AccountModal.astro";
 import { url } from "../lib/paths";
 
 interface Props {
@@ -109,6 +110,7 @@ const structuredData = {
 		<slot />
 		<Footer />
 		<LeadModal />
+		<AccountModal />
 		<script>
 			// Apre la sessione e fissa le UTM di ingresso su ogni pagina, prima
 			// che l'utente navighi via e l'URL con i parametri sia perso.

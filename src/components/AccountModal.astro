@@ -1,0 +1,352 @@
+---
+// Il pannello dell'area riservata — quello dietro l'omino nella barra.
+//
+// Si aggancia a qualunque comando con [data-open-account] presente in pagina:
+// l'omino della barra desktop, quello della barra mobile, la voce in fondo al
+// menu del telefono. La delega è sul documento e non sui singoli pulsanti,
+// così vale anche per i comandi che un domani compariranno in altre pagine.
+//
+// Le voci non stanno qui: stanno in `data/areaRiservata.ts`, che le legge da
+// dove il sito tiene già quegli indirizzi. Il perché è scritto là.
+//
+// Il guscio è quello di `LeadModal`: un <dialog> nativo aperto con
+// showModal(), la X in una testa appiccicosa, la chiusura dal backdrop e da
+// Esc. Due pannelli con due meccaniche diverse sarebbero due cose da
+// sistemare ogni volta, e chiuso un <dialog> esce da sé dall'ordine di
+// tabulazione — il modo giusto di nascondere un pannello anche alla tastiera.
+import { BLOCCHI } from "../data/areaRiservata";
+---
+
+<dialog id="account-modal" class="ar" aria-labelledby="ar-title">
+	<div class="ar__panel">
+		<div class="ar__head">
+			<div>
+				<p class="eyebrow ar__eyebrow">Area riservata</p>
+				<h2 class="ar__title" id="ar-title" tabindex="-1">Sei già <em class="accent">dei nostri</em></h2>
+			</div>
+			<button class="ar__close" type="button" aria-label="Chiudi" data-ar-close>
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+					<path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+				</svg>
+			</button>
+		</div>
+
+		{/* Nessun paragrafo di apertura: quello che direbbe — le app, il
+		    portale, le iscrizioni — sono i nomi dei tre blocchi qui sotto, e
+		    ripeterli sopra costava due righe e cinquanta pixel, cioè
+		    l'ultimo blocco che finiva sotto il bordo su una scrivania da
+		    900px. Un pannello che si scorre è un pannello in cui una delle
+		    tre cose non si vede. */}
+		<div class="ar__body">
+			{
+				BLOCCHI.map((blocco) => (
+					<section class="ar__blocco">
+						<p class="ar__blocco-label">{blocco.eyebrow}</p>
+						<div class:list={["ar__voci", { "ar__voci--compatto": blocco.compatto }]}>
+							{blocco.voci.map((v) => (
+								<a
+									class:list={["ar__voce", { "ar__voce--pieno": v.pieno }]}
+									href={v.href}
+									target={v.esterno ? "_blank" : undefined}
+									rel={v.esterno ? "noopener" : undefined}
+								>
+									<span class="ar__voce-testo">
+										<span class="ar__voce-label">{v.label}</span>
+										{v.nota && <span class="ar__voce-nota">{v.nota}</span>}
+									</span>
+									<span class="ar__voce-freccia" aria-hidden="true">→</span>
+								</a>
+							))}
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</div>
+</dialog>
+
+<script>
+	// @ts-nocheck — script vanilla per il browser (accesso al DOM, niente tipi)
+	const modal = document.getElementById("account-modal");
+	let ultimoComando = null;
+
+	function chiudi() {
+		modal.close();
+		document.body.classList.remove("ar-locked");
+		ultimoComando?.setAttribute("aria-expanded", "false");
+		// Il focus torna da dove era partito: chi naviga da tastiera si
+		// ritrova sull'omino e non in cima al documento.
+		ultimoComando?.focus();
+		ultimoComando = null;
+	}
+
+	document.addEventListener("click", function (e) {
+		const comando = e.target.closest("[data-open-account]");
+		if (!comando) return;
+		ultimoComando = comando;
+		modal.showModal();
+		document.body.classList.add("ar-locked");
+		comando.setAttribute("aria-expanded", "true");
+	});
+
+	// Esc chiude il <dialog> per conto suo: il lucchetto sul body e
+	// l'aria-expanded del comando vanno rimessi comunque.
+	modal.addEventListener("close", function () {
+		document.body.classList.remove("ar-locked");
+		ultimoComando?.setAttribute("aria-expanded", "false");
+		ultimoComando = null;
+	});
+
+	modal.querySelectorAll("[data-ar-close]").forEach(function (el) {
+		el.addEventListener("click", chiudi);
+	});
+
+	// Chiusura dal backdrop: il click cade sul <dialog> stesso, non sul pannello.
+	modal.addEventListener("click", function (e) {
+		if (e.target === modal) chiudi();
+	});
+</script>
+
+<style is:global>
+	/* ── Dialog ──────────────────────────────────────────────────────── */
+	.ar {
+		border: none;
+		padding: 0;
+		background: transparent;
+		max-width: min(96vw, 30rem);
+		width: 100%;
+		margin: auto;
+	}
+	.ar::backdrop {
+		background: rgba(28, 28, 24, 0.6);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+	}
+
+	.ar__panel {
+		background: var(--bg);
+		color: var(--text);
+		border-radius: var(--radius);
+		display: flex;
+		flex-direction: column;
+		max-height: 92vh;
+		/* dvh misura l'altezza davvero visibile: su mobile la barra del
+		   browser entra e esce, e con 92vh il fondo del pannello finisce
+		   sotto di lei. La riga sopra serve a chi non conosce dvh. */
+		max-height: 92dvh;
+		overflow-y: auto;
+		box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.4);
+	}
+
+	/* ── Testa ───────────────────────────────────────────────────────── */
+	.ar__head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding: 2rem 2rem 1.5rem;
+		border-bottom: 1px solid var(--border-strong);
+		background: var(--bg-alt);
+		position: sticky;
+		top: 0;
+		z-index: 2;
+	}
+	.ar__eyebrow {
+		margin: 0;
+	}
+	.ar__title {
+		font-size: var(--text-xl);
+		line-height: var(--leading-lg);
+		letter-spacing: var(--tracking-lg);
+		margin: 0.4rem 0 0;
+	}
+	.ar__title em {
+		font-family: var(--font-serif);
+		font-size: 1.15em;
+	}
+	.ar__title:focus {
+		outline: none;
+	}
+	.ar__close {
+		flex-shrink: 0;
+		position: relative;
+		width: 2rem;
+		height: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		background: none;
+		border: 1px solid var(--border-strong);
+		border-radius: 50%;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: border-color 0.18s ease, color 0.18s ease, transform 0.1s ease-out;
+	}
+	/* Il cerchio resta piccolo, ma l'area che risponde al dito arriva a 44px. */
+	.ar__close::after {
+		content: "";
+		position: absolute;
+		inset: -6px;
+	}
+	.ar__close:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.ar__close:active {
+		transform: scale(0.9);
+		transition-duration: 0.05s;
+	}
+
+	/* ── Corpo ───────────────────────────────────────────────────────── */
+	.ar__body {
+		padding: 1.5rem 2rem 2rem;
+	}
+	.ar__blocco + .ar__blocco {
+		margin-top: 1.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--border-strong);
+	}
+	.ar__blocco-label {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		margin: 0 0 0.75rem;
+	}
+
+	.ar__voci {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	/* Una riga e non un pulsante: le voci sono otto, e otto pulsanti pieni
+	   uno sopra l'altro sono un muro in cui non si distingue quello che si
+	   sta cercando. La riga porta l'etichetta e, sotto, a cosa serve. */
+	.ar__voce {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		/* 44px di bersaglio anche per la voce senza nota, che è una riga sola. */
+		min-height: 44px;
+		padding: 0.8rem 1rem;
+		background: var(--bg-alt);
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius);
+		color: var(--text);
+		text-decoration: none;
+		transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+			transform 0.1s ease-out;
+	}
+	.ar__voce:hover {
+		background: var(--accent-tint);
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.ar__voce:active {
+		transform: scale(0.99);
+		transition-duration: 0.05s;
+	}
+	.ar__voce-testo {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		min-width: 0;
+	}
+	.ar__voce-label {
+		font-family: var(--font-sans);
+		font-size: var(--text-base);
+		font-weight: 600;
+		line-height: 1.25;
+	}
+	.ar__voce-nota {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		line-height: 1.3;
+		color: var(--text-muted);
+	}
+	.ar__voce-freccia {
+		flex-shrink: 0;
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		transition: transform 0.15s ease, color 0.15s ease;
+	}
+	.ar__voce:hover .ar__voce-freccia {
+		color: var(--accent);
+		transform: translateX(3px);
+	}
+
+	/* Due colonne per le voci di una parola: la freccia esce, che su una
+	   colonna da 130px si mangerebbe lo spazio dell'etichetta, e la riga si
+	   centra — senza nota sotto non c'è niente da allineare a sinistra. */
+	.ar__voci--compatto {
+		grid-template-columns: 1fr 1fr;
+	}
+	.ar__voci--compatto .ar__voce {
+		justify-content: center;
+		padding-inline: 0.75rem;
+	}
+	.ar__voci--compatto .ar__voce-testo {
+		align-items: center;
+	}
+	.ar__voci--compatto .ar__voce-freccia {
+		display: none;
+	}
+
+	/* Il comando pieno è uno solo, ed è quello che cerca la maggioranza.
+	   Le note dentro un pulsante pieno vanno sul crema, non sul grigio. */
+	.ar__voce--pieno {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--text-on-dark);
+	}
+	.ar__voce--pieno:hover {
+		background: var(--accent-hover);
+		border-color: var(--accent-hover);
+		color: var(--text-on-dark);
+	}
+	.ar__voce--pieno .ar__voce-nota,
+	.ar__voce--pieno .ar__voce-freccia,
+	.ar__voce--pieno:hover .ar__voce-nota,
+	.ar__voce--pieno:hover .ar__voce-freccia {
+		color: var(--text-on-dark);
+		opacity: 0.85;
+	}
+
+	body.ar-locked {
+		overflow: hidden;
+	}
+
+	/* ── Totem verticale ─────────────────────────────────────────────── */
+	/* La terna di condizioni è quella di `styles/totem.css`: se cambia là va
+	   cambiata anche qui. Alzare la radice porta con sé tutta la scala, ma il
+	   fondo della scala parte troppo in basso perché la nota lo segua: 0,72rem
+	   su radice 20px fanno 14,4px, cioè meno dei 19 che si leggono in piedi da
+	   un metro. Le tre misure salgono insieme così la gerarchia resta —
+	   etichetta 22px, nota e nome del blocco 19. */
+	@media (orientation: portrait) and (min-width: 900px) and (min-height: 1400px) {
+		.ar__voce-label {
+			font-size: var(--text-md);
+		}
+		.ar__voce-nota,
+		.ar__blocco-label {
+			font-size: var(--text-base);
+		}
+	}
+
+	/* ── Telefono ────────────────────────────────────────────────────── */
+	@media (max-width: 560px) {
+		.ar__head {
+			padding: 1.4rem 1.2rem 1.2rem;
+		}
+		.ar__body {
+			/* Due pixel sopra il tetto del 92dvh, su un telefono da 844px di
+			   altezza, sono un pannello che si scorre per niente: qui il
+			   fondo cede quei tre pixel e le nove voci entrano intere. */
+			padding: 1.3rem 1.2rem 1.35rem;
+		}
+	}
+</style>
