@@ -407,13 +407,13 @@ export const faq: FaqItem[] = [
 		id: "piscina-esterna-chi-puo-accedere-alla-piscina-esterna",
 		pagina: "piscina-esterna",
 		q: "Chi può accedere alla piscina esterna?",
-		a: "L'accesso è riservato agli abbonati Gold e Silver (non incluso nell'abbonamento Swim)."
+		a: "L'accesso è riservato agli abbonati Gold e Silver (non incluso nell'abbonamento Swim), e si entra passando il badge personale ai tornelli d'ingresso: senza badge non è possibile accedere all'area piscina."
 	},
 	{
 		id: "piscina-esterna-in-che-periodo-dell-anno-e-aperta",
 		pagina: "piscina-esterna",
 		q: "In che periodo dell'anno è aperta?",
-		a: "La piscina esterna è aperta nella stagione estiva, da giugno ad agosto."
+		a: "La piscina esterna è aperta indicativamente dai primi giorni di giugno al 15 settembre, compatibilmente con le condizioni meteorologiche."
 	},
 	{
 		id: "piscina-esterna-cosa-posso-fare-oltre-a-nuotare",
