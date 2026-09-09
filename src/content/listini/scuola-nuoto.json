@@ -10,9 +10,11 @@
       "obiettivi": [
         "Sviluppo psicomotorio precoce",
         "Ambientamento acquatico",
-        "Gestione della respirazione e del galleggiamento"
+        "Sviluppo sicurezza acquatica"
       ],
       "durata": "40 minuti",
+      "frequenza": "1 volta a settimana",
+      "giorni": "mercoledì pomeriggio, giovedì pomeriggio e sabato mattina",
       "vasca": "Vasca di ambientamento · 32°C",
       "image": "images/activities/acquaticita-baby.jpg",
       "imageAlt": "Bambino in vasca con un genitore durante il corso di acquaticità a Ronchiverdi",
@@ -68,14 +70,16 @@
       "title": "Baby",
       "titleLungo": "",
       "ageLabel": "3–5 anni",
-      "percorso": "Corsi mirati all'autonomia acquatica e alla scoperta ludica dei movimenti base, per introdurre in forma ludica i primi elementi dei quattro stili.",
+      "percorso": "Primo approccio alla scuola nuoto con attività di ambientamento acquatico. I corsi sono strutturati in due livelli (1 e 2) e l'obiettivo è l'autonomia acquatica.",
       "obiettivi": [
         "Autonomia acquatica",
         "Scoperta ludica dei movimenti base",
-        "Primi elementi dei quattro stili"
+        "Gestione della respirazione e del galleggiamento"
       ],
       "durata": "40 minuti",
-      "vasca": "Vasca di ambientamento · 32°C",
+      "frequenza": "1 o 2 volte a settimana (monosettimanale o bisettimanale)",
+      "giorni": "dal lunedì al venerdì pomeriggio",
+      "vasca": "Vasca di ambientamento e vasca grande",
       "image": "images/activities/scuola-nuoto-young.jpg",
       "imageAlt": "Bambini del corso Baby in vasca con l'istruttrice a Ronchiverdi",
       "listino": [
@@ -109,11 +113,11 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1 volta a settimana"
+          "valore": "1 o 2 volte a settimana"
         },
         {
           "label": "Vasca",
-          "valore": "Vasca di ambientamento · 32°C"
+          "valore": "Vasca di ambientamento e vasca grande"
         },
         {
           "label": "Certificato medico",
@@ -137,6 +141,8 @@
         "Apprendimento tecnico dei quattro stili"
       ],
       "durata": "40 minuti",
+      "frequenza": "1 o 2 volte a settimana (monosettimanale o bisettimanale)",
+      "giorni": "dal lunedì al venerdì pomeriggio",
       "vasca": "Vasca grande 25 m · 28°C",
       "image": "images/activities/nuoto-open.jpg",
       "imageAlt": "Bambini del corso Open con la tavoletta nella vasca grande di Ronchiverdi",
@@ -171,7 +177,7 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1 volta a settimana"
+          "valore": "1 o 2 volte a settimana"
         },
         {
           "label": "Vasca",
@@ -199,6 +205,8 @@
         "Introduzione alla preparazione pre-agonistica"
       ],
       "durata": "60 minuti",
+      "frequenza": "1, 2 o 3 volte a settimana (monosettimanale, bisettimanale o trisettimanale)",
+      "giorni": "dal lunedì al venerdì pomeriggio",
       "vasca": "Vasca grande 25 m · 28°C",
       "image": "images/activities/nuoto-propaganda.jpg",
       "imageAlt": "Ragazzi del corso Propaganda in allenamento nella vasca grande di Ronchiverdi",
@@ -251,7 +259,7 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1 o 2 volte a settimana"
+          "valore": "1, 2 o 3 volte a settimana"
         },
         {
           "label": "Vasca",

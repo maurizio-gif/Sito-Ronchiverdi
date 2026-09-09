@@ -235,6 +235,20 @@ export default defineConfig({
               },
               { type: "string", name: "obiettivi", label: "Obiettivi", list: true },
               { type: "string", name: "durata", label: "Durata della lezione", required: true },
+              {
+                type: "string",
+                name: "frequenza",
+                label: "Frequenza",
+                description:
+                  "Quante volte a settimana, es. \"1 volta a settimana\". Lasciandolo vuoto la riga non compare.",
+              },
+              {
+                type: "string",
+                name: "giorni",
+                label: "Giorni del corso",
+                description:
+                  "In quali giorni si tiene, es. \"mercoledì pomeriggio, giovedì pomeriggio e sabato mattina\". Compare nella card del corso e nella sua pagina di iscrizione.",
+              },
               { type: "string", name: "vasca", label: "Vasca", required: true },
               { type: "image", name: "image", label: "Foto", required: true },
               { type: "string", name: "imageAlt", label: "Descrizione della foto", required: true },

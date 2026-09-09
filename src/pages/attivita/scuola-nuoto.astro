@@ -122,6 +122,15 @@ const faq = faqDiPagina("scuola-nuoto");
 								{p.vasca}
 							</span>
 						</div>
+						{(p.frequenza || p.giorni) && (
+							<p class="program-card__giorni">
+								<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3.2" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" /><path d="M2 6.6h12M5.5 1.8v2.4M10.5 1.8v2.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg>
+								<span>
+									{p.frequenza && <Fragment>Il corso prevede una frequenza di <strong>{p.frequenza}</strong>. </Fragment>}
+									{p.giorni && <Fragment>I giorni sono: <strong>{p.giorni}</strong>.</Fragment>}
+								</span>
+							</p>
+						)}
 						<div class="program-card__cta">
 							<a class="btn" href={url(`/attivita/scuola-nuoto/iscrizione/${p.slug}`)}>Quote e iscrizione</a>
 							<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
@@ -343,6 +352,31 @@ const faq = faqDiPagina("scuola-nuoto");
 			flex-shrink: 0;
 			color: var(--accent);
 		}
+		/* Frequenza e giorni: sono l'informazione che ferma di piu' chi
+		   sceglie, quindi stanno in evidenza sopra i pulsanti e non fra i
+		   tag, dove la frase non ci starebbe. */
+		.program-card__giorni {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.55rem;
+			margin: 0 0 1.25rem;
+			padding: 0.7rem 0.9rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			line-height: 1.5;
+			color: var(--text);
+			background: var(--accent-tint);
+			border-radius: 10px;
+		}
+		.program-card__giorni svg {
+			flex-shrink: 0;
+			margin-top: 0.15rem;
+			color: var(--accent);
+		}
+		.program-card__giorni strong {
+			font-weight: 600;
+		}
+
 		.program-card__cta {
 			display: flex;
 			gap: 0.6rem;
