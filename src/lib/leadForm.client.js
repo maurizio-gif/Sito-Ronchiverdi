@@ -114,13 +114,15 @@ export function initLeadForm(root, options) {
 	// stesso pannello finale (chiamata, WhatsApp, email, salva contatto), con
 	// gli orari della segreteria mostrati solo dove sono stati comunicati.
 	var REFERENTI_YOUNG_DIRETTO = {
+		// Il nuoto risponde come servizio e non come persona: `etichetta`
+		// invece di titolo e nome, così il pannello non espone un nominativo
+		// che cambia con i turni della segreteria.
 		"scuola-nuoto": {
-			titolo: "Responsabile Young School Nuoto",
-			nome: "Sara Tugnolo",
+			etichetta: "Young School Nuoto",
 			telefonoDisplay: "+39 380 7522285",
 			telefonoHref: "+393807522285",
 			email: "youngschoolnuoto@ronchiverdi.it",
-			orari: "Segreteria telefonica dedicata: dal lunedì al venerdì, 10:00–13:00 e 16:00–18:00.",
+			orari: "Puoi contattarci nei seguenti giorni e orari: dal lunedì al venerdì, 10:00–13:00 e 16:00–18:00.",
 		},
 		"triathlon-young": {
 			titolo: "Responsabile Young School Triathlon",
@@ -151,20 +153,30 @@ export function initLeadForm(root, options) {
 			.replace(/\n/g, "\\n");
 	}
 
-	function buildVCardUrl(ref) {
-		var spazio = ref.nome.indexOf(" ");
-		var datoNome = spazio === -1 ? ref.nome : ref.nome.slice(0, spazio);
-		var datoCognome = spazio === -1 ? "" : ref.nome.slice(spazio + 1);
+	/** Il nome da mostrare: la persona dove c'è, altrimenti il servizio. */
+	function nomeReferente(ref) {
+		return ref.nome || ref.etichetta;
+	}
 
-		var righe = [
-			"BEGIN:VCARD",
-			"VERSION:3.0",
-			"N:" + vcardEscape(datoCognome) + ";" + vcardEscape(datoNome) + ";;;",
-			"FN:" + vcardEscape(ref.nome),
-			"ORG:Ronchiverdi Sport Club",
-			"TITLE:" + vcardEscape(ref.titolo),
-			"TEL;TYPE=CELL,VOICE:" + ref.telefonoHref,
-		];
+	function buildVCardUrl(ref) {
+		var righe = ["BEGIN:VCARD", "VERSION:3.0"];
+
+		if (ref.nome) {
+			var spazio = ref.nome.indexOf(" ");
+			var datoNome = spazio === -1 ? ref.nome : ref.nome.slice(0, spazio);
+			var datoCognome = spazio === -1 ? "" : ref.nome.slice(spazio + 1);
+			righe.push("N:" + vcardEscape(datoCognome) + ";" + vcardEscape(datoNome) + ";;;");
+			righe.push("FN:" + vcardEscape(ref.nome));
+		} else {
+			// Contatto di servizio: in rubrica ci va il nome del servizio, senza
+			// campi nome e cognome da riempire con qualcosa che non esiste.
+			righe.push("N:" + vcardEscape(ref.etichetta) + ";;;;");
+			righe.push("FN:" + vcardEscape(ref.etichetta));
+		}
+
+		righe.push("ORG:Ronchiverdi Sport Club");
+		if (ref.titolo) righe.push("TITLE:" + vcardEscape(ref.titolo));
+		righe.push("TEL;TYPE=CELL,VOICE:" + ref.telefonoHref);
 		if (ref.email) righe.push("EMAIL;TYPE=INTERNET:" + ref.email);
 		righe.push("END:VCARD");
 
@@ -722,11 +734,11 @@ export function initLeadForm(root, options) {
 		var intro = root.querySelector("#" + P + "-young-intro");
 		if (intro) {
 			intro.innerHTML =
-				"Il tuo riferimento è <strong>" +
-				esc(ref.titolo) +
-				" " +
-				esc(ref.nome) +
-				"</strong>: " +
+				"Il tuo riferimento è " +
+				(ref.nome
+					? "<strong>" + esc(ref.titolo) + " " + esc(ref.nome) + "</strong>"
+					: "la <strong>" + esc(ref.etichetta) + "</strong>") +
+				": " +
 				(ref.senzaChiamata
 					? "puoi scrivere su WhatsApp o mandare una email."
 					: "puoi chiamare, scrivere su WhatsApp o mandare una email.");
@@ -763,7 +775,7 @@ export function initLeadForm(root, options) {
 		var salvaBtn = root.querySelector("#" + P + "-young-salva");
 		if (salvaBtn) {
 			salvaBtn.href = buildVCardUrl(ref);
-			salvaBtn.download = ref.nome + ".vcf";
+			salvaBtn.download = nomeReferente(ref) + ".vcf";
 		}
 	}
 

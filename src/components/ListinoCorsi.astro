@@ -35,9 +35,15 @@ interface Props {
 	aggiornatoAl: string;
 	/** Intestazione della prima colonna. */
 	colonna?: string;
+	/**
+	 * La nota di chiusura ("tocca il prezzo…", listino aggiornato a). Va
+	 * spenta dove la stessa pagina mostra più listini di seguito: la frase
+	 * vale per tutti e la pagina la scrive una volta sola.
+	 */
+	mostraNota?: boolean;
 }
 
-const { righe, dettagli, aggiornatoAl, colonna = "Corso" } = Astro.props;
+const { righe, dettagli, aggiornatoAl, colonna = "Corso", mostraNota = true } = Astro.props;
 
 const scheda = linkProdotto;
 
@@ -114,8 +120,10 @@ const etichetta = (r: RigaListino) =>
 	</ul>
 )}
 
-<p class="isc-note isc-note--center">
-	Tocca il prezzo per aprire la scheda di quella formula sul portale InforYou,
-	dove si completa l'iscrizione. Listino aggiornato a {aggiornatoAl}: i prezzi
-	ufficiali sono quelli del portale.
-</p>
+{mostraNota && (
+	<p class="isc-note isc-note--center">
+		Tocca il prezzo per aprire la scheda di quella formula sul portale InforYou,
+		dove si completa l'iscrizione. Listino aggiornato a {aggiornatoAl}: i prezzi
+		ufficiali sono quelli del portale.
+	</p>
+)}

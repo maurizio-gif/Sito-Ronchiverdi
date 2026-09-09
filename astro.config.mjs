@@ -92,8 +92,17 @@ if (!sitoProduzione) {
 // una pagina: le regole del club stanno nel documento unico dei termini e
 // condizioni. Il redirect serve a chi ha salvato o citato il vecchio
 // indirizzo, e a non lasciare un 404 in giro per i motori di ricerca.
+//
+// I quattro corsi della scuola nuoto avevano una pagina di iscrizione per
+// ciascuno; ora sono sezioni della stessa pagina. Gli indirizzi vecchi sono
+// stati in giro — nei link mandati alle famiglie e in sitemap — quindi
+// portano all'ancora del loro corso invece di finire in 404.
 const redirectInterni = {
 	'/regolamento': '/termini-e-condizioni',
+	'/attivita/scuola-nuoto/iscrizione/acquaticita': '/attivita/scuola-nuoto/iscrizione#acquaticita',
+	'/attivita/scuola-nuoto/iscrizione/baby': '/attivita/scuola-nuoto/iscrizione#baby',
+	'/attivita/scuola-nuoto/iscrizione/open': '/attivita/scuola-nuoto/iscrizione#open',
+	'/attivita/scuola-nuoto/iscrizione/propaganda': '/attivita/scuola-nuoto/iscrizione#propaganda',
 };
 
 // Le verticali sportive del vecchio sito. Sono gli indirizzi più visitati del
