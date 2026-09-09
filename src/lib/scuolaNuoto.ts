@@ -9,6 +9,7 @@
 // delle modalità di iscrizione e le quattro pagine di iscrizione.
 
 import { getEntry } from "astro:content";
+import { linkCategoria } from "./portale";
 
 export { euro } from "./formato";
 
@@ -16,16 +17,13 @@ export { euro } from "./formato";
 // Ogni prezzo porta alla sua riga di listino: /store/2/product/<id> apre la
 // scheda di quel prodotto in una finestra sopra il catalogo. Gli id stanno
 // nel JSON accanto al prezzo, perché sono la stessa informazione: se cambia
-// il listino si aggiornano insieme.
-const STORE_BASE = "https://inforyou.teamsystem.com/ronchiverdi/store/2";
-
-export const STORE_NON_SOCI = `${STORE_BASE}/category/2`;
-export const STORE_SOCI = `${STORE_BASE}/category/10`;
+// il listino si aggiornano insieme. L'indirizzo base sta in `lib/portale.ts`.
 
 /** La scheda di un singolo prodotto sul portale. */
-export function linkProdotto(id: number): string {
-	return `${STORE_BASE}/product/${id}`;
-}
+export { linkProdotto } from "./portale";
+
+export const STORE_NON_SOCI = linkCategoria(2);
+export const STORE_SOCI = linkCategoria(10);
 
 /** Il numero della segreteria, usato nelle informative dell'iscrizione. */
 export const TELEFONO_CLUB = "011 6612146";

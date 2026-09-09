@@ -71,6 +71,26 @@ const links = [
 		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
 		<a class="btn btn-outline nav-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
 	</div>
+	<!-- L'area riservata: apre `AccountModal`, che sta nel Layout.
+	     È un pulsante e non un link perché non porta a una pagina — apre un
+	     pannello — e su una barra dove tutto il resto naviga la differenza si
+	     sente col lettore di schermo. Sta prima di "Contattaci" perché quello
+	     è il comando per chi non è ancora socio: l'ordine dice a chi parla
+	     ciascuno dei due. -->
+	<button
+		type="button"
+		class="nav-account"
+		data-open-account
+		aria-label="Area riservata"
+		aria-haspopup="dialog"
+		aria-expanded="false"
+	>
+		<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6" />
+			<path d="M4.5 21c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+		</svg>
+	</button>
+
 	<button type="button" class="btn nav-cta" data-open-contact>Contattaci</button>
 
 	<!-- Solo mobile: al centro della barra, perché lì la CTA desktop è nascosta
@@ -124,6 +144,16 @@ const links = [
 		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
 		<a class="btn btn-outline nav-mobile-business-btn" href="https://www.business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
 	</div>
+	<!-- Nel drawer l'area riservata è una voce scritta e non l'omino: qui non
+	     c'è una barra su cui un'icona si riconosce per posizione, e un'icona
+	     muta la trova solo chi la sta cercando. L'omino resta nella barra. -->
+	<button type="button" class="btn btn-outline nav-mobile-account" data-open-account aria-haspopup="dialog" aria-expanded="false">
+		<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8" />
+			<path d="M4.5 21c0-3.6 3.4-6.5 7.5-6.5s7.5 2.9 7.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+		</svg>
+		Area riservata
+	</button>
 	<button type="button" class="btn nav-mobile-cta" data-open-contact>Prenota un tour</button>
 </div>
 
@@ -148,11 +178,12 @@ const links = [
 	// Anche il pulsante "Prenota un tour" deve chiudere il menu mobile: non è
 	// un link che porta via dalla pagina come gli altri, apre il modal sopra
 	// lo stesso overlay, quindi va incluso esplicitamente insieme alle <a>.
-	mobileMenu?.querySelectorAll("a, .nav-mobile-cta").forEach((el) => el.addEventListener("click", closeMenu));
+	mobileMenu?.querySelectorAll("a, .nav-mobile-cta, .nav-mobile-account").forEach((el) => el.addEventListener("click", closeMenu));
 
-	// "Contattaci" sta nella barra, che resta sopra all'overlay: se il menu è
-	// aperto va chiuso, altrimenti il modal si aprirebbe dietro al drawer.
-	document.querySelector(".nav-contatta")?.addEventListener("click", closeMenu);
+	// "Contattaci" e l'omino stanno nella barra, che resta sopra all'overlay:
+	// se il menu è aperto va chiuso, altrimenti il modal si aprirebbe dietro
+	// al drawer.
+	document.querySelectorAll(".nav-contatta, .nav-account").forEach((el) => el.addEventListener("click", closeMenu));
 
 	function closeOtherDropdowns(item) {
 		document.querySelectorAll(".nav-item.has-dropdown.open").forEach((other) => {
@@ -248,6 +279,40 @@ const links = [
 
 	.nav-contatta {
 		display: none;
+	}
+
+	/* L'omino è un cerchio con l'icona dentro, non un pulsante etichettato:
+	   accanto a "Contattaci" due comandi pieni si farebbero concorrenza, e
+	   quello che vende è l'altro. Le misure sono in rem perché sul totem la
+	   radice cresce e un comando in px resterebbe alto come su un telefono. */
+	.nav-account {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		background: var(--bg-alt);
+		border: 1px solid var(--border-strong);
+		border-radius: 50%;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+			transform 0.1s ease-out;
+	}
+	.nav-account:hover {
+		background: var(--accent-tint);
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.nav-account:active {
+		transform: scale(0.94);
+		transition-duration: 0.05s;
+	}
+	.nav-account svg {
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
 	.nav-business {
@@ -586,6 +651,29 @@ const links = [
 		border-color: var(--border-strong);
 		color: var(--text);
 	}
+	/* Sopra "Prenota un tour" e sotto i due indirizzi del gruppo: l'ordine
+	   in fondo al menu va dal generico al mirato, e chi è già socio non
+	   cerca il tour. Contornato e non pieno per la stessa ragione per cui
+	   nella barra è un'icona: il pieno resta al comando che vende. */
+	.nav-mobile-account {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+		text-align: center;
+		opacity: 0;
+		transform: translateY(10px);
+		transition: opacity 0.35s ease 0.15s, transform 0.35s ease 0.15s;
+	}
+	.nav-mobile.open .nav-mobile-account {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	.nav-mobile-account svg {
+		flex-shrink: 0;
+	}
+
 	.nav-mobile-cta {
 		margin-top: 0.75rem;
 		text-align: center;
@@ -604,10 +692,17 @@ const links = [
 	   verticale, non solo per i telefoni. */
 	@media (max-width: 1260px), (orientation: portrait) {
 		.nav {
-			padding: 0.5rem 1.25rem;
+			/* A destra i comandi sono tre e non più due — l'omino, "Contattaci",
+			   l'hamburger — e su 360px di schermo la somma sforava: la barra
+			   scorreva in orizzontale di 19px e l'etichetta di "Contattaci" si
+			   comprimeva già a 390. Il gap del desktop (1.25rem) era tarato su
+			   due comandi; qui si stringe, e il marchio scende di otto pixel.
+			   Misurato: a 360px restano 18px di respiro, a 390 quarantotto. */
+			gap: 0.5rem;
+			padding: 0.5rem 1rem;
 		}
 		.nav-logo img {
-			height: 64px;
+			height: 56px;
 		}
 		.nav-links {
 			display: none;
@@ -630,10 +725,24 @@ const links = [
 			margin-left: auto;
 			min-height: 40px;
 			height: 40px;
-			padding: 0 1.1rem;
+			padding: 0 0.85rem;
 			font-size: var(--text-2xs);
 			letter-spacing: 0.08em;
 			white-space: nowrap;
+		}
+		/* L'omino resta anche qui, e resta il primo dei tre comandi a destra:
+		   chi arriva dal telefono per prenotare un corso non deve aprire il
+		   menu per trovarlo. Alto quanto "Contattaci" e quanto l'hamburger,
+		   così i tre si leggono come una fila sola. */
+		.nav-account {
+			width: 40px;
+			height: 40px;
+			margin-left: auto;
+		}
+		/* Con l'omino davanti, il margine automatico che spingeva a destra
+		   passa a lui: qui "Contattaci" torna a stare attaccato. */
+		.nav-contatta {
+			margin-left: 0;
 		}
 	}
 
@@ -645,6 +754,13 @@ const links = [
 		}
 		.nav-contatta {
 			padding: 0 0.75rem;
+		}
+		/* Qui i tre comandi non ci stanno più, e a uscire è l'omino: sotto i
+		   40px il cerchio smette di leggersi come un'icona, e l'area
+		   riservata ha un ripiego suo — la voce scritta in fondo al menu —
+		   mentre "Contattaci" nella barra non ce l'ha. */
+		.nav-account {
+			display: none;
 		}
 	}
 
@@ -668,6 +784,17 @@ const links = [
 			height: 4rem;
 			padding: 0 2rem;
 			font-size: var(--text-sm);
+		}
+		/* Le misure in rem seguirebbero la radice da sole, ma qui la coppia
+		   deve pareggiare l'hamburger e "Contattaci", che sono in px fissi
+		   riportati a 4rem qui sopra: l'omino li segue. */
+		.nav-account {
+			width: 4rem;
+			height: 4rem;
+		}
+		.nav-account svg {
+			width: 2rem;
+			height: 2rem;
 		}
 		.nav-hamburger span {
 			width: 2.4rem;

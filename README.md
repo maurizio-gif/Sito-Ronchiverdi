@@ -77,6 +77,57 @@ pagine su cui va mostrata); da lì:
 - `Faq.astro` pubblica da solo lo structured data **FAQPage** delle domande che
   sta mostrando — quindi una FAQ nuova entra nei rich results senza altri passi.
 
+## Area riservata
+
+L'omino nella barra apre **`AccountModal.astro`**, montato nel Layout come il
+modulo contatti: dietro ci sono i link che servono a chi è già socio. Prima non
+esistevano da nessuna parte come insieme — l'App del Club era citata dentro due
+f.a.q. del fitness, Wansport dentro la pagina del padel, il portale InforYou
+sotto ai prezzi dei listini, gli orari nel menu — e dal sito non si arrivava al
+proprio account.
+
+Le voci stanno in **`src/data/areaRiservata.ts`** e non nel markup del pannello,
+perché sono le stesse che vivono già nelle pagine: gli indirizzi si leggono da
+dove il sito li tiene già (`APP_URL` e `WANSPORT_URL` da `data/faq.ts`, la base
+del portale da `lib/portale.ts`). Un indirizzo che cambia cambia in un posto
+solo, e il pannello non può raccontare una cosa diversa dalla pagina.
+
+Tre blocchi, nell'ordine della frequenza con cui si usano: **prenota** (le due
+app e il planning), **il tuo account** (il portale, e il telefono della
+segreteria per le credenziali smarrite), **iscrizioni online** (le quattro
+pagine di iscrizione, che sono anche quelle del footer — la lista è la stessa
+costante `ISCRIZIONI`).
+
+Tre cose da sapere prima di toccarlo.
+
+- **Un indirizzo che non abbiamo non si indovina.** Il portale punta al catalogo
+  del club, che è l'unico indirizzo InforYou che il sito conosce e che il login
+  attraversa: un percorso di login scritto a intuito non darebbe errore, porterebbe
+  una persona su una pagina che non c'è. Se il club dà il link diretto
+  all'accesso, si aggiunge in quel blocco. Per la stessa ragione le credenziali
+  smarrite sono un numero di telefono e non una pagina di reset: è quello che
+  dicono già la f.a.q. dell'iscrizione al nuoto e la nota della pagina del padel.
+- **Nella barra è un'icona, nel menu del telefono è una voce scritta.** Accanto a
+  "Contattaci" due comandi pieni si farebbero concorrenza, e quello che vende è
+  l'altro; nel drawer, invece, non c'è una barra su cui un'icona si riconosca per
+  posizione, e un'icona muta la trova solo chi la sta cercando. **Sotto i 360px
+  l'omino esce dalla barra**: i tre comandi non ci stanno (misurato: sforava di
+  19px), e l'area riservata ha il suo ripiego nel menu mentre "Contattaci" no.
+- **Il pannello non deve scorrere.** Nove voci su una scrivania da 900px stavano
+  appena fuori, e un pannello che si scorre è un pannello in cui uno dei tre
+  blocchi non si vede: da qui le iscrizioni su due colonne (etichette di una
+  parola, nessuna nota) e l'assenza di un paragrafo di apertura, che ripeteva i
+  nomi dei tre blocchi sottostanti.
+
+Per verificare: la spazzata del totem (1080×1920) e dei formati telefono e
+scrivania sul pannello aperto — nessun overflow, nessun comando sotto i 44px,
+niente sotto i 19px sul totem, nessuna nota che va a capo. In un browser: il
+comando apre il pannello **senza navigare** (`location.pathname` non cambia),
+con `body.ar-locked`; X, Esc e backdrop lo chiudono e riportano il focus
+sull'omino; a pannello chiuso nessuno dei nove link è raggiungibile col tab; e
+dal menu del telefono l'apertura chiude prima il drawer, o il pannello resterebbe
+dietro all'overlay.
+
 ## Pagine legali
 
 `/privacy` e `/termini-e-condizioni` usano lo stesso impianto:

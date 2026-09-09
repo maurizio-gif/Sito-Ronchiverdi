@@ -8,17 +8,14 @@
 // JSON accanto ai prezzi, così un prezzo e il suo link si aggiornano insieme.
 
 import { getEntry } from "astro:content";
+import { linkCategoria } from "./portale";
 
 export { euro } from "./formato";
+/** La scheda di un singolo prodotto sul portale. */
+export { linkProdotto } from "./portale";
 
-const STORE_BASE = "https://inforyou.teamsystem.com/ronchiverdi/store/2";
-
-export const STORE_NON_SOCI_TENNIS = `${STORE_BASE}/category/3`;
-export const STORE_SOCI_TENNIS = `${STORE_BASE}/category/13`;
-
-export function linkProdotto(id: number): string {
-	return `${STORE_BASE}/product/${id}`;
-}
+export const STORE_NON_SOCI_TENNIS = linkCategoria(3);
+export const STORE_SOCI_TENNIS = linkCategoria(13);
 
 export interface RigaSport {
 	/** Il nome del livello o del percorso: RonchiRed, Competizione, ... */

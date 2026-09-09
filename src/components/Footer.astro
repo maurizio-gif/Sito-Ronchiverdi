@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
 import { getHours } from "../lib/schedules";
+import { ISCRIZIONI } from "../data/areaRiservata";
 
 const gymFloorHours = await getHours("gym-floor");
 
@@ -32,11 +33,14 @@ const clubLinks = [
 	{ openContact: true, label: "Prenota un tour" },
 ];
 
-const iscrizioniLinks = [
-	{ href: url("/attivita/tennis/iscrizione"), label: "Iscrizione Tennis" },
-	{ href: url("/attivita/scuola-nuoto/iscrizione"), label: "Iscrizione Scuola Nuoto" },
-	{ href: url("/attivita/triathlon/iscrizione"), label: "Iscrizione Triathlon" },
-];
+// Le pagine di iscrizione stanno in `data/areaRiservata.ts`, che è anche la
+// sorgente del pannello dell'area riservata. Qui erano scritte a mano e il
+// padel dei ragazzi mancava: quella pagina è arrivata dopo che questa lista
+// era stata compilata, e una copia non si accorge di una pagina nuova.
+const iscrizioniLinks = ISCRIZIONI.map((i) => ({
+	href: i.href,
+	label: `Iscrizione ${i.sport}`,
+}));
 
 const legalLinks = [
 	// Il vecchio link "Regolamento" puntava a una pagina mai esistita: le regole
