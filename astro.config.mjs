@@ -209,50 +209,58 @@ const redirectContatti = {
 // business del vecchio sito resta su Wix e si sposta su un sottodominio suo,
 // quindi questi indirizzi non hanno un corrispondente qui: se ne vanno.
 //
-// Le pagine più profonde del vecchio sito — carta dei vini, martini lounge, i
-// vari menu — vengono raccolte sulla pagina del ristorante invece di
-// indovinare un percorso che su quel sito potrebbe non esistere. Gli unici
-// percorsi presupposti esistenti sono quelli che il sito già linka (vedi Nav,
-// Footer e src/content/services/), e vanno verificati sul sottodominio prima
-// del cambio DNS.
+// Ognuno va al proprio percorso, identico. È possibile perché il sottodominio
+// serve lo *stesso* sito Wix di prima, con gli stessi slug: chi inquadra il QR
+// sul tavolo del ristorante cerca il menu e trova il menu, non una pagina
+// generica del locale. Prima queste voci erano raccolte tutte su /elements,
+// perché si dava per scontato un sito business nuovo di cui non si potevano
+// indovinare i percorsi; ora i percorsi si sanno, sono quelli di adesso.
+//
+// Le eccezioni sono tre, e vanno alla radice: /home-business era una home, e
+// /copia-di-business è il tipo di slug che sparisce al primo riordino delle
+// pagine — meglio la radice che un 404 su Wix.
 //
 // Senza `www`: è la forma standard per un sottodominio ed è quella che si
 // collega su Wix. Chi digita www.business.ronchiverdi.it va coperto con un
 // redirect lato DNS/Wix, non da qui.
 //
-// ATTENZIONE: business.ronchiverdi.it oggi non risolve. Questi redirect
-// funzionano solo dal momento in cui il sottodominio esiste, che è comunque
-// un prerequisito del cambio DNS — finché il dominio del club sta su Wix
-// nessuno arriva a questi indirizzi passando da qui.
+// ATTENZIONE: business.ronchiverdi.it oggi non risolve, e questa tabella dà
+// per fermi gli slug attuali di Wix. Vanno verificati uno per uno quando il
+// sottodominio esiste — cioè prima del cambio DNS, mentre il dominio del club
+// sta ancora su Wix e un errore non costa niente.
 const BUSINESS = 'https://business.ronchiverdi.it';
 
 const redirectBusiness = {
-	'/business': BUSINESS,
+	'/business': `${BUSINESS}/business`,
 	'/home-business': BUSINESS,
 	'/copia-di-business': BUSINESS,
-	'/eventi-business': BUSINESS,
-	'/upcoming-eventi-business': BUSINESS,
+	'/eventi-business': `${BUSINESS}/eventi-business`,
+	'/upcoming-eventi-business': `${BUSINESS}/upcoming-eventi-business`,
 	'/business-lounge': `${BUSINESS}/business-lounge`,
+
+	// Elements: il ristorante e tutto quello che gli sta attorno. I menu sono
+	// gli indirizzi più inquadrati dai QR, quindi sono quelli che meno di
+	// tutti possono finire su una pagina di cortesia.
 	'/elements': `${BUSINESS}/elements`,
-	'/caffetteria': `${BUSINESS}/elements`,
-	'/carta-dei-vini': `${BUSINESS}/elements`,
-	'/menu': `${BUSINESS}/elements`,
-	'/menu-serale': `${BUSINESS}/elements`,
-	'/menu-caffetteria': `${BUSINESS}/elements`,
-	'/menu-provvisorio': `${BUSINESS}/elements`,
-	'/martini-lounge': `${BUSINESS}/elements`,
-	'/martini-lounge-pool': `${BUSINESS}/elements`,
+	'/caffetteria': `${BUSINESS}/caffetteria`,
+	'/carta-dei-vini': `${BUSINESS}/carta-dei-vini`,
+	'/menu': `${BUSINESS}/menu`,
+	'/menu-serale': `${BUSINESS}/menu-serale`,
+	'/menu-caffetteria': `${BUSINESS}/menu-caffetteria`,
+	'/menu-provvisorio': `${BUSINESS}/menu-provvisorio`,
+	'/martini-lounge': `${BUSINESS}/martini-lounge`,
+	'/martini-lounge-pool': `${BUSINESS}/martini-lounge-pool`,
 
 	// Erano classificate col club, ma guardando il contenuto appartengono al
 	// business: la prenotazione è quella dei tavoli del ristorante, gli
 	// "orari club" sono gli orari del ristorante, e il modulo lead è quello
 	// di Elements. Oronero e Ronchi Viaggi stavano nella colonna business
 	// della home di Wix, e il club ha confermato che è lì che vanno.
-	'/reservations': `${BUSINESS}/elements`,
-	'/orari-club': `${BUSINESS}/elements`,
-	'/lead-eventi-elements': `${BUSINESS}/elements`,
-	'/oronero': BUSINESS,
-	'/ronchi-viaggi': BUSINESS,
+	'/reservations': `${BUSINESS}/reservations`,
+	'/orari-club': `${BUSINESS}/orari-club`,
+	'/lead-eventi-elements': `${BUSINESS}/lead-eventi-elements`,
+	'/oronero': `${BUSINESS}/oronero`,
+	'/ronchi-viaggi': `${BUSINESS}/ronchi-viaggi`,
 };
 
 // Servizi chiusi o mai partiti, senza un corrispondente nel club di oggi: il
