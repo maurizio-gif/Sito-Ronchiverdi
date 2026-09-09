@@ -180,6 +180,72 @@ curriculum non hanno ragione di finire anche in una casella di posta, dove
 restano per sempre e nessuno li cancella. Il rovescio è che nessuno viene
 avvisato: la sezione Curriculum va aperta.
 
+## Lead dai moduli istantanei di Meta
+
+Le campagne Meta a obiettivo lead raccolgono i contatti in un **modulo
+istantaneo**, dentro Facebook o Instagram: chi compila non arriva mai sul sito,
+quindi non passa da `/api/lead` e non ha né sessione né UTM da tracciare.
+
+`POST /api/lead-meta` è il loro ingresso. Scrive nella stessa tabella dei lead
+del sito, `form_contatti`, perché da lì passano già la deduplicazione
+dell'anagrafica, la trattativa per Club e Family, l'Agenda e le sezioni del
+pannello: una tabella a parte avrebbe voluto dire riscrivere tutto quello.
+
+**Chi chiama non è un browser** ma l'automazione (oggi n8n, con il nodo
+*Facebook Lead Ads Trigger*, che registra da sé la sottoscrizione al webhook e
+verifica il challenge di Meta). L'accesso è quindi un segreto condiviso
+nell'header `x-lead-meta-secret`, da confrontare con **`LEAD_META_SECRET`** su
+Vercel: senza, questo endpoint sarebbe un modo per scrivere in anagrafica da
+fuori.
+
+Il webhook di Meta manda **solo l'id del lead**, mai i campi: è l'automazione a
+rileggerli dalla Graph API e a spedirli qui in `field_data`, nella stessa forma
+in cui Meta li restituisce.
+
+### `attivita` è il campo che decide chi vede il lead
+
+Nel pannello le richieste non sono un elenco unico: ogni canale pesca le sue per
+`attivita` (vedi `CANALI` in `lib/richieste.ts` di APP-RONCHIVERDI). Un valore
+inventato non corrisponde a nessun canale e il lead resta **salvato ma
+invisibile** — il modo peggiore di perdere un contatto pagato. Per questo
+`attivita` è obbligatoria e validata contro `src/data/leadActivities.ts`, la
+stessa fonte da cui il form del sito prende le sue opzioni, e una richiesta con
+un'attività sconosciuta viene rifiutata con `400 unknown_attivita` e l'elenco
+dei valori validi.
+
+Per `corsi-tennis` serve anche `settore` (`scuola` o `competizione`): i due
+canali del tennis filtrano entrambi per settore, e senza il lead non compare in
+nessuno dei due.
+
+La mappatura modulo Meta → attività si configura nell'automazione, un ramo per
+modulo. Le altre scelte, con il perché, stanno commentate nell'endpoint:
+
+- **il nome** arriva spesso come `full_name` unico e si divide sul primo spazio,
+  che sui nomi composti sbaglia. Se il cognome deve essere giusto, il modulo su
+  Meta va configurato con Nome e Cognome separati;
+- **almeno un recapito** fra email e cellulare è obbligatorio: senza, la
+  deduplicazione non ha una chiave e il lead resterebbe senza persona;
+- **`privacy`** è sempre vera (l'informativa è nel modulo e l'invio la implica),
+  **`marketing`** solo se l'automazione lo passa: quel consenso esiste solo se
+  il modulo fa una domanda esplicita, e il nome di quel campo lo conosce chi ha
+  configurato il modulo;
+- **`utm_source`** social con **`utm_medium: "paid"`** è ciò che il pannello
+  classifica come *Social a pagamento*: con altri valori questi lead
+  finirebbero in *Traffico diretto* e le campagne Meta risulterebbero a
+  rendimento zero.
+
+Migration: **`scripts/sql/2026-09-08-meta-leadgen-id.sql`**, da eseguire dal SQL
+Editor di Supabase **prima** di attivare l'automazione. Aggiunge
+`meta_leadgen_id` con un indice unico parziale: Meta rimanda lo stesso webhook
+quando la risposta tarda, e senza quel vincolo ogni ritentativo diventerebbe una
+richiesta doppia e una persona doppia in anagrafica. Sul duplicato l'endpoint
+risponde `200 {"duplicato": true}`, non un errore, o il webhook ritenterebbe
+per sempre.
+
+I lead già raccolti nei moduli **non** arrivano da qui: Meta li tiene
+scaricabili per circa 90 giorni e vanno esportati in CSV dai Moduli istantanei,
+poi importati a parte con la stessa mappatura.
+
 ## Immagini per le anteprime social
 
 `public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,
