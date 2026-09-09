@@ -12,9 +12,18 @@
 
 /* ── Impianto delle sezioni ─────────────────────────────────────────── */
 .isc-section {
-	max-width: 72rem;
+	/* --isc-misura comprende il margine laterale, --isc-lato è quel margine:
+	   il contenuto di ogni sezione è quindi larga misura meno due lati, e
+	   parte allo stesso punto in tutte. */
+	--isc-misura: 72rem;
+	--isc-lato: 1.5rem;
+	/* La misura dei testi di lettura: titoli, occhielli, elenchi di punti.
+	   Chi aggiunge un blocco di testo centrato prende questa, così i testi
+	   stanno tutti nella stessa colonna. */
+	--isc-testo: 42rem;
+	max-width: var(--isc-misura);
 	margin: 0 auto;
-	padding: 4rem 1.5rem;
+	padding: 4rem var(--isc-lato);
 	scroll-margin-top: 5rem;
 }
 /* La banda sabbia va a tutta larghezza: il contenuto resta incolonnato. */
@@ -22,13 +31,16 @@
 	max-width: none;
 	background: var(--bg-alt);
 }
+/* Qui il limite si applica *dentro* il padding, quindi va scalato dei due
+   lati: con 72rem piene il contenuto della banda partirebbe 1.5rem prima di
+   quello delle sezioni normali. */
 .isc-section--alt > * {
-	max-width: 72rem;
+	max-width: calc(var(--isc-misura) - var(--isc-lato) * 2);
 	margin: 0 auto;
 }
 
 .isc-head {
-	max-width: 42rem;
+	max-width: var(--isc-testo, 42rem);
 	margin: 0 auto 2.25rem;
 	text-align: center;
 }
@@ -266,6 +278,27 @@
 	font-weight: 600;
 }
 
+/* Righe con un colore di gruppo (i livelli della scuola tennis): barra a
+   sinistra e pallino accanto al nome. Il nome resta nel colore del testo —
+   scritto in giallo o arancione su fondo crema non si leggerebbe. */
+.listino td.listino__formula--colore {
+	border-left: 4px solid var(--riga-colore, var(--accent));
+	border-radius: 4px 0 0 4px;
+	padding-left: 0.85rem;
+}
+.listino__voce {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+}
+.listino__pallina {
+	flex-shrink: 0;
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 50%;
+	background: var(--riga-colore, var(--accent));
+}
+
 /* Il prezzo è un box: si vede che si preme, senza doverci passare sopra
    col mouse per scoprirlo — che su un telefono non si può fare. */
 .prezzo-box {
@@ -328,7 +361,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
-	margin: 1.5rem 0 0;
+	margin: 1.5rem auto 0;
 	padding: 0;
 	list-style: none;
 }
@@ -384,6 +417,9 @@
 		flex-direction: column;
 		grid-column: 1 / -1;
 		padding-right: 0;
+	}
+	.listino td.listino__formula--colore {
+		padding: 0.5rem 0 0.5rem 0.75rem;
 	}
 }
 
