@@ -103,8 +103,14 @@ const schema = {
 </Layout>
 
 <style>
+	/* La colonna dell'articolo: a 44rem su un monitor largo restava un
+	   nastro sottile in mezzo a due margini vuoti — il 41% dello schermo a
+	   1600px. Allargarla da sola porterebbe le righe oltre i cento
+	   caratteri, che si leggono peggio: cresce insieme al corpo del testo,
+	   cosi' la misura di riga resta quella di prima (intorno agli ottanta
+	   caratteri) e l'articolo occupa la pagina invece di galleggiarci. */
 	.post {
-		max-width: 44rem;
+		max-width: 54rem;
 		margin: 0 auto;
 		padding: 3rem 1.5rem 1rem;
 	}
@@ -128,8 +134,14 @@ const schema = {
 
 	/* Il corpo arriva da markdown, quindi gli stili vanno in :global */
 	.post__body {
-		font-size: var(--text-md);
-		line-height: 1.75;
+		/* Non var(--text-md): quel token vale i lede di tutto il sito, e qui
+		   serve il corpo di lettura di un articolo lungo.
+		   Il corpo e' tarato sulla colonna: a 54rem con il testo di prima le
+		   righe arrivavano a cento caratteri, che si leggono peggio di quelle
+		   di partenza. Cosi' la misura torna a ottantanove caratteri, come
+		   prima dell'allargamento, ma su una colonna larga un quarto in piu'. */
+		font-size: 1.35rem;
+		line-height: 1.7;
 	}
 	.post__body :global(p) {
 		margin: 0 0 1.35rem;
@@ -236,6 +248,12 @@ const schema = {
 	.post-card:hover .post-card__title {
 		text-decoration: underline;
 		text-underline-offset: 3px;
+	}
+
+	@media (max-width: 760px), (orientation: portrait) {
+		.post__body {
+			font-size: 1.15rem;
+		}
 	}
 
 	@media (max-width: 900px), (orientation: portrait) {

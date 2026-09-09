@@ -204,6 +204,19 @@ const schema = {
 		color: var(--accent);
 	}
 
+	/* La sezione c'era ma senza stile: restava allineata a sinistra, senza
+	   respiro e senza la banda sabbia, mentre su tutte le altre pagine e'
+	   centrata. Stesse regole delle altre, cosi' la chiusura e' la stessa
+	   in tutto il sito. */
+	.final-cta {
+		padding: 6rem 1.5rem;
+		text-align: center;
+		background: var(--bg-alt);
+	}
+	.final-cta .lede {
+		margin-bottom: 2rem;
+	}
+
 	@media (max-width: 1100px), (orientation: portrait) {
 		.blog__grid {
 			grid-template-columns: repeat(2, 1fr);

@@ -11,20 +11,10 @@ const trainers = (await getCollection("trainers")).sort(
 	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
 );
 
-// Normalizza un numero (con o senza prefisso) in un href tel: pulito.
-function telHref(phone: string) {
-	const digits = phone.replace(/\D/g, "");
-	const withCountry = digits.startsWith("39") && digits.length > 10 ? digits : `39${digits}`;
-	return `+${withCountry}`;
-}
-
-const igHref = (handle: string) => `https://instagram.com/${handle.replace(/^@/, "")}`;
-const webHref = (site: string) => (site.startsWith("http") ? site : `https://${site}`);
-
-const phoneIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 2.2h2l1 3-1.5 1.2a8 8 0 0 0 4.6 4.6l1.2-1.5 3 1v2a1.2 1.2 0 0 1-1.3 1.2A10.8 10.8 0 0 1 2.3 3.5a1.2 1.2 0 0 1 1.2-1.3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /></svg>`;
-const mailIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.5" stroke="currentColor" stroke-width="1.3" /><path d="M2.5 4l5.5 4.2L13.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>`;
-const igIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.8" y="1.8" width="12.4" height="12.4" rx="3.6" stroke="currentColor" stroke-width="1.3" /><circle cx="8" cy="8" r="3.1" stroke="currentColor" stroke-width="1.3" /><circle cx="11.6" cy="4.5" r="0.9" fill="currentColor" /></svg>`;
-const webIcon = `<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3" /><path d="M1.8 8h12.4M8 1.8c1.7 1.8 2.6 4 2.6 6.2s-.9 4.4-2.6 6.2c-1.7-1.8-2.6-4-2.6-6.2S6.3 3.6 8 1.8Z" stroke="currentColor" stroke-width="1.3" /></svg>`;
+// I contatti dei trainer non compaiono più nelle schede: la richiesta passa
+// dal Fitness Manager, che valuta obiettivo e disponibilità e fa l'abbinamento.
+// I recapiti restano nei file dei trainer (servono al club) ma non vengono
+// resi, quindi non finiscono nella pagina.
 
 // Il mini questionario della consulenza col Fitness Manager. Sta qui e non
 // nel markup perché le risposte viaggiano anche nel payload: una lista sola
@@ -67,14 +57,14 @@ const facts = [
 
 <Layout
 	title="Personal Training — Ronchiverdi Sport Club"
-	description="Il team di Personal Trainer di Ronchiverdi Sport Club a Torino: percorsi su misura per dimagrimento, forza, recupero funzionale e preparazione atletica. Contatta direttamente il trainer che preferisci."
+	description="Il team di Personal Trainer di Ronchiverdi Sport Club a Torino: percorsi su misura per dimagrimento, forza, recupero funzionale e preparazione atletica. Richiedi il tuo personal: il Fitness Manager ti abbina il trainer più adatto al tuo obiettivo."
 	image="og/personal-training.jpg"
 >
 	<PageHero image="images/activities/personal-training.jpg" imageAlt="Trainer che segue un allenamento alle battle rope al Ronchiverdi Sport Club" eyebrow="Attività · Adulti">
 		<Fragment slot="title">Personal <em class="accent">Training</em></Fragment>
-		<Fragment slot="lede">Un percorso costruito intorno a te, seguito da un trainer che scegli tu. Sfoglia i profili e contatta direttamente chi fa per te.</Fragment>
+		<Fragment slot="lede">Un percorso costruito intorno a te, seguito da un trainer scelto per il tuo obiettivo. Sfoglia i profili del team, poi richiedi il tuo personal.</Fragment>
 		<div class="header-cta">
-			<a class="btn" href="#consulenza-fitness-manager">Richiedi informazioni</a>
+			<a class="btn" href="#richiedi-personal">Richiedi il tuo personal</a>
 		</div>
 	</PageHero>
 
@@ -82,20 +72,20 @@ const facts = [
 		<span class="eyebrow">Come funziona</span>
 		<h2>Un allenamento, un solo obiettivo: il tuo</h2>
 		<p class="lede" style="margin-inline:auto">
-			Il personal training di Ronchiverdi mette a disposizione un team di trainer con formazioni e specializzazioni diverse — dalla ricomposizione corporea alla preparazione atletica, dal recupero funzionale all'allenamento in gravidanza. Scegli il profilo più vicino al tuo obiettivo e <strong>contattalo direttamente</strong>: nessun intermediario, nessuna attesa.
+			Il personal training di Ronchiverdi mette a disposizione un team di trainer con formazioni e specializzazioni diverse — dalla ricomposizione corporea alla preparazione atletica, dal recupero funzionale all'allenamento in gravidanza. Guarda formazione e competenze di ciascuno, poi <strong>richiedi il tuo personal</strong>: il Fitness Manager valuta obiettivo, livello e disponibilità e ti abbina il trainer giusto.
 		</p>
 	</section>
 
 	<IconFacts eyebrow="Perché il personal training" title="Cosa comprende il servizio" items={facts} />
 
-	<TriplePack ctaHref="#consulenza-fitness-manager" ctaLabel="Parlane con il Fitness Manager" />
+	<TriplePack ctaHref="#richiedi-personal" ctaLabel="Richiedi il tuo personal" />
 
 	<section class="team">
 		<div class="team__head">
 			<span class="eyebrow">Il team</span>
 			<h2>I nostri Personal Trainer</h2>
 			<p class="lede" style="margin-inline:auto">
-				Passa il mouse su una scheda — o toccala da smartphone — per vedere formazione, competenze e contatti diretti.
+				Passa il mouse su una scheda — o toccala da smartphone — per vedere formazione e competenze.
 			</p>
 		</div>
 
@@ -109,7 +99,7 @@ const facts = [
 							<strong class="pt-card__name">{t.data.name}</strong>
 							{t.data.role && <span class="pt-card__role">{t.data.role}</span>}
 
-							<span class="pt-card__hint">Formazione e contatti <span aria-hidden="true">&rarr;</span></span>
+							<span class="pt-card__hint">Formazione e competenze <span aria-hidden="true">&rarr;</span></span>
 
 							<div class="pt-card__reveal">
 								{t.data.formazione && t.data.formazione.length > 0 && (
@@ -124,42 +114,31 @@ const facts = [
 										<ul>{t.data.competenze.map((c) => <li>{c}</li>)}</ul>
 									</div>
 								)}
-								<div class="pt-card__contacts">
-									{t.data.phone && (
-										<a class="pt-contact" href={`tel:${telHref(t.data.phone)}`} aria-label={`Chiama ${t.data.name}`}>
-											<span set:html={phoneIcon} />{t.data.phone}
-										</a>
-									)}
-									{t.data.email && (
-										<a class="pt-contact" href={`mailto:${t.data.email}`} aria-label={`Scrivi un'email a ${t.data.name}`}>
-											<span set:html={mailIcon} />Email
-										</a>
-									)}
-									{t.data.instagram && (
-										<a class="pt-contact" href={igHref(t.data.instagram)} target="_blank" rel="noopener" aria-label={`Instagram di ${t.data.name}`}>
-											<span set:html={igIcon} />Instagram
-										</a>
-									)}
-									{t.data.website && (
-										<a class="pt-contact" href={webHref(t.data.website)} target="_blank" rel="noopener" aria-label={`Sito di ${t.data.name}`}>
-											<span set:html={webIcon} />Sito web
-										</a>
-									)}
-								</div>
 							</div>
 						</div>
 					</div>
 				</article>
 			))}
 		</div>
+
+		{/* Un pulsante per tutto il team, non uno per scheda: quindici pulsanti
+		    identici sarebbero rumore, e la richiesta è la stessa da qualunque
+		    profilo si parta. */}
+		<div class="pt-cta">
+			<a class="btn" href="#richiedi-personal">Richiedi il tuo personal</a>
+			<p class="pt-cta__nota">
+				La richiesta arriva al Fitness Manager, che valuta obiettivo e
+				disponibilità e ti abbina il trainer più adatto.
+			</p>
+		</div>
 	</section>
 
-	<section class="fm-section" id="consulenza-fitness-manager">
+	<section class="fm-section" id="richiedi-personal">
 		<div class="fm-intro">
 			<span class="eyebrow">Consulenza gratuita</span>
-			<h2>Non sai quale trainer <em class="accent">scegliere</em>?</h2>
+			<h2>Richiedi il tuo <em class="accent">personal</em></h2>
 			<p class="lede">
-				Rispondi a tre domande sul tuo obiettivo e lasciaci i tuoi dati: li riceve il <strong>Fitness Manager</strong>, che ti richiama personalmente per fissare una prima consulenza e indicarti il personal trainer più adatto a te.
+				Rispondi a tre domande sul tuo obiettivo e lasciaci i tuoi dati: li riceve il <strong>Fitness Manager</strong>, che ti richiama personalmente, fissa una prima consulenza gratuita e ti abbina il personal trainer più adatto a te.
 			</p>
 		</div>
 
@@ -246,12 +225,12 @@ const facts = [
 			</div>
 
 			<p class="fm-nota">
-				I dati che lasci qui vengono inoltrati al Fitness Manager del club: sarà lui a ricontattarti direttamente al telefono per fissare la prima consulenza.
+				I dati che lasci qui vengono inoltrati al Fitness Manager del club: sarà lui a ricontattarti al telefono per la prima consulenza e per dirti con quale trainer partirai.
 			</p>
 
 			<p class="lf__error" id="fm-error" hidden role="alert"></p>
 
-			<button class="btn" type="submit" id="fm-invia">Richiedi la consulenza</button>
+			<button class="btn" type="submit" id="fm-invia">Richiedi il tuo personal</button>
 		</form>
 
 		<div class="fm-confirm" id="fm-confirm" hidden>
@@ -342,7 +321,7 @@ const facts = [
 			const datiLead = {
 				origine: "fitness-manager-inline",
 				pagina: location.pathname,
-				cta: "Consulenza con il Fitness Manager",
+				cta: "Richiedi il tuo personal",
 				nome: nome.value.trim(),
 				cognome: cognome.value.trim(),
 				email: email.value.trim(),
@@ -364,23 +343,21 @@ const facts = [
 				trackLead(datiLead);
 			} catch {
 				fmInvia.disabled = false;
-				fmInvia.textContent = "Richiedi la consulenza";
+				fmInvia.textContent = "Richiedi il tuo personal";
 				return fmErroreMostra("Non siamo riusciti a inviare la richiesta. Riprova, oppure chiamaci direttamente.");
 			}
 
-			fmConfermaTesto.textContent = `Grazie ${nome.value.trim()}, la tua richiesta è arrivata al Fitness Manager: ti richiamerà al numero che ci hai lasciato per fissare la prima consulenza.`;
+			fmConfermaTesto.textContent = `Grazie ${nome.value.trim()}, la tua richiesta è arrivata al Fitness Manager: ti richiamerà al numero che ci hai lasciato per la prima consulenza e per abbinarti il personal trainer più adatto.`;
 			fmForm.hidden = true;
 			fmConferma.hidden = false;
 		});
 
+		// Le schede si aprono al tocco: da smartphone l':hover non esiste.
+		// Non contengono più link, quindi il click non deve più distinguere.
 		document.querySelectorAll(".pt-card").forEach((card) => {
 			const toggle = () => card.classList.toggle("is-open");
-			card.addEventListener("click", (e) => {
-				if ((e.target as HTMLElement).closest("a")) return;
-				toggle();
-			});
+			card.addEventListener("click", toggle);
 			card.addEventListener("keydown", (e) => {
-				if ((e.target as HTMLElement).closest("a")) return;
 				if (e.key === "Enter" || e.key === " ") {
 					e.preventDefault();
 					toggle();
@@ -561,34 +538,18 @@ const facts = [
 			border-radius: 50%;
 			background: var(--accent-on-dark);
 		}
-		.pt-card__contacts {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 6px;
-			margin-top: 10px;
+		/* L'unica azione del blocco team: chiude la griglia e porta al form. */
+		.pt-cta {
+			margin-top: 2.75rem;
+			text-align: center;
 		}
-		.pt-contact {
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-			padding: 0.4rem 0.65rem;
-			border-radius: 999px;
-			background: rgba(246, 239, 222, 0.12);
-			color: var(--text-on-dark);
+		.pt-cta__nota {
+			max-width: 34rem;
+			margin: 1.1rem auto 0;
 			font-family: var(--font-sans);
-			font-size: 0.72rem;
-			font-weight: 600;
-			text-decoration: none;
-			line-height: 1;
-			transition: background 0.2s ease, color 0.2s ease;
-		}
-		.pt-contact:hover,
-		.pt-contact:focus-visible {
-			background: var(--accent-on-dark);
-			color: var(--bg-dark);
-		}
-		.pt-contact svg {
-			flex-shrink: 0;
+			font-size: var(--text-2xs);
+			line-height: 1.7;
+			color: var(--text-muted);
 		}
 
 		@media (max-width: 1080px), (orientation: portrait) {
