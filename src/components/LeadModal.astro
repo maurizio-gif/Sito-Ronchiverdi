@@ -787,6 +787,40 @@ import { leadActivityMap } from "../data/leadActivities";
 	.lf__field--full {
 		grid-column: 1 / -1;
 	}
+
+	/* Titoletto che divide una griglia di campi in blocchi ("Atleta",
+	   "Genitore o tutore"): stessa voce delle etichette di gruppo dello step 1. */
+	.lf__group-label {
+		grid-column: 1 / -1;
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	.lf__group-note {
+		grid-column: 1 / -1;
+		margin: -0.5rem 0 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+	}
+	/* Il blocco del genitore compare sotto quello dell'atleta: serve l'aria
+	   che fra due griglie separate non c'è. */
+	.lf__grid--minore {
+		margin-top: 1.2rem;
+	}
+	/* `display: grid` e `display: flex` qui sopra battono la regola del
+	   browser per [hidden]: senza questa riga i blocchi che il form apre e
+	   chiude (i contatti dell'atleta, quelli del genitore) resterebbero
+	   sempre a video. */
+	.lf__grid[hidden],
+	.lf__field[hidden] {
+		display: none;
+	}
+
 	.lf__field label {
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);

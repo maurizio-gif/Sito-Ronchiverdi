@@ -48,7 +48,9 @@ export function initLeadForm(root, options) {
 	// Ramificazioni: attività scelta → step successivo. Le attività con
 	// contactFlow "azione" (oggi: Abbonamento Club e Family) propongono
 	// appuntamento/telefonata/messaggio; "settore-tennis" (Young School Tennis)
-	// fa scegliere il settore e raccoglie i dati di genitore e bambino/a;
+	// fa scegliere il settore e poi raccoglie i dati: dal genitore per il
+	// Settore Scuola, dall'atleta (con il genitore solo se minorenne) per il
+	// Settore Competizione;
 	// "young-diretto" (Young School Nuoto e Triathlon) raccoglie gli stessi dati
 	// di genitore e bambino/a saltando la scelta del settore; "padel" (Corsi
 	// Padel, solo adulti) raccoglie subito i dati dell'adulto. Tutte mettono poi
@@ -76,6 +78,7 @@ export function initLeadForm(root, options) {
 		"2-settore-tennis": 2,
 		"2-dati-padel": 2,
 		"3-dati-young": 3,
+		"3-dati-competizione": 3,
 		"4-dati": 3,
 	};
 
@@ -186,6 +189,12 @@ export function initLeadForm(root, options) {
 		bambinoNome: "Inserisci il nome del bambino/a.",
 		bambinoCognome: "Inserisci il cognome del bambino/a.",
 		bambinoDataNascita: "Inserisci la data di nascita del bambino/a.",
+		atletaNome: "Inserisci il nome dell'atleta.",
+		atletaCognome: "Inserisci il cognome dell'atleta.",
+		atletaDataNascita: "Inserisci la data di nascita dell'atleta.",
+		atletaDataNascitaFutura: "La data di nascita dell'atleta non può essere nel futuro.",
+		atletaEmail: "Inserisci un'email valida per l'atleta.",
+		atletaCellulare: "Inserisci un numero di cellulare valido per l'atleta.",
 	};
 
 	function initialState() {
@@ -198,6 +207,9 @@ export function initLeadForm(root, options) {
 			cta: "",
 			azione: null,
 			settore: null,
+			// Data di nascita di chi intesta la richiesta: la compila il ramo
+			// Competizione quando l'atleta è maggiorenne (è lui il contatto).
+			dataNascita: "",
 			minoreNome: "",
 			minoreCognome: "",
 			minoreDataNascita: "",
@@ -278,6 +290,29 @@ export function initLeadForm(root, options) {
 		if (cifre.length < 6 || cifre.length > 14) return false;
 		if (/^(\d)\1+$/.test(cifre)) return false;
 		return true;
+	}
+
+	// Età compiuta a partire da una data "YYYY-MM-DD", o null se la data non è
+	// utilizzabile (vuota, non valida, nel futuro). Serve al ramo Competizione,
+	// dove è la data di nascita dell'atleta a decidere se chiedere anche i dati
+	// di un genitore: il conto va fatto sui giorni, non sulla differenza fra
+	// gli anni, altrimenti chi compie 18 anni a dicembre risulta maggiorenne
+	// da gennaio.
+	function etaDa(iso) {
+		if (!iso) return null;
+		var parti = iso.split("-");
+		if (parti.length !== 3) return null;
+		var anno = parseInt(parti[0], 10);
+		var mese = parseInt(parti[1], 10);
+		var giorno = parseInt(parti[2], 10);
+		if (!anno || !mese || !giorno) return null;
+
+		var oggi = new Date();
+		var eta = oggi.getFullYear() - anno;
+		var compiuto =
+			oggi.getMonth() + 1 > mese || (oggi.getMonth() + 1 === mese && oggi.getDate() >= giorno);
+		if (!compiuto) eta -= 1;
+		return eta < 0 ? null : eta;
 	}
 
 	// ── STEP 1 · Attività di interesse ─────────────────────────────────
@@ -386,13 +421,16 @@ export function initLeadForm(root, options) {
 	});
 
 	// ── STEP 2-SETTORE-TENNIS · Scuola o Competizione ───────────────────
-	// Prima di mostrare i contatti diretti del referente raccogliamo i dati di
-	// genitore e bambino/a (obbligatori per questo percorso): la scelta del
-	// settore porta quindi allo step 3-dati-young, non ancora al contatto.
+	// Prima di mostrare i contatti diretti del referente raccogliamo i dati
+	// obbligatori per il percorso, e i due settori non chiedono le stesse cose:
+	// il Settore Scuola è per bambini e parte dal genitore (3-dati-young), il
+	// Settore Competizione può riguardare anche un adulto in squadra e parte
+	// quindi dall'atleta, chiedendo il genitore solo se è minorenne
+	// (3-dati-competizione).
 	root.querySelectorAll("[data-settore]").forEach(function (btn) {
 		btn.addEventListener("click", function () {
 			state.settore = btn.dataset.settore;
-			showStep("3-dati-young");
+			showStep(btn.dataset.settore === "competizione" ? "3-dati-competizione" : "3-dati-young");
 		});
 	});
 
@@ -515,6 +553,169 @@ export function initLeadForm(root, options) {
 			renderReferenteTennis(state.settore);
 			showStep("4-referente-tennis");
 		}
+	}
+
+	// ── STEP 3-DATI-COMPETIZIONE · Dati dell'atleta (+ genitore se minorenne) ──
+	// Qui si parte dall'atleta perché il Settore Competizione riguarda anche
+	// adulti in squadra: è la data di nascita a dire se serve un genitore, e
+	// finché non è compilata non mostriamo né i contatti dell'atleta né quelli
+	// del genitore, per non far scegliere alla persona quale dei due riempire.
+	var dcAtlNascita = root.querySelector("#" + P + "-dc-atl-nascita");
+	var dcAtlEmail = root.querySelector("#" + P + "-dc-atl-email");
+	var dcAtlCell = root.querySelector("#" + P + "-dc-atl-cellulare");
+	var dcAtlPrefisso = root.querySelector("#" + P + "-dc-atl-prefisso");
+	var dcAtlEmailWrap = root.querySelector("#" + P + "-dc-atl-email-wrap");
+	var dcAtlCellWrap = root.querySelector("#" + P + "-dc-atl-cellulare-wrap");
+	var dcGenWrap = root.querySelector("#" + P + "-dc-gen-wrap");
+	var dcGenEmail = root.querySelector("#" + P + "-dc-gen-email");
+	var dcGenCell = root.querySelector("#" + P + "-dc-gen-cellulare");
+	var dcGenPrefisso = root.querySelector("#" + P + "-dc-gen-prefisso");
+
+	// Gli stessi due listener (bordo rosso al blur, via appena il valore torna
+	// valido) servono a quattro campi di questo step: qui li leghiamo in un
+	// giro solo invece di ricopiarli campo per campo.
+	function legaValidazioneCampo(input, valido) {
+		if (!input) return;
+		input.addEventListener("blur", function () {
+			input.classList.toggle("lf__input--error", !!input.value && !valido(input.value));
+		});
+		input.addEventListener("input", function () {
+			if (valido(input.value)) input.classList.remove("lf__input--error");
+		});
+	}
+	legaValidazioneCampo(dcAtlEmail, isValidEmail);
+	legaValidazioneCampo(dcGenEmail, isValidEmail);
+	legaValidazioneCampo(dcAtlCell, isValidPhone);
+	legaValidazioneCampo(dcGenCell, isValidPhone);
+
+	/** L'atleta è minorenne? null finché la data di nascita non è utilizzabile. */
+	function dcMinorenne() {
+		var eta = etaDa(dcAtlNascita ? dcAtlNascita.value : "");
+		return eta === null ? null : eta < 18;
+	}
+
+	// Apre il blocco giusto in base alla data di nascita: i contatti
+	// dell'atleta se è maggiorenne, quelli del genitore se è minorenne.
+	function dcSincronizzaBlocchi() {
+		var minore = dcMinorenne();
+		if (dcAtlEmailWrap) dcAtlEmailWrap.hidden = minore !== false;
+		if (dcAtlCellWrap) dcAtlCellWrap.hidden = minore !== false;
+		if (dcGenWrap) dcGenWrap.hidden = minore !== true;
+	}
+
+	if (dcAtlNascita) {
+		// "change" non basta: su desktop la data si può digitare, e l'input
+		// arriva prima che il campo perda il fuoco.
+		dcAtlNascita.addEventListener("change", dcSincronizzaBlocchi);
+		dcAtlNascita.addEventListener("input", dcSincronizzaBlocchi);
+	}
+
+	var dcInvia = root.querySelector("#" + P + "-dc-invia");
+	if (dcInvia) {
+		dcInvia.addEventListener("click", function () {
+			var s = getStep("3-dati-competizione");
+			clearError(s);
+
+			var atlNome = root.querySelector("#" + P + "-dc-atl-nome");
+			var atlCognome = root.querySelector("#" + P + "-dc-atl-cognome");
+			var genNome = root.querySelector("#" + P + "-dc-gen-nome");
+			var genCognome = root.querySelector("#" + P + "-dc-gen-cognome");
+			var privacy = root.querySelector("#" + P + "-dc-privacy");
+
+			if (!atlNome.value.trim()) {
+				showError(s, ERR.atletaNome);
+				atlNome.focus();
+				return;
+			}
+			if (!atlCognome.value.trim()) {
+				showError(s, ERR.atletaCognome);
+				atlCognome.focus();
+				return;
+			}
+			if (!dcAtlNascita.value) {
+				showError(s, ERR.atletaDataNascita);
+				dcAtlNascita.focus();
+				return;
+			}
+
+			var minore = dcMinorenne();
+			if (minore === null) {
+				showError(s, ERR.atletaDataNascitaFutura);
+				dcAtlNascita.focus();
+				return;
+			}
+
+			if (minore) {
+				if (!genNome.value.trim()) {
+					showError(s, ERR.genitoreNome);
+					genNome.focus();
+					return;
+				}
+				if (!genCognome.value.trim()) {
+					showError(s, ERR.genitoreCognome);
+					genCognome.focus();
+					return;
+				}
+				if (!isValidEmail(dcGenEmail.value)) {
+					dcGenEmail.classList.add("lf__input--error");
+					showError(s, ERR.genitoreEmail);
+					dcGenEmail.focus();
+					return;
+				}
+				if (!isValidPhone(dcGenCell.value)) {
+					dcGenCell.classList.add("lf__input--error");
+					showError(s, ERR.genitoreCellulare);
+					dcGenCell.focus();
+					return;
+				}
+			} else {
+				if (!isValidEmail(dcAtlEmail.value)) {
+					dcAtlEmail.classList.add("lf__input--error");
+					showError(s, ERR.atletaEmail);
+					dcAtlEmail.focus();
+					return;
+				}
+				if (!isValidPhone(dcAtlCell.value)) {
+					dcAtlCell.classList.add("lf__input--error");
+					showError(s, ERR.atletaCellulare);
+					dcAtlCell.focus();
+					return;
+				}
+			}
+
+			if (!privacy.checked) return showError(s, ERR.privacy);
+
+			// Chi intesta la richiesta cambia con l'età: per un minorenne il
+			// contatto è il genitore e l'atleta finisce nei campi "minore",
+			// come negli altri percorsi Young; per un maggiorenne l'atleta è
+			// lui stesso il contatto e i campi "minore" restano vuoti.
+			if (minore) {
+				state.nome = genNome.value.trim();
+				state.cognome = genCognome.value.trim();
+				state.email = dcGenEmail.value.trim();
+				state.cellulare = (dcGenPrefisso ? dcGenPrefisso.value : "+39") + " " + dcGenCell.value.trim();
+				state.dataNascita = "";
+				state.minoreNome = atlNome.value.trim();
+				state.minoreCognome = atlCognome.value.trim();
+				state.minoreDataNascita = dcAtlNascita.value;
+			} else {
+				state.nome = atlNome.value.trim();
+				state.cognome = atlCognome.value.trim();
+				state.email = dcAtlEmail.value.trim();
+				state.cellulare = (dcAtlPrefisso ? dcAtlPrefisso.value : "+39") + " " + dcAtlCell.value.trim();
+				state.dataNascita = dcAtlNascita.value;
+				state.minoreNome = "";
+				state.minoreCognome = "";
+				state.minoreDataNascita = "";
+			}
+			state.privacy = true;
+			state.marketing = root.querySelector("#" + P + "-dc-marketing").checked;
+
+			// Stesso invio degli altri percorsi Young: l'attività è
+			// "corsi-tennis", quindi il pannello finale è quello del referente
+			// di settore (qui: Settore Competizione).
+			inviaRichiestaYoung();
+		});
 	}
 
 	function renderReferenteYoungDiretto(ref) {
@@ -1069,16 +1270,41 @@ export function initLeadForm(root, options) {
 			"#" + P + "-dp-cognome",
 			"#" + P + "-dp-email",
 			"#" + P + "-dp-cellulare",
+			"#" + P + "-dc-atl-nome",
+			"#" + P + "-dc-atl-cognome",
+			"#" + P + "-dc-atl-nascita",
+			"#" + P + "-dc-atl-email",
+			"#" + P + "-dc-atl-cellulare",
+			"#" + P + "-dc-gen-nome",
+			"#" + P + "-dc-gen-cognome",
+			"#" + P + "-dc-gen-email",
+			"#" + P + "-dc-gen-cellulare",
 		].forEach(function (sel) {
 			var el = root.querySelector(sel);
 			if (el) el.value = "";
 		});
-		[emailInput, cellInput, dyGenEmail, dyGenCell, dpEmail, dpCell].forEach(function (el) {
+		[
+			emailInput,
+			cellInput,
+			dyGenEmail,
+			dyGenCell,
+			dpEmail,
+			dpCell,
+			dcAtlEmail,
+			dcAtlCell,
+			dcGenEmail,
+			dcGenCell,
+		].forEach(function (el) {
 			if (el) el.classList.remove("lf__input--error");
 		});
 		if (prefissoSelect) prefissoSelect.value = "+39";
 		if (dyGenPrefisso) dyGenPrefisso.value = "+39";
 		if (dpPrefisso) dpPrefisso.value = "+39";
+		if (dcAtlPrefisso) dcAtlPrefisso.value = "+39";
+		if (dcGenPrefisso) dcGenPrefisso.value = "+39";
+		// La data di nascita è appena stata azzerata: i blocchi condizionali
+		// tornano chiusi insieme a lei.
+		dcSincronizzaBlocchi();
 		syncExtras(null);
 		if (nextBtn) nextBtn.disabled = true;
 		["appuntamento", "telefonata"].forEach(function (tipo) {
