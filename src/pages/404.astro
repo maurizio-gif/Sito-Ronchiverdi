@@ -1,0 +1,274 @@
+---
+// Pagina servita per ogni indirizzo che non esiste.
+//
+// Serve soprattutto al passaggio dal vecchio sito: gli indirizzi Wix censiti
+// hanno un redirect (vedi astro.config.mjs), ma quelli che lo scraping non ha
+// visto — link vecchi, indirizzi scritti a mano, QR stampati anni fa —
+// arrivano qui. Prima arrivavano sulla pagina di default di Astro, nera e in
+// inglese, da cui non si andava da nessuna parte.
+//
+// Le destinazioni sono poche e scelte: il footer sotto porta già la mappa
+// completa del sito, quindi ripeterla qui non aggiungerebbe niente. Quelle
+// elencate coprono le intenzioni con cui si arriva su un indirizzo sbagliato —
+// cercavo un'attività, gli orari, i prezzi, un evento, l'iscrizione.
+//
+// `noindex` non è per il 404 in sé, che si dichiara già con lo stato HTTP: è
+// perché /404 è anche una rotta raggiungibile a mano, e quella risponde 200.
+import Layout from "../layouts/Layout.astro";
+import { url } from "../lib/paths";
+import { ISCRIZIONI } from "../data/areaRiservata";
+
+const destinazioni = [
+	{
+		href: url("/#attivita"),
+		titolo: "Attività sportive",
+		testo: "Tennis, padel, nuoto, fitness, Hyrox, triathlon e la Young School.",
+	},
+	{
+		href: url("/planning"),
+		titolo: "Planning e orari",
+		testo: "Orari di apertura del club e palinsesti settimanali dei corsi.",
+	},
+	{
+		href: url("/abbonamenti"),
+		titolo: "Abbonamenti",
+		testo: "Le formule del club, con quello che comprendono attività per attività.",
+	},
+	{
+		href: url("/eventi"),
+		titolo: "Eventi",
+		testo: "Cosa succede al club nelle prossime settimane.",
+	},
+	{
+		href: url("/faq"),
+		titolo: "Domande frequenti",
+		testo: "Tesseramento, certificato medico, prove gratuite, disdette.",
+	},
+	{
+		href: url("/blog"),
+		titolo: "Blog",
+		testo: "Allenamento, nuoto, tennis e benessere raccontati dallo staff.",
+	},
+];
+---
+
+<Layout
+	title="Pagina non trovata — Ronchiverdi Sport Club"
+	description="L'indirizzo cercato non esiste su ronchiverdi.it. Da qui si arriva alle attività, al planning, agli abbonamenti e alle iscrizioni del club."
+	noindex={true}
+>
+	<main class="nf">
+		<header class="nf-head">
+			<p class="eyebrow">Errore 404</p>
+			<h1 class="nf-title">Questa pagina non <em class="accent">c'è</em></h1>
+			<p class="lede nf-lede">
+				L'indirizzo che hai aperto non esiste, o non esiste più: il sito del
+				club è stato rifatto e qualche pagina ha cambiato nome. Non è andato
+				perso niente — qui sotto ci sono le strade principali.
+			</p>
+		</header>
+
+		<ul class="nf-grid">
+			{destinazioni.map((d) => (
+				<li>
+					<a class="nf-card" href={d.href}>
+						<span class="nf-card__titolo">
+							{d.titolo}
+							<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+								><path
+									d="M3.2 8h9.6M8.8 4l4 4-4 4"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/></svg
+							>
+						</span>
+						<span class="nf-card__testo">{d.testo}</span>
+					</a>
+				</li>
+			))}
+		</ul>
+
+		<section class="nf-iscrizioni" aria-labelledby="nf-isc-titolo">
+			<h2 id="nf-isc-titolo" class="nf-sottotitolo">Cercavi un'iscrizione?</h2>
+			<ul class="nf-chips">
+				{ISCRIZIONI.map((i) => (
+					<li><a class="nf-chip" href={i.href}>{i.sport}</a></li>
+				))}
+			</ul>
+		</section>
+
+		<section class="nf-aiuto">
+			<div>
+				<h2 class="nf-sottotitolo">Non trovi quello che cerchi?</h2>
+				<p class="nf-aiuto__testo">
+					Scrivici cosa ti serve, o chiama la segreteria:{" "}
+					<a href="tel:+390116612146">011 6612146</a>.
+				</p>
+			</div>
+			<button type="button" class="btn" data-open-contact>Contattaci</button>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	/* Stessa misura e stesso margine laterale delle altre pagine, così il
+	   contenuto parte dove parte altrove. */
+	.nf {
+		--nf-misura: 72rem;
+		--nf-lato: 1.5rem;
+		max-width: var(--nf-misura);
+		margin: 0 auto;
+		padding: 5rem var(--nf-lato) 6rem;
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
+	.nf-head {
+		max-width: 42rem;
+	}
+	.nf-title {
+		margin: 0.5rem 0 0;
+		font-size: var(--text-2xl);
+		letter-spacing: var(--tracking-2xl);
+		line-height: var(--leading-2xl);
+	}
+	.nf-lede {
+		margin: 1.25rem 0 0;
+	}
+
+	.nf-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+	.nf-grid > li {
+		display: flex;
+	}
+
+	.nf-card {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		padding: 1.4rem 1.5rem 1.5rem;
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius);
+		background: var(--bg-alt);
+		text-decoration: none;
+		color: var(--text);
+		transition: border-color 0.25s ease, transform 0.25s ease;
+	}
+	.nf-card:hover {
+		border-color: var(--accent);
+		transform: translateY(-2px);
+	}
+	.nf-card:active {
+		transform: scale(0.99);
+		transition-duration: 0.05s;
+	}
+	.nf-card__titolo {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-md);
+		font-weight: 500;
+	}
+	.nf-card__titolo svg {
+		flex: none;
+		color: var(--accent);
+	}
+	.nf-card__testo {
+		font-size: var(--text-sm);
+		line-height: 1.55;
+		color: var(--text-muted);
+	}
+
+	.nf-sottotitolo {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-lg);
+		font-weight: 500;
+		letter-spacing: var(--tracking-lg);
+		line-height: var(--leading-lg);
+	}
+
+	.nf-iscrizioni {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.nf-chips {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+	.nf-chip {
+		display: inline-flex;
+		align-items: center;
+		/* 44px di area toccabile, come gli altri comandi del sito. */
+		min-height: 44px;
+		padding: 0.6rem 1.15rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--text);
+		transition: border-color 0.25s ease, background 0.25s ease;
+	}
+	.nf-chip:hover {
+		border-color: var(--accent);
+		background: var(--accent-tint);
+	}
+
+	.nf-aiuto {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 1.5rem;
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--border);
+	}
+	.nf-aiuto__testo {
+		margin: 0.5rem 0 0;
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+	}
+	.nf-aiuto__testo a {
+		color: var(--text);
+	}
+
+	@media (max-width: 900px), (orientation: portrait) {
+		.nf-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 620px) {
+		.nf {
+			padding-top: 3.5rem;
+			gap: 2.5rem;
+		}
+		.nf-grid {
+			grid-template-columns: 1fr;
+		}
+		/* Su telefono il pulsante va sotto il testo e prende la riga intera,
+		   come nel footer. */
+		.nf-aiuto {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+</style>

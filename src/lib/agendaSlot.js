@@ -41,6 +41,14 @@ export var ORARI_CLUB = {
 // Il preavviso minimo evita di proporre un orario che il club non farebbe in
 // tempo a onorare, e l'orizzonte è volutamente corto sulla telefonata: una
 // chiamata si fissa per i prossimi giorni, non fra due settimane.
+//
+// La telefonata resta qui pur non essendo più prenotabile dal sito: il modulo
+// contatti offre l'appuntamento in sede o il messaggio, ma le telefonate già
+// fissate vanno ancora spostate: la pagina /appuntamento e l'endpoint che
+// esegue lo spostamento leggono queste regole per sapere quali orari offrire.
+// Togliendola, spostare una chiamata già presa in agenda ricadrebbe sul passo
+// da 45 minuti dell'appuntamento e proporrebbe orari che l'agenda del club
+// calcola diversi.
 export var DISPONIBILITA = {
 	appuntamento: { giorniAvanti: 7, passoMinuti: 45, orari: ORARI_CLUB },
 	telefonata: { giorniAvanti: 3, passoMinuti: 20, orari: ORARI_CLUB },

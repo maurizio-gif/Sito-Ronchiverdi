@@ -230,8 +230,15 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
       e codice di condotta, oggi linkati dal footer ma non ancora esistenti
 - [x] **Lavora con noi** (`/lavora-con-noi`): aree e ruoli, modulo con CV su
       bucket privato, candidature lette dal pannello nella sezione Curriculum
-- [ ] Redirect 301 dal vecchio sito Wix (~110 URL, vedi
-      `scripts/scrape_output/inventario.csv`)
+- [x] **Redirect 301 dal vecchio sito Wix**: dei 105 indirizzi distinti
+      dell'inventario (`scripts/scrape_output/inventario.csv`) 22 sono serviti
+      da una pagina che si chiama ancora così, gli altri 83 hanno un redirect
+      nella tabella di `astro.config.mjs`. Le destinazioni sono raggruppate per
+      origine e commentate una per una; cinque sono scelte di contenuto
+      discutibili (Oronero, SAA, Ronchi Viaggi) e vanno confermate col club
+- [x] **Pagina 404** (`src/pages/404.astro`): serve chi arriva da un vecchio
+      indirizzo che lo scraping non ha censito, e non ripete la mappa del sito
+      perché il footer sotto ce l'ha già
 - [ ] GA4 / GTM e tag di conversione
 - [ ] Impostare `SITE_URL` al go-live: senza, robots.txt blocca i motori
 

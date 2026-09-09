@@ -29,8 +29,8 @@ export interface LeadActivity {
 	audience: LeadAudience;
 	icon: string;
 	/**
-	 * Percorso dopo lo step 1. "azione" propone appuntamento in sede,
-	 * telefonata o messaggio (il flusso costruito finora). "settore-tennis" fa
+	 * Percorso dopo lo step 1. "azione" propone appuntamento in sede o
+	 * messaggio (il flusso costruito finora). "settore-tennis" fa
 	 * scegliere fra Settore Scuola e Settore Competizione, poi raccoglie i dati
 	 * — genitore e bambino/a per la Scuola, l'atleta (e il genitore solo se
 	 * minorenne) per la Competizione, che riguarda anche adulti in squadra — e
