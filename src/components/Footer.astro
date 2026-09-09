@@ -48,8 +48,11 @@ const legalLinks = [
 	// /regolamento ci reindirizza (vedi astro.config.mjs).
 	{ href: url("/termini-e-condizioni"), label: "Termini e Condizioni" },
 	{ href: url("/privacy"), label: "Privacy" },
-	{ href: url("/nomina-safeguarding"), label: "Nomina Safeguarding" },
-	{ href: url("/codice-di-condotta"), label: "Codice di Condotta" },
+	// La nomina del Safeguarding è il verbale d'assemblea in PDF, non una
+	// pagina: si apre in una scheda nuova come tutti i documenti, così chi lo
+	// legge non perde il sito. "Codice di Condotta" è stato tolto perché non
+	// c'era niente dietro: il codice vive dentro il MOG, citato nei termini.
+	{ href: url("/documenti/nomina-safeguarding.pdf"), label: "Nomina Safeguarding", esterno: true },
 ];
 
 const social = [
@@ -234,7 +237,7 @@ const enti = [
 		<ul class="legal-list">
 			{legalLinks.map((l) => (
 				<li>
-					<a href={l.href}>
+					<a href={l.href} target={l.esterno ? "_blank" : undefined} rel={l.esterno ? "noopener" : undefined}>
 						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.2 1.8H4.5a1 1 0 0 0-1 1v10.4a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.1L9.2 1.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /><path d="M9 2v3.2h3.3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /></svg>
 						<span>{l.label}</span>
 					</a>
