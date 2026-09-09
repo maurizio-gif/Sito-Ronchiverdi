@@ -77,7 +77,7 @@
         "Gestione della respirazione e del galleggiamento"
       ],
       "durata": "40 minuti",
-      "frequenza": "1 o 2 volte a settimana (monosettimanale o bisettimanale)",
+      "frequenza": "1 volta a settimana",
       "giorni": "dal lunedì al venerdì pomeriggio",
       "vasca": "Vasca di ambientamento e vasca grande",
       "image": "images/activities/scuola-nuoto-young.jpg",
@@ -113,7 +113,7 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1 o 2 volte a settimana"
+          "valore": "1 volta a settimana"
         },
         {
           "label": "Vasca",
@@ -141,7 +141,7 @@
         "Apprendimento tecnico dei quattro stili"
       ],
       "durata": "40 minuti",
-      "frequenza": "1 o 2 volte a settimana (monosettimanale o bisettimanale)",
+      "frequenza": "1 volta a settimana",
       "giorni": "dal lunedì al venerdì pomeriggio",
       "vasca": "Vasca grande 25 m · 28°C",
       "image": "images/activities/nuoto-open.jpg",
@@ -177,7 +177,7 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1 o 2 volte a settimana"
+          "valore": "1 volta a settimana"
         },
         {
           "label": "Vasca",
@@ -205,7 +205,7 @@
         "Introduzione alla preparazione pre-agonistica"
       ],
       "durata": "60 minuti",
-      "frequenza": "1, 2 o 3 volte a settimana (monosettimanale, bisettimanale o trisettimanale)",
+      "frequenza": "1 o 2 volte a settimana (monosettimanale o bisettimanale)",
       "giorni": "dal lunedì al venerdì pomeriggio",
       "vasca": "Vasca grande 25 m · 28°C",
       "image": "images/activities/nuoto-propaganda.jpg",
@@ -259,7 +259,7 @@
         },
         {
           "label": "Frequenza",
-          "valore": "1, 2 o 3 volte a settimana"
+          "valore": "1 o 2 volte a settimana"
         },
         {
           "label": "Vasca",
