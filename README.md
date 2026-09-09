@@ -234,13 +234,20 @@ Non c'è una versione separata delle pagine. Il totem è gestito in due punti:
       dell'inventario (`scripts/scrape_output/inventario.csv`) 22 sono serviti
       da una pagina che si chiama ancora così, gli altri 83 hanno un redirect
       nella tabella di `astro.config.mjs`. Le destinazioni sono raggruppate per
-      origine e commentate una per una; cinque sono scelte di contenuto
-      discutibili (Oronero, SAA, Ronchi Viaggi) e vanno confermate col club
+      origine e commentate una per una. Oronero e Ronchi Viaggi sono stati
+      confermati dal club e portano al sito business; restano da confermare le
+      due pagine del campus SAA, oggi mandate agli abbonamenti
 - [x] **Pagina 404** (`src/pages/404.astro`): serve chi arriva da un vecchio
       indirizzo che lo scraping non ha censito, e non ripete la mappa del sito
       perché il footer sotto ce l'ha già
 - [ ] GA4 / GTM e tag di conversione
-- [ ] Impostare `SITE_URL` al go-live: senza, robots.txt blocca i motori
+- [ ] **Cambio DNS**: il piano sta in
+      `.claude/plans/` — sottodominio business prima, dominio principale dopo.
+      Al go-live servono tre cose che non stanno in repo: impostare `SITE_URL`
+      (senza, robots.txt blocca i motori), attivare **Trailing Slash** nel
+      progetto Vercel (i redirect sono regex esatta e non tollerano lo slash
+      finale) e verificare che `business.ronchiverdi.it` risolva, perché 20
+      redirect ci puntano
 
 ## Contenuti scrapati dal vecchio sito
 
