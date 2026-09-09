@@ -47,7 +47,7 @@ export function initLeadForm(root, options) {
 
 	// Ramificazioni: attività scelta → step successivo. Le attività con
 	// contactFlow "azione" (oggi: Abbonamento Club e Family) propongono
-	// appuntamento/telefonata/messaggio; "settore-tennis" (Young School Tennis)
+	// appuntamento in sede o messaggio; "settore-tennis" (Young School Tennis)
 	// fa scegliere il settore e poi raccoglie i dati: dal genitore per il
 	// Settore Scuola, dall'atleta (con il genitore solo se minorenne) per il
 	// Settore Competizione;
@@ -216,8 +216,8 @@ export function initLeadForm(root, options) {
 			dataScelta: null,
 			oraScelta: null,
 			messaggioTesto: "",
-			// L'oggetto dell'appuntamento o della telefonata: cosa la persona
-			// vuole discutere. Finisce nella stessa colonna del messaggio (vedi
+			// L'oggetto dell'appuntamento: cosa la persona vuole discutere in
+			// sede. Finisce nella stessa colonna del messaggio (vedi
 			// api/lead.ts), perché per la segreteria è la stessa cosa — il testo
 			// che ha scritto chi ha compilato il form.
 			oggetto: "",
@@ -1077,18 +1077,22 @@ export function initLeadForm(root, options) {
 		}
 	}
 
-	["appuntamento", "telefonata"].forEach(function (tipo) {
-		var btn = document.getElementById(P + "-" + tipo + "-next");
-		if (!btn) return;
-		btn.addEventListener("click", function () {
-			var s = getStep("3-" + tipo);
+	// ── STEP 3-APPUNTAMENTO ──────────────────────────────────────────────
+	// Il calendario resta indicizzato per tipo (`-giorni-appuntamento`,
+	// `-slots-appuntamento`) perché `buildPicker` e `regoleDi` lavorano così,
+	// e perché il pannello di gestione riusa le stesse regole per spostare una
+	// telefonata già prenotata. Dal form, però, di tipi ne parte uno solo.
+	var appuntamentoNext = document.getElementById(P + "-appuntamento-next");
+	if (appuntamentoNext) {
+		appuntamentoNext.addEventListener("click", function () {
+			var s = getStep("3-appuntamento");
 			clearError(s);
 			if (!state.dataScelta) return showError(s, ERR.giorno);
 			if (!state.oraScelta) return showError(s, ERR.orario);
 			// L'oggetto è obbligatorio: un appuntamento senza sapere di cosa si
-			// parlerà arriva in segreteria da richiamare per chiederlo, e la
+			// parlerà arriva in segreteria da richiamare per chiederlo, e quella
 			// telefonata di preparazione vale quanto l'appuntamento stesso.
-			var oggetto = root.querySelector("#" + P + "-" + tipo + "-oggetto");
+			var oggetto = root.querySelector("#" + P + "-appuntamento-oggetto");
 			if (oggetto && !oggetto.value.trim()) {
 				showError(s, ERR.oggetto);
 				oggetto.focus();
@@ -1097,7 +1101,7 @@ export function initLeadForm(root, options) {
 			state.oggetto = oggetto ? oggetto.value.trim() : "";
 			showStep("4-dati");
 		});
-	});
+	}
 
 	// ── STEP 3-MESSAGGIO ─────────────────────────────────────────────────
 	var messaggioNext = root.querySelector("#" + P + "-messaggio-next");
@@ -1116,7 +1120,7 @@ export function initLeadForm(root, options) {
 		});
 	}
 
-	// ── STEP 4-DATI · Contatto, condiviso dai tre percorsi ──────────────
+	// ── STEP 4-DATI · Contatto, condiviso dai due percorsi ──────────────
 	var datiBack = root.querySelector("#" + P + "-dati-back");
 	if (datiBack) {
 		datiBack.addEventListener("click", function () {
@@ -1196,7 +1200,6 @@ export function initLeadForm(root, options) {
 
 	var CONFERMA = {
 		appuntamento: { titolo: "Ti aspettiamo <em>al Club!</em>" },
-		telefonata: { titolo: "Perfetto! <em>Ti richiamiamo noi.</em>" },
 		messaggio: { titolo: "Messaggio <em>ricevuto!</em>" },
 	};
 
@@ -1307,19 +1310,17 @@ export function initLeadForm(root, options) {
 		dcSincronizzaBlocchi();
 		syncExtras(null);
 		if (nextBtn) nextBtn.disabled = true;
-		["appuntamento", "telefonata"].forEach(function (tipo) {
-			var strip = document.getElementById(P + "-giorni-" + tipo);
-			var slots = document.getElementById(P + "-slots-" + tipo);
-			var next = document.getElementById(P + "-" + tipo + "-next");
-			var oggetto = document.getElementById(P + "-" + tipo + "-oggetto");
-			if (oggetto) oggetto.value = "";
-			if (strip) strip.innerHTML = "";
-			if (slots) {
-				slots.innerHTML = "";
-				slots.hidden = true;
-			}
-			if (next) next.disabled = true;
-		});
+		var strip = document.getElementById(P + "-giorni-appuntamento");
+		var slots = document.getElementById(P + "-slots-appuntamento");
+		var nextAppuntamento = document.getElementById(P + "-appuntamento-next");
+		var oggettoAppuntamento = document.getElementById(P + "-appuntamento-oggetto");
+		if (oggettoAppuntamento) oggettoAppuntamento.value = "";
+		if (strip) strip.innerHTML = "";
+		if (slots) {
+			slots.innerHTML = "";
+			slots.hidden = true;
+		}
+		if (nextAppuntamento) nextAppuntamento.disabled = true;
 		root.querySelectorAll(".lf__error").forEach(function (err) {
 			err.hidden = true;
 		});
