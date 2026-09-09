@@ -32,9 +32,11 @@ export interface LeadActivity {
 	 * Percorso dopo lo step 1. "azione" propone appuntamento in sede,
 	 * telefonata o messaggio (il flusso costruito finora). "settore-tennis" fa
 	 * scegliere fra Settore Scuola e Settore Competizione, poi raccoglie i dati
-	 * di genitore e bambino/a e mette in contatto diretto (chiamata o email)
-	 * col referente di quel settore. "padel" raccoglie i dati dell'adulto e
-	 * mette in contatto diretto (WhatsApp o chiamata) col referente del corso.
+	 * — genitore e bambino/a per la Scuola, l'atleta (e il genitore solo se
+	 * minorenne) per la Competizione, che riguarda anche adulti in squadra — e
+	 * mette in contatto diretto (chiamata o email) col referente di quel
+	 * settore. "padel" raccoglie i dati dell'adulto e mette in contatto
+	 * diretto (WhatsApp o chiamata) col referente del corso.
 	 * "young-diretto" (Nuoto e Triathlon) raccoglie gli stessi dati di genitore
 	 * e bambino/a di "settore-tennis" ma senza scelta di settore, poi mette in
 	 * contatto diretto (chiamata, WhatsApp o email) col referente dell'attività.
@@ -82,6 +84,7 @@ export const leadActivityGroups: LeadActivityGroup[] = [
 					"Nuoto Libero",
 					"Triathlon",
 					"Tennis",
+					"Corsi Tennis Adulti",
 					"Padel",
 				],
 				audience: "adulti",

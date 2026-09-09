@@ -27,10 +27,17 @@ interface Props {
 	image?: string;
 	/** Pagine di lavoro non ancora pubbliche: fuori dagli indici dei motori. */
 	noindex?: boolean;
+	/**
+	 * Pagina senza barra e senza footer, con la sola cornice grafica del
+	 * sito. Serve alle pagine che si usano su un dispositivo dedicato — il
+	 * guest register al banco — dove la navigazione del sito non è
+	 * un'opzione: da lì non si va da nessuna parte, si compila e basta.
+	 */
+	senzaNavigazione?: boolean;
 	/** JSON-LD aggiuntivo della pagina (es. FAQPage, Event). */
 	schema?: unknown;
 }
-const { title, description, image, noindex = false, schema } = Astro.props;
+const { title, description, image, noindex = false, senzaNavigazione = false, schema } = Astro.props;
 
 // Indirizzo canonico della pagina. Serve a dire a Google qual è l'unico
 // indirizzo buono fra le copie che il sito ha oggi (GitHub Pages, preview
@@ -106,11 +113,14 @@ const structuredData = {
 		{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 	</head>
 	<body>
-		<Nav />
+		{!senzaNavigazione && <Nav />}
 		<slot />
-		<Footer />
-		<LeadModal />
-		<AccountModal />
+		{!senzaNavigazione && <Footer />}
+		{/* Le due modali servono i pulsanti della barra, del footer e delle
+		    pagine: senza navigazione non c'è niente che le apra, e sarebbero
+		    due form nascosti caricati per nulla. */}
+		{!senzaNavigazione && <LeadModal />}
+		{!senzaNavigazione && <AccountModal />}
 		<script>
 			// Apre la sessione e fissa le UTM di ingresso su ogni pagina, prima
 			// che l'utente navighi via e l'URL con i parametri sia perso.

@@ -19,6 +19,10 @@ export const GET: APIRoute = ({ site }) => {
 				"",
 				"# L'anteprima del modulo è un file di lavoro, non una pagina del sito.",
 				"Disallow: /anteprima-modulo-contatti.html",
+				"",
+				"# Il guest register è la pagina del banco: serve a chi è in sede,",
+				"# non è un contenuto da far trovare a chi cerca su Google.",
+				"Disallow: /guest-register",
 				...(sitemap ? ["", `Sitemap: ${sitemap}`] : []),
 			]
 		: [

@@ -55,7 +55,7 @@ const youngPrograms = [
 		color: "#c8791f",
 	},
 	{
-		ageLabel: "Livello successivo",
+		ageLabel: "Livello intermedio",
 		title: "Green",
 		percorso: "Palla verde, più vicina a quella standard: si consolidano tecnica e tattica, con un carico di allenamento maggiore.",
 		obiettivi: ["Consolidamento tecnico e tattico", "45' o 60' di tennis + 45' di preparazione atletica", "2 o 3 volte a settimana"],
@@ -66,7 +66,7 @@ const youngPrograms = [
 		ageLabel: "Livello avanzato",
 		title: "Yellow",
 		percorso: "La palla gialla standard, l'ultimo gradino prima del settore agonistico: tecnica di gara e intensità crescente.",
-		obiettivi: ["Palla gialla standard", "90' di tennis + 45' di preparazione atletica", "2 volte a settimana"],
+		obiettivi: ["Palla gialla standard", "90' di tennis + 45' di preparazione atletica", "2 o 3 volte a settimana"],
 		durata: "90 + 45 minuti",
 		color: "#c9a227",
 	},
@@ -81,18 +81,22 @@ const agonismoCards = [
 	{
 		eyebrow: "Settore Competizione",
 		title: "Allenamenti mirati per ogni atleta",
-		desc: "La parte competitiva della Young School: si parte dal settore formazione, con un torneo interno al mese il sabato pomeriggio come prima introduzione soft alla competizione, fino alle squadre federali — Ronchiverdi partecipa alla Serie B1 e alle categorie a scalare — secondo il calendario della Federazione Italiana Tennis e Padel.",
+		desc: "Il gradino successivo al Next Gen, indicativamente dai 14 anni in su: qui la base tecnica e tattica c'è già, e il lavoro serve a portarla a un livello di gioco più alto. Allenamenti da 90 minuti di tennis più 90 minuti di preparazione atletica, da 2 a 7 volte a settimana, con non più di quattro atleti per campo.",
 	},
 ];
 
-const maestri = [
+const staffTennis = [
 	{ nome: "Luca Anselmi", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Stefano Bertone", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Laurent Bondaz", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Andrea Dario", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Andrea Durando", ruolo: "Maestro Nazionale FITP" },
 	{ nome: "Fabio Vallino", ruolo: "Maestro Nazionale FITP" },
+	{ nome: "Simone Dario", ruolo: "Istruttore 2° grado FITP" },
 	{ nome: "Tommaso Vescovi", ruolo: "Istruttore 2° grado FITP" },
+	{ nome: "Andrea Lemma", ruolo: "Preparatore Atletico 2° grado FITP" },
+	{ nome: "Mario Bellavia", ruolo: "Preparatore Atletico 1° grado FITP" },
+	{ nome: "Andrea Spanu", ruolo: "Preparatore Atletico 1° grado FITP" },
 ];
 
 
@@ -177,12 +181,51 @@ const faq = faqDiPagina("tennis");
 				</article>
 			))}
 		</div>
-		<p class="adulti-note">
-			Nella stagione estiva i campi sono compresi nel tuo abbonamento e sempre prenotabili (fino a un'ora di gioco al giorno, un'ora e mezza per il doppio): corsi, lezioni individuali con i maestri e ore invernali si acquistano a parte.
-		</p>
+		<!-- Come si accede ai campi: due box affiancati perché sono due cose
+		     diverse e la riga unica di prima le confondeva — da una parte
+		     quello che l'abbonamento comprende già, dall'altra quello che si
+		     acquista a parte. -->
+		<div class="accesso">
+			<article class="accesso-box accesso-box--incluso">
+				<span class="accesso-box__tag">Con l'abbonamento</span>
+				<h3>I campi sono già tuoi</h3>
+				<ul class="accesso-box__voci">
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						<span>Nella <strong>stagione estiva</strong> i campi sono compresi nella tua membership e sempre prenotabili.</span>
+					</li>
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						<span>Fino a <strong>un'ora di gioco al giorno</strong>, un'ora e mezza per il doppio.</span>
+					</li>
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						<span><strong>Tariffa agevolata</strong> riservata agli abbonati per prenotare le ore dei campi invernali.</span>
+					</li>
+				</ul>
+			</article>
+
+			<article class="accesso-box accesso-box--extra">
+				<span class="accesso-box__tag">Da acquistare a parte</span>
+				<h3>Corsi, maestri e ore invernali</h3>
+				<ul class="accesso-box__voci">
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.2v9.6M3.2 8h9.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+						<span><strong>Corsi di gruppo</strong> per adulti, formati per livello di gioco.</span>
+					</li>
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.2v9.6M3.2 8h9.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+						<span><strong>Lezioni individuali</strong> con i maestri, da concordare sull'obiettivo.</span>
+					</li>
+					<li>
+						<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.2v9.6M3.2 8h9.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+						<span><strong>Ore dei campi invernali</strong>, a tariffa agevolata per chi è abbonato.</span>
+					</li>
+				</ul>
+			</article>
+		</div>
 		<div class="section-cta">
-			<a class="btn" href={url("/attivita/tennis/iscrizione/livelli")}>Quote e iscrizione</a>
-			<button type="button" class="btn btn-outline" data-open-contact>Contattaci</button>
+			<button type="button" class="btn" data-open-contact>Contattaci</button>
 		</div>
 	</section>
 
@@ -237,6 +280,9 @@ const faq = faqDiPagina("tennis");
 		<p class="young-corsi__dates">
 			Young School: dal <strong>14 settembre 2026</strong> al <strong>4 giugno 2027</strong>. In estate continua con il <strong>Summer Tennis</strong>, con iscrizione settimanale.
 		</p>
+		<div class="section-cta">
+			<a class="btn" href={url("/attivita/tennis/iscrizione/livelli")}>Quote e iscrizione</a>
+		</div>
 	</section>
 
 	<section class="agonismo" id="agonismo">
@@ -261,15 +307,15 @@ const faq = faqDiPagina("tennis");
 	</div>
 	</div>
 
-	<section class="maestri">
-		<div class="maestri__head">
-			<h2>I nostri maestri</h2>
-			<p class="lede" style="margin-inline:auto">Professionisti certificati FITP, uniti da esperienza e metodo condiviso.</p>
+	<section class="staff">
+		<div class="staff__head">
+			<h2>Lo staff tennis</h2>
+			<p class="lede" style="margin-inline:auto">Maestri e preparatori atletici certificati FITP, uniti da esperienza e metodo condiviso.</p>
 		</div>
-		<div class="maestri-grid">
-			{maestri.map((m) => (
-				<div class="maestro-card">
-					<span class="maestro-card__avatar" aria-hidden="true">
+		<div class="staff-grid">
+			{staffTennis.map((m) => (
+				<div class="staff-card">
+					<span class="staff-card__avatar" aria-hidden="true">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5" /><path d="M4 20c0-3.6 3.6-6 8-6s8 2.4 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
 					</span>
 					<h3>{m.nome}</h3>
@@ -279,7 +325,7 @@ const faq = faqDiPagina("tennis");
 		</div>
 	</section>
 
-	<Faq items={faq} />
+	<Faq items={faq} misura="78rem" />
 
 	<section class="final-cta">
 		<h2>Vuoi saperne di più?</h2>
@@ -421,9 +467,20 @@ const faq = faqDiPagina("tennis");
 			}
 		}
 
+		.section-frame,
+		.staff {
+			/* --tn-misura comprende i lati, --tn-lato è il lato: il contenuto
+			   di ogni blocco è quindi largo misura meno due lati, e parte allo
+			   stesso punto in tutta la pagina. --tn-testo è la misura dei
+			   testi centrati (titoli, note): quelli stanno in una colonna
+			   loro, sempre la stessa. */
+			--tn-misura: 78rem;
+			--tn-lato: 1.5rem;
+			--tn-testo: 42rem;
+		}
 		.section-frame {
 			position: relative;
-			max-width: 88rem;
+			max-width: var(--tn-misura);
 			margin: 0 auto 4.5rem;
 			padding-top: 0.75rem;
 			border: 1.5px solid var(--border-strong);
@@ -459,9 +516,8 @@ const faq = faqDiPagina("tennis");
 		}
 
 		.adulti {
-			max-width: 78rem;
 			margin: 0 auto 4.5rem;
-			padding: 2rem 1.5rem 3rem;
+			padding: 2rem var(--tn-lato) 3rem;
 			text-align: center;
 			scroll-margin-top: 7.5rem;
 		}
@@ -541,13 +597,69 @@ const faq = faqDiPagina("tennis");
 			margin-top: 0.2rem;
 			color: var(--accent);
 		}
-		.adulti-note {
-			max-width: 42rem;
-			margin: 2.5rem auto 1.75rem;
+
+		/* ── Accesso ai campi: incluso vs a parte ─────────────────────── */
+		.accesso {
+			margin: 2.5rem 0 1.75rem;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.75rem;
+			text-align: left;
+		}
+		.accesso-box {
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			padding: 1.6rem 1.75rem 1.75rem;
+		}
+		/* Il box di ciò che è già compreso è quello che va letto per primo:
+		   fondo e bordo nell'oro del club lo staccano da quello degli extra. */
+		.accesso-box--incluso {
+			background: var(--accent-tint);
+			border-color: rgba(139, 108, 20, 0.24);
+		}
+		.accesso-box--extra {
+			background: var(--bg-alt);
+		}
+		.accesso-box__tag {
+			display: inline-block;
+			margin-bottom: 0.7rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 600;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.accesso-box--extra .accesso-box__tag {
+			color: var(--text-muted);
+		}
+		.accesso-box h3 {
+			margin: 0 0 1.1rem;
+		}
+		.accesso-box__voci {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.7rem;
 			font-family: var(--font-sans);
 			font-size: var(--text-sm);
+			line-height: 1.55;
+			color: var(--text);
+		}
+		.accesso-box__voci li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.55rem;
+		}
+		.accesso-box__voci li svg {
+			flex-shrink: 0;
+			margin-top: 0.25rem;
+			color: var(--accent);
+		}
+		.accesso-box--extra .accesso-box__voci li svg {
 			color: var(--text-muted);
-			line-height: 1.6;
 		}
 		.section-cta {
 			display: flex;
@@ -561,7 +673,8 @@ const faq = faqDiPagina("tennis");
 			font-family: var(--font-sans);
 		}
 		@media (max-width: 760px), (orientation: portrait) {
-			.adulti-cards {
+			.adulti-cards,
+			.accesso {
 				grid-template-columns: 1fr;
 			}
 		}
@@ -571,9 +684,9 @@ const faq = faqDiPagina("tennis");
 			grid-template-columns: 1fr 1fr;
 			align-items: center;
 			gap: 3.5rem;
-			max-width: 78rem;
+			max-width: var(--tn-misura);
 			margin: 0 auto;
-			padding: 2rem 1.5rem 5rem;
+			padding: 2rem var(--tn-lato) 5rem;
 			scroll-margin-top: 7.5rem;
 		}
 		.young-intro__media img {
@@ -605,9 +718,9 @@ const faq = faqDiPagina("tennis");
 		}
 
 		.young-corsi {
-			max-width: 84rem;
+			max-width: var(--tn-misura);
 			margin: 0 auto;
-			padding: 1rem 1.5rem 4rem;
+			padding: 1rem var(--tn-lato) 4rem;
 			scroll-margin-top: 7.5rem;
 		}
 		.program-cards--tennis {
@@ -716,7 +829,7 @@ const faq = faqDiPagina("tennis");
 		.young-corsi__dates {
 			text-align: center;
 			margin: 2.5rem auto 0;
-			max-width: 40rem;
+			max-width: var(--tn-testo);
 			font-family: var(--font-sans);
 			font-size: var(--text-sm);
 			color: var(--text-muted);
@@ -730,11 +843,11 @@ const faq = faqDiPagina("tennis");
 
 		.agonismo {
 			background: var(--bg-alt);
-			padding: 5.5rem 1.5rem;
+			padding: 5.5rem var(--tn-lato);
 			scroll-margin-top: 7.5rem;
 		}
 		.agonismo__head {
-			max-width: 42rem;
+			max-width: var(--tn-testo);
 			margin: 0 auto 2.75rem;
 			text-align: center;
 		}
@@ -742,7 +855,7 @@ const faq = faqDiPagina("tennis");
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			gap: 1.75rem;
-			max-width: 72rem;
+			max-width: calc(var(--tn-misura) - var(--tn-lato) * 2);
 			margin: 0 auto;
 		}
 		.agonismo-card {
@@ -767,29 +880,29 @@ const faq = faqDiPagina("tennis");
 			}
 		}
 
-		.maestri {
-			max-width: 78rem;
+		.staff {
+			max-width: var(--tn-misura);
 			margin: 0 auto;
-			padding: 5.5rem 1.5rem;
+			padding: 5.5rem var(--tn-lato);
 		}
-		.maestri__head {
-			max-width: 42rem;
+		.staff__head {
+			max-width: var(--tn-testo);
 			margin: 0 auto 2.75rem;
 			text-align: center;
 		}
-		.maestri-grid {
+		.staff-grid {
 			display: grid;
 			grid-template-columns: repeat(4, 1fr);
 			gap: 1.5rem;
 		}
-		.maestro-card {
+		.staff-card {
 			text-align: center;
 			padding: 2rem 1.25rem;
 			border: 1px solid var(--border);
 			border-radius: 16px;
 			background: var(--bg-alt);
 		}
-		.maestro-card__avatar {
+		.staff-card__avatar {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -800,23 +913,23 @@ const faq = faqDiPagina("tennis");
 			background: var(--border-strong);
 			color: var(--text-muted);
 		}
-		.maestro-card h3 {
+		.staff-card h3 {
 			font-size: var(--text-md);
 			margin: 0 0 0.3rem;
 		}
-		.maestro-card p {
+		.staff-card p {
 			font-family: var(--font-sans);
 			font-size: var(--text-2xs);
 			color: var(--text-muted);
 			margin: 0;
 		}
 		@media (max-width: 860px), (orientation: portrait) {
-			.maestri-grid {
+			.staff-grid {
 				grid-template-columns: 1fr 1fr;
 			}
 		}
 		@media (max-width: 480px) {
-			.maestri-grid {
+			.staff-grid {
 				grid-template-columns: 1fr;
 			}
 		}

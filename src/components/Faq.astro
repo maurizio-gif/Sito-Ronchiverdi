@@ -15,9 +15,22 @@ interface Props {
 	title?: string;
 	/** Link alla knowledge base completa in coda all'elenco. */
 	linkWiki?: boolean;
+	/**
+	 * Larghezza della colonna della pagina che ospita le FAQ, lati compresi:
+	 * l'elenco si allinea a quella, invece di avere una misura sua che non
+	 * combacia con niente. Ogni pagina passa la propria — 82rem è quella più
+	 * diffusa, ed è il valore di ripiego.
+	 */
+	misura?: string;
 }
 
-const { items, eyebrow = "Hai dubbi?", title = "Domande frequenti", linkWiki = true } = Astro.props;
+const {
+	items,
+	eyebrow = "Hai dubbi?",
+	title = "Domande frequenti",
+	linkWiki = true,
+	misura = "82rem",
+} = Astro.props;
 
 // Structured data FAQPage. Sta qui e non nel Layout perché così lo ottiene
 // automaticamente ogni pagina che mostra delle FAQ, comprese quelle future, e
@@ -28,7 +41,7 @@ const schema = schemaFaq(items, title, Astro.site ? new URL(Astro.url.pathname, 
 
 {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-<section class="faq-section">
+<section class="faq-section" style={`--faq-misura: ${misura}`}>
 	<div class="faq-section__head">
 		<span class="eyebrow">{eyebrow}</span>
 		<h2>{title}</h2>
@@ -74,11 +87,16 @@ const schema = schemaFaq(items, title, Astro.site ? new URL(Astro.url.pathname, 
 
 <style>
 	.faq-section {
+		/* Stesso impianto delle sezioni delle pagine: --faq-misura arriva
+		   dalla pagina e comprende i lati, --faq-lato è il lato, --faq-testo
+		   la colonna dei testi centrati. */
+		--faq-lato: 1.5rem;
+		--faq-testo: 42rem;
 		background: var(--bg-dark);
-		padding: 6rem 1.5rem;
+		padding: 6rem var(--faq-lato);
 	}
 	.faq-section__head {
-		max-width: 68rem;
+		max-width: var(--faq-testo);
 		margin: 0 auto 3rem;
 		text-align: center;
 	}
@@ -89,8 +107,12 @@ const schema = schemaFaq(items, title, Astro.site ? new URL(Astro.url.pathname, 
 		color: var(--text-on-dark);
 		margin: 0.4rem 0 0;
 	}
+	/* La banda è a tutta larghezza: il limite si applica dentro il padding,
+	   quindi va scalato dei due lati per far combaciare i bordi con quelli
+	   dei blocchi della pagina. Le risposte restano leggibili per conto loro:
+	   i paragrafi hanno la loro misura, più sotto. */
 	.faq-list {
-		max-width: 52rem;
+		max-width: calc(var(--faq-misura) - var(--faq-lato) * 2);
 		margin: 0 auto;
 		border-top: 1px solid var(--border-dark);
 	}
@@ -198,7 +220,7 @@ const schema = schemaFaq(items, title, Astro.site ? new URL(Astro.url.pathname, 
 	}
 	/* La sezione FAQ sta sempre su fondo scuro: colori "on dark". */
 	.faq-section__wiki {
-		max-width: 52rem;
+		max-width: var(--faq-testo);
 		margin: 2.5rem auto 0;
 		text-align: center;
 		font-size: var(--text-sm);

@@ -3,53 +3,62 @@
   "percorsi": [
     {
       "slug": "livelli",
-      "title": "Livelli colore",
-      "eyebrow": "Young School · 6–16 anni",
-      "descrizione": "Il percorso della scuola tennis, diviso per colore: si entra dal livello che corrisponde all'età e alle capacità, e si sale man mano. Ogni livello ha la sua frequenza settimanale e la sua durata di lezione, sempre con la preparazione atletica compresa.",
+      "title": "Livelli per colore",
+      "eyebrow": "Mini Tennis e Young School · 4–16 anni",
+      "descrizione": "Il percorso della scuola tennis, diviso per colore: si entra dal livello che corrisponde all'età e alle capacità, e si sale man mano. Ogni livello ha la sua frequenza settimanale, la sua durata di lezione e, dall'Orange in su, la preparazione atletica compresa.",
       "punti": [
         "Gruppi formati per livello di gioco, non solo per età",
-        "45 minuti di preparazione atletica in ogni lezione",
-        "Dal 14 settembre 2026 al 4 giugno 2027"
+        "Dal 14 settembre 2026 al 4 giugno 2027",
+        "Iscrizione possibile solo dopo la lezione di prova e il via libera dello staff tecnico"
       ],
       "image": "images/activities/tennis-young.jpg",
       "imageAlt": "Ragazzi della scuola tennis Ronchiverdi in campo con il maestro",
       "listino": [
         {
           "voce": "RonchiRed",
+          "colore": "#b23a2e",
           "dettaglio": "1 volta a settimana",
           "prezzoNonSoci": 680,
           "prezzoSoci": 630,
           "idNonSoci": 222,
-          "idSoci": 236
+          "idSoci": 236,
+          "nota": "45' di tennis"
         },
         {
           "voce": "RonchiRed",
+          "colore": "#b23a2e",
           "dettaglio": "2 volte a settimana",
           "prezzoNonSoci": 1025,
           "prezzoSoci": 975,
           "idNonSoci": 223,
-          "idSoci": 237
+          "idSoci": 237,
+          "nota": "45' di tennis"
         },
         {
           "voce": "RonchiOrange",
+          "colore": "#c8791f",
           "dettaglio": "1 volta a settimana",
           "prezzoNonSoci": 1075,
           "prezzoSoci": 1025,
           "idNonSoci": 224,
-          "idSoci": 238
+          "idSoci": 238,
+          "nota": "45' di tennis + 45' di preparazione atletica"
         },
         {
           "voce": "RonchiOrange",
+          "colore": "#c8791f",
           "dettaglio": "2 volte a settimana",
           "prezzoNonSoci": 1435,
           "prezzoSoci": 1385,
           "idNonSoci": 225,
-          "idSoci": 239
+          "idSoci": 239,
+          "nota": "45' di tennis + 45' di preparazione atletica"
         },
         {
           "voce": "RonchiGreen",
+          "colore": "#4f7a4a",
           "dettaglio": "2 volte a settimana",
-          "nota": "45 minuti di tennis",
+          "nota": "45' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 1500,
           "prezzoSoci": 1450,
           "idNonSoci": 226,
@@ -57,8 +66,9 @@
         },
         {
           "voce": "RonchiGreen",
+          "colore": "#4f7a4a",
           "dettaglio": "3 volte a settimana",
-          "nota": "45 minuti di tennis",
+          "nota": "45' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 2025,
           "prezzoSoci": 1975,
           "idNonSoci": 227,
@@ -66,8 +76,9 @@
         },
         {
           "voce": "RonchiGreen",
+          "colore": "#4f7a4a",
           "dettaglio": "2 volte a settimana",
-          "nota": "60 minuti di tennis",
+          "nota": "60' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 1755,
           "prezzoSoci": 1705,
           "idNonSoci": 228,
@@ -75,8 +86,9 @@
         },
         {
           "voce": "RonchiGreen",
+          "colore": "#4f7a4a",
           "dettaglio": "3 volte a settimana",
-          "nota": "60 minuti di tennis",
+          "nota": "60' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 2450,
           "prezzoSoci": 2400,
           "idNonSoci": 229,
@@ -84,8 +96,9 @@
         },
         {
           "voce": "RonchiYellow",
+          "colore": "#c9a227",
           "dettaglio": "2 volte a settimana",
-          "nota": "90 minuti di tennis",
+          "nota": "90' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 2230,
           "prezzoSoci": 2180,
           "idNonSoci": 230,
@@ -93,8 +106,9 @@
         },
         {
           "voce": "RonchiYellow",
+          "colore": "#c9a227",
           "dettaglio": "3 volte a settimana",
-          "nota": "90 minuti di tennis",
+          "nota": "90' di tennis + 45' di preparazione atletica",
           "prezzoNonSoci": 3000,
           "prezzoSoci": 2950,
           "idNonSoci": 231,
@@ -102,6 +116,10 @@
         }
       ],
       "dettagli": [
+        {
+          "label": "Iscrizione",
+          "valore": "Solo dopo la lezione di prova e il via libera dello staff tecnico"
+        },
         {
           "label": "Età",
           "valore": "Da 4 a 16 anni, per livello"
@@ -112,7 +130,7 @@
         },
         {
           "label": "In campo",
-          "valore": "Da 45 a 90 minuti di tennis, più 45 di preparazione atletica"
+          "valore": "Da 45 a 90 minuti di tennis, più 45 di preparazione atletica dall'Orange"
         },
         {
           "label": "Certificato medico",

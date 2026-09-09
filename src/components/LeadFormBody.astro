@@ -258,6 +258,102 @@ const { prefix } = Astro.props;
 	<p class="lf__error" hidden role="alert"></p>
 </div>
 
+<!-- ─── STEP 3-DATI-COMPETIZIONE · Dati dell'atleta (+ genitore se minorenne) ───
+     Il Settore Competizione non è solo per bambini: chi chiede può essere un
+     adulto che gioca in squadra. Si parte quindi dall'atleta, e solo se la data
+     di nascita dice che è minorenne si apre il blocco del genitore — che in
+     quel caso diventa il contatto della richiesta al posto dell'atleta. -->
+<div class="lf__body" data-step="3-dati-competizione" hidden>
+	<p class="lf__sub">
+		Ultimo passaggio: i dati dell'atleta. Se è minorenne ti chiediamo anche
+		i dati di un genitore.
+	</p>
+
+	<div class="lf__grid">
+		<p class="lf__group-label">Atleta</p>
+		<div class="lf__field">
+			<label for={`${prefix}-dc-atl-nome`}>Nome dell'atleta <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-atl-nome`} type="text" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dc-atl-cognome`}>Cognome dell'atleta <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-atl-cognome`} type="text" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dc-atl-nascita`}>Data di nascita dell'atleta <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-atl-nascita`} type="date" />
+		</div>
+
+		<!-- Contatti dell'atleta: solo se maggiorenne. Per un minorenne il
+		     riferimento è il genitore, e chiedere due volte gli stessi campi
+		     non aiuterebbe nessuno. -->
+		<div class="lf__field lf__field--full" id={`${prefix}-dc-atl-email-wrap`} hidden>
+			<label for={`${prefix}-dc-atl-email`}>Email dell'atleta <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-atl-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+		</div>
+		<div class="lf__field lf__field--full" id={`${prefix}-dc-atl-cellulare-wrap`} hidden>
+			<label for={`${prefix}-dc-atl-cellulare`}>Cellulare dell'atleta <span aria-hidden="true">*</span></label>
+			<div class="lf__tel">
+				<select id={`${prefix}-dc-atl-prefisso`} class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+					{prefissi.map((pf) => (
+						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+					))}
+				</select>
+				<input id={`${prefix}-dc-atl-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+			</div>
+		</div>
+	</div>
+
+	<!-- Blocco genitore: nascosto finché la data di nascita non dice che
+	     l'atleta è minorenne. -->
+	<div class="lf__grid lf__grid--minore" id={`${prefix}-dc-gen-wrap`} hidden>
+		<p class="lf__group-label">Genitore o tutore</p>
+		<p class="lf__group-note">L'atleta è minorenne: la richiesta viene intestata a chi se ne prende cura.</p>
+		<div class="lf__field">
+			<label for={`${prefix}-dc-gen-nome`}>Nome del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-gen-nome`} type="text" autocomplete="given-name" />
+		</div>
+		<div class="lf__field">
+			<label for={`${prefix}-dc-gen-cognome`}>Cognome del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-gen-cognome`} type="text" autocomplete="family-name" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dc-gen-email`}>Email del genitore <span aria-hidden="true">*</span></label>
+			<input id={`${prefix}-dc-gen-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+		</div>
+		<div class="lf__field lf__field--full">
+			<label for={`${prefix}-dc-gen-cellulare`}>Cellulare del genitore <span aria-hidden="true">*</span></label>
+			<div class="lf__tel">
+				<select id={`${prefix}-dc-gen-prefisso`} class="lf__tel-prefisso" aria-label="Prefisso internazionale" autocomplete="tel-country-code">
+					{prefissi.map((pf) => (
+						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+					))}
+				</select>
+				<input id={`${prefix}-dc-gen-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+			</div>
+		</div>
+	</div>
+
+	<div class="lf__consent">
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dc-privacy`} type="checkbox" />
+			<span>Ho letto e accetto la <a href={url("/privacy")} target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+		</label>
+		<label class="lf__consent-item">
+			<input id={`${prefix}-dc-marketing`} type="checkbox" />
+			<span>Acconsento a ricevere comunicazioni e novità da Ronchiverdi. <em>(facoltativo)</em></span>
+		</label>
+	</div>
+
+	<div class="lf__actions">
+		<button class="lf__back" data-step-back="2-settore-tennis" type="button">← Indietro</button>
+		<button class="btn lf__next" id={`${prefix}-dc-invia`} type="button">
+			Invia richiesta <span class="lf__arrow">→</span>
+		</button>
+	</div>
+	<p class="lf__error" hidden role="alert"></p>
+</div>
+
 <!-- ─── STEP 4-REFERENTE-TENNIS · Richiesta inviata + contatto diretto ─── -->
 <div class="lf__body lf__confirm" data-step="4-referente-tennis" hidden aria-live="polite">
 	<div class="lf__confirm-check" aria-hidden="true">

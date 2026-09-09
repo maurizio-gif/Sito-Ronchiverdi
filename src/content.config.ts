@@ -245,6 +245,9 @@ const listiniSport = defineCollection({
         listino: z.array(
           z.object({
             voce: z.string(),
+            // Il colore del gruppo, dove i corsi ne hanno uno: solo i livelli
+            // della scuola tennis lo usano.
+            colore: z.string().optional(),
             dettaglio: z.string(),
             nota: z.string().optional(),
             prezzoNonSoci: z.number(),
