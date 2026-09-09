@@ -1,24 +1,42 @@
 ---
+// Modalità di iscrizione alla scuola nuoto: una pagina sola, con una sezione
+// per ogni categoria.
+//
+// Prima ogni corso aveva la sua pagina, raggiunta da un hub che non faceva
+// altro che smistare: quattro indirizzi per quattro listini che condividevano
+// procedura, pagamento e primo giorno, e un genitore con due figli di età
+// diverse doveva confrontarli aprendo due schede. Ora le categorie sono
+// sezioni ancorate della stessa pagina: le card in testa fanno da indice, e
+// le informative — che erano identiche su tutte e cinque le pagine — compaiono
+// una volta sola, in fondo.
+//
+// Il compito però non cambia: portare al portale InforYou, dove l'iscrizione
+// si completa davvero. Tutto il resto serve a togliere i dubbi che fermano
+// prima del clic.
 import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
+import ListinoCorsi from "../../../components/ListinoCorsi.astro";
 import ModalitaIscrizioneNuoto from "../../../components/ModalitaIscrizioneNuoto.astro";
 import { faqDiPagina } from "../../../data/faq";
 import { url } from "../../../lib/paths";
-import { euro, getCorsiNuoto, prezzoDa } from "../../../lib/scuolaNuoto";
+import {
+	TELEFONO_CLUB,
+	euro,
+	getCorsiNuoto,
+	prezzoDa,
+	getListinoAggiornatoAl,
+} from "../../../lib/scuolaNuoto";
 import "../../../styles/iscrizione.css";
 
-// La pagina ha un solo compito: portare al portale InforYou, dove l'iscrizione
-// si completa davvero. Tutto il resto (procedura, pagamento, badge) serve a
-// togliere i dubbi che fermano prima del clic, quindi sta sotto le due card.
-
 const corsiNuoto = await getCorsiNuoto();
+const listinoAggiornatoAl = await getListinoAggiornatoAl();
 const faq = faqDiPagina("scuola-nuoto-iscrizione");
 ---
 
 <Layout
 	title="Modalità di iscrizione — Scuola Nuoto Ronchiverdi"
-	description="Come iscriversi alla Scuola Nuoto Ronchiverdi: quote, procedura, pagamento, accesso al club e contatti della segreteria."
+	description="Come iscriversi alla Scuola Nuoto Ronchiverdi: quote di Acquaticità, Baby, Open e Propaganda, procedura, pagamento, accesso al club e contatti della segreteria."
 	image="og/scuola-nuoto-iscrizione.jpg"
 >
 	<PageHero
@@ -27,32 +45,32 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 		eyebrow="Scuola Nuoto · Iscrizione"
 	>
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
-		<Fragment slot="lede">Se sai già a quale corso iscriverti, accedi direttamente al portale online. In alternativa, contatta il responsabile: ti aiutiamo noi.</Fragment>
+		<Fragment slot="lede">Quote, procedura e contatti dei quattro corsi, tutto su questa pagina. Se sai già a quale iscriverti, vai al suo listino e accedi al portale online.</Fragment>
 		<div class="header-cta">
-			<a class="btn" href="#iscriviti">Iscriviti online</a>
+			<a class="btn" href="#corsi">Vedi i corsi</a>
 			<button type="button" class="btn btn-outline" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
 		</div>
 	</PageHero>
 
-	<section class="isc-section" id="iscriviti">
+	<section class="isc-section" id="corsi">
 		<div class="isc-head">
 			<span class="eyebrow">Quote e iscrizione</span>
 			<h2>Parti dal corso di tuo figlio</h2>
 			<p class="isc-head__lede">
 				Ogni corso ha il suo listino, con la quota d'iscrizione già compresa e
-				un prezzo dedicato ai soci del club. Apri il tuo per vedere quote,
-				formule e link all'iscrizione online.
+				un prezzo dedicato ai soci del club. Vai al tuo per vedere obiettivi,
+				giorni, quote e formule.
 			</p>
 		</div>
 		<div class="corsi-cards">
 			{corsiNuoto.map((c) => (
-				<a class="corso-card" href={url(`/attivita/scuola-nuoto/iscrizione/${c.slug}`)}>
+				<a class="corso-card" href={`#${c.slug}`}>
 					<span class="corso-card__eta">{c.ageLabel}</span>
 					<span class="corso-card__nome">{c.title}</span>
 					<span class="corso-card__prezzo">da {euro(prezzoDa(c))}</span>
 					<span class="corso-card__vai">
-						Quote e iscrizione
-						<svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true"><path d="M1 7h15M10 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+						Vedi le quote
+						<svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M7 1v13M1 8.5l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
 					</span>
 				</a>
 			))}
@@ -62,6 +80,90 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			trovi tutte le formule, per soci e non soci.
 		</p>
 	</section>
+
+	{/* Una sezione per categoria, a bande alternate: il cambio di fondo è
+	    quello che fa capire dove finisce un corso e comincia il prossimo,
+	    su una pagina che ne mette quattro di seguito. */}
+	{corsiNuoto.map((corso, i) => (
+		<section class:list={["isc-section", "isc-corso", i % 2 === 1 && "isc-section--alt"]} id={corso.slug}>
+			<div class="isc-corso__dentro">
+				<div class="isc-head">
+					<span class="eyebrow">{corso.ageLabel}</span>
+					<h2>{corso.titleLungo || corso.title}</h2>
+					<p class="isc-head__lede">{corso.percorso}</p>
+				</div>
+
+				<div class="corso-griglia">
+					<div class="corso-box">
+						<h3>Obiettivi</h3>
+						<ul class="corso-punti">
+							{corso.obiettivi.map((o) => (
+								<li>
+									<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+									<span>{o}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+					<div class="corso-box">
+						<h3>In pratica</h3>
+						<dl class="isc-list">
+							<div class="isc-list__row">
+								<dt>Età</dt>
+								<dd>{corso.ageLabel}</dd>
+							</div>
+							<div class="isc-list__row">
+								<dt>Durata della lezione</dt>
+								<dd>{corso.durata}</dd>
+							</div>
+							{corso.frequenza && (
+								<div class="isc-list__row">
+									<dt>Frequenza</dt>
+									<dd>{corso.frequenza}</dd>
+								</div>
+							)}
+							{corso.giorni && (
+								<div class="isc-list__row">
+									<dt>Giorni</dt>
+									<dd>{corso.giorni}</dd>
+								</div>
+							)}
+							<div class="isc-list__row">
+								<dt>Dove</dt>
+								<dd>{corso.vasca}</dd>
+							</div>
+						</dl>
+					</div>
+				</div>
+
+				<h3 class="isc-corso__quote">Quanto costa</h3>
+				<ListinoCorsi
+					colonna="Formula"
+					righe={corso.listino.map((r) => ({
+						voce: r.formula,
+						dettaglio: r.periodo,
+						nota: r.dettaglio,
+						prezzoNonSoci: r.prezzoNonSoci,
+						prezzoSoci: r.prezzoSoci,
+						idNonSoci: r.idNonSoci,
+						idSoci: r.idSoci,
+					}))}
+					dettagli={corso.dettagli}
+					aggiornatoAl={listinoAggiornatoAl}
+					mostraNota={false}
+				/>
+			</div>
+		</section>
+	))}
+
+	{/* La nota dei listini una volta sola, invece che sotto ognuna delle
+	    quattro tabelle: la frase è la stessa e la data pure. */}
+	<p class="isc-note isc-note--center isc-note--listini">
+		La quota d'iscrizione è compresa e non ci sono costi aggiuntivi. Tocca un
+		prezzo per aprire la scheda di quella formula sul portale InforYou, dove si
+		completa l'iscrizione: listini aggiornati a {listinoAggiornatoAl}, i prezzi
+		ufficiali sono quelli del portale.
+	</p>
 
 	<ModalitaIscrizioneNuoto />
 
@@ -75,7 +177,10 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 				venerdì, 10:00–13:00 e 16:00–18:00</strong>.
 			</p>
 		</div>
-		<button type="button" class="btn" data-open-contact data-interest="scuola-nuoto">Richiedi maggiori informazioni</button>
+		<div class="corso-azioni">
+			<button type="button" class="btn" data-open-contact data-interest="scuola-nuoto">Richiedi maggiori informazioni</button>
+			<a class="btn btn-outline" href={`tel:+39${TELEFONO_CLUB.replace(/\s/g, "")}`}>{TELEFONO_CLUB}</a>
+		</div>
 		<p class="isc-note isc-note--center">In caso di elevato numero di richieste i tempi di risposta potrebbero allungarsi.</p>
 		<p class="isc-closing">Lo staff della Young School Nuoto sarà lieto di accompagnare i vostri figli in questo entusiasmante percorso.</p>
 	</section>
@@ -85,7 +190,10 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 	<section class="final-cta">
 		<h2>Hai ancora dubbi?</h2>
 		<p class="lede" style="margin-inline:auto">Contattaci: ti aiutiamo a scegliere il corso più adatto e a completare l'iscrizione.</p>
-		<button type="button" class="btn" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
+		<div class="final-cta__buttons">
+			<button type="button" class="btn" data-open-contact data-interest="scuola-nuoto">Contattaci</button>
+			<a class="btn btn-outline" href={url("/attivita/scuola-nuoto")}>Torna alla scuola nuoto</a>
+		</div>
 	</section>
 
 	<style>
@@ -96,6 +204,9 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			margin-top: 0;
 		}
 
+		/* ── L'indice in testa ──────────────────────────────────────────── */
+		/* Sono ancore, non pagine: la freccia punta in basso perché il corso
+		   sta più giù su questa stessa pagina, non da un'altra parte. */
 		.corsi-cards {
 			display: grid;
 			grid-template-columns: repeat(4, 1fr);
@@ -147,6 +258,74 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			text-transform: uppercase;
 			color: var(--text);
 		}
+		.corso-card__vai svg {
+			color: var(--accent);
+		}
+
+		/* ── Le sezioni dei corsi ───────────────────────────────────────── */
+		/* La banda sabbia impagina i suoi figli da sé (.isc-section--alt > *):
+		   il contenuto di ogni corso sta quindi in un contenitore unico, così
+		   sezioni chiare e sezioni sabbia partono dallo stesso punto. */
+		.isc-corso {
+			padding-block: 4.5rem;
+		}
+		.isc-corso__quote {
+			max-width: var(--isc-testo);
+			margin: 3.5rem auto 1.5rem;
+			text-align: center;
+			font-size: var(--text-xl);
+			line-height: var(--leading-lg);
+		}
+		.isc-note--listini {
+			max-width: 46rem;
+			margin: 2.5rem auto 0;
+			padding-inline: 1.5rem;
+		}
+
+		.corso-griglia {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem;
+		}
+		.corso-box h3 {
+			margin: 0 0 1rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-md);
+			font-weight: 600;
+		}
+		.corso-punti {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.7rem;
+		}
+		.corso-punti li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.6rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.corso-punti svg {
+			flex-shrink: 0;
+			margin-top: 0.3em;
+			color: var(--accent);
+		}
+
+		.corso-azioni {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.corso-azioni .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
 
 		/* Il saluto dello staff chiude la pagina: e' l'unico pezzo di voce
 		   umana, quindi ha un trattamento suo. */
@@ -157,6 +336,7 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 			font-size: var(--text-lg);
 			line-height: 1.4;
 			color: var(--text);
+			text-align: center;
 		}
 
 		.final-cta {
@@ -170,6 +350,16 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 		.final-cta .lede {
 			margin-bottom: 2rem;
 		}
+		.final-cta__buttons {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.final-cta__buttons .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+		}
 
 		/* Quattro card in fila stanno solo sul desktop largo: sotto vanno a
 		   due, e su telefono in colonna. */
@@ -181,6 +371,15 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 		@media (max-width: 620px) {
 			.corsi-cards {
 				grid-template-columns: minmax(0, 1fr);
+			}
+		}
+		@media (max-width: 860px), (orientation: portrait) {
+			.corso-griglia {
+				grid-template-columns: minmax(0, 1fr);
+				gap: 2.5rem;
+			}
+			.isc-corso {
+				padding-block: 3.5rem;
 			}
 		}
 	</style>

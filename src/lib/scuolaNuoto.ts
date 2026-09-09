@@ -39,7 +39,7 @@ export interface RigaListino {
 }
 
 export interface CorsoNuoto {
-	/** Ultimo pezzo dell'indirizzo: /attivita/scuola-nuoto/iscrizione/<slug> */
+	/** L'ancora della sezione: /attivita/scuola-nuoto/iscrizione#<slug> */
 	slug: string;
 	title: string;
 	titleLungo?: string;
