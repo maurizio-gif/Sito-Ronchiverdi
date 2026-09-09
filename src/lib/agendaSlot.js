@@ -7,8 +7,8 @@
 // questo il file non ha il suffisso .client: gira anche sul server, dove è
 // l'unica difesa contro una richiesta costruita a mano.
 //
-// Stanno qui e non in due copie perché sono la stessa agenda: se il sabato
-// cambia orario, o cambia il passo di una telefonata, i due punti devono
+// Stanno qui e non in due copie perché sono la stessa agenda: se cambiano i
+// giorni in cui si ricevono, o il passo di una telefonata, i due punti devono
 // muoversi insieme — altrimenti il sito lascia spostare un appuntamento a
 // un'ora che non avrebbe mai offerto in prenotazione.
 
@@ -25,11 +25,17 @@
 // fallita qui vale "niente occupato" (vedi caricaOccupati).
 export var ENDPOINT_DISPONIBILITA = "https://crm.ronchiverdi.it/api/disponibilita";
 
-// Il sabato si ricevono solo nel pomeriggio e la domenica non si prendono
-// appuntamenti: un giorno senza fascia (null) non produce orari.
+// Si ricevono solo dal lunedì al venerdì: nel fine settimana non si prendono
+// appuntamenti né telefonate. Un giorno senza fascia (null) non produce orari,
+// ed è così che sabato e domenica restano fuori.
+//
+// Le due voci del fine settimana restano dichiarate invece di essere tolte:
+// `fasciaDelGiorno` le cerca per nome, e un giorno che non trova la sua chiave
+// ricadrebbe sui feriali — cioè il sabato tornerebbe prenotabile per omissione
+// invece che per scelta. Per riaprirlo basta rimettere qui una fascia.
 export var ORARI_CLUB = {
 	feriali: { apre: "10:00", chiude: "19:00" },
-	sabato: { apre: "14:30", chiude: "18:00" },
+	sabato: null,
 	domenica: null,
 };
 
@@ -72,8 +78,8 @@ export function parseHHMM(s) {
 	return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
 }
 
-// La fascia dipende dal giorno: feriali per intero, sabato solo il
-// pomeriggio, domenica niente (null).
+// La fascia dipende dal giorno: i feriali per intero, il fine settimana
+// niente (null).
 export function fasciaDelGiorno(tipo, date) {
 	var dow = date.getDay(); // 0 = domenica, 6 = sabato
 	var orari = regoleDi(tipo).orari;
