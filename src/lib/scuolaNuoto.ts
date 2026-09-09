@@ -47,6 +47,10 @@ export interface CorsoNuoto {
 	percorso: string;
 	obiettivi: string[];
 	durata: string;
+	/** Quante volte a settimana, e in quali giorni: le mostrano la card del
+	 *  corso e la sua pagina di iscrizione. Non tutti i corsi le hanno. */
+	frequenza?: string;
+	giorni?: string;
 	vasca: string;
 	image: string;
 	imageAlt: string;

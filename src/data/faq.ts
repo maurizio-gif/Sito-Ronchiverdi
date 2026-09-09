@@ -299,7 +299,7 @@ export const faq: FaqItem[] = [
 		id: "scuola-nuoto-dove-si-svolgono-i-corsi",
 		pagina: "scuola-nuoto",
 		q: "Dove si svolgono i corsi?",
-		a: "I corsi di Acquaticità e Baby si svolgono nella vasca di ambientamento, con acqua a circa 32°C. I corsi Open e Propaganda si svolgono nella vasca grande da 25 metri, con acqua a circa 28°C."
+		a: "Il corso di Acquaticità si svolge nella vasca di ambientamento, con acqua a circa 32°C. Il corso Baby si svolge sia nella vasca di ambientamento sia nella vasca grande da 25 metri, con acqua a circa 28°C. I corsi Open e Propaganda si svolgono nella vasca grande."
 	},
 	{
 		id: "scuola-nuoto-cosa-devo-portare-per-mio-figlio-a-per-svolgere-la-lezione-di-nuoto",

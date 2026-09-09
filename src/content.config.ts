@@ -200,6 +200,10 @@ const listini = defineCollection({
         percorso: z.string(),
         obiettivi: z.array(z.string()),
         durata: z.string(),
+        // Quante volte a settimana e in quali giorni: non tutti i corsi le
+        // dichiarano, quindi le pagine le mostrano solo dove ci sono.
+        frequenza: z.string().optional(),
+        giorni: z.string().optional(),
         vasca: z.string(),
         image: z.string(),
         imageAlt: z.string(),

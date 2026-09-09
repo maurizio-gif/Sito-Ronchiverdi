@@ -86,6 +86,18 @@ const faq = faqDiPagina("scuola-nuoto-iscrizione");
 						<dt>Durata della lezione</dt>
 						<dd>{corso.durata}</dd>
 					</div>
+					{corso.frequenza && (
+						<div class="isc-list__row">
+							<dt>Frequenza</dt>
+							<dd>{corso.frequenza}</dd>
+						</div>
+					)}
+					{corso.giorni && (
+						<div class="isc-list__row">
+							<dt>Giorni</dt>
+							<dd>{corso.giorni}</dd>
+						</div>
+					)}
 					<div class="isc-list__row">
 						<dt>Dove</dt>
 						<dd>{corso.vasca}</dd>
