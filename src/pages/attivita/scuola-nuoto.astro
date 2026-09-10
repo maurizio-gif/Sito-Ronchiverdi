@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+import { INVIO_NON_AGONISTICO } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
 import { getCorsiNuoto } from "../../lib/scuolaNuoto";
 
@@ -44,7 +45,7 @@ const famiglie = [
 	{
 		icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 3.5h12a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" /><path d="M12 8.5v6M9 11.5h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
 		title: "Certificato medico",
-		desc: "È obbligatorio per i bambini sopra i 6 anni e si carica sul portale in fase di iscrizione, insieme al regolamento firmato.",
+		desc: `È obbligatorio per i bambini sopra i 6 anni. ${INVIO_NON_AGONISTICO} Sul portale, in fase di iscrizione, si carica il regolamento firmato.`,
 	},
 ];
 
@@ -154,7 +155,7 @@ const faq = faqDiPagina("scuola-nuoto");
 				<article class="famiglia-card">
 					<span class="famiglia-card__icon" aria-hidden="true" set:html={f.icon} />
 					<h3>{f.title}</h3>
-					<p>{f.desc}</p>
+					<p set:html={f.desc} />
 				</article>
 			))}
 		</div>

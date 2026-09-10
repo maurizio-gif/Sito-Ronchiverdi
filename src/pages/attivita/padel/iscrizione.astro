@@ -7,6 +7,7 @@ import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
 import ListinoCorsi from "../../../components/ListinoCorsi.astro";
+import { EMAIL_CERTIFICATI, INVIO_NON_AGONISTICO } from "../../../data/certificatoMedico";
 import { faqDiPagina } from "../../../data/faq";
 import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
 import "../../../styles/iscrizione.css";
@@ -25,8 +26,8 @@ const procedura = [
 		desc: "Dal listino qui sopra arrivi alla scheda del carnet: scegli il tuo listino e completa il pagamento.",
 	},
 	{
-		title: "Carica i documenti",
-		desc: "Certificato medico e regolamento firmato, dalla tua area personale sul portale.",
+		title: "Consegna i documenti",
+		desc: `Il regolamento firmato si carica dalla tua area personale sul portale. Il certificato medico no: ${INVIO_NON_AGONISTICO.replace("Si invia", "si invia")}`,
 	},
 ];
 ---
@@ -87,7 +88,7 @@ const procedura = [
 				<li class="isc-step">
 					<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
 					<h3>{s.title}</h3>
-					<p>{s.desc}</p>
+					<p set:html={s.desc} />
 				</li>
 			))}
 		</ol>
@@ -107,14 +108,14 @@ const procedura = [
 				<dl class="isc-list">
 					<div class="isc-list__row">
 						<dt>Certificato medico</dt>
-						<dd>Di idoneità sportiva non agonistica, richiesto sopra i 6 anni. Si carica nell'area personale del portale.</dd>
+						<dd>Di idoneità sportiva non agonistica, richiesto sopra i 6 anni. Si invia in allegato a <a href={`mailto:${EMAIL_CERTIFICATI}`}>{EMAIL_CERTIFICATI}</a>.</dd>
 					</div>
 					<div class="isc-list__row">
 						<dt>Regolamento firmato</dt>
 						<dd>Si scarica dal portale al momento dell'iscrizione e si ricarica firmato.</dd>
 					</div>
 				</dl>
-				<p class="isc-note">I documenti vanno caricati prima della prima lezione.</p>
+				<p class="isc-note">I documenti vanno consegnati prima della prima lezione.</p>
 			</div>
 			<div>
 				<div class="isc-head isc-head--left">

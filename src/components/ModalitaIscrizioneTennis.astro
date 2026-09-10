@@ -6,6 +6,8 @@
 // sull'hub: chi legge la pagina dei livelli colore deve trovarci tutto quello
 // che gli serve, senza essere mandato altrove. Ripetere il testo in quattro
 // file significherebbe aggiornarlo in quattro punti.
+import { INVIO_AGONISTICO, INVIO_NON_AGONISTICO } from "../data/certificatoMedico";
+
 const procedura = [
 	{
 		title: "Prenota la prova",
@@ -24,7 +26,11 @@ const procedura = [
 const documenti = [
 	{
 		title: "Certificato medico",
-		desc: "Di idoneità sportiva non agonistica; agonistica per chi entra nel Settore Competizione o ha già la tessera atleta.",
+		desc: `Di idoneità sportiva non agonistica. ${INVIO_NON_AGONISTICO}`,
+	},
+	{
+		title: "Se l'attività è agonistica",
+		desc: `Serve l'idoneità agonistica per chi entra nel Settore Competizione o ha già la tessera atleta. ${INVIO_AGONISTICO}`,
 	},
 	{
 		title: "Tesseramento FITP",
@@ -75,7 +81,7 @@ const calendario = [
 				{documenti.map((d) => (
 					<div class="isc-list__row">
 						<dt>{d.title}</dt>
-						<dd>{d.desc}</dd>
+						<dd set:html={d.desc} />
 					</div>
 				))}
 			</dl>

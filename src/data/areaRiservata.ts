@@ -91,15 +91,16 @@ export const BLOCCHI: {
 		voci: [
 			{
 				/* Il portale è la porta dell'area personale: da lì si entra, si
-				   caricano il certificato medico e il regolamento firmato, si
-				   vedono le rate. L'indirizzo è quello del catalogo del club,
+				   carica il regolamento firmato, si vedono le rate. Il
+				   certificato medico va per email, non qui: vedi
+				   src/data/certificatoMedico.ts. L'indirizzo è quello del catalogo del club,
 				   che è l'unico che il sito conosce e che il login attraversa:
 				   un percorso di login scritto a intuito sarebbe un indirizzo
 				   inventato, e un indirizzo inventato non dà errore — porta
 				   una persona su una pagina che non c'è. Se il club ci dà il
 				   link diretto all'accesso, si aggiunge qui sopra. */
 				label: "Portale InforYou",
-				nota: "Documenti, certificato, pagamenti",
+				nota: "Documenti, iscrizioni, pagamenti",
 				href: PORTALE_BASE,
 				esterno: true,
 			},

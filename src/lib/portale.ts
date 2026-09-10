@@ -1,8 +1,9 @@
 // Il portale InforYou di TeamSystem, in un posto solo.
 //
 // È il gestionale del club, e per chi è già socio è l'area personale: da lì
-// si comprano i corsi, si caricano il certificato medico e il regolamento
-// firmato, si vedono le rate. Il sito lo linka da tre posti diversi — la
+// si comprano i corsi, si carica il regolamento firmato, si vedono le rate.
+// Il certificato medico no: quello va per email alla casella dedicata — vedi
+// src/data/certificatoMedico.ts. Il sito lo linka da tre posti diversi — la
 // tabella dei listini, i due moduli delle modalità di iscrizione, il
 // pannello dell'area riservata — e l'indirizzo base era scritto tre volte:
 // `ListinoCorsi.astro`, `listiniSport.ts` e `scuolaNuoto.ts` avevano la

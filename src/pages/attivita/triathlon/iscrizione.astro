@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
+import { EMAIL_CERTIFICATI, INVIO_AGONISTICO, INVIO_NON_AGONISTICO } from "../../../data/certificatoMedico";
 import { faqDiPagina } from "../../../data/faq";
 import ListinoCorsi from "../../../components/ListinoCorsi.astro";
 import MembershipTable from "../../../components/MembershipTable.astro";
@@ -90,10 +91,10 @@ const procedura = [
 ];
 
 const documenti = [
-	"Certificato medico in corso di validità per la Young School; dai 12 anni è richiesto il certificato medico agonistico",
-	"Certificato medico agonistico in corso di validità per Academy e Age Group Senior Master, obbligatorio anche per il tesseramento federale",
-	"Tesseramento FITRI, compreso nella quota per Young School e Academy",
-	"Tesseramento FIDAL, compreso nella quota della Young School",
+	`Certificato medico non agonistico in corso di validità per la Young School fino agli 11 anni. ${INVIO_NON_AGONISTICO}`,
+	`Certificato medico agonistico dai 12 anni della Young School, e sempre per Academy e Age Group Senior Master, dove è obbligatorio anche per il tesseramento federale. ${INVIO_AGONISTICO}`,
+	"Tesseramento FITRI, compreso nella quota per Young School e Academy.",
+	"Tesseramento FIDAL, compreso nella quota della Young School.",
 ];
 
 
@@ -220,9 +221,10 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		<MembershipTable piani={pianiTriathlon} voci={vociTriathlon} planCtaLabel="Richiedi l'abbonamento" />
 		<p class="isc-note isc-note--center">
 			Qui sopra le voci che servono a un triatleta. Il confronto completo dei
-			quattro piani, Gym e Swim compresi, è nella pagina <a href={url("/abbonamenti")}>abbonamenti</a>. Il tesseramento FITRI e il
-			certificato medico agonistico restano necessari e si sistemano in
-			Reception insieme all'iscrizione.
+			quattro piani, Gym e Swim compresi, è nella pagina <a href={url("/abbonamenti")}>abbonamenti</a>. Il tesseramento FITRI resta necessario e si
+			sistema in Reception insieme all'iscrizione; il certificato medico
+			agonistico si invia a <a href={`mailto:${EMAIL_CERTIFICATI}`}>{EMAIL_CERTIFICATI}</a> e l'originale va consegnato al
+			responsabile del settore.
 		</p>
 	</section>
 
@@ -254,9 +256,9 @@ const faq = faqDiPagina("triathlon-iscrizione");
 					<h2>Cosa serve preparare</h2>
 				</div>
 				<ul class="plain-list">
-					{documenti.map((d) => <li>{d}</li>)}
+					{documenti.map((d) => <li set:html={d} />)}
 				</ul>
-				<p class="isc-note">Il certificato medico va consegnato prima dell'inizio dell'attività: senza, non è possibile partecipare agli allenamenti.</p>
+				<p class="isc-note">Il certificato va mandato prima dell'inizio dell'attività: senza, non è possibile partecipare agli allenamenti.</p>
 			</div>
 			<div>
 				<div class="isc-head isc-head--left">
