@@ -369,8 +369,16 @@ const utiliStampa = ID_STAMPA.map((id) => {
 		      filetti, che si stampano sempre. */
 		@media print {
 			@page {
-				size: A4 landscape;
-				margin: 8mm 9mm 12mm;
+				/* Verticale, non orizzontale. Safari ignora da sempre la
+				   regola `size` e stampa in verticale qualunque cosa si
+				   dichiari: dichiarando l'orizzontale il foglio usciva in due
+				   versioni diverse a seconda del browser, e da Safari usciva
+				   quella non progettata. Meglio un foglio solo, uguale per
+				   tutti. Le sette colonne della griglia stanno in 27 mm
+				   ciascuna: i nomi delle lezioni vanno a capo, ma si leggono.
+				   Il margine basso è più alto degli altri: ci vive il piede. */
+				size: A4 portrait;
+				margin: 10mm 9mm 15mm;
 			}
 
 			/* Via tutto quello che è navigazione, richiamo o finestra: su
@@ -438,10 +446,15 @@ const utiliStampa = ID_STAMPA.map((id) => {
 			}
 
 			/* ── Piede ripetuto su ogni facciata ──────────────────────── */
+			/* `bottom: -10mm` porta il piede dentro il margine basso della
+			   pagina. Con `bottom: 0` stava sul fondo dell'area di contenuto,
+			   cioè esattamente dove finisce il testo quando la pagina è
+			   piena: si sovrapponeva agli orari e copriva i titoli delle
+			   ultime sezioni. */
 			.stampa-piede {
 				display: flex !important;
 				position: fixed !important;
-				bottom: 0 !important;
+				bottom: -10mm !important;
 				left: 0 !important;
 				right: 0 !important;
 				align-items: baseline !important;
@@ -467,32 +480,32 @@ const utiliStampa = ID_STAMPA.map((id) => {
 				border-top: none !important;
 				break-inside: avoid !important;
 			}
+			/* Il titolo non si stacca mai da quello che intitola: senza
+			   questo, in verticale "Corsi Fitness" restava in fondo a una
+			   pagina e la sua griglia cominciava nella successiva. */
 			.planning-section__head {
 				max-width: none !important;
-				margin: 0 0 1.8mm !important;
+				margin: 0 0 2mm !important;
 				padding: 0 !important;
 				text-align: left !important;
+				break-after: avoid !important;
 			}
-			/* Il titolo tira una riga fino al bordo: tiene insieme la colonna
-			   di testo e la griglia larga che gli sta sotto, senza bisogno di
-			   una campitura che consumi toner. */
+			/* Fascia sabbia con filetto oro: un titolo in serif senza
+			   campitura, schiacciato tra due griglie, si legge come una riga
+			   di testo qualunque — e sopra la griglia dei corsi non si capiva
+			   che fosse il suo titolo. */
 			.planning-section__head h2,
 			.stampa-utili h2 {
-				display: flex !important;
-				align-items: center !important;
-				gap: 3mm !important;
+				display: block !important;
 				margin: 0 !important;
+				padding: 1.2mm 2.5mm !important;
+				background: #f0ead9 !important;
+				border-left: 2pt solid #8b6c14 !important;
 				font-family: var(--font-serif) !important;
 				font-size: 13pt !important;
 				font-weight: 600 !important;
-				line-height: 1.05 !important;
-			}
-			.planning-section__head h2::after,
-			.stampa-utili h2::after {
-				content: "" !important;
-				flex: 1 1 auto !important;
-				height: 0.5pt !important;
-				background: #d8d2bd !important;
+				line-height: 1.15 !important;
+				break-after: avoid !important;
 				print-color-adjust: exact !important;
 				-webkit-print-color-adjust: exact !important;
 			}
@@ -673,8 +686,12 @@ const utiliStampa = ID_STAMPA.map((id) => {
 			.stampa-utili h2 {
 				margin-bottom: 2mm !important;
 			}
+			.planning-scroll,
+			.aree-grid {
+				break-before: avoid !important;
+			}
 			.stampa-utili__lista {
-				columns: 3 !important;
+				columns: 2 !important;
 				column-gap: 7mm !important;
 				column-rule: 0.4pt solid #e2ddcb !important;
 			}
