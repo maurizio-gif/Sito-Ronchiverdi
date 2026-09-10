@@ -8,7 +8,7 @@ import Faq from "../components/Faq.astro";
 // il file unico editabile da Tina: le sezioni qui sotto sono le stesse che
 // vedono le pagine delle singole attività.
 import { getAllSchedules, getHours } from "../lib/schedules";
-import { faqDiPagina } from "../data/faq";
+import { APP_URL, faqDiPagina } from "../data/faq";
 
 const gymFloor = await getHours("gym-floor");
 const zonaRelax = await getHours("zona-relax");
@@ -44,10 +44,21 @@ const faq = faqDiPagina("planning");
 			<div class="planning-section__head">
 				<h2>{sezione.title}</h2>
 				<p class="lede">
-					Il palinsesto settimanale. Clicca su una lezione per leggerne la descrizione.{sezione.note && <em> {sezione.note}</em>}
+					Il palinsesto settimanale. Clicca su una lezione per leggerne la descrizione.
 				</p>
 			</div>
 			<WeeklySchedule id={sezione.id} lessons={sezione.lessons} schedule={sezione.schedule} />
+			{/* La nota stava in corsivo in coda al lede, sopra la griglia:
+			    «soggetto a variazioni» si legge dopo aver guardato un orario,
+			    non prima. Il link all'app è sempre lo stesso e vale per ogni
+			    palinsesto, quindi lo aggiungiamo qui e non nel testo della
+			    nota, che la segreteria scrive da Tina. */}
+			{sezione.note && (
+				<p class="planning-section__nota">
+					{sezione.note}{" "}
+					<a href={APP_URL} target="_blank" rel="noopener">Scarica l'app</a>
+				</p>
+			)}
 		</section>
 	))}
 
