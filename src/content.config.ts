@@ -107,11 +107,14 @@ const accessLevel = z.enum(["full", "seasonal", "rate", "none"]);
 const memberships = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/memberships" }),
   schema: z.object({
+    // Il prezzo non sta sul piano: le formule si costruiscono su fascia
+    // d'età, durata e modalità di pagamento, quindi una colonna non può
+    // dirne uno. Resta un solo riferimento di ingresso per tutta la tabella.
+    suMisura: z.object({ daPrezzo: z.string() }),
     plans: z.array(
       z.object({
         key: z.enum(["gold", "silver", "gym", "swim"]),
         name: z.string(),
-        price: z.string(),
         duration: z.string().optional(),
         featured: z.boolean().optional(),
       })

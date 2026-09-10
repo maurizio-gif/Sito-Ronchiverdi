@@ -137,6 +137,22 @@ export default defineConfig({
         fields: [
           {
             type: "object",
+            name: "suMisura",
+            label: "Formule su misura",
+            description:
+              "Il riferimento di ingresso mostrato in fondo alla tabella. Le colonne non hanno un prezzo: le formule si costruiscono su fascia d'età, durata e modalità di pagamento.",
+            fields: [
+              {
+                type: "string",
+                name: "daPrezzo",
+                label: "Si parte da",
+                description: "Rata mensile su base annuale, es. \"69€\".",
+                required: true,
+              },
+            ],
+          },
+          {
+            type: "object",
             name: "plans",
             label: "Piani",
             list: true,
@@ -150,7 +166,6 @@ export default defineConfig({
                 options: ["gold", "silver", "gym", "swim"],
               },
               { type: "string", name: "name", label: "Nome", required: true },
-              { type: "string", name: "price", label: "Prezzo mensile", required: true },
               { type: "string", name: "duration", label: "Durata (nota)" },
               { type: "boolean", name: "featured", label: "In evidenza" },
             ],

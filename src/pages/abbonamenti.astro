@@ -18,27 +18,21 @@ const faq = faqDiPagina("abbonamenti");
 >
 	<PageHero image="images/club/lacertosus.jpg" imageAlt="Area Lacertosus Ronchiverdi" eyebrow="Abbonamenti">
 		<Fragment slot="title">Scegli il tuo <em class="accent">abbonamento</em></Fragment>
-		<Fragment slot="lede">Quattro formule pensate per ogni esigenza: dal club completo <strong>Gold</strong> agli abbonamenti <strong>Gym e Swim</strong> dedicati a un'unica area.</Fragment>
+		<Fragment slot="lede">Quattro combinazioni di attività: dal club completo <strong>Gold</strong> agli abbonamenti <strong>Gym e Swim</strong> dedicati a un'unica area. La quota si costruisce poi sulla tua fascia d'età, sulla durata e sul modo in cui preferisci pagare.</Fragment>
 	</PageHero>
 
-	<MembershipTable />
-
-	{/* La tabella mostra le quattro formule più richieste, non il listino
-	    completo: fasce d'età e soluzioni flessibili si costruiscono con un
-	    consulente, e senza dirlo qui chi non si riconosce in nessuna delle
-	    quattro colonne se ne va pensando che non ci sia altro. */}
-	<section class="su-misura">
-		<div class="su-misura__box">
-			<span class="eyebrow">Non è tutto qui</span>
-			<h2>Formule <em class="accent">su misura</em></h2>
-			<p class="lede" style="margin-inline:auto">
-				Quelle qui sopra sono una selezione. Le formule sono <strong>personalizzate in base alla fascia di età</strong> e disponibili anche con <strong>soluzioni flessibili</strong>.
-			</p>
-			<button type="button" class="btn" data-open-contact data-interest="club-adulti">
-				Contatta un consulente per un preventivo personalizzato
-			</button>
-		</div>
-	</section>
+	{/* Le colonne dicono quali attività comprende un abbonamento, non quanto
+	    costa: la quota dipende da fascia d'età, durata e pagamento. Il perché
+	    va detto due volte — nel lede, che si legge prima delle colonne, e
+	    attaccato in fondo alla tabella con `suMisura`, dove l'occhio cerca il
+	    prezzo. Prima era una sezione staccata più in basso: chi guardava le
+	    colonne cercando una cifra non trovava né la cifra né la spiegazione. */}
+	<MembershipTable
+		eyebrow="Cosa comprendono"
+		title="Le quattro combinazioni"
+		lede="Ogni colonna dice a quali attività dà accesso. Il prezzo non sta nelle colonne: dipende da fascia d'età, durata e modalità di pagamento, e lo trovi spiegato in fondo alla tabella — <strong>si parte da 69&#8239;€ al mese</strong>."
+		suMisura
+	/>
 
 	<TriplePack />
 
@@ -54,32 +48,6 @@ const faq = faqDiPagina("abbonamenti");
 	</section>
 
 	<style>
-		.su-misura {
-			/* Senza padding sotto: lo stacco dal riquadro del Triple Pack, che
-			   segue, lo mette il suo padding-top. Sommati farebbero 160px. */
-			padding: 0 1.5rem;
-		}
-		.su-misura__box {
-			max-width: 46rem;
-			margin: 0 auto;
-			padding: 3rem 2rem;
-			text-align: center;
-			background: var(--bg-alt);
-			border: 1px solid var(--border);
-			border-radius: var(--radius, 12px);
-		}
-		.su-misura__box h2 {
-			margin: 0.4rem 0 0.8rem;
-		}
-		.su-misura__box .lede {
-			margin-bottom: 2rem;
-		}
-		.su-misura__box .btn {
-			cursor: pointer;
-			font-family: var(--font-sans);
-			border: none;
-		}
-
 		.final-cta {
 			padding: 6rem 1.5rem;
 			text-align: center;
