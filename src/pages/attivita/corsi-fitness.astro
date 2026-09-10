@@ -182,12 +182,22 @@ const faq = faqDiPagina("corsi-fitness");
 			{/* Il testo arriva da planning.json, accanto al palinsesto che
 			    descrive: chi aggiorna gli orari da Tina aggiorna anche questa
 			    riga, senza passare da qui. */}
-			{corsiFitness.intro && <p class="lede" style="margin-inline:0">{corsiFitness.intro}</p>}
-			<p class="lede" style="margin-inline:0">
+			{corsiFitness.intro && <p class="lede">{corsiFitness.intro}</p>}
+			<p class="lede">
 				Clicca su una lezione per leggerne la descrizione.
 			</p>
 		</div>
 		<WeeklySchedule id="corsi-fitness" lessons={corsiFitness.lessons} schedule={corsiFitness.schedule} />
+		{/* La nota arriva da planning.json, il link all'app no: è sempre lo
+		    stesso e sta in un posto solo (APP_URL). Va detto qui, sotto la
+		    griglia: è il momento in cui uno ha appena letto un orario e sta
+		    per fidarsi. */}
+		{corsiFitness.note && (
+			<p class="planning-section__nota">
+				{corsiFitness.note}{" "}
+				<a href={APP_URL} target="_blank" rel="noopener">Scarica l'app</a>
+			</p>
+		)}
 		<div class="planning-section__cta">
 			<a class="btn" href={url("/planning")}>Consulta il planning completo</a>
 		</div>
@@ -311,6 +321,15 @@ const faq = faqDiPagina("corsi-fitness");
 		}
 		.planning-section__head .lede {
 			margin-top: 0.5rem;
+		}
+		.planning-section__nota {
+			max-width: 42rem;
+			margin: 1.5rem auto 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.6;
+			color: var(--text-muted);
+			text-align: center;
 		}
 		.planning-section__cta {
 			text-align: center;
