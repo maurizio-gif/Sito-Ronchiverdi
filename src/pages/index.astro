@@ -63,6 +63,33 @@ const clubGallery = [
 		</div>
 	</header>
 
+	{/* L'autoplay è un permesso, non un diritto: il Risparmio energetico di
+	    iOS e il risparmio dati di Android lo negano, e in quel caso la Hero
+	    resta su un fermo immagine e sembra rotta. Il permesso però arriva al
+	    primo gesto della persona, che è quando si riprova. Vale anche per il
+	    caso in cui il sistema fermi un video già partito: un `pause` che
+	    nessuno ha chiesto va letto come un rifiuto. */}
+	<script>
+		const heroVideo = document.querySelector(".hero-bg");
+
+		if (heroVideo) {
+			const gesti = ["pointerdown", "touchstart", "keydown", "scroll"];
+			const riprova = () => heroVideo.play().catch(() => {});
+
+			// Riagganciare la stessa funzione non duplica l'ascoltatore, quindi
+			// arma e disarma si possono richiamare senza tenere il conto.
+			const arma = () => gesti.forEach((g) => window.addEventListener(g, riprova, { passive: true }));
+			const disarma = () => gesti.forEach((g) => window.removeEventListener(g, riprova, { passive: true }));
+
+			heroVideo.addEventListener("playing", disarma);
+			heroVideo.addEventListener("pause", () => {
+				if (!heroVideo.ended) arma();
+			});
+
+			heroVideo.play().catch(arma);
+		}
+	</script>
+
 	<section class="chi-siamo">
 		<div class="chi-siamo-grid">
 			<div class="chi-siamo-text">
