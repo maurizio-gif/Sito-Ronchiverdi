@@ -450,14 +450,38 @@ export default defineConfig({
               { type: "string", name: "title", label: "Titolo", required: true },
               { type: "string", name: "note", label: "Nota" },
               {
+                type: "string",
+                name: "columns",
+                label: "Colonne",
+                list: true,
+                description:
+                  "Solo per le tabelle che hanno più di un orario al giorno (es. Zona Relax: Accensione, In temperatura, Spegnimento). Lasciale vuote per la tabella semplice a due colonne, dove basta il campo Orario di ogni riga.",
+              },
+              {
                 type: "object",
                 name: "rows",
                 label: "Righe",
                 list: true,
-                ui: { itemProps: (item) => ({ label: [item?.label, item?.hours].filter(Boolean).join(" · ") }) },
+                ui: {
+                  itemProps: (item) => ({
+                    label: [item?.label, item?.hours ?? item?.values?.join(" · ")].filter(Boolean).join(" · "),
+                  }),
+                },
                 fields: [
                   { type: "string", name: "label", label: "Giorni", required: true },
-                  { type: "string", name: "hours", label: "Orario", required: true },
+                  {
+                    type: "string",
+                    name: "hours",
+                    label: "Orario",
+                    description: "Per la tabella semplice, senza colonne.",
+                  },
+                  {
+                    type: "string",
+                    name: "values",
+                    label: "Orari",
+                    list: true,
+                    description: "Per la tabella con le colonne: un valore per colonna, nello stesso ordine.",
+                  },
                 ],
               },
             ],

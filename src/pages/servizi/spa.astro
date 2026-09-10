@@ -2,8 +2,13 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
+import HoursTable from "../../components/HoursTable.astro";
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
+// Orari dal file unico editabile da Tina (src/content/schedules/planning.json).
+import { getHours } from "../../lib/schedules";
+
+const orari = await getHours("zona-relax");
 
 const services = [
 	{ title: "Sauna", desc: "Ambiente in legno e pietra che ricrea l'atmosfera tradizionale di montagna." },
@@ -91,6 +96,20 @@ const faq = faqDiPagina("spa");
 		<button class="spa-lightbox__nav spa-lightbox__nav--next" type="button" aria-label="Foto successiva">›</button>
 	</div>
 
+	<section class="spa-orari" id="orari">
+		<div class="spa-orari__head">
+			<p class="eyebrow">Orari</p>
+			<h2>Quando la <em class="accent">Zona Relax</em> è pronta</h2>
+			<p class="lede" style="margin-inline:auto">
+				Sauna e bagno di vapore hanno bisogno di tempo per salire in
+				temperatura: qui sotto l'ora in cui parte il riscaldamento e quella in
+				cui gli ambienti sono pronti.
+			</p>
+		</div>
+		<HoursTable rows={orari.rows} columns={orari.columns} />
+		{orari.note && <p class="spa-orari__nota">{orari.note}</p>}
+	</section>
+
 	<Faq items={faq} />
 
 	<section class="final-cta">
@@ -102,6 +121,42 @@ const faq = faqDiPagina("spa");
 	</section>
 
 	<style>
+		/* ── Orari Zona Relax ──────────────────────────────────────────────
+		   Sotto la galleria scura: la sezione torna al fondo crema della
+		   pagina, così la tabella si legge come testo e non come una didascalia
+		   della galleria. */
+		.spa-orari {
+			max-width: 64rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem;
+			text-align: center;
+		}
+		.spa-orari__head {
+			max-width: 42rem;
+			margin: 0 auto 2.5rem;
+		}
+		.spa-orari__head h2 {
+			margin: 0.4rem 0 0;
+			font-size: var(--text-2xl);
+			letter-spacing: var(--tracking-2xl);
+			line-height: var(--leading-2xl);
+		}
+		.spa-orari__head .lede {
+			margin-top: 0.9rem;
+			margin-bottom: 0;
+		}
+		.spa-orari :global(.hours-table) {
+			margin-inline: auto;
+		}
+		.spa-orari__nota {
+			max-width: 42rem;
+			margin: 1.75rem auto 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+
 		.services-grid {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);

@@ -1,22 +1,45 @@
 ---
 interface Row {
 	label: string;
-	hours: string;
+	/** Tabella a due colonne: l'unico orario della riga. */
+	hours?: string;
+	/** Tabella a più colonne: un valore per ogni intestazione in `columns`. */
+	values?: string[];
 }
 
 interface Props {
 	rows: Row[];
+	/**
+	 * Le intestazioni, dove un giorno ha più di un orario da dire. Assenti,
+	 * la tabella resta quella a due colonne senza riga di testa: per "Lunedì
+	 * – Venerdì 7:00 – 22:00" un'intestazione non aggiungerebbe niente.
+	 */
+	columns?: string[];
 }
 
-const { rows } = Astro.props;
+const { rows, columns } = Astro.props;
 ---
 
-<table class="hours-table">
+<table class:list={["hours-table", { "hours-table--multi": columns }]}>
+	{columns && (
+		<thead>
+			<tr>
+				<th class="hours-table__label" scope="col"></th>
+				{columns.map((c) => (
+					<th class="hours-table__col" scope="col">{c}</th>
+				))}
+			</tr>
+		</thead>
+	)}
 	<tbody>
 		{rows.map((row) => (
 			<tr>
-				<td class="hours-table__label">{row.label}</td>
-				<td class="hours-table__hours">{row.hours}</td>
+				<th class="hours-table__label" scope="row">{row.label}</th>
+				{columns ? (
+					row.values?.map((v) => <td class="hours-table__hours">{v}</td>)
+				) : (
+					<td class="hours-table__hours">{row.hours}</td>
+				)}
 			</tr>
 		))}
 	</tbody>
@@ -28,18 +51,36 @@ const { rows } = Astro.props;
 		max-width: 28rem;
 		border-collapse: collapse;
 	}
+	/* Tre colonne di orari non stanno in 28rem senza schiacciarsi. */
+	.hours-table--multi {
+		max-width: 40rem;
+	}
 	.hours-table tr {
 		border-bottom: 1px solid var(--border);
 	}
 	.hours-table tr:last-child {
 		border-bottom: none;
 	}
+	/* Il giorno è l'intestazione della sua riga: <th scope="row">, così uno
+	   screen reader legge "Venerdì, In temperatura, 10:30" invece di tre
+	   numeri di fila. */
 	.hours-table__label {
 		padding: 0.95rem 0.5rem;
 		font-family: var(--font-sans);
 		font-size: var(--text-base);
 		font-weight: 500;
 		color: var(--text);
+		text-align: left;
+	}
+	.hours-table__col {
+		padding: 0.6rem 0.5rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 700;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		text-align: right;
 	}
 	.hours-table__hours {
 		padding: 0.95rem 0.5rem;
@@ -49,5 +90,20 @@ const { rows } = Astro.props;
 		color: var(--accent);
 		text-align: right;
 		font-variant-numeric: tabular-nums;
+	}
+
+	/* Su telefono le quattro colonne della tabella multipla si giocano
+	   trecento pixel: i fianchi delle celle si stringono e le intestazioni
+	   vanno a capo invece di far scrollare la pagina. */
+	@media (max-width: 560px) {
+		.hours-table--multi .hours-table__label,
+		.hours-table--multi .hours-table__hours,
+		.hours-table--multi .hours-table__col {
+			padding-inline: 0.15rem;
+		}
+		.hours-table--multi .hours-table__label,
+		.hours-table--multi .hours-table__hours {
+			font-size: var(--text-sm);
+		}
 	}
 </style>
