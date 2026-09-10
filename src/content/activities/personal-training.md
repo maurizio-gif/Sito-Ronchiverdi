@@ -3,6 +3,6 @@ title: Personal Training
 image: /images/activities/personal-training-card.jpg
 summary: Percorsi personalizzati con i nostri trainer
 audience: adulti
-order: 4
+order: 6
 href: /attivita/personal-training
 ---

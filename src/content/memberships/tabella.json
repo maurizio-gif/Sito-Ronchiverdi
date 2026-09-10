@@ -1,9 +1,10 @@
 {
+  "suMisura": {"daPrezzo": "69€"},
   "plans": [
-    {"key": "gym", "name": "Gym", "price": "99€"},
-    {"key": "swim", "name": "Swim", "price": "99€", "duration": "11 mesi · agosto escluso"},
-    {"key": "silver", "name": "Silver", "price": "158€"},
-    {"key": "gold", "name": "Gold", "price": "170€", "featured": true}
+    {"key": "gym", "name": "Gym"},
+    {"key": "swim", "name": "Swim", "duration": "11 mesi · agosto escluso"},
+    {"key": "silver", "name": "Silver"},
+    {"key": "gold", "name": "Gold", "featured": true}
   ],
   "features": [
     {

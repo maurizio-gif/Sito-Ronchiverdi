@@ -15,9 +15,16 @@ interface Props {
 	piani?: string[];
 	/** Estratto: le etichette delle voci da mostrare, nell'ordine dato. Assente = tutte. */
 	voci?: string[];
+	/**
+	 * Chiude la tabella col blocco delle formule su misura: le tre variabili
+	 * da cui dipende il prezzo, il riferimento d'ingresso e l'invito a
+	 * contattare. Va sulla pagina abbonamenti, dove la tabella è il centro
+	 * del discorso; sugli estratti dentro altre pagine sarebbe fuori tema.
+	 */
+	suMisura?: boolean;
 }
 
-const { eyebrow, title, lede, planCtaLabel = "Scopri di più", planCtaHref, piani, voci } = Astro.props;
+const { eyebrow, title, lede, planCtaLabel = "Scopri di più", planCtaHref, piani, voci, suMisura } = Astro.props;
 
 // Sorgente unica della tabella: src/content/memberships/tabella.json.
 const tabella = await getEntry("memberships", "tabella");
@@ -41,7 +48,6 @@ const features = pick(tabella.data.features, voci, (f) => f.label);
 // estratto di due colonne le altre condizioni sarebbero rumore.
 const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key])));
 
-const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, per maggiori info clicca sul pulsante sotto al piano.";
 ---
 
 <section class="compare">
@@ -53,6 +59,7 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		</div>
 	)}
 
+	<div class="compare-box">
 	<div class="compare-scroll">
 		<div
 			class="compare-table"
@@ -90,12 +97,8 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 
 			<div class="compare-row compare-row--cta" role="row">
 				<div class="compare-cell compare-cell--label" role="cell"></div>
-				{plans.map((p, i) => (
+				{plans.map((p) => (
 					<div class={`compare-cell compare-cell--plan compare-cell--plan-${p.key} ${p.featured ? "compare-cell--featured" : ""}`} role="cell">
-						<span class="plan-price">
-							{p.price}<span class="plan-price-unit">/mese</span>
-							<InfoTip text={priceTooltip} align={i === plans.length - 1 ? "end" : "start"} />
-						</span>
 						{planCtaHref ? (
 							<a class="plan-cta" href={planCtaHref}>{planCtaLabel}</a>
 						) : (
@@ -119,6 +122,42 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		{segni.has("rate") && <span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>}
 		{segni.has("none") && <span class="legend-item"><PlanMark status="none" /> non incluso</span>}
 	</p>
+	{suMisura && (
+		<div class="su-misura">
+			<span class="eyebrow">E il prezzo?</span>
+			<h3>La quota si costruisce <em class="accent">su misura</em></h3>
+			<p class="su-misura__testo">
+				Le colonne qui sopra dicono <strong>quali attività</strong> comprende
+				ogni abbonamento. La quota è un'altra cosa e si costruisce su tre
+				variabili: per questo non può stare in una colonna.
+			</p>
+			<ul class="su-misura__assi">
+				<li>
+					<strong>Fascia d'età</strong>
+					<span>Under, adulti, senior: la quota cambia con l'età di chi si iscrive.</span>
+				</li>
+				<li>
+					<strong>Durata</strong>
+					<span>Annuale, stagionale o mensile con la formula Flex.</span>
+				</li>
+				<li>
+					<strong>Modalità di pagamento</strong>
+					<span>Soluzione unica, rateizzazione o addebito ricorrente.</span>
+				</li>
+			</ul>
+			<p class="su-misura__da">
+				Si parte da <strong>{tabella.data.suMisura.daPrezzo}</strong> al mese, su base annuale.
+			</p>
+			<button type="button" class="btn" data-open-contact data-interest="club-adulti">
+				Chiedi la tua formula
+			</button>
+			<p class="su-misura__nota">
+				Ti richiamiamo per capire cosa ti serve e costruire la quota sulla tua
+				situazione, senza impegno.
+			</p>
+		</div>
+	)}
+	</div>
 
 	<slot />
 </section>
@@ -139,10 +178,17 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		margin-bottom: 0;
 	}
 
-	.compare-scroll {
-		overflow-x: auto;
+	/* Tabella, legenda e blocco della quota dentro un bordo solo: sono una
+	   cosa sola, e chi legge le colonne cercando un prezzo deve trovare la
+	   spiegazione lì, senza staccarsi dall'oggetto che sta guardando. */
+	.compare-box {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
+		overflow: hidden;
+		background: var(--bg-alt);
+	}
+	.compare-scroll {
+		overflow-x: auto;
 	}
 
 	/* --cols arriva dal markup: la tabella piena ne ha quattro, un estratto
@@ -229,23 +275,6 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		padding-bottom: 1.75rem;
 		gap: 0.75rem;
 	}
-	.plan-price {
-		display: inline-flex;
-		align-items: baseline;
-		justify-content: center;
-		gap: 0.2rem;
-		font-family: var(--font-serif);
-		font-size: var(--text-xl);
-		font-weight: 600;
-		color: var(--text);
-	}
-	.plan-price-unit {
-		font-family: var(--font-sans);
-		font-size: var(--text-2xs);
-		font-weight: 500;
-		color: var(--text-muted);
-		margin-right: 0.1rem;
-	}
 	.plan-cta {
 		display: inline-block;
 		font-family: var(--font-sans);
@@ -289,13 +318,105 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		}
 	}
 
+	/* Attaccato al fondo della tabella, senza stacco: continua il bordo e
+	   arrotonda solo sotto, così tabella e quota si leggono come un oggetto
+	   unico. Prima era un riquadro staccato più in basso, e per scoprirlo
+	   bisognava scorrere: chi guardava le colonne cercando un prezzo non
+	   trovava né il prezzo né la spiegazione.
+	   Sta fuori da .compare-scroll di proposito: dentro erediterebbe la
+	   larghezza minima della griglia e su telefono si leggerebbe scorrendo
+	   di lato. */
+	.su-misura {
+		margin: 0;
+		padding: 2.25rem 2rem 2.5rem;
+		text-align: center;
+		background: var(--bg);
+		border-top: 1px solid var(--border);
+	}
+	.su-misura h3 {
+		margin: 0.4rem 0 0.9rem;
+		font-size: var(--text-2xl);
+		line-height: var(--leading-lg);
+	}
+	.su-misura__testo {
+		max-width: 38rem;
+		margin: 0 auto;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		line-height: 1.7;
+		color: var(--text-muted);
+	}
+	.su-misura__assi {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+		margin: 2rem 0;
+		padding: 0;
+		list-style: none;
+		text-align: left;
+	}
+	.su-misura__assi li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		padding: 1rem 1.1rem;
+		background: var(--bg);
+		border-radius: 10px;
+	}
+	.su-misura__assi strong {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.su-misura__assi span {
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		line-height: 1.6;
+		color: var(--text-muted);
+	}
+	.su-misura__da {
+		margin: 0 0 1.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-lg);
+		line-height: 1.4;
+		color: var(--text);
+	}
+	.su-misura .btn {
+		cursor: pointer;
+		font-family: var(--font-sans);
+		border: none;
+	}
+	.su-misura__nota {
+		max-width: 32rem;
+		margin: 1.1rem auto 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		line-height: 1.6;
+		color: var(--text-muted);
+	}
+	@media (max-width: 720px) {
+		.su-misura {
+			padding: 2rem 1.25rem;
+		}
+		.su-misura__assi {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.75rem;
+		}
+	}
+
 	.compare-legend {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1.5rem;
 		justify-content: center;
-		margin: 2rem 0 0;
-		padding: 0;
+		/* Dentro il contenitore: sotto le righe che spiega, col suo respiro,
+		   senza staccarsi dalla tabella. */
+		margin: 0;
+		padding: 1.25rem 1.5rem;
+		border-top: 1px solid var(--border);
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		color: var(--text-muted);
