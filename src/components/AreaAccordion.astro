@@ -13,7 +13,8 @@ interface AreaItem {
 	desc: string;
 	bullets?: string[];
 	note?: string;
-	photos: Photo[];
+	/** Assenti o vuote, il pannello dà tutta la larghezza al testo. */
+	photos?: Photo[];
 	equipment?: string[];
 }
 
@@ -44,7 +45,8 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 				</button>
 			</h3>
 			<div class="area__panel" id={`${area.id}-panel`}>
-				<div class="area__panel-inner">
+				<div class:list={["area__panel-inner", { "area__panel-inner--senza-foto": !area.photos?.length }]}>
+					{!!area.photos?.length && (
 					<div class="area__slideshow" data-slideshow>
 						<div class="slideshow__frame">
 							{area.photos.map((p, j) => (
@@ -67,6 +69,7 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 							)}
 						</div>
 					</div>
+					)}
 
 					<div class="area__content">
 						<p class="area__desc">{area.desc}</p>
@@ -287,6 +290,16 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 		gap: 2.5rem;
 		align-items: start;
 		padding: 0.5rem 0.5rem 2.75rem;
+	}
+	/* Un'area di cui non abbiamo ancora la foto giusta: il testo si prende
+	   tutta la riga invece di lasciare un riquadro vuoto da 16/10. Senza il
+	   limite di misura, però, arriverebbe a righe da centottanta battute:
+	   il pannello è largo, la colonna di testo no. */
+	.area__panel-inner--senza-foto {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.area__panel-inner--senza-foto .area__content {
+		max-width: 46rem;
 	}
 
 	.slideshow__frame {
