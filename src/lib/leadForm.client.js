@@ -82,65 +82,23 @@ export function initLeadForm(root, options) {
 		"4-dati": 3,
 	};
 
-	// Referenti Young School Tennis: contatto diretto (chiamata o email), senza
-	// passare dai passi di raccolta dati condivisi dagli altri percorsi.
-	var REFERENTI_TENNIS = {
-		scuola: {
-			titolo: "Maestro Nazionale FITP",
-			nome: "Stefano Bertone",
-			telefonoDisplay: "+39 335 320334",
-			telefonoHref: "+39335320334",
-			email: "s.bertone@ronchiverdi.it",
-		},
-		competizione: {
-			titolo: "Maestro Nazionale FITP",
-			nome: "Dario Andrea",
-			telefonoDisplay: "+39 335 7032403",
-			telefonoHref: "+393357032403",
-			email: "a.dario@ronchiverdi.it",
-		},
-	};
+	// I referenti del pannello finale — chi risponde, con quali contatti —
+	// serializzati dal componente Astro su data-referenti. Stanno in
+	// src/data/referenti.ts perché li usa anche l'email di conferma: se
+	// vivessero solo qui, l'email non potrebbe citarli e continuerebbe a
+	// promettere "ti rispondiamo il prima possibile" a chi in questo pannello
+	// ha appena letto numero e indirizzo.
+	var REFERENTI = (function () {
+		try {
+			return JSON.parse(root.dataset.referenti || "{}");
+		} catch (e) {
+			return {};
+		}
+	})();
 
-	// Referente Corsi Padel: contatto diretto via WhatsApp o chiamata, nessuna
-	// email proposta per questo percorso.
-	var REFERENTE_PADEL = {
-		titolo: "Istruttore 1° livello Padel FITP",
-		nome: "Davide Casale",
-		telefonoDisplay: "+39 339 8817507",
-		telefonoHref: "+393398817507",
-	};
-
-	// Referenti dei percorsi Young senza scelta di settore, per id attività:
-	// stesso pannello finale (chiamata, WhatsApp, email, salva contatto), con
-	// gli orari della segreteria mostrati solo dove sono stati comunicati.
-	var REFERENTI_YOUNG_DIRETTO = {
-		// Il nuoto risponde come servizio e non come persona: `etichetta`
-		// invece di titolo e nome, così il pannello non espone un nominativo
-		// che cambia con i turni della segreteria.
-		"scuola-nuoto": {
-			etichetta: "Young School Nuoto",
-			telefonoDisplay: "+39 380 7522285",
-			telefonoHref: "+393807522285",
-			email: "youngschoolnuoto@ronchiverdi.it",
-			orari: "Puoi contattarci nei seguenti giorni e orari: dal lunedì al venerdì, 10:00–13:00 e 16:00–18:00.",
-		},
-		"triathlon-young": {
-			titolo: "Responsabile Young School Triathlon",
-			nome: "Giorgio Mortara",
-			telefonoDisplay: "+39 348 1541597",
-			telefonoHref: "+393481541597",
-			email: "g.mortara@ronchiverdi.it",
-		},
-		"summer-camp": {
-			titolo: "Responsabile Summer Camp",
-			nome: "Silvana D'Auria",
-			telefonoDisplay: "+39 349 7026694",
-			telefonoHref: "+393497026694",
-			email: "kidsvillage@ronchiverdi.it",
-			// Per il Summer Camp il numero si usa solo su WhatsApp.
-			senzaChiamata: true,
-		},
-	};
+	var REFERENTI_TENNIS = REFERENTI.tennis || {};
+	var REFERENTE_PADEL = REFERENTI.padel || null;
+	var REFERENTI_YOUNG_DIRETTO = REFERENTI.youngDiretto || {};
 
 	// "Salva contatto": un file .vcf generato al volo, così chi arriva al
 	// referente può aggiungerlo in rubrica con nome, cognome e ruolo ai
@@ -896,6 +854,7 @@ export function initLeadForm(root, options) {
 
 	function renderReferentePadel() {
 		var ref = REFERENTE_PADEL;
+		if (!ref) return;
 
 		var intro = root.querySelector("#" + P + "-padel-intro");
 		if (intro) {

@@ -6,9 +6,16 @@
 // step 1 (gli id sono quelli di src/data/leadActivities.ts).
 import LeadFormBody from "./LeadFormBody.astro";
 import { leadActivityMap } from "../data/leadActivities";
+import { referentiPerClient } from "../data/referenti";
 ---
 
-<dialog id="lead-modal" class="lf" aria-labelledby="lf-title" data-activities={JSON.stringify(leadActivityMap)}>
+<dialog
+	id="lead-modal"
+	class="lf"
+	aria-labelledby="lf-title"
+	data-activities={JSON.stringify(leadActivityMap)}
+	data-referenti={JSON.stringify(referentiPerClient)}
+>
 	<div class="lf__panel">
 		<div class="lf__head">
 			<div>

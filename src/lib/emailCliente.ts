@@ -10,6 +10,13 @@
 // mittente dev'essere verificato su SendGrid, altrimenti l'invio viene
 // rifiutato con 403 — non "finisce in spam", proprio non parte.
 
+import {
+	linkWhatsApp,
+	referentePerLead,
+	riferimentoCompleto,
+	type Referente,
+} from "../data/referenti";
+
 const ENDPOINT = "https://api.sendgrid.com/v3/mail/send";
 
 const MITTENTE_EMAIL = import.meta.env.SENDGRID_FROM_EMAIL ?? "digital@ronchiverdi.it";
@@ -30,6 +37,14 @@ export type DatiAppuntamento = {
 	ora: string | null; // HH:MM
 	attivita: string | null;
 	token: string;
+	/**
+	 * Id dell'attività, settore e origine: servono solo a risolvere il
+	 * referente da citare nell'email (vedi src/data/referenti.ts). `attivita`
+	 * qui sopra è l'etichetta leggibile, e non basta a identificarlo.
+	 */
+	attivitaId?: string | null;
+	settore?: string | null;
+	origine?: string | null;
 };
 
 /**
@@ -122,6 +137,78 @@ function riquadro(righe: [string, string][]): string {
 	return `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0;padding:16px 18px;background:#f8f2e5;border-radius:8px;">${celle}</table>`;
 }
 
+/**
+ * Il riquadro coi contatti del referente: gli stessi che il form mostra
+ * nell'ultimo passo.
+ *
+ * Ogni canale è un link, perché l'email si legge dal telefono: l'indirizzo
+ * apre il client di posta, il numero apre il dialer, WhatsApp apre la chat
+ * già intestata. Un numero scritto e non cliccabile va ricopiato a mano, ed è
+ * il punto in cui la gente si ferma.
+ */
+function riquadroReferente(ref: Referente): string {
+	const canali: [string, string, string][] = [];
+	if (ref.email) canali.push(["Email", `mailto:${ref.email}`, ref.email]);
+	canali.push(["WhatsApp", linkWhatsApp(ref), ref.telefonoDisplay]);
+	// Dove il numero serve solo per WhatsApp la chiamata non va proposta: lo
+	// stesso criterio del pannello del form.
+	if (!ref.senzaChiamata) canali.push(["Telefono", `tel:${ref.telefonoHref}`, ref.telefonoDisplay]);
+
+	const celle = canali
+		.map(
+			([canale, href, valore]) =>
+				`<tr><td style="padding:6px 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#4a4a42;width:110px;vertical-align:top;">${esc(canale)}</td>
+				 <td style="padding:6px 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;"><a href="${esc(href)}" style="color:#8b6c14;font-weight:bold;text-decoration:none;">${esc(valore)}</a></td></tr>`
+		)
+		.join("");
+
+	return `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:20px 0;padding:16px 18px;background:#f8f2e5;border-radius:8px;">${celle}</table>`;
+}
+
+function contattiReferenteTesto(ref: Referente): string {
+	const righe: string[] = [];
+	if (ref.email) righe.push(`Email: ${ref.email}`);
+	righe.push(`WhatsApp: ${linkWhatsApp(ref)} (${ref.telefonoDisplay})`);
+	if (!ref.senzaChiamata) righe.push(`Telefono: ${ref.telefonoDisplay}`);
+	return righe.join("\n");
+}
+
+/**
+ * "il tuo riferimento è Silvana D'Auria, Responsabile Summer Camp".
+ *
+ * Il nome viene prima e il ruolo dopo, fra virgole: "il tuo riferimento è
+ * Responsabile Summer Camp Silvana D'Auria" chiede un articolo davanti al
+ * ruolo, e l'articolo giusto cambia da un ruolo all'altro. Dove risponde un
+ * servizio e non una persona resta la forma del pannello del form.
+ */
+function presentazioneReferente(ref: Referente): string {
+	if (!ref.nome) return `il tuo riferimento è la ${ref.etichetta}`;
+	return `il tuo riferimento è ${[ref.nome, ref.titolo].filter(Boolean).join(", ")}`;
+}
+
+/**
+ * Come si può contattare, all'infinito: "mandare una email, scrivere su
+ * WhatsApp o chiamare".
+ *
+ * All'infinito e non con un pronome perché il referente può essere una donna,
+ * un uomo o un servizio: "puoi scrivergli o chiamarlo" sbaglia in due casi su
+ * tre. E i canali elencati sono solo quelli che quel referente ha davvero —
+ * il Summer Camp risponde solo su WhatsApp, il padel non dà un'email.
+ */
+function azioniReferente(ref: Referente): string {
+	const azioni: string[] = [];
+	if (ref.email) azioni.push("mandare una email");
+	azioni.push("scrivere su WhatsApp");
+	if (!ref.senzaChiamata) azioni.push("chiamare");
+	if (azioni.length === 1) return azioni[0];
+	return `${azioni.slice(0, -1).join(", ")} o ${azioni[azioni.length - 1]}`;
+}
+
+/** Il referente da citare in questa email, se il percorso ne ha uno. */
+function referenteDi(d: DatiAppuntamento): Referente | null {
+	return referentePerLead({ attivita: d.attivitaId, settore: d.settore, origine: d.origine });
+}
+
 function etichettaTipo(azione: string | null): string {
 	return azione === "telefonata" ? "telefonata" : "visita in sede";
 }
@@ -144,8 +231,43 @@ function saluto(nome: string | null): string {
 
 // ── I quattro messaggi ────────────────────────────────────────────────────
 
-function contenutoConfermaMessaggio(nome: string | null): { oggetto: string; html: string; testo: string } {
+/**
+ * Conferma di una richiesta senza appuntamento.
+ *
+ * Dove l'attività ha un referente l'email non promette un richiamo: dà i suoi
+ * contatti, gli stessi tre canali che il form mostra nell'ultimo passo. La
+ * promessa di essere ricontattati è un filtro che ha senso solo dove la
+ * richiesta la lavora la segreteria — Abbonamento Club e Family — e per tutto
+ * il resto è solo un'attesa in più fra chi chiede e chi risponde.
+ */
+function contenutoConfermaMessaggio(
+	nome: string | null,
+	ref: Referente | null
+): { oggetto: string; html: string; testo: string } {
 	const oggetto = "Abbiamo ricevuto il tuo messaggio";
+
+	if (ref) {
+		const html = impagina(
+			"Messaggio ricevuto",
+			`<p style="margin:0 0 14px;">${esc(saluto(nome))}</p>
+			 <p style="margin:0 0 4px;">grazie per averci scritto: la tua richiesta è arrivata, e ${esc(presentazioneReferente(ref))}. Puoi ${esc(azioniReferente(ref))} direttamente, senza aspettare che ti ricontattiamo noi.</p>
+			 ${riquadroReferente(ref)}
+			 ${ref.orari ? `<p style="margin:0 0 14px;font-size:13px;">${esc(ref.orari)}</p>` : ""}
+			 <p style="margin:0;">Per tutto il resto ci trovi in segreteria allo <strong style="color:#1c1c18;">${esc(TELEFONO_CLUB)}</strong>.</p>`
+		);
+		const testo = `${saluto(nome)}
+
+grazie per averci scritto: la tua richiesta è arrivata, e ${presentazioneReferente(ref)}. Puoi ${azioniReferente(ref)} direttamente, senza aspettare che ti ricontattiamo noi.
+
+${contattiReferenteTesto(ref)}
+${ref.orari ? `\n${ref.orari}\n` : ""}
+Per tutto il resto ci trovi in segreteria allo ${TELEFONO_CLUB}.
+
+Ronchiverdi Sport Club · ${INDIRIZZO_CLUB}
+`;
+		return { oggetto, html, testo };
+	}
+
 	const html = impagina(
 		"Messaggio ricevuto",
 		`<p style="margin:0 0 14px;">${esc(saluto(nome))}</p>
@@ -281,12 +403,21 @@ async function invia(a: string, oggetto: string, html: string, testo: string): P
 	}
 }
 
-/** Conferma di una richiesta appena arrivata dal form. */
+/**
+ * Conferma di una richiesta appena arrivata dal form.
+ *
+ * Un appuntamento o una telefonata arrivano solo dai percorsi che passano
+ * dalla segreteria (Abbonamento Club e Family), che non hanno un referente di
+ * attività: là l'email conferma data e ora. Tutto il resto prende la conferma
+ * col referente, quando quel percorso ne ha uno.
+ */
 export async function confermaAlCliente(d: DatiAppuntamento): Promise<boolean> {
 	if (!d.email) return false;
 	const eAppuntamento = d.azione === "appuntamento" || d.azione === "telefonata";
 	const { oggetto, html, testo } =
-		eAppuntamento && d.data ? contenutoConfermaAppuntamento(d) : contenutoConfermaMessaggio(d.nome);
+		eAppuntamento && d.data
+			? contenutoConfermaAppuntamento(d)
+			: contenutoConfermaMessaggio(d.nome, referenteDi(d));
 	return invia(d.email, oggetto, html, testo);
 }
 
