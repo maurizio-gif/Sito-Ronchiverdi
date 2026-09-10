@@ -8,14 +8,58 @@ import Faq from "../components/Faq.astro";
 // il file unico editabile da Tina: le sezioni qui sotto sono le stesse che
 // vedono le pagine delle singole attività.
 import { getAllSchedules, getHours } from "../lib/schedules";
-import { APP_URL, faqDiPagina } from "../data/faq";
+import { APP_URL, faq, faqDiPagina } from "../data/faq";
+import { TELEFONO_CLUB } from "../lib/scuolaNuoto";
 
-const gymFloor = await getHours("gym-floor");
 const zonaRelax = await getHours("zona-relax");
-const sezioni = await getAllSchedules();
+const nuotoLibero = await getHours("nuoto-libero");
+// Le tre aree ad accesso libero: la sala pesi e le due piscine. Stanno
+// insieme in testa alla pagina perché rispondono tutte alla stessa domanda
+// — "a che ora posso venire" — mentre i palinsesti più sotto rispondono a
+// quella opposta: "cosa c'è a quest'ora".
+const aree = [
+	await getHours("gym-floor"),
+	await getHours("piscine-indoor"),
+	await getHours("piscina-esterna"),
+];
+// Il nuoto libero qui va a fascia, non a tabella: le corsie riservate
+// cambiano di mezz'ora in mezz'ora ma la vasca resta aperta senza
+// interruzioni, quindi la griglia settimanale ripeteva "Nuoto Libero" in
+// quaranta caselle per dire una cosa che sta in due righe. Il palinsesto
+// dettagliato, corsia per corsia, resta sulla pagina dell'attività.
+const sezioni = (await getAllSchedules()).filter((s) => s.id !== "nuoto-libero");
 
 
-const faq = faqDiPagina("planning");
+const faqPagina = faqDiPagina("planning");
+
+// Le "informazioni utili" del foglio stampato non sono un testo a parte: sono
+// le stesse voci delle FAQ del sito, prese per id. Il contenuto si aggiorna in
+// src/data/faq.ts — o da Tina, dove le FAQ sono editabili — e il PDF esce
+// aggiornato da sé, senza ricopiare niente a mano.
+//
+// Qui stanno le voci che riguardano le attività di questo planning: come si
+// accede alla sala, come si prenotano i corsi, cosa serve per il nuoto libero.
+// Se una di queste sparisse o cambiasse id, la build si ferma: meglio un
+// errore adesso che un foglio stampato con un buco.
+//
+// Una sola FAQ di questa pagina resta fuori, e non per svista: "Devo
+// prenotare per partecipare a un corso?" dice di contattare il club, mentre
+// quella del Gym Floor qui sotto dice che i corsi si prenotano tutti dall'App
+// — sulla stessa facciata si contraddirebbero. Sistemato quel testo in
+// faq.ts, basta aggiungere qui il suo id.
+const ID_STAMPA = [
+	"gym-floor-cosa-serve-per-accedere-alla-sala-fitness",
+	"gym-floor-come-posso-prenotare-i-corsi-di-gruppo",
+	"nuoto-libero-serve-prenotare-per-il-nuoto-libero",
+	"gym-floor-posso-allenarmi-nell-area-funzionale-lacertosus-in-autonomia",
+	"planning-gli-orari-mostrati-sono-sempre-aggiornati",
+	"planning-cosa-succede-se-un-corso-non-e-disponibile-nella-fascia-che-mi-interes",
+];
+const utiliStampa = ID_STAMPA.map((id) => {
+	const voce = faq.find((f) => f.id === id);
+	if (!voce) throw new Error(`Planning: la FAQ "${id}" non esiste più in src/data/faq.ts`);
+	return voce;
+});
 ---
 
 <Layout
@@ -29,18 +73,56 @@ const faq = faqDiPagina("planning");
 		<p class="lede">
 			Orari e palinsesti settimanali di ogni area del club. Clicca su una lezione per leggerne la descrizione.
 		</p>
+		{/* La stampa la fa il browser: `window.print()` apre la stessa finestra
+		    da cui si salva in PDF, quindi un bottone solo copre entrambe le
+		    cose. Niente file da generare e da tenere aggiornato a mano. */}
+		<button type="button" class="btn btn-outline" data-stampa>Stampa o salva in PDF</button>
 	</header>
+
+	{/* Sul foglio stampato la navigazione non c'è: senza questa riga il
+	    planning arriva in mano a qualcuno senza dire di che club è, né a
+	    quando risale. La data si genera alla build, che è il momento in cui
+	    i dati sono stati letti. */}
+	<div class="stampa-testa" aria-hidden="true">
+		<img src={url("logo-ronchiverdi-stampa.png")} alt="" />
+		<div class="stampa-testa__testo">
+			<span class="stampa-testa__eyebrow">Ronchiverdi Sport Club · Torino</span>
+			<strong>Planning</strong>
+			<span class="stampa-testa__meta">
+				Orari e palinsesti settimanali · aggiornato al {new Date().toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" })}
+			</span>
+		</div>
+	</div>
+
+	{/* Il piede è in `position: fixed`: in stampa Chrome lo ripete su ogni
+	    facciata, ed è il modo di dare un riferimento anche al retro, che
+	    l'intestazione grande non ce l'ha. */}
+	<div class="stampa-piede" aria-hidden="true">
+		<span class="stampa-piede__sito">ronchiverdi.it</span>
+		<span>Reception {TELEFONO_CLUB} · le variazioni dell'ultimo momento sono sull'App del Club</span>
+	</div>
 
 	<section class="planning-section">
 		<div class="planning-section__head">
-			<h2>{gymFloor.title}</h2>
-			<p class="lede">Orari di apertura della sala pesi.</p>
+			<h2>Le aree e i loro <em>orari</em></h2>
+			<p class="lede">
+				Spazi ad accesso libero: si entra quando si vuole, negli orari di apertura dell'area.
+			</p>
 		</div>
-		<HoursTable rows={gymFloor.rows} />
+		<div class="aree-grid">
+			{aree.map((area) => (
+				<article class="area-card">
+					<h3 class="area-card__titolo">{area.title}</h3>
+					{area.intro && <p class="area-card__intro">{area.intro}</p>}
+					<HoursTable rows={area.rows} />
+					{area.note && <p class="area-card__nota">{area.note}</p>}
+				</article>
+			))}
+		</div>
 	</section>
 
 	{sezioni.map((sezione) => (
-		<section class="planning-section">
+		<section class="planning-section" data-sezione={sezione.id}>
 			<div class="planning-section__head">
 				<h2>{sezione.title}</h2>
 				<p class="lede">
@@ -64,6 +146,15 @@ const faq = faqDiPagina("planning");
 
 	<section class="planning-section">
 		<div class="planning-section__head">
+			<h2>{nuotoLibero.title}</h2>
+			<p class="lede">Apertura della vasca grande indoor per il nuoto libero.</p>
+		</div>
+		<HoursTable rows={nuotoLibero.rows} />
+		{nuotoLibero.note && <p class="planning-section__nota">{nuotoLibero.note}</p>}
+	</section>
+
+	<section class="planning-section">
+		<div class="planning-section__head">
 			<h2>{zonaRelax.title}</h2>
 			<p class="lede">Apertura e chiusura di sauna, bagno di vapore e percorso benessere.</p>
 		</div>
@@ -71,7 +162,23 @@ const faq = faqDiPagina("planning");
 		{zonaRelax.note && <p class="planning-section__nota">{zonaRelax.note}</p>}
 	</section>
 
-	<Faq items={faq} />
+	{/* Solo sul foglio stampato: a schermo le stesse risposte sono qui sotto
+	    nelle FAQ, aperte a fisarmonica. Su carta non si clicca, quindi
+	    servono già distese. */}
+	<section class="stampa-utili" aria-hidden="true">
+		<h2>Informazioni utili</h2>
+		<div class="stampa-utili__lista">
+			{utiliStampa.map((voce) => (
+				<div class="stampa-utili__voce">
+					<p class="stampa-utili__q">{voce.q}</p>
+					{voce.a && <p class="stampa-utili__a">{voce.a}</p>}
+					{voce.html && <div class="stampa-utili__a" set:html={voce.html} />}
+				</div>
+			))}
+		</div>
+	</section>
+
+	<Faq items={faqPagina} />
 
 	<section class="final-cta">
 		<h2>Vieni a scoprire il club</h2>
@@ -81,7 +188,44 @@ const faq = faqDiPagina("planning");
 		<button type="button" class="btn" data-open-contact>Prenota un tour</button>
 	</section>
 
+	<script>
+		// Il nome che il browser propone salvando in PDF è il titolo della
+		// pagina, che qui è "Planning — Ronchiverdi Sport Club": il trattino
+		// finirebbe nel nome del file. Lo si cambia per il tempo della stampa
+		// e lo si rimette subito dopo, perché il titolo è anche quello della
+		// scheda e quello che leggono i motori di ricerca.
+		//
+		// Il cambio sta in `beforeprint`, non nel click, così vale anche per
+		// chi stampa con Cmd+P senza passare dal pulsante; il click lo
+		// imposta comunque prima di chiamare `print()`, perché in qualche
+		// browser il nome del file viene deciso prima dell'evento.
+		const NOME_FILE = "Planning Ronchiverdi Sport Club";
+		let titoloPagina = document.title;
+
+		window.addEventListener("beforeprint", () => {
+			if (document.title !== NOME_FILE) titoloPagina = document.title;
+			document.title = NOME_FILE;
+		});
+		window.addEventListener("afterprint", () => {
+			document.title = titoloPagina;
+		});
+
+		document.querySelector("[data-stampa]")?.addEventListener("click", () => {
+			titoloPagina = document.title;
+			document.title = NOME_FILE;
+			window.print();
+		});
+	</script>
+
 	<style>
+		.stampa-testa,
+		.stampa-piede,
+		.stampa-utili {
+			display: none;
+		}
+		.page-header .btn {
+			margin-top: 1.5rem;
+		}
 		.page-header {
 			max-width: 44rem;
 			margin: 0 auto;
@@ -117,6 +261,61 @@ const faq = faqDiPagina("planning");
 		.planning-section :global(.hours-table) {
 			margin-inline: auto;
 		}
+		/* Le tre aree affiancate: lo stesso dato — l'orario di apertura —
+		   ripetuto tre volte si confronta a colpo d'occhio solo se sta in
+		   colonne. Sotto i 900px le colonne si impilano, ed è lì che l'intro
+		   di ognuna serve davvero: senza le vicine, il titolo da solo non
+		   dice cosa comprende l'area. */
+		.aree-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 1.25rem;
+			max-width: 74rem;
+			margin: 0 auto;
+		}
+		@media (min-width: 900px) {
+			.aree-grid {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		.area-card {
+			display: flex;
+			flex-direction: column;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			padding: 1.75rem 1.5rem 1.85rem;
+			text-align: center;
+		}
+		/* In una colonna da 380px un orario che va a capo si legge come due
+		   dati invece di uno: la cella resta su una riga sola, ed è
+		   l'etichetta a cedere se serve. */
+		.area-card :global(.hours-table__hours) {
+			white-space: nowrap;
+		}
+		.area-card__titolo {
+			margin: 0 0 0.45rem;
+			font-family: var(--font-serif);
+			font-size: var(--text-xl);
+		}
+		.area-card__intro {
+			margin: 0 0 1.25rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.55;
+			color: var(--text-muted);
+		}
+		/* La nota si appoggia in fondo alla card: solo la piscina esterna ne
+		   ha una, e senza `auto` resterebbe attaccata alla sua tabella
+		   sbilanciando la colonna rispetto alle altre due. */
+		.area-card__nota {
+			margin: auto 0 0;
+			padding-top: 1.1rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-xs);
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
 		.planning-section__nota {
 			max-width: 42rem;
 			margin: 1.5rem auto 0;
@@ -138,6 +337,383 @@ const faq = faqDiPagina("planning");
 		}
 		.final-cta .lede {
 			margin-bottom: 2rem;
+		}
+	</style>
+
+	<style is:global>
+		/* ── Il foglio stampato ────────────────────────────────────────────
+		   Due facciate A4 orizzontali: un foglio fronte/retro. Davanti gli
+		   orari di apertura delle tre aree e la griglia dei corsi fitness,
+		   dietro l'acqua fitness, il nuoto libero, la zona relax e le
+		   informazioni utili.
+
+		   Orizzontale perché la griglia ha sette colonne: in verticale ognuna
+		   sta sotto i 27 mm e i nomi delle lezioni si spezzano su tre righe.
+		   Niente volantino a quattro facciate ripiegate: andrebbero impaginati
+		   i pannelli in ordine 4|1 e 2|3 indovinando come il printer gira il
+		   foglio, e mezza A4 non basta comunque alla griglia.
+
+		   Due cose da sapere prima di toccare questo blocco:
+
+		   1. `!important` non è pigrizia. Gli stili di questa pagina e dei
+		      componenti sono "scoped": Astro aggiunge al selettore un
+		      attributo `data-astro-cid-*` che alza la specificità sopra
+		      qualunque regola globale. Senza `!important` il foglio verrebbe
+		      ignorato — è già capitato scrivendolo.
+
+		   2. `print-color-adjust: exact` non è decorativo. Chrome per
+		      default NON stampa gli sfondi (è la casella "Grafica di sfondo",
+		      spenta), quindi senza quella riga le campiture sabbia e le righe
+		      alternate spariscono e resta un foglio in bianco e nero. Il
+		      disegno però regge anche senza: la gerarchia sta nei corpi e nei
+		      filetti, che si stampano sempre. */
+		@media print {
+			@page {
+				size: A4 landscape;
+				margin: 8mm 9mm 12mm;
+			}
+
+			/* Via tutto quello che è navigazione, richiamo o finestra: su
+			   carta non si clicca. */
+			.nav,
+			.nav-mobile,
+			.footer,
+			.faq-section,
+			.final-cta,
+			.planning-modal,
+			.page-header,
+			dialog,
+			[class*="cky-"] {
+				display: none !important;
+			}
+
+			html,
+			body {
+				background: #fff !important;
+				color: #1c1c18 !important;
+			}
+
+			/* ── Intestazione: logo, titolo, data ─────────────────────── */
+			.stampa-testa {
+				display: flex !important;
+				flex-direction: row !important;
+				align-items: center !important;
+				gap: 5mm !important;
+				margin: 0 0 4mm !important;
+				padding: 1mm 0 3mm !important;
+				border-bottom: 1.5pt solid #8b6c14 !important;
+				font-family: var(--font-sans) !important;
+			}
+			/* Il logo usa il file ritagliato dai bianchi interni
+			   (logo-ronchiverdi-stampa.png), così sta grande occupando solo
+			   l'altezza del suo inchiostro. Niente margini negativi come
+			   nella prima versione: essendo il primo blocco della pagina
+			   tiravano il logo dentro il margine di stampa, e la stampante ne
+			   tagliava la cima. */
+			.stampa-testa img {
+				height: 17mm !important;
+				width: auto !important;
+			}
+			.stampa-testa__testo {
+				display: flex !important;
+				flex-direction: column !important;
+				gap: 0.4mm !important;
+			}
+			.stampa-testa__eyebrow {
+				font-size: 6.5pt !important;
+				font-weight: 600 !important;
+				letter-spacing: 0.16em !important;
+				text-transform: uppercase !important;
+				color: #8b6c14 !important;
+			}
+			.stampa-testa strong {
+				font-family: var(--font-serif) !important;
+				font-size: 21pt !important;
+				font-weight: 600 !important;
+				line-height: 1 !important;
+			}
+			.stampa-testa__meta {
+				font-size: 7pt !important;
+				color: #4a4a42 !important;
+			}
+
+			/* ── Piede ripetuto su ogni facciata ──────────────────────── */
+			.stampa-piede {
+				display: flex !important;
+				position: fixed !important;
+				bottom: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+				align-items: baseline !important;
+				justify-content: space-between !important;
+				gap: 4mm !important;
+				padding-top: 1.5mm !important;
+				border-top: 0.5pt solid #d8d2bd !important;
+				font-family: var(--font-sans) !important;
+				font-size: 6pt !important;
+				letter-spacing: 0.04em !important;
+				color: #4a4a42 !important;
+			}
+			.stampa-piede__sito {
+				font-weight: 600 !important;
+				letter-spacing: 0.12em !important;
+				text-transform: uppercase !important;
+				color: #8b6c14 !important;
+			}
+
+			/* ── Sezioni ───────────────────────────────────────────────── */
+			.planning-section {
+				padding: 0 0 3mm !important;
+				border-top: none !important;
+				break-inside: avoid !important;
+			}
+			.planning-section__head {
+				max-width: none !important;
+				margin: 0 0 1.8mm !important;
+				padding: 0 !important;
+				text-align: left !important;
+			}
+			/* Il titolo tira una riga fino al bordo: tiene insieme la colonna
+			   di testo e la griglia larga che gli sta sotto, senza bisogno di
+			   una campitura che consumi toner. */
+			.planning-section__head h2,
+			.stampa-utili h2 {
+				display: flex !important;
+				align-items: center !important;
+				gap: 3mm !important;
+				margin: 0 !important;
+				font-family: var(--font-serif) !important;
+				font-size: 13pt !important;
+				font-weight: 600 !important;
+				line-height: 1.05 !important;
+			}
+			.planning-section__head h2::after,
+			.stampa-utili h2::after {
+				content: "" !important;
+				flex: 1 1 auto !important;
+				height: 0.5pt !important;
+				background: #d8d2bd !important;
+				print-color-adjust: exact !important;
+				-webkit-print-color-adjust: exact !important;
+			}
+			.planning-section__head h2 em {
+				font-style: italic !important;
+				color: #8b6c14 !important;
+			}
+			/* L'invito a cliccare su carta non ha senso; la nota della
+			   sezione invece sì, e resta. */
+			.planning-section__head .lede {
+				display: none !important;
+			}
+			.planning-section__nota {
+				max-width: none !important;
+				margin: 1.2mm 0 0 !important;
+				font-size: 6.5pt !important;
+				line-height: 1.35 !important;
+				text-align: left !important;
+				color: #4a4a42 !important;
+			}
+			/* Il testo della nota su carta serve ("soggetto a variazioni"),
+			   l'invito a scaricare l'app no: è un link, e un link stampato è
+			   una parola sottolineata che non porta da nessuna parte. */
+			.planning-section__nota a {
+				display: none !important;
+			}
+
+			/* ── Le tre aree con orario di apertura ───────────────────── */
+			.aree-grid {
+				max-width: none !important;
+				gap: 3mm !important;
+				grid-template-columns: repeat(3, 1fr) !important;
+			}
+			.area-card {
+				padding: 2mm 2.5mm 1.5mm !important;
+				background: #f6f2e6 !important;
+				border: 0.5pt solid #d8d2bd !important;
+				border-radius: 2pt !important;
+				text-align: left !important;
+				print-color-adjust: exact !important;
+				-webkit-print-color-adjust: exact !important;
+			}
+			.area-card__titolo {
+				margin: 0 0 1mm !important;
+				font-size: 11pt !important;
+				line-height: 1.05 !important;
+			}
+			.area-card__intro {
+				margin: 0 0 1.2mm !important;
+				padding-bottom: 1.2mm !important;
+				border-bottom: 0.5pt solid #e2ddcb !important;
+				font-size: 6.5pt !important;
+				line-height: 1.3 !important;
+				color: #4a4a42 !important;
+			}
+			.area-card__nota {
+				margin: 1.5mm 0 0 !important;
+				padding-top: 1.5mm !important;
+				border-top: 0.5pt solid #e2ddcb !important;
+				font-size: 6pt !important;
+				line-height: 1.3 !important;
+				color: #4a4a42 !important;
+			}
+
+			/* ── Tabelle orari ────────────────────────────────────────── */
+			.hours-table {
+				max-width: none !important;
+			}
+			.hours-table tr {
+				border-bottom: 0.4pt solid #e2ddcb !important;
+			}
+			.hours-table tr:last-child {
+				border-bottom: none !important;
+			}
+			.hours-table__label {
+				padding: 0.7mm 0 !important;
+				font-family: var(--font-sans) !important;
+				font-size: 7.5pt !important;
+				font-weight: 500 !important;
+				color: #1c1c18 !important;
+			}
+			/* L'orario è il dato che si cerca: in oro e in semibold si trova
+			   scorrendo la colonna, senza rileggere le etichette. */
+			.hours-table__hours {
+				padding: 0.7mm 0 !important;
+				font-family: var(--font-sans) !important;
+				font-size: 8.5pt !important;
+				font-weight: 600 !important;
+				color: #8b6c14 !important;
+				white-space: nowrap !important;
+			}
+
+			/* ── La griglia settimanale ───────────────────────────────── */
+			/* A schermo scorre in orizzontale con una larghezza minima di
+			   64rem: in stampa un contenitore che scorre taglia quello che
+			   sporge, e mancherebbero due giorni su sette. */
+			.planning-scroll {
+				overflow: visible !important;
+			}
+			.planning-grid {
+				min-width: 0 !important;
+				max-width: none !important;
+				border-top: none !important;
+			}
+			.planning-day {
+				min-width: 0 !important;
+				border-right: 0.4pt solid #e2ddcb !important;
+			}
+			.planning-day:last-child {
+				border-right: none !important;
+			}
+			.planning-day__head {
+				padding: 1mm 1.2mm !important;
+				background: #e5e0ca !important;
+				border-bottom: 1pt solid #8b6c14 !important;
+				print-color-adjust: exact !important;
+				-webkit-print-color-adjust: exact !important;
+			}
+			.planning-day__short {
+				display: none !important;
+			}
+			.planning-day__full {
+				font-family: var(--font-sans) !important;
+				font-size: 7pt !important;
+				font-weight: 600 !important;
+				letter-spacing: 0.1em !important;
+				text-transform: uppercase !important;
+				line-height: 1.1 !important;
+				color: #1c1c18 !important;
+			}
+			.planning-day__list {
+				padding: 0 !important;
+			}
+			.planning-slot {
+				display: block !important;
+				width: 100% !important;
+				padding: 0.5mm 1.2mm !important;
+				background: none !important;
+				border: none !important;
+				text-align: left !important;
+			}
+			/* Righe alternate: in sette colonne fitte l'occhio perde la
+			   riga, e una campitura leggerissima la tiene. */
+			.planning-day__list .planning-slot:nth-child(odd) {
+				background: #faf7ee !important;
+				print-color-adjust: exact !important;
+				-webkit-print-color-adjust: exact !important;
+			}
+			.planning-slot__time {
+				display: block !important;
+				font-family: var(--font-sans) !important;
+				font-size: 6pt !important;
+				font-weight: 600 !important;
+				letter-spacing: 0.02em !important;
+				line-height: 1.15 !important;
+				color: #8b6c14 !important;
+			}
+			.planning-slot__name {
+				display: block !important;
+				font-family: var(--font-sans) !important;
+				font-size: 7.5pt !important;
+				line-height: 1.05 !important;
+				color: #1c1c18 !important;
+			}
+			.planning-rest {
+				padding: 1mm 1.2mm !important;
+				font-size: 6.5pt !important;
+				font-style: italic !important;
+				color: #4a4a42 !important;
+			}
+
+			/* ── Informazioni utili (dalle FAQ del sito) ──────────────── */
+			.stampa-utili {
+				display: block !important;
+				break-inside: avoid !important;
+				padding-top: 1mm !important;
+			}
+			.stampa-utili h2 {
+				margin-bottom: 2mm !important;
+			}
+			.stampa-utili__lista {
+				columns: 3 !important;
+				column-gap: 7mm !important;
+				column-rule: 0.4pt solid #e2ddcb !important;
+			}
+			.stampa-utili__voce {
+				break-inside: avoid !important;
+				margin: 0 0 2.5mm !important;
+			}
+			.stampa-utili__q {
+				margin: 0 0 0.6mm !important;
+				font-family: var(--font-sans) !important;
+				font-size: 7.5pt !important;
+				font-weight: 600 !important;
+				line-height: 1.25 !important;
+				color: #8b6c14 !important;
+			}
+			.stampa-utili__a,
+			.stampa-utili__a p {
+				margin: 0 !important;
+				font-family: var(--font-sans) !important;
+				font-size: 7pt !important;
+				line-height: 1.4 !important;
+				color: #4a4a42 !important;
+			}
+			/* Nelle risposte ci sono link e bottoni pensati per lo schermo:
+			   il bottone su carta non esiste, e un link sottolineato è una
+			   parola evidenziata che non porta da nessuna parte — resta il
+			   testo, che la frase la completa comunque. */
+			.stampa-utili__a button {
+				display: none !important;
+			}
+			.stampa-utili__a a {
+				color: inherit !important;
+				text-decoration: none !important;
+			}
+
+			/* Il retro del foglio. */
+			[data-sezione="acqua-fitness"] {
+				break-before: page !important;
+			}
 		}
 	</style>
 </Layout>

@@ -155,6 +155,10 @@ const schedules = defineCollection({
           .object({
             id: z.string(),
             title: z.string(),
+            // Una riga per dire cosa comprende l'area, dove il titolo da solo
+            // non basta: la Gym Floor sono quattro zone diverse sotto lo
+            // stesso orario di apertura.
+            intro: z.string().optional(),
             note: z.string().optional(),
             columns: z.array(z.string()).optional(),
             rows: z.array(

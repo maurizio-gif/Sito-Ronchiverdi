@@ -463,6 +463,13 @@ export default defineConfig({
                 description: "Identificativo usato dalle pagine (es. gym-floor). Non modificarlo.",
               },
               { type: "string", name: "title", label: "Titolo", required: true },
+              {
+                type: "string",
+                name: "intro",
+                label: "Cosa comprende",
+                description:
+                  "Riga di presentazione sotto il titolo, dove il titolo da solo non basta (es. le quattro zone della Gym Floor). Facoltativa.",
+              },
               { type: "string", name: "note", label: "Nota" },
               {
                 type: "string",
