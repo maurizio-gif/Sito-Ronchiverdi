@@ -192,6 +192,31 @@ node scripts/genera-og-image.mjs
 Quando si aggiunge una pagina con un hero nuovo, va aggiunta la riga
 corrispondente nella mappa dentro lo script e rilanciato il comando.
 
+## Video di sfondo
+
+I video in `public/videos/` (l'hero della home, il drone di "Chi siamo") sono
+sfondi: muti, in loop, senza comandi. **Ogni volta che se ne carica uno nuovo**
+va lanciato:
+
+```sh
+node scripts/prepara-video.mjs
+```
+
+Lo script sposta l'indice del file (l'atom `moov`) all'inizio — il "fast
+start". Molti programmi di export lo scrivono in fondo, dopo i fotogrammi: in
+quel caso il browser deve scaricare tutto il file prima di mostrare un solo
+frame e da telefono il video resta fermo sul poster. Non è una riconversione:
+qualità e peso non cambiano, e i file già a posto vengono lasciati stare.
+
+Due cose da sapere sull'export:
+
+- **H.264, non HEVC/H.265.** L'HEVC pesa meno ma i browser senza decoder
+  mostrano solo il poster fermo. Lo script avvisa se trova un file HEVC.
+- **Il poster è il primo fotogramma del video.** Se cambia il video va
+  rigenerato, altrimenti all'avvio l'immagine "salta". Quello dell'hero è
+  `public/images/hero-video-poster.jpg` — da non confondere con
+  `hero-poster.jpg`, che serve alle anteprime social.
+
 ## Totem verticale
 
 Oltre a desktop e mobile il sito è tarato su un **totem da 27" in verticale**

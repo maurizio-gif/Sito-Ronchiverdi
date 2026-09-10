@@ -33,10 +33,17 @@ const clubGallery = [
 	description="Ronchiverdi, storico club sportivo di Torino: tennis, padel, 4 piscine, fitness, Young School, ristorante e coworking. 35.000 mq nel verde, 7 giorni su 7."
 >
 	<header class="hero">
+		{/* Video di sfondo: muto, in loop e senza comandi, sta al posto di una
+		    foto e va trattato come tale. Il poster è il primo fotogramma del
+		    video, non la foto dei campi che serve alle anteprime social: così
+		    all'avvio l'immagine non "salta".
+		    Il file deve restare in fast start, altrimenti da telefono il video
+		    resta fermo sul poster: ci pensa scripts/prepara-video.mjs. */}
 		<video
 			class="hero-bg"
 			src={url("videos/hero.mp4")}
-			poster={url("images/hero-poster.jpg")}
+			poster={url("images/hero-video-poster.jpg")}
+			aria-hidden="true"
 			autoplay
 			muted
 			loop
