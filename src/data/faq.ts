@@ -609,7 +609,7 @@ export const faq: FaqItem[] = [
 		id: "triathlon-iscrizione-come-ci-si-iscrive-categoria-per-categoria",
 		pagina: "triathlon-iscrizione",
 		q: "Come ci si iscrive, categoria per categoria?",
-		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, scegliendo il programma dal listino del corso. Academy e Age Group Senior Master non si acquistano online: l'accesso passa dall'abbonamento al Club — Gold o Silver, gli unici piani che comprendono piscina, palestra e triathlon — e l'iscrizione si completa alla Reception. In tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura."
+		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, scegliendo il programma dal listino del corso. Academy e Age Group Senior Master non si acquistano online e si iscrivono alla Reception del Club: l'Academy versando la quota annuale di 1.200 €, l'Age Group Senior Master attivando l'abbonamento al Club — Gold o Silver, gli unici piani che comprendono piscina, palestra e triathlon. In tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura."
 	},
 	{
 		id: "triathlon-iscrizione-posso-provare-prima-di-iscrivermi",
@@ -627,7 +627,7 @@ export const faq: FaqItem[] = [
 		id: "triathlon-iscrizione-cosa-comprende-la-quota",
 		pagina: "triathlon-iscrizione",
 		q: "Cosa comprende la quota?",
-		a: "La Young School ha un listino corso a 1, 2 o 3 allenamenti settimanali, e la quota comprende i tesseramenti FITRI e FIDAL. Academy e Age Group Senior Master non hanno un listino corso: per loro vale il listino degli abbonamenti soci, con Gold o Silver, e l'abbonamento dà accesso al club tutti i giorni, anche fuori dagli orari di allenamento. Per l'Academy il tesseramento FITRI è compreso e ha validità annuale."
+		a: "La Young School ha un listino corso a 1, 2 o 3 allenamenti settimanali, e la quota comprende i tesseramenti FITRI e FIDAL. L'Academy ha una quota unica di 1.200 € all'anno, che comprende il tesseramento FITRI e l'accesso al club tutti i giorni, anche fuori dagli orari di allenamento: si versa in Reception e non passa dal portale. L'Age Group Senior Master non ha una quota corso — l'attività della squadra è compresa nell'abbonamento al Club, Gold o Silver."
 	},
 
 	// ── Summer Camp ─────────────────────────────────────────────────────────

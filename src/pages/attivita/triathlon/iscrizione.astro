@@ -10,8 +10,10 @@ import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
 import "../../../styles/iscrizione.css";
 
 // Ogni card chiude sul punto che qui conta più di tutti: quanto si paga e
-// dove. La Young School è l'unica con un listino corso e l'acquisto online;
-// per le altre due il prezzo è quello dell'abbonamento al Club.
+// dove. Le tre categorie rispondono in tre modi diversi: la Young School ha
+// un listino a frequenza e si acquista online sul portale; l'Academy ha una
+// quota annuale unica che non passa dal portale; l'Age Group Senior Master
+// non ha una quota corso e segue il listino degli abbonamenti al Club.
 const categorie = [
 	{
 		eyebrow: "6–13 anni",
@@ -40,10 +42,10 @@ const categorie = [
 			"La quota comprende il tesseramento FITRI e ha validità annuale",
 		],
 		quota: {
-			label: "Abbonamento al Club",
-			testo: "Nessun listino corso: vale il listino degli abbonamenti soci",
-			linkLabel: "Vedi gli abbonamenti",
-			href: "#abbonamento",
+			label: "Quota del corso",
+			testo: "1.200 € all'anno, non acquistabile online: si versa in Reception",
+			linkLabel: "Vedi la quota",
+			href: "#quota-academy",
 		},
 		anchor: "#academy",
 	},
@@ -58,7 +60,7 @@ const categorie = [
 		],
 		quota: {
 			label: "Abbonamento al Club",
-			testo: "Nessun listino corso: vale il listino degli abbonamenti soci",
+			testo: "Nessuna quota corso: vale il listino degli abbonamenti soci",
 			linkLabel: "Vedi gli abbonamenti",
 			href: "#abbonamento",
 		},
@@ -83,7 +85,7 @@ const procedura = [
 	},
 	{
 		title: "Completa l'iscrizione",
-		desc: "Per la Young School si acquista il programma dal listino, online sul portale InforYou. Per Academy e Age Group Senior Master si passa dalla Reception del Club, dove si attiva l'abbonamento e si sistema il tesseramento federale.",
+		desc: "Per la Young School si acquista il programma dal listino, online sul portale InforYou. Academy e Age Group Senior Master passano dalla Reception del Club: là si versa la quota dell'Academy o si attiva l'abbonamento, e si sistema il tesseramento federale.",
 	},
 ];
 
@@ -95,8 +97,9 @@ const documenti = [
 ];
 
 
-// Sul portale è in vendita la sola Young School: Academy e Age Group Senior Master si
-// iscrivono in reception, e restano descritte nelle card qui sopra.
+// Sul portale è in vendita la sola Young School, e solo di quella si può
+// mostrare il listino con i link ai prodotti: la quota dell'Academy e gli
+// abbonamenti dell'Age Group Senior Master hanno una sezione loro, più sotto.
 const young = await getPercorso("triathlon");
 const aggiornatoAl = await getListinoAggiornatoAl("triathlon");
 const faq = faqDiPagina("triathlon-iscrizione");
@@ -109,7 +112,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon · Iscrizione">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
-		<Fragment slot="lede">Young School, Academy e Age Group Senior Master hanno procedure e quote diverse: solo la Young School si acquista online, per le altre due vale il listino degli abbonamenti soci. Qui trovi come funziona ognuna.</Fragment>
+		<Fragment slot="lede">Young School, Academy e Age Group Senior Master hanno procedure e quote diverse: solo la Young School si acquista online. Qui trovi come funziona ognuna, quanto costa e dove si versa.</Fragment>
 		<div class="header-cta">
 			<a class="btn" href="#listino">Quote e abbonamenti</a>
 			<button type="button" class="btn btn-outline" data-open-contact data-interest="triathlon-young">Contattaci</button>
@@ -122,11 +125,10 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			<h2>I tre percorsi</h2>
 			<p class="isc-head__lede">
 				Cambia il modo di allenarsi, e cambia anche il modo di pagare: la
-				<strong>Young School</strong> è un corso con un suo listino, che si
-				acquista online. <strong>Academy</strong> e
-				<strong>Age Group Senior Master</strong> non hanno un listino corso —
-				per loro vale il listino degli abbonamenti soci, e l'iscrizione si
-				completa in Reception.
+				<strong>Young School</strong> ha un listino a frequenza e si acquista
+				online, l'<strong>Academy</strong> una quota annuale unica che si
+				versa in Reception, l'<strong>Age Group Senior Master</strong> nessuna
+				quota corso — là vale il listino degli abbonamenti al Club.
 			</p>
 		</div>
 		<div class="cat-grid">
@@ -172,21 +174,47 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			aggiornatoAl={aggiornatoAl}
 		/>
 		<p class="isc-note isc-note--center">
-			Cerchi le quote di Academy o Age Group Senior Master? Non sono in questo
-			listino: <a href="#abbonamento">vale il listino degli abbonamenti</a>.
+			Cerchi le quote delle altre due categorie? Non sono in questo listino e
+			non passano dal portale: <a href="#quota-academy">la quota dell'Academy</a>
+			si versa in Reception, e per l'Age Group Senior Master
+			<a href="#abbonamento">vale il listino degli abbonamenti</a>.
 		</p>
 	</section>
 
-	<section class="isc-section" id="abbonamento">
+	<section class="isc-section" id="quota-academy">
 		<div class="isc-head">
-			<span class="eyebrow">Quote Academy e Age Group Senior Master · dai 14 anni</span>
+			<span class="eyebrow">Quota Academy · 14–23 anni</span>
+			<h2>Una quota unica per la stagione</h2>
+			<p class="isc-head__lede">
+				L'Academy non ha un listino a frequenza: gli allenamenti sono
+				distribuiti su tutta la settimana e la quota è una sola, per l'intera
+				stagione. Non è in vendita sul portale InforYou — si versa in
+				Reception, dove si completa anche l'iscrizione.
+			</p>
+		</div>
+		<div class="quota-card">
+			<span class="quota-card__label">Quota annuale</span>
+			<p class="quota-card__prezzo">1.200<span class="quota-card__valuta">€</span></p>
+			<ul class="quota-card__punti">
+				<li>Validità annuale, per l'intera stagione sportiva</li>
+				<li>Comprende il tesseramento FITRI</li>
+				<li>Comprende l'accesso al club sette giorni su sette, anche fuori dagli orari di allenamento</li>
+				<li>Si versa in Reception: non è acquistabile online</li>
+			</ul>
+			<button type="button" class="btn" data-open-contact data-interest="triathlon-young">Richiedi informazioni</button>
+		</div>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="abbonamento">
+		<div class="isc-head">
+			<span class="eyebrow">Quote Age Group Senior Master · dai 23 anni</span>
 			<h2>Vale il listino degli abbonamenti</h2>
 			<p class="isc-head__lede">
-				Dai 14 anni in avanti non c'è una quota corso da acquistare online:
-				si entra nell'attività come socio del Club, e il prezzo è quello
-				dell'abbonamento. Gli unici due piani che comprendono il triathlon
-				sono <strong>Gold</strong> e <strong>Silver</strong>, perché sono
-				quelli con piscina e palestra insieme.
+				Qui non c'è una quota corso: l'attività della squadra è compresa
+				nell'abbonamento al Club, e il prezzo è quello. Gli unici due piani
+				che comprendono il triathlon sono <strong>Gold</strong> e
+				<strong>Silver</strong>, perché sono quelli con piscina e palestra
+				insieme.
 			</p>
 		</div>
 		<MembershipTable piani={pianiTriathlon} voci={vociTriathlon} planCtaLabel="Richiedi l'abbonamento" />
@@ -198,7 +226,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		</p>
 	</section>
 
-	<section class="isc-section isc-section--alt">
+	<section class="isc-section">
 		<div class="isc-head">
 			<span class="eyebrow">Tre passaggi</span>
 			<h2>Come ci si iscrive</h2>
@@ -218,7 +246,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		</p>
 	</section>
 
-	<section class="isc-section">
+	<section class="isc-section isc-section--alt">
 		<div class="isc-duo">
 			<div>
 				<div class="isc-head isc-head--left">
@@ -371,6 +399,72 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		#abbonamento :global(.compare) {
 			padding: 0;
 			max-width: none;
+		}
+
+		/* La quota dell'Academy è un numero solo, e non passa dal portale:
+		   niente tabella e niente prezzi cliccabili, solo la cifra e cosa
+		   comprende. */
+		.quota-card {
+			max-width: 34rem;
+			margin: 0 auto;
+			padding: 2.25rem 2rem 2.5rem;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			text-align: center;
+		}
+		.quota-card__label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 700;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.quota-card__prezzo {
+			margin: 0.5rem 0 1.5rem;
+			font-family: var(--font-serif);
+			font-size: var(--text-3xl);
+			line-height: 1;
+			font-weight: 600;
+			color: var(--text);
+		}
+		.quota-card__valuta {
+			/* Ridotto e staccato di poco: attaccato alla cifra sembra una
+			   cifra in più, e con uno spazio pieno sembra un'altra parola. */
+			margin-left: 0.12em;
+			font-size: 0.5em;
+			font-weight: 500;
+			color: var(--text-muted);
+		}
+		.quota-card__punti {
+			list-style: none;
+			margin: 0 0 1.9rem;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.6rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.55;
+			color: var(--text-muted);
+			text-align: left;
+		}
+		.quota-card__punti li {
+			padding-left: 1.1rem;
+			position: relative;
+		}
+		.quota-card__punti li::before {
+			content: "—";
+			position: absolute;
+			left: 0;
+			color: var(--accent);
+		}
+		.quota-card .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
 		}
 		/* Stessa soglia del resto delle pagine di iscrizione: la pagina cambia
 		   impaginazione tutta insieme. */
