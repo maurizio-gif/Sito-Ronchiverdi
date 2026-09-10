@@ -1,3 +1,4 @@
+import { EMAIL_CERTIFICATI } from "./certificatoMedico";
 import { url } from "../lib/paths";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -171,7 +172,7 @@ export const faq: FaqItem[] = [
 		id: "tennis-e-richiesto-il-certificato-medico",
 		pagina: "tennis",
 		q: "È richiesto il certificato medico?",
-		a: "Sì. È necessario presentare il certificato medico di idoneità all'attività non agonistica. Per gli allievi in possesso della tessera atleta è richiesto il certificato medico di idoneità all'attività agonistica."
+		a: `Sì. Serve il certificato medico di idoneità all'attività non agonistica, da inviare in allegato a ${EMAIL_CERTIFICATI}. Per gli allievi del Settore Competizione e per chi ha la tessera atleta è richiesta l'idoneità agonistica: oltre all'email va consegnato l'originale al responsabile del settore.`
 	},
 
 	// ── Iscrizione Tennis ─────────────────────────────────────────────────────────
@@ -191,7 +192,7 @@ export const faq: FaqItem[] = [
 		id: "tennis-iscrizione-cosa-serve-il-primo-giorno",
 		pagina: "tennis-iscrizione",
 		q: "Cosa serve il primo giorno?",
-		a: "Abbigliamento sportivo adeguato: la racchetta, nella fase iniziale della Young School, può essere fornita da Ronchiverdi. Certificato medico e tesseramento FITP vanno perfezionati in reception prima dell'inizio dei corsi."
+		a: `Abbigliamento sportivo adeguato: la racchetta, nella fase iniziale della Young School, può essere fornita da Ronchiverdi. Il tesseramento FITP si perfeziona in reception prima dell'inizio dei corsi; il certificato medico si invia in allegato a ${EMAIL_CERTIFICATI}, e se l'idoneità è agonistica l'originale va consegnato al responsabile del settore.`
 	},
 
 	// ── Padel ─────────────────────────────────────────────────────────
@@ -329,7 +330,7 @@ export const faq: FaqItem[] = [
 		id: "scuola-nuoto-e-obbligatorio-il-certificato-medico",
 		pagina: "scuola-nuoto",
 		q: "È obbligatorio il certificato medico?",
-		a: "Il certificato medico è obbligatorio per i bambini sopra i 6 anni."
+		a: `Il certificato medico è obbligatorio per i bambini sopra i 6 anni. È di idoneità non agonistica e si invia in allegato a ${EMAIL_CERTIFICATI}.`
 	},
 	{
 		id: "scuola-nuoto-e-possibile-recuperare-le-lezioni-perse",
@@ -433,7 +434,7 @@ export const faq: FaqItem[] = [
 		id: "gym-floor-cosa-serve-per-accedere-alla-sala-fitness",
 		pagina: "gym-floor",
 		q: "Cosa serve per accedere alla sala fitness?",
-		a: "Per accedere alla palestra servono un abbonamento attivo, un certificato medico in corso di validità e il proprio braccialetto personale per l'ingresso. In sala pesi sono obbligatorie calzature sportive pulite, dedicate all'uso in palestra, e l'asciugamano personale da appoggiare sulle panche e sugli attrezzi: se lo dimentichi, puoi noleggiarlo in reception."
+		a: `Per accedere alla palestra servono un abbonamento attivo, un certificato medico in corso di validità — di idoneità non agonistica, da inviare in allegato a ${EMAIL_CERTIFICATI} — e il proprio braccialetto personale per l'ingresso. In sala pesi sono obbligatorie calzature sportive pulite, dedicate all'uso in palestra, e l'asciugamano personale da appoggiare sulle panche e sugli attrezzi: se lo dimentichi, puoi noleggiarlo in reception.`
 	},
 	{
 		id: "gym-floor-e-sempre-presente-un-istruttore-in-sala",
@@ -601,7 +602,7 @@ export const faq: FaqItem[] = [
 		id: "triathlon-come-ci-si-iscrive-quali-documenti-servono-e-come-arrivano-le-comunica",
 		pagina: "triathlon",
 		q: "Come ci si iscrive, quali documenti servono e come arrivano le comunicazioni?",
-		a: "L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto il certificato medico agonistico, obbligatorio anche per Academy e Age Group Senior Master e per il tesseramento federale. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo di messaggistica dedicato agli atleti e alle famiglie."
+		a: `L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto quello agonistico, obbligatorio anche per Academy e Age Group Senior Master e per il tesseramento federale. Il certificato si invia in allegato a ${EMAIL_CERTIFICATI}; quando è agonistico va consegnato anche l'originale al responsabile del settore. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo di messaggistica dedicato agli atleti e alle famiglie.`
 	},
 
 	// ── Iscrizione Triathlon ─────────────────────────────────────────────────────────
@@ -621,7 +622,7 @@ export const faq: FaqItem[] = [
 		id: "triathlon-iscrizione-quali-documenti-servono",
 		pagina: "triathlon-iscrizione",
 		q: "Quali documenti servono?",
-		a: "Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Age Group Senior Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale."
+		a: `Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Age Group Senior Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale. In tutti i casi si invia in allegato a ${EMAIL_CERTIFICATI}; se l'idoneità è agonistica va consegnato anche l'originale al responsabile del settore.`
 	},
 	{
 		id: "triathlon-iscrizione-cosa-comprende-la-quota",

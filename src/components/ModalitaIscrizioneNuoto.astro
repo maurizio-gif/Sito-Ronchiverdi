@@ -7,6 +7,7 @@
 // quello che gli serve, senza essere mandato altrove. Ripetere il testo in
 // cinque file, invece, significherebbe aggiornarlo in cinque punti — e
 // prima o poi dimenticarne uno.
+import { INVIO_NON_AGONISTICO } from "../data/certificatoMedico";
 import { TELEFONO_CLUB } from "../lib/scuolaNuoto";
 
 interface Props {
@@ -26,8 +27,8 @@ const procedura = [
 		desc: "Dal listino qui sopra arrivi alla scheda giusta: scegli la formula e completa il pagamento online.",
 	},
 	{
-		title: "Carica i documenti",
-		desc: "Certificato medico e regolamento firmato, dalla tua area personale.",
+		title: "Consegna i documenti",
+		desc: `Il regolamento firmato si carica dalla tua area personale. Il certificato medico no: ${INVIO_NON_AGONISTICO.replace("Si invia", "si invia")}`,
 	},
 ];
 
@@ -59,7 +60,7 @@ const primoGiorno = [
 			<li class="isc-step">
 				<span class="isc-step__num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
 				<h3>{s.title}</h3>
-				<p>{s.desc}</p>
+				<p set:html={s.desc} />
 			</li>
 		))}
 	</ol>

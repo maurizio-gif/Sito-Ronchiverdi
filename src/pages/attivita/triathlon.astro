@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+import { EMAIL_CERTIFICATI } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
 
 const facts = [
@@ -265,7 +266,7 @@ const faq = faqDiPagina("triathlon");
 		</section>
 
 		<p class="frame-note">
-			L'iscrizione si effettua presso la <strong>Reception del Club</strong>, con una quota annuale di <strong>1.200 €</strong> che comprende il tesseramento FITRI: non è in vendita sul portale. È obbligatorio il certificato medico agonistico in corso di validità. Le comunicazioni su attività, programmi e gare passano dal gruppo di messaggistica dedicato ad atleti e famiglie.
+			L'iscrizione si effettua presso la <strong>Reception del Club</strong>, con una quota annuale di <strong>1.200 €</strong> che comprende il tesseramento FITRI: non è in vendita sul portale. È obbligatorio il certificato medico agonistico in corso di validità: si invia in allegato a <a href={`mailto:${EMAIL_CERTIFICATI}`}>{EMAIL_CERTIFICATI}</a> e l'originale va consegnato al responsabile del settore. Le comunicazioni su attività, programmi e gare passano dal gruppo di messaggistica dedicato ad atleti e famiglie.
 		</p>
 
 		<div class="section-cta">
