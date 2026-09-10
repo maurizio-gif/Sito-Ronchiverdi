@@ -19,15 +19,14 @@ const services = [
 
 // Galleria degli ambienti. L'ordine non è casuale: si entra dalla Relax Zone,
 // si passa per il calore (sauna, vapore), poi il freddo, e si chiude alla
-// tisaneria — lo stesso percorso che si fa in sede. `span` marca le due foto
-// che nel mosaico occupano il doppio della larghezza.
+// tisaneria — lo stesso percorso che si fa in sede.
 const galleria = [
-	{ src: "spa-relax-zone", alt: "Relax Zone della Spa Ronchiverdi con sedute illuminate", titolo: "Relax Zone", nota: "Il momento della pausa", span: true },
+	{ src: "spa-relax-zone", alt: "Relax Zone della Spa Ronchiverdi con sedute illuminate", titolo: "Relax Zone", nota: "Il momento della pausa" },
 	{ src: "spa-sauna", alt: "Sauna finlandese in legno scuro affacciata sul verde", titolo: "Sauna", nota: "Legno scuro e luce sul parco" },
 	{ src: "spa-bagno-vapore", alt: "Bagno di vapore con illuminazione rossa", titolo: "Bagno di vapore", nota: "Calore umido e cromoterapia" },
 	{ src: "spa-cascata-ghiaccio", alt: "Cascata di ghiaccio della Spa Ronchiverdi", titolo: "Cascata di ghiaccio", nota: "Il contrasto che rigenera" },
 	{ src: "spa-percorso", alt: "Percorso benessere tra sauna e cascata di ghiaccio", titolo: "Il percorso", nota: "Dal caldo al freddo, e ritorno" },
-	{ src: "spa-tisaneria", alt: "Angolo tisaneria della Spa Ronchiverdi", titolo: "Tisaneria", nota: "Dove il percorso si chiude", span: true },
+	{ src: "spa-tisaneria", alt: "Angolo tisaneria della Spa Ronchiverdi", titolo: "Tisaneria", nota: "Dove il percorso si chiude" },
 ];
 
 const faq = faqDiPagina("spa");
@@ -61,7 +60,7 @@ const faq = faqDiPagina("spa");
 		<div class="spa-gallery__grid">
 			{galleria.map((foto, i) => (
 				<button
-					class:list={["spa-shot", { "spa-shot--wide": foto.span }]}
+					class="spa-shot"
 					type="button"
 					data-lightbox={i}
 					aria-label={`Ingrandisci: ${foto.titolo}`}
@@ -99,14 +98,12 @@ const faq = faqDiPagina("spa");
 	<section class="spa-orari" id="orari">
 		<div class="spa-orari__head">
 			<p class="eyebrow">Orari</p>
-			<h2>Quando la <em class="accent">Zona Relax</em> è pronta</h2>
+			<h2>Quando la <em class="accent">Zona Relax</em> è aperta</h2>
 			<p class="lede" style="margin-inline:auto">
-				Sauna e bagno di vapore hanno bisogno di tempo per salire in
-				temperatura: qui sotto l'ora in cui parte il riscaldamento e quella in
-				cui gli ambienti sono pronti.
+				Apertura e chiusura di sauna, bagno di vapore e percorso benessere.
 			</p>
 		</div>
-		<HoursTable rows={orari.rows} columns={orari.columns} />
+		<HoursTable rows={orari.rows} />
 		{orari.note && <p class="spa-orari__nota">{orari.note}</p>}
 	</section>
 
@@ -195,14 +192,14 @@ const faq = faqDiPagina("spa");
 			max-width: 72rem;
 			margin: 0 auto;
 			display: grid;
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: repeat(3, 1fr);
 			gap: 0.85rem;
 		}
-		/* Mosaico: due scatti larghi il doppio spezzano la griglia regolare,
-		   che con sei foto uguali sembrerebbe un catalogo. */
-		.spa-shot--wide {
-			grid-column: span 2;
-		}
+		/* Sei riquadri uguali, tre per riga. Prima due scatti erano larghi il
+		   doppio: con l'aspect-ratio addosso a ogni riquadro, però, i singoli
+		   non si allungavano fino al fondo della riga e le due foto larghe
+		   sporgevano di duecento pixel sotto le altre. Tutti uguali è l'unico
+		   modo di allinearli senza ritagliare nessuna foto. */
 
 		.spa-shot {
 			position: relative;
@@ -290,9 +287,6 @@ const faq = faqDiPagina("spa");
 			.spa-gallery__grid {
 				grid-template-columns: repeat(2, 1fr);
 			}
-			.spa-shot--wide {
-				grid-column: span 2;
-			}
 		}
 		@media (max-width: 560px) {
 			.spa-gallery {
@@ -300,9 +294,6 @@ const faq = faqDiPagina("spa");
 			}
 			.spa-gallery__grid {
 				grid-template-columns: 1fr;
-			}
-			.spa-shot--wide {
-				grid-column: span 1;
 			}
 			/* Senza hover la nota non comparirebbe mai: sul touch resta sempre
 			   visibile. */

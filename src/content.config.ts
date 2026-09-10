@@ -144,11 +144,11 @@ const schedules = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/schedules" }),
   schema: z.object({
     title: z.string(),
-    // Una tabella orari ha due forme. Quella semplice — la maggioranza — è a
-    // due colonne: giorni e orario, in `hours`. Quella a più colonne serve
-    // dove un giorno ha più di un orario da dire (la Zona Relax ha
-    // accensione, temperatura e spegnimento): la tabella dichiara le
-    // intestazioni in `columns` e ogni riga i suoi valori in `values`.
+    // Una tabella orari ha due forme. Quella semplice — oggi tutte — è a due
+    // colonne: giorni e orario, in `hours`. Quella a più colonne resta per
+    // il caso in cui un giorno abbia più di un orario da dire: la tabella
+    // dichiara le intestazioni in `columns` e ogni riga i suoi valori in
+    // `values`.
     hours: z
       .array(
         z

@@ -50,68 +50,15 @@
     {
       "id": "zona-relax",
       "title": "Spa · Zona Relax",
-      "note": "Il riscaldamento parte all'orario di accensione: sauna e bagno di vapore sono in temperatura, e quindi pronti, dall'orario della colonna centrale e fino allo spegnimento.",
-      "columns": [
-        "Accensione",
-        "In temperatura",
-        "Spegnimento"
-      ],
+      "note": "Sauna e bagno di vapore vanno in riscaldamento poco prima dell'apertura: dall'orario di apertura sono in temperatura.",
       "rows": [
         {
-          "label": "Lunedì",
-          "values": [
-            "08:35",
-            "09:00",
-            "22:00"
-          ]
+          "label": "Lunedì – Venerdì",
+          "hours": "9:00 – 22:00"
         },
         {
-          "label": "Martedì",
-          "values": [
-            "08:35",
-            "09:00",
-            "22:00"
-          ]
-        },
-        {
-          "label": "Mercoledì",
-          "values": [
-            "08:35",
-            "09:00",
-            "22:00"
-          ]
-        },
-        {
-          "label": "Giovedì",
-          "values": [
-            "08:35",
-            "09:00",
-            "22:00"
-          ]
-        },
-        {
-          "label": "Venerdì",
-          "values": [
-            "10:00",
-            "10:30",
-            "22:00"
-          ]
-        },
-        {
-          "label": "Sabato",
-          "values": [
-            "09:35",
-            "10:00",
-            "20:00"
-          ]
-        },
-        {
-          "label": "Domenica",
-          "values": [
-            "09:35",
-            "10:00",
-            "20:00"
-          ]
+          "label": "Sabato e domenica",
+          "hours": "10:00 – 20:00"
         }
       ]
     }

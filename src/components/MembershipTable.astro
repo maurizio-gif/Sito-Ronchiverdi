@@ -122,6 +122,8 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 		{segni.has("rate") && <span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>}
 		{segni.has("none") && <span class="legend-item"><PlanMark status="none" /> non incluso</span>}
 	</p>
+	</div>
+
 	{suMisura && (
 		<div class="su-misura">
 			<span class="eyebrow">E il prezzo?</span>
@@ -134,7 +136,7 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 			<ul class="su-misura__assi">
 				<li>
 					<strong>Fascia d'età</strong>
-					<span>Under, adulti, senior: la quota cambia con l'età di chi si iscrive.</span>
+					<span>La quota cambia in base all'età di chi si iscrive.</span>
 				</li>
 				<li>
 					<strong>Durata</strong>
@@ -157,7 +159,6 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 			</p>
 		</div>
 	)}
-	</div>
 
 	<slot />
 </section>
@@ -178,9 +179,9 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 		margin-bottom: 0;
 	}
 
-	/* Tabella, legenda e blocco della quota dentro un bordo solo: sono una
-	   cosa sola, e chi legge le colonne cercando un prezzo deve trovare la
-	   spiegazione lì, senza staccarsi dall'oggetto che sta guardando. */
+	/* Tabella e legenda dentro un bordo solo: la legenda spiega i segni
+	   delle righe, quindi appartiene alla tabella e non va staccata. Il
+	   blocco della quota invece resta un oggetto a sé, subito sotto. */
 	.compare-box {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
@@ -318,20 +319,17 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 		}
 	}
 
-	/* Attaccato al fondo della tabella, senza stacco: continua il bordo e
-	   arrotonda solo sotto, così tabella e quota si leggono come un oggetto
-	   unico. Prima era un riquadro staccato più in basso, e per scoprirlo
-	   bisognava scorrere: chi guardava le colonne cercando un prezzo non
-	   trovava né il prezzo né la spiegazione.
-	   Sta fuori da .compare-scroll di proposito: dentro erediterebbe la
-	   larghezza minima della griglia e su telefono si leggerebbe scorrendo
-	   di lato. */
+	/* Riquadro proprio, subito sotto la tabella: parla del prezzo, non delle
+	   attività, e fondendolo con tabella e legenda si leggeva come una loro
+	   coda. Resta però a contatto d'occhio — chi guarda le colonne cercando
+	   una cifra la trova qui senza dover scorrere. */
 	.su-misura {
-		margin: 0;
+		margin: 1.25rem 0 0;
 		padding: 2.25rem 2rem 2.5rem;
 		text-align: center;
-		background: var(--bg);
-		border-top: 1px solid var(--border);
+		background: var(--bg-alt);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
 	}
 	.su-misura h3 {
 		margin: 0.4rem 0 0.9rem;
@@ -412,10 +410,10 @@ const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key]))
 		flex-wrap: wrap;
 		gap: 1.5rem;
 		justify-content: center;
-		/* Dentro il contenitore: sotto le righe che spiega, col suo respiro,
-		   senza staccarsi dalla tabella. */
+		/* Dentro il contenitore, sotto le righe che spiega: il respiro glielo
+		   dà il padding, non un margine che la staccherebbe dal bordo. */
 		margin: 0;
-		padding: 1.25rem 1.5rem;
+		padding: 1.75rem 1.5rem;
 		border-top: 1px solid var(--border);
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
