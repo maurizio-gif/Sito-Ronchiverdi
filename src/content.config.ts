@@ -141,14 +141,49 @@ const schedules = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/schedules" }),
   schema: z.object({
     title: z.string(),
+    // Una tabella orari ha due forme. Quella semplice — la maggioranza — è a
+    // due colonne: giorni e orario, in `hours`. Quella a più colonne serve
+    // dove un giorno ha più di un orario da dire (la Zona Relax ha
+    // accensione, temperatura e spegnimento): la tabella dichiara le
+    // intestazioni in `columns` e ogni riga i suoi valori in `values`.
     hours: z
       .array(
-        z.object({
-          id: z.string(),
-          title: z.string(),
-          note: z.string().optional(),
-          rows: z.array(z.object({ label: z.string(), hours: z.string() })),
-        })
+        z
+          .object({
+            id: z.string(),
+            title: z.string(),
+            note: z.string().optional(),
+            columns: z.array(z.string()).optional(),
+            rows: z.array(
+              z.object({
+                label: z.string(),
+                hours: z.string().optional(),
+                values: z.array(z.string()).optional(),
+              })
+            ),
+          })
+          // Meglio un errore di build che una tabella con le celle vuote o
+          // le colonne sfalsate: chi modifica il planning da Tina se ne
+          // accorge subito, non dalla pagina pubblicata.
+          .superRefine((table, ctx) => {
+            for (const [i, row] of table.rows.entries()) {
+              if (table.columns) {
+                if (row.values?.length !== table.columns.length) {
+                  ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ["rows", i, "values"],
+                    message: `La tabella orari "${table.id}" ha ${table.columns.length} colonne: la riga "${row.label}" deve avere altrettanti valori.`,
+                  });
+                }
+              } else if (!row.hours) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  path: ["rows", i, "hours"],
+                  message: `La tabella orari "${table.id}" è a due colonne: la riga "${row.label}" deve avere un orario.`,
+                });
+              }
+            }
+          })
       )
       .default([]),
     sections: z.array(

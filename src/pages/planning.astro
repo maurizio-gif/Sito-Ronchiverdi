@@ -11,6 +11,7 @@ import { getAllSchedules, getHours } from "../lib/schedules";
 import { faqDiPagina } from "../data/faq";
 
 const gymFloor = await getHours("gym-floor");
+const zonaRelax = await getHours("zona-relax");
 const sezioni = await getAllSchedules();
 
 
@@ -36,6 +37,15 @@ const faq = faqDiPagina("planning");
 			<p class="lede">Orari di apertura della sala pesi.</p>
 		</div>
 		<HoursTable rows={gymFloor.rows} />
+	</section>
+
+	<section class="planning-section">
+		<div class="planning-section__head">
+			<h2>{zonaRelax.title}</h2>
+			<p class="lede">Accensione, temperatura e spegnimento di sauna e bagno di vapore.</p>
+		</div>
+		<HoursTable rows={zonaRelax.rows} columns={zonaRelax.columns} />
+		{zonaRelax.note && <p class="planning-section__nota">{zonaRelax.note}</p>}
 	</section>
 
 	{sezioni.map((sezione) => (
@@ -95,6 +105,15 @@ const faq = faqDiPagina("planning");
 		   centrata anche lei, o resta appoggiata al bordo sinistro. */
 		.planning-section :global(.hours-table) {
 			margin-inline: auto;
+		}
+		.planning-section__nota {
+			max-width: 42rem;
+			margin: 1.5rem auto 0;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.6;
+			color: var(--text-muted);
+			text-align: center;
 		}
 		.planning-section__head em {
 			font-style: italic;
