@@ -11,14 +11,35 @@ interface Props {
 	planCtaLabel?: string;
 	/** Se assente, il pulsante apre il modulo di contatto; passala solo per un link diretto. */
 	planCtaHref?: string;
+	/** Estratto: le chiavi dei piani da mostrare, nell'ordine dato. Assente = tutti. */
+	piani?: string[];
+	/** Estratto: le etichette delle voci da mostrare, nell'ordine dato. Assente = tutte. */
+	voci?: string[];
 }
 
-const { eyebrow, title, lede, planCtaLabel = "Scopri di più", planCtaHref } = Astro.props;
+const { eyebrow, title, lede, planCtaLabel = "Scopri di più", planCtaHref, piani, voci } = Astro.props;
 
 // Sorgente unica della tabella: src/content/memberships/tabella.json.
 const tabella = await getEntry("memberships", "tabella");
 if (!tabella) throw new Error("Manca src/content/memberships/tabella.json");
-const { plans, features } = tabella.data;
+
+// L'estratto sceglie piani e voci per nome, non per posizione: se la tabella
+// cambia ordine la pagina che lo chiede continua a mostrare le stesse righe.
+const pick = <T,>(tutti: T[], chiavi: string[] | undefined, nome: (v: T) => string) => {
+	if (!chiavi) return tutti;
+	return chiavi.map((k) => {
+		const trovato = tutti.find((v) => nome(v) === k);
+		if (!trovato) throw new Error(`MembershipTable: "${k}" non è in src/content/memberships/tabella.json`);
+		return trovato;
+	});
+};
+
+const plans = pick(tabella.data.plans, piani, (p) => p.key);
+const features = pick(tabella.data.features, voci, (f) => f.label);
+
+// La legenda spiega solo i segni che finiscono davvero in tabella: in un
+// estratto di due colonne le altre condizioni sarebbero rumore.
+const segni = new Set(features.flatMap((f) => plans.map((p) => f.access[p.key])));
 
 const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, per maggiori info clicca sul pulsante sotto al piano.";
 ---
@@ -33,7 +54,12 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 	)}
 
 	<div class="compare-scroll">
-		<div class="compare-table" role="table" aria-label="Confronto abbonamenti Gold, Silver, Gym e Swim">
+		<div
+			class="compare-table"
+			role="table"
+			aria-label={`Confronto abbonamenti ${plans.map((p) => p.name).join(", ")}`}
+			style={`--cols:${plans.length}`}
+		>
 			<div class="compare-row compare-row--head" role="row">
 				<div class="compare-cell compare-cell--label" role="columnheader"></div>
 				{plans.map((p) => (
@@ -82,14 +108,16 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 	</div>
 
 	<p class="compare-legend">
-		<span class="legend-item"><PlanMark status="full" /> incluso</span>
+		{segni.has("full") && <span class="legend-item"><PlanMark status="full" /> incluso</span>}
 		{/* La condizione per intero sta nel tooltip della riga: qui basta che
 		    l'asterisco rimandi a qualcosa, o resterebbe un simbolo muto. */}
-		<span class="legend-item">
-			<PlanMark status="seasonal" /> incluso da aprile a settembre, poi a tariffa agevolata
-		</span>
-		<span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>
-		<span class="legend-item"><PlanMark status="none" /> non incluso</span>
+		{segni.has("seasonal") && (
+			<span class="legend-item">
+				<PlanMark status="seasonal" /> incluso da aprile a settembre, poi a tariffa agevolata
+			</span>
+		)}
+		{segni.has("rate") && <span class="legend-item"><PlanMark status="rate" /> tariffa agevolata</span>}
+		{segni.has("none") && <span class="legend-item"><PlanMark status="none" /> non incluso</span>}
 	</p>
 
 	<slot />
@@ -117,17 +145,19 @@ const priceTooltip = "Prezzo relativo alla rata mensile di abbonamento annuale, 
 		border-radius: var(--radius);
 	}
 
+	/* --cols arriva dal markup: la tabella piena ne ha quattro, un estratto
+	   anche solo due, e in quel caso non deve scrollare per niente. */
 	.compare-table {
 		display: grid;
-		grid-template-columns: minmax(160px, 1.3fr) repeat(4, minmax(130px, 1fr));
-		min-width: 44rem;
+		grid-template-columns: minmax(160px, 1.3fr) repeat(var(--cols, 4), minmax(130px, 1fr));
+		min-width: calc(10rem + var(--cols, 4) * 8.5rem);
 		background: var(--bg-alt);
 	}
 
 	@media (max-width: 640px) {
 		.compare-table {
-			grid-template-columns: minmax(128px, 1fr) repeat(4, minmax(130px, 1fr));
-			min-width: 40rem;
+			grid-template-columns: minmax(128px, 1fr) repeat(var(--cols, 4), minmax(130px, 1fr));
+			min-width: calc(8rem + var(--cols, 4) * 8rem);
 		}
 	}
 

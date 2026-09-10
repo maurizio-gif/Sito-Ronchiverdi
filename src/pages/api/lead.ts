@@ -152,6 +152,12 @@ export async function POST({ request }: { request: Request }) {
 			ora: str(body.oraScelta),
 			attivita: str(body.attivitaLabel),
 			token: String(inserito.token_gestione),
+			// Id, settore e origine servono a risolvere il referente da citare
+			// nell'email: l'etichetta qui sopra è per chi legge, non per
+			// cercare in src/data/referenti.ts.
+			attivitaId: str(body.attivita),
+			settore: str(body.settore),
+			origine: str(body.origine),
 		});
 	}
 

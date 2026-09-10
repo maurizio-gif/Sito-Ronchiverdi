@@ -547,7 +547,7 @@ export const faq: FaqItem[] = [
 		id: "triathlon-da-quale-eta-si-puo-iniziare-e-come-sono-divise-le-categorie",
 		pagina: "triathlon",
 		q: "Da quale età si può iniziare e come sono divise le categorie?",
-		a: "Il percorso triathlon copre tutte le età: la Young School è rivolta a bambini e ragazzi dai 6 ai 13 anni, la Triathlon Academy a ragazzi e ragazze dai 14 ai 20 anni, il Triathlon Master ai soci dai 20 anni in avanti. Il passaggio dalla Young School all'Academy è automatico, salvo eccezioni valutate con i tecnici."
+		a: "Il percorso triathlon copre tutte le età: la Young School è rivolta a bambini e ragazzi dai 6 ai 13 anni, la Triathlon Academy a ragazzi e ragazze dai 14 ai 23 anni, il Triathlon Age Group Senior Master ai soci dai 23 anni in avanti. Il passaggio dalla Young School all'Academy è automatico, salvo eccezioni valutate con i tecnici."
 	},
 	{
 		id: "triathlon-come-vengono-formati-i-gruppi",
@@ -559,19 +559,19 @@ export const faq: FaqItem[] = [
 		id: "triathlon-e-possibile-fare-una-lezione-di-prova",
 		pagina: "triathlon",
 		q: "È possibile fare una lezione di prova?",
-		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact>form di questa pagina</button>.</p>`
+		html: `<p>Sì, per tutte e tre le categorie. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite, durante le quali i ragazzi conoscono i tecnici e sperimentano le diverse discipline. Per Academy e Age Group Senior Master è possibile partecipare a una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento: puoi richiederla con il <button type="button" class="faq-inline-btn" data-open-contact>form di questa pagina</button>.</p>`
 	},
 	{
 		id: "triathlon-bisogna-avere-gia-esperienza-nel-triathlon",
 		pagina: "triathlon",
 		q: "Bisogna avere già esperienza nel triathlon?",
-		a: "No. Nella Young School non è richiesta esperienza, ma è necessario saper nuotare e andare in bicicletta a un livello base: le attività vengono poi proposte gradualmente. Gli allenamenti Master sono aperti a tutti i soci, anche a chi non ha mai praticato triathlon, ed è possibile partecipare partendo anche da una sola disciplina tra nuoto, corsa e ciclismo."
+		a: "No. Nella Young School non è richiesta esperienza, ma è necessario saper nuotare e andare in bicicletta a un livello base: le attività vengono poi proposte gradualmente. Gli allenamenti Age Group Senior Master sono aperti a tutti i soci, anche a chi non ha mai praticato triathlon, ed è possibile partecipare partendo anche da una sola disciplina tra nuoto, corsa e ciclismo."
 	},
 	{
 		id: "triathlon-quante-volte-ci-si-allena-a-settimana",
 		pagina: "triathlon",
 		q: "Quante volte ci si allena a settimana?",
-		a: "Nella Young School sono disponibili programmi con 1, 2 o 3 allenamenti settimanali, per un totale rispettivamente di 2, 4 o 6 ore: gli allenamenti si svolgono il lunedì, mercoledì, giovedì e venerdì e ogni famiglia sceglie i giorni in base al programma acquistato. Academy e Master prevedono invece attività distribuite lungo tutta la settimana, con frequenza modulata dai tecnici in base al periodo della stagione, al livello e agli obiettivi."
+		a: "Nella Young School sono disponibili programmi con 1, 2 o 3 allenamenti settimanali, per un totale rispettivamente di 2, 4 o 6 ore: gli allenamenti si svolgono il lunedì, mercoledì, giovedì e venerdì e ogni famiglia sceglie i giorni in base al programma acquistato. Academy e Age Group Senior Master prevedono invece attività distribuite lungo tutta la settimana, con frequenza modulata dai tecnici in base al periodo della stagione, al livello e agli obiettivi."
 	},
 	{
 		id: "triathlon-e-possibile-recuperare-un-allenamento-perso",
@@ -595,13 +595,13 @@ export const faq: FaqItem[] = [
 		id: "triathlon-sono-previsti-programmi-di-allenamento-personalizzati",
 		pagina: "triathlon",
 		q: "Sono previsti programmi di allenamento personalizzati?",
-		a: "Sì, per Academy e Master. I tecnici predispongono una programmazione individuale in base a livello di preparazione, obiettivi personali e agonistici, calendario delle gare, periodo della stagione e — per i Master — disponibilità settimanale e impegni di lavoro e famiglia. Il programma viene aggiornato in base ai progressi."
+		a: "Sì, per Academy e Age Group Senior Master. I tecnici predispongono una programmazione individuale in base a livello di preparazione, obiettivi personali e agonistici, calendario delle gare, periodo della stagione e — per gli Age Group Senior Master — disponibilità settimanale e impegni di lavoro e famiglia. Il programma viene aggiornato in base ai progressi."
 	},
 	{
 		id: "triathlon-come-ci-si-iscrive-quali-documenti-servono-e-come-arrivano-le-comunica",
 		pagina: "triathlon",
 		q: "Come ci si iscrive, quali documenti servono e come arrivano le comunicazioni?",
-		a: "L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto il certificato medico agonistico, obbligatorio anche per Academy e Master e per il tesseramento federale. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo di messaggistica dedicato agli atleti e alle famiglie."
+		a: "L'iscrizione alla Young School si effettua online dal sito Ronchiverdi, quella all'Academy presso la Reception del Club. Serve un certificato medico in corso di validità: dai 12 anni è richiesto il certificato medico agonistico, obbligatorio anche per Academy e Age Group Senior Master e per il tesseramento federale. La quota Young School comprende i tesseramenti FITRI e FIDAL, quella Academy il tesseramento FITRI con validità annuale. Allenamenti, uscite in bici, gare e iniziative vengono comunicati tramite il gruppo di messaggistica dedicato agli atleti e alle famiglie."
 	},
 
 	// ── Iscrizione Triathlon ─────────────────────────────────────────────────────────
@@ -609,25 +609,25 @@ export const faq: FaqItem[] = [
 		id: "triathlon-iscrizione-come-ci-si-iscrive-categoria-per-categoria",
 		pagina: "triathlon-iscrizione",
 		q: "Come ci si iscrive, categoria per categoria?",
-		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, all'Academy presso la Reception del Club. Per il Triathlon Master l'accesso è riservato ai soci con abbonamento Gold o Silver: in tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura."
+		a: "Alla Young School ci si iscrive online dal sito Ronchiverdi, scegliendo il programma dal listino del corso. Academy e Age Group Senior Master non si acquistano online e si iscrivono alla Reception del Club: l'Academy versando la quota annuale di 1.200 €, l'Age Group Senior Master attivando l'abbonamento al Club — Gold o Silver, gli unici piani che comprendono piscina, palestra e triathlon. In tutti i casi puoi scriverci con il modulo di contatto e ti seguiamo noi nella procedura."
 	},
 	{
 		id: "triathlon-iscrizione-posso-provare-prima-di-iscrivermi",
 		pagina: "triathlon-iscrizione",
 		q: "Posso provare prima di iscrivermi?",
-		a: "Sì. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite. Per Academy e Master è possibile richiedere una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento."
+		a: "Sì. Nella Young School la prima settimana di attività è dedicata alle lezioni di prova gratuite. Per Academy e Age Group Senior Master è possibile richiedere una lezione di prova per conoscere gli allenatori, il gruppo e il metodo di allenamento."
 	},
 	{
 		id: "triathlon-iscrizione-quali-documenti-servono",
 		pagina: "triathlon-iscrizione",
 		q: "Quali documenti servono?",
-		a: "Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale."
+		a: "Per la Young School serve un certificato medico in corso di validità, che dai 12 anni deve essere agonistico. Per Academy e Age Group Senior Master è obbligatorio il certificato medico agonistico, necessario anche per il tesseramento federale."
 	},
 	{
 		id: "triathlon-iscrizione-cosa-comprende-la-quota",
 		pagina: "triathlon-iscrizione",
 		q: "Cosa comprende la quota?",
-		a: "La quota della Young School comprende i tesseramenti FITRI e FIDAL. Quella dell'Academy comprende il tesseramento FITRI e ha validità annuale; gli iscritti possono inoltre frequentare il club quotidianamente, anche al di fuori degli orari di allenamento."
+		a: "La Young School ha un listino corso a 1, 2 o 3 allenamenti settimanali, e la quota comprende i tesseramenti FITRI e FIDAL. L'Academy ha una quota unica di 1.200 € all'anno, che comprende il tesseramento FITRI e l'accesso al club tutti i giorni, anche fuori dagli orari di allenamento: si versa in Reception e non passa dal portale. L'Age Group Senior Master non ha una quota corso — l'attività della squadra è compresa nell'abbonamento al Club, Gold o Silver."
 	},
 
 	// ── Summer Camp ─────────────────────────────────────────────────────────

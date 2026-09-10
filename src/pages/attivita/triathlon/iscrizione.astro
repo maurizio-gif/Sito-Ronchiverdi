@@ -5,9 +5,15 @@ import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
 import { faqDiPagina } from "../../../data/faq";
 import ListinoCorsi from "../../../components/ListinoCorsi.astro";
+import MembershipTable from "../../../components/MembershipTable.astro";
 import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
 import "../../../styles/iscrizione.css";
 
+// Ogni card chiude sul punto che qui conta più di tutti: quanto si paga e
+// dove. Le tre categorie rispondono in tre modi diversi: la Young School ha
+// un listino a frequenza e si acquista online sul portale; l'Academy ha una
+// quota annuale unica che non passa dal portale; l'Age Group Senior Master
+// non ha una quota corso e segue il listino degli abbonamenti al Club.
 const categorie = [
 	{
 		eyebrow: "6–13 anni",
@@ -18,57 +24,82 @@ const categorie = [
 			"Prima settimana di attività dedicata alle prove gratuite",
 			"La quota comprende i tesseramenti FITRI e FIDAL",
 		],
+		quota: {
+			label: "Quota del corso",
+			testo: "Listino a 1, 2 o 3 allenamenti settimanali, acquisto online",
+			linkLabel: "Vedi le quote",
+			href: "#listino",
+		},
 		anchor: "#young",
 	},
 	{
-		eyebrow: "14–20 anni",
+		eyebrow: "14–23 anni",
 		title: "Academy",
-		desc: "L'iscrizione si effettua presso la Reception del Club. Prima di iscriversi è possibile partecipare a una lezione di prova, per conoscere i tecnici, il gruppo e l'organizzazione degli allenamenti.",
+		desc: "L'iscrizione si effettua presso la Reception del Club, dove i tecnici definiscono il gruppo. Prima di iscriversi è possibile partecipare a una lezione di prova, per conoscere i tecnici e l'organizzazione degli allenamenti.",
 		punti: [
 			"Iscrizione presso la Reception del Club",
 			"Lezione di prova su richiesta",
 			"La quota comprende il tesseramento FITRI e ha validità annuale",
 		],
+		quota: {
+			label: "Quota del corso",
+			testo: "1.200 € all'anno, non acquistabile online: si versa in Reception",
+			linkLabel: "Vedi la quota",
+			href: "#quota-academy",
+		},
 		anchor: "#academy",
 	},
 	{
-		eyebrow: "Dai 20 anni",
-		title: "Master",
-		desc: "L'attività della squadra è riservata ai soci del club: serve un abbonamento che comprenda piscina e palestra, Gold o Silver. Anche qui è possibile partecipare a una lezione di prova prima di entrare nel gruppo.",
+		eyebrow: "Dai 23 anni",
+		title: "Age Group Senior Master",
+		desc: "L'attività della squadra è riservata ai soci del club e l'iscrizione si completa in Reception. Anche qui è possibile partecipare a una lezione di prova prima di entrare nel gruppo.",
 		punti: [
-			"Abbonamento Gold o Silver attivo",
+			"Iscrizione presso la Reception del Club",
 			"Lezione di prova su richiesta",
 			"Tesseramento FITRI per attività di squadra e gare",
 		],
+		quota: {
+			label: "Abbonamento al Club",
+			testo: "Nessuna quota corso: vale il listino degli abbonamenti soci",
+			linkLabel: "Vedi gli abbonamenti",
+			href: "#abbonamento",
+		},
 		anchor: "#master",
 	},
 ];
 
+// L'estratto della tabella abbonamenti: solo Gold e Silver, gli unici due
+// piani che comprendono il triathlon, e solo le voci che servono a un
+// triatleta. Le etichette devono esistere in memberships/tabella.json.
+const pianiTriathlon = ["gold", "silver"];
+const vociTriathlon = ["Triathlon", "Nuoto Libero", "Gym Floor", "Piscina Estiva", "Spa"];
+
 const procedura = [
 	{
 		title: "Scegli la categoria",
-		desc: "Young School dai 6 ai 13 anni, Academy dai 14 ai 20, Master dai 20 in su: se hai dubbi sul gruppo giusto, chiedi a noi.",
+		desc: "Young School dai 6 ai 13 anni, Academy dai 14 ai 23, Age Group Senior Master dai 23 in su: se hai dubbi sul gruppo giusto, chiedi a noi.",
 	},
 	{
 		title: "Prova un allenamento",
-		desc: "Nella Young School la prima settimana è di prove gratuite; per Academy e Master la lezione di prova si concorda su richiesta.",
+		desc: "Nella Young School la prima settimana è di prove gratuite; per Academy e Age Group Senior Master la lezione di prova si concorda su richiesta.",
 	},
 	{
 		title: "Completa l'iscrizione",
-		desc: "Per la Young School dal listino qui sopra, sul portale InforYou; per Academy e Master alla Reception del Club.",
+		desc: "Per la Young School si acquista il programma dal listino, online sul portale InforYou. Academy e Age Group Senior Master passano dalla Reception del Club: là si versa la quota dell'Academy o si attiva l'abbonamento, e si sistema il tesseramento federale.",
 	},
 ];
 
 const documenti = [
 	"Certificato medico in corso di validità per la Young School; dai 12 anni è richiesto il certificato medico agonistico",
-	"Certificato medico agonistico in corso di validità per Academy e Master, obbligatorio anche per il tesseramento federale",
+	"Certificato medico agonistico in corso di validità per Academy e Age Group Senior Master, obbligatorio anche per il tesseramento federale",
 	"Tesseramento FITRI, compreso nella quota per Young School e Academy",
 	"Tesseramento FIDAL, compreso nella quota della Young School",
 ];
 
 
-// Sul portale è in vendita la sola Young School: Academy e Master si
-// iscrivono in reception, e restano descritte nelle card qui sopra.
+// Sul portale è in vendita la sola Young School, e solo di quella si può
+// mostrare il listino con i link ai prodotti: la quota dell'Academy e gli
+// abbonamenti dell'Age Group Senior Master hanno una sezione loro, più sotto.
 const young = await getPercorso("triathlon");
 const aggiornatoAl = await getListinoAggiornatoAl("triathlon");
 const faq = faqDiPagina("triathlon-iscrizione");
@@ -76,14 +107,14 @@ const faq = faqDiPagina("triathlon-iscrizione");
 
 <Layout
 	title="Modalità di iscrizione — Triathlon Ronchiverdi"
-	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
+	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Age Group Senior Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
 	image="og/triathlon.jpg"
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon · Iscrizione">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
-		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
+		<Fragment slot="lede">Young School, Academy e Age Group Senior Master hanno procedure e quote diverse: solo la Young School si acquista online. Qui trovi come funziona ognuna, quanto costa e dove si versa.</Fragment>
 		<div class="header-cta">
-			<a class="btn" href="#listino">Vedi le quote</a>
+			<a class="btn" href="#listino">Quote e abbonamenti</a>
 			<button type="button" class="btn btn-outline" data-open-contact data-interest="triathlon-young">Contattaci</button>
 		</div>
 	</PageHero>
@@ -92,6 +123,13 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		<div class="isc-head">
 			<span class="eyebrow">Le tre categorie</span>
 			<h2>I tre percorsi</h2>
+			<p class="isc-head__lede">
+				Cambia il modo di allenarsi, e cambia anche il modo di pagare: la
+				<strong>Young School</strong> ha un listino a frequenza e si acquista
+				online, l'<strong>Academy</strong> una quota annuale unica che si
+				versa in Reception, l'<strong>Age Group Senior Master</strong> nessuna
+				quota corso — là vale il listino degli abbonamenti al Club.
+			</p>
 		</div>
 		<div class="cat-grid">
 			{categorie.map((c) => (
@@ -107,6 +145,11 @@ const faq = faqDiPagina("triathlon-iscrizione");
 							</li>
 						))}
 					</ul>
+					<div class="cat-card__quota">
+						<span class="cat-card__quota-label">{c.quota.label}</span>
+						<p class="cat-card__quota-testo">{c.quota.testo}</p>
+						<a class="cat-card__quota-link" href={c.quota.href}>{c.quota.linkLabel} →</a>
+					</div>
 					<a class="cat-card__link" href={url(`/attivita/triathlon${c.anchor}`)}>Scopri il percorso →</a>
 				</article>
 			))}
@@ -115,12 +158,13 @@ const faq = faqDiPagina("triathlon-iscrizione");
 
 	<section class="isc-section isc-section--alt" id="listino">
 		<div class="isc-head">
-			<span class="eyebrow">Quote {young.title}</span>
-			<h2>Quanto costa</h2>
+			<span class="eyebrow">Quote {young.title} · 6–13 anni</span>
+			<h2>Quanto costa la Young School</h2>
 			<p class="isc-head__lede">
-				La quota comprende i tesseramenti FITRI e FIDAL. Con un abbonamento
-				Ronchiverdi attivo vale il listino soci. Academy e Master si iscrivono
-				in reception: per quelli, scrivici.
+				È l'unico percorso con un listino corso e l'acquisto online: si sceglie
+				il programma da 1, 2 o 3 allenamenti e si completa tutto sul portale
+				InforYou. La quota comprende i tesseramenti FITRI e FIDAL, e con un
+				abbonamento Ronchiverdi attivo vale il listino soci.
 			</p>
 		</div>
 		<ListinoCorsi
@@ -129,6 +173,57 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			dettagli={young.dettagli}
 			aggiornatoAl={aggiornatoAl}
 		/>
+		<p class="isc-note isc-note--center">
+			Cerchi le quote delle altre due categorie? Non sono in questo listino e
+			non passano dal portale: <a href="#quota-academy">la quota dell'Academy</a>
+			si versa in Reception, e per l'Age Group Senior Master
+			<a href="#abbonamento">vale il listino degli abbonamenti</a>.
+		</p>
+	</section>
+
+	<section class="isc-section" id="quota-academy">
+		<div class="isc-head">
+			<span class="eyebrow">Quota Academy · 14–23 anni</span>
+			<h2>Una quota unica per la stagione</h2>
+			<p class="isc-head__lede">
+				L'Academy non ha un listino a frequenza: gli allenamenti sono
+				distribuiti su tutta la settimana e la quota è una sola, per l'intera
+				stagione. Non è in vendita sul portale InforYou — si versa in
+				Reception, dove si completa anche l'iscrizione.
+			</p>
+		</div>
+		<div class="quota-card">
+			<span class="quota-card__label">Quota annuale</span>
+			<p class="quota-card__prezzo">1.200<span class="quota-card__valuta">€</span></p>
+			<ul class="quota-card__punti">
+				<li>Validità annuale, per l'intera stagione sportiva</li>
+				<li>Comprende il tesseramento FITRI</li>
+				<li>Comprende l'accesso al club sette giorni su sette, anche fuori dagli orari di allenamento</li>
+				<li>Si versa in Reception: non è acquistabile online</li>
+			</ul>
+			<button type="button" class="btn" data-open-contact data-interest="triathlon-young">Richiedi informazioni</button>
+		</div>
+	</section>
+
+	<section class="isc-section isc-section--alt" id="abbonamento">
+		<div class="isc-head">
+			<span class="eyebrow">Quote Age Group Senior Master · dai 23 anni</span>
+			<h2>Vale il listino degli abbonamenti</h2>
+			<p class="isc-head__lede">
+				Qui non c'è una quota corso: l'attività della squadra è compresa
+				nell'abbonamento al Club, e il prezzo è quello. Gli unici due piani
+				che comprendono il triathlon sono <strong>Gold</strong> e
+				<strong>Silver</strong>, perché sono quelli con piscina e palestra
+				insieme.
+			</p>
+		</div>
+		<MembershipTable piani={pianiTriathlon} voci={vociTriathlon} planCtaLabel="Richiedi l'abbonamento" />
+		<p class="isc-note isc-note--center">
+			Qui sopra le voci che servono a un triatleta. Il confronto completo dei
+			quattro piani, Gym e Swim compresi, è nella pagina <a href={url("/abbonamenti")}>abbonamenti</a>. Il tesseramento FITRI e il
+			certificato medico agonistico restano necessari e si sistemano in
+			Reception insieme all'iscrizione.
+		</p>
 	</section>
 
 	<section class="isc-section">
@@ -146,7 +241,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			))}
 		</ol>
 		<p class="isc-note">
-			Academy e Master non si iscrivono online: si passa dalla Reception del
+			Academy e Age Group Senior Master non si iscrivono online: si passa dalla Reception del
 			Club, oppure ci si scrive e organizziamo tutto noi.
 		</p>
 	</section>
@@ -169,7 +264,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 					<h2>Prova prima di iscriverti</h2>
 				</div>
 				<p class="isc-testo">Nella Young School la <strong>prima settimana di attività</strong> è dedicata alle lezioni di prova gratuite: i ragazzi conoscono i tecnici e sperimentano nuoto, ciclismo e corsa.</p>
-				<p class="isc-testo">Per <strong>Academy</strong> e <strong>Master</strong> la lezione di prova si concorda su richiesta.</p>
+				<p class="isc-testo">Per <strong>Academy</strong> e <strong>Age Group Senior Master</strong> la lezione di prova si concorda su richiesta.</p>
 			</div>
 		</div>
 	</section>
@@ -237,7 +332,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 		}
 		.cat-card__punti {
 			list-style: none;
-			margin: 0 0 1.5rem;
+			margin: 0 0 1.25rem;
 			padding: 0;
 			display: flex;
 			flex-direction: column;
@@ -257,16 +352,119 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			margin-top: 0.2rem;
 			color: var(--accent);
 		}
-		.cat-card__link {
+		/* Il blocco quota è la risposta alla domanda per cui si arriva su questa
+		   pagina: sta in fondo a ogni card, staccato dal resto da un filo, e
+		   allineato fra le tre colonne dal margin-top: auto. */
+		.cat-card__quota {
 			margin-top: auto;
+			padding-top: 1.1rem;
+			border-top: 1px solid var(--border);
+		}
+		.cat-card__quota-label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 700;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.cat-card__quota-testo {
+			margin: 0.4rem 0 0.7rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.5;
+			color: var(--text);
+		}
+		.cat-card__quota-link,
+		.cat-card__link {
 			font-family: var(--font-sans);
 			font-size: var(--text-sm);
 			font-weight: 600;
 			color: var(--text);
 			text-decoration: none;
 		}
+		.cat-card__quota-link:hover,
 		.cat-card__link:hover {
 			color: var(--accent);
+		}
+		.cat-card__link {
+			margin-top: 1.1rem;
+			color: var(--text-muted);
+			font-weight: 500;
+		}
+
+		/* La tabella porta con sé il suo respiro verticale: dentro una sezione
+		   che ne ha già, va azzerato. */
+		#abbonamento :global(.compare) {
+			padding: 0;
+			max-width: none;
+		}
+
+		/* La quota dell'Academy è un numero solo, e non passa dal portale:
+		   niente tabella e niente prezzi cliccabili, solo la cifra e cosa
+		   comprende. */
+		.quota-card {
+			max-width: 34rem;
+			margin: 0 auto;
+			padding: 2.25rem 2rem 2.5rem;
+			background: var(--bg-alt);
+			border: 1px solid var(--border);
+			border-radius: 16px;
+			text-align: center;
+		}
+		.quota-card__label {
+			display: block;
+			font-family: var(--font-sans);
+			font-size: var(--text-2xs);
+			font-weight: 700;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			color: var(--accent);
+		}
+		.quota-card__prezzo {
+			margin: 0.5rem 0 1.5rem;
+			font-family: var(--font-serif);
+			font-size: var(--text-3xl);
+			line-height: 1;
+			font-weight: 600;
+			color: var(--text);
+		}
+		.quota-card__valuta {
+			/* Ridotto e staccato di poco: attaccato alla cifra sembra una
+			   cifra in più, e con uno spazio pieno sembra un'altra parola. */
+			margin-left: 0.12em;
+			font-size: 0.5em;
+			font-weight: 500;
+			color: var(--text-muted);
+		}
+		.quota-card__punti {
+			list-style: none;
+			margin: 0 0 1.9rem;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.6rem;
+			font-family: var(--font-sans);
+			font-size: var(--text-sm);
+			line-height: 1.55;
+			color: var(--text-muted);
+			text-align: left;
+		}
+		.quota-card__punti li {
+			padding-left: 1.1rem;
+			position: relative;
+		}
+		.quota-card__punti li::before {
+			content: "—";
+			position: absolute;
+			left: 0;
+			color: var(--accent);
+		}
+		.quota-card .btn {
+			cursor: pointer;
+			font-family: var(--font-sans);
+			border: none;
 		}
 		/* Stessa soglia del resto delle pagine di iscrizione: la pagina cambia
 		   impaginazione tutta insieme. */

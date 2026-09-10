@@ -43,7 +43,7 @@
     },
     {
       "label": "Triathlon",
-      "note": "Nuoto, ciclismo e corsa seguiti da tecnici federali, dalla Young School alla squadra Master: un unico percorso per le tre discipline.",
+      "note": "Nuoto, ciclismo e corsa seguiti da tecnici federali, dalla Young School alla squadra Age Group Senior Master: un unico percorso per le tre discipline.",
       "access": {"gold": "full", "silver": "full", "gym": "none", "swim": "none"}
     },
     {
