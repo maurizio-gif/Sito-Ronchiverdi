@@ -378,7 +378,7 @@ const utiliStampa = ID_STAMPA.map((id) => {
 				   ciascuna: i nomi delle lezioni vanno a capo, ma si leggono.
 				   Il margine basso è più alto degli altri: ci vive il piede. */
 				size: A4 portrait;
-				margin: 10mm 9mm 15mm;
+				margin: 10mm 9mm;
 			}
 
 			/* Via tutto quello che è navigazione, richiamo o finestra: su
@@ -446,17 +446,18 @@ const utiliStampa = ID_STAMPA.map((id) => {
 			}
 
 			/* ── Piede ripetuto su ogni facciata ──────────────────────── */
-			/* `bottom: -10mm` porta il piede dentro il margine basso della
-			   pagina. Con `bottom: 0` stava sul fondo dell'area di contenuto,
-			   cioè esattamente dove finisce il testo quando la pagina è
-			   piena: si sovrapponeva agli orari e copriva i titoli delle
-			   ultime sezioni. */
+			/* Il piede sta nel flusso, in coda al foglio. Era in
+			   `position: fixed` per ripeterlo su ogni facciata, ma quella
+			   posizione lo appoggiava sul fondo dell'area di contenuto —
+			   cioè dove finisce il testo a pagina piena — e si sovrapponeva
+			   agli orari coprendo i titoli delle ultime sezioni. Spostarlo
+			   nel margine risolve in Chrome, ma di Safari non si sa: nel
+			   flusso non può sovrapporsi a niente, in nessun browser.
+			   Compare una volta, in fondo al retro, che è comunque la
+			   facciata che non ha l'intestazione grande. */
 			.stampa-piede {
 				display: flex !important;
-				position: fixed !important;
-				bottom: -10mm !important;
-				left: 0 !important;
-				right: 0 !important;
+				margin-top: 3mm !important;
 				align-items: baseline !important;
 				justify-content: space-between !important;
 				gap: 4mm !important;
@@ -727,10 +728,16 @@ const utiliStampa = ID_STAMPA.map((id) => {
 				text-decoration: none !important;
 			}
 
-			/* Il retro del foglio. */
-			[data-sezione="acqua-fitness"] {
-				break-before: page !important;
-			}
+			/* Nessun salto pagina imposto. La prima versione ne aveva uno
+			   prima dell'acqua fitness, e con quello il fronte doveva stare
+			   in 272mm esatti: bastava che un browser misurasse i font un
+			   filo più larghi — Safari non rende come Chrome — e il foglio
+			   passava a tre pagine. Senza il salto, il contenuto (363mm in
+			   tutto) si distribuisce da sé sulle due facciate, che ne
+			   reggono 544: c'è spazio per il 50% di scarto prima che ne
+			   serva una terza. Le sezioni restano intere grazie a
+			   `break-inside: avoid` qui sopra, quindi il salto cade tra due
+			   sezioni e non in mezzo a una tabella. */
 		}
 	</style>
 </Layout>
