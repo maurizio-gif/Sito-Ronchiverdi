@@ -1,5 +1,5 @@
 ---
-title: Triathlon Master
+title: Triathlon Age Group Senior Master
 image: /images/activities/triathlon.jpg
 summary: La squadra dei soci, dallo Sprint all'Ironman
 audience: adulti

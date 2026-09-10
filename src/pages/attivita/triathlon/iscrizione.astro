@@ -21,7 +21,7 @@ const categorie = [
 		anchor: "#young",
 	},
 	{
-		eyebrow: "14–20 anni",
+		eyebrow: "14–23 anni",
 		title: "Academy",
 		desc: "L'iscrizione si effettua presso la Reception del Club. Prima di iscriversi è possibile partecipare a una lezione di prova, per conoscere i tecnici, il gruppo e l'organizzazione degli allenamenti.",
 		punti: [
@@ -32,8 +32,8 @@ const categorie = [
 		anchor: "#academy",
 	},
 	{
-		eyebrow: "Dai 20 anni",
-		title: "Master",
+		eyebrow: "Dai 23 anni",
+		title: "Age Group Senior Master",
 		desc: "L'attività della squadra è riservata ai soci del club: serve un abbonamento che comprenda piscina e palestra, Gold o Silver. Anche qui è possibile partecipare a una lezione di prova prima di entrare nel gruppo.",
 		punti: [
 			"Abbonamento Gold o Silver attivo",
@@ -47,27 +47,27 @@ const categorie = [
 const procedura = [
 	{
 		title: "Scegli la categoria",
-		desc: "Young School dai 6 ai 13 anni, Academy dai 14 ai 20, Master dai 20 in su: se hai dubbi sul gruppo giusto, chiedi a noi.",
+		desc: "Young School dai 6 ai 13 anni, Academy dai 14 ai 23, Age Group Senior Master dai 23 in su: se hai dubbi sul gruppo giusto, chiedi a noi.",
 	},
 	{
 		title: "Prova un allenamento",
-		desc: "Nella Young School la prima settimana è di prove gratuite; per Academy e Master la lezione di prova si concorda su richiesta.",
+		desc: "Nella Young School la prima settimana è di prove gratuite; per Academy e Age Group Senior Master la lezione di prova si concorda su richiesta.",
 	},
 	{
 		title: "Completa l'iscrizione",
-		desc: "Per la Young School dal listino qui sopra, sul portale InforYou; per Academy e Master alla Reception del Club.",
+		desc: "Per la Young School dal listino qui sopra, sul portale InforYou; per Academy e Age Group Senior Master alla Reception del Club.",
 	},
 ];
 
 const documenti = [
 	"Certificato medico in corso di validità per la Young School; dai 12 anni è richiesto il certificato medico agonistico",
-	"Certificato medico agonistico in corso di validità per Academy e Master, obbligatorio anche per il tesseramento federale",
+	"Certificato medico agonistico in corso di validità per Academy e Age Group Senior Master, obbligatorio anche per il tesseramento federale",
 	"Tesseramento FITRI, compreso nella quota per Young School e Academy",
 	"Tesseramento FIDAL, compreso nella quota della Young School",
 ];
 
 
-// Sul portale è in vendita la sola Young School: Academy e Master si
+// Sul portale è in vendita la sola Young School: Academy e Age Group Senior Master si
 // iscrivono in reception, e restano descritte nelle card qui sopra.
 const young = await getPercorso("triathlon");
 const aggiornatoAl = await getListinoAggiornatoAl("triathlon");
@@ -76,12 +76,12 @@ const faq = faqDiPagina("triathlon-iscrizione");
 
 <Layout
 	title="Modalità di iscrizione — Triathlon Ronchiverdi"
-	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
+	description="Come iscriversi al triathlon Ronchiverdi: Young School, Academy e Age Group Senior Master, con lezione di prova, documenti necessari e tesseramenti FITRI e FIDAL."
 	image="og/triathlon.jpg"
 >
 	<PageHero image="images/activities/triathlon.jpg" imageAlt="Atleta di triathlon in gara" eyebrow="Triathlon · Iscrizione">
 		<Fragment slot="title">Modalità di <em class="accent">iscrizione</em></Fragment>
-		<Fragment slot="lede">Young School, Academy e Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
+		<Fragment slot="lede">Young School, Academy e Age Group Senior Master hanno procedure diverse: qui trovi come funziona ognuna, con i documenti da preparare.</Fragment>
 		<div class="header-cta">
 			<a class="btn" href="#listino">Vedi le quote</a>
 			<button type="button" class="btn btn-outline" data-open-contact data-interest="triathlon-young">Contattaci</button>
@@ -119,7 +119,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			<h2>Quanto costa</h2>
 			<p class="isc-head__lede">
 				La quota comprende i tesseramenti FITRI e FIDAL. Con un abbonamento
-				Ronchiverdi attivo vale il listino soci. Academy e Master si iscrivono
+				Ronchiverdi attivo vale il listino soci. Academy e Age Group Senior Master si iscrivono
 				in reception: per quelli, scrivici.
 			</p>
 		</div>
@@ -146,7 +146,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 			))}
 		</ol>
 		<p class="isc-note">
-			Academy e Master non si iscrivono online: si passa dalla Reception del
+			Academy e Age Group Senior Master non si iscrivono online: si passa dalla Reception del
 			Club, oppure ci si scrive e organizziamo tutto noi.
 		</p>
 	</section>
@@ -169,7 +169,7 @@ const faq = faqDiPagina("triathlon-iscrizione");
 					<h2>Prova prima di iscriverti</h2>
 				</div>
 				<p class="isc-testo">Nella Young School la <strong>prima settimana di attività</strong> è dedicata alle lezioni di prova gratuite: i ragazzi conoscono i tecnici e sperimentano nuoto, ciclismo e corsa.</p>
-				<p class="isc-testo">Per <strong>Academy</strong> e <strong>Master</strong> la lezione di prova si concorda su richiesta.</p>
+				<p class="isc-testo">Per <strong>Academy</strong> e <strong>Age Group Senior Master</strong> la lezione di prova si concorda su richiesta.</p>
 			</div>
 		</div>
 	</section>
