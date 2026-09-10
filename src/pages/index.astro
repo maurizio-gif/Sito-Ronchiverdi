@@ -77,8 +77,22 @@ const clubGallery = [
 				</div>
 			</div>
 			<div class="chi-siamo-media">
-				<img class="chi-siamo-img chi-siamo-img--main" src={url("images/chi-siamo-1.jpg")} alt="Area funzionale Ronchiverdi" />
-				<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="Allenamento funzionale Ronchiverdi" />
+				{/* Ripresa dal drone al tramonto: muta, in loop e senza comandi,
+				    sta al posto di una foto e va trattata come tale. Il poster è
+				    il primo fotogramma, così il riquadro non resta nero nei
+				    decimi prima che il video parta. */}
+				<video
+					class="chi-siamo-img chi-siamo-img--main"
+					src={url("videos/chi-siamo.mp4")}
+					poster={url("images/chi-siamo-video-poster.jpg")}
+					aria-label="Ronchiverdi dal drone al tramonto: i campi in terra rossa e le piscine, con Torino e le Alpi sul fondo"
+					autoplay
+					muted
+					loop
+					playsinline
+					preload="metadata"
+				></video>
+				<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="La piscina esterna di Ronchiverdi con lettini e ombrelloni, circondata dal verde" />
 			</div>
 		</div>
 	</section>
