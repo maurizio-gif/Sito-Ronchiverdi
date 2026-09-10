@@ -21,16 +21,13 @@ const faq = faqDiPagina("abbonamenti");
 		<Fragment slot="lede">Quattro combinazioni di attività: dal club completo <strong>Gold</strong> agli abbonamenti <strong>Gym e Swim</strong> dedicati a un'unica area. La quota si costruisce poi sulla tua fascia d'età, sulla durata e sul modo in cui preferisci pagare.</Fragment>
 	</PageHero>
 
-	{/* Le colonne dicono quali attività comprende un abbonamento, non quanto
-	    costa: la quota dipende da fascia d'età, durata e pagamento. Il perché
-	    va detto due volte — nel lede, che si legge prima delle colonne, e
-	    attaccato in fondo alla tabella con `suMisura`, dove l'occhio cerca il
-	    prezzo. Prima era una sezione staccata più in basso: chi guardava le
-	    colonne cercando una cifra non trovava né la cifra né la spiegazione. */}
+	{/* Sopra la tabella solo il titolo: la spiegazione del prezzo sta tutta
+	    nel riquadro che `suMisura` mette sotto, dove l'occhio cerca la cifra.
+	    Dirla due volte allungava la pagina prima ancora di far vedere le
+	    colonne. */}
 	<MembershipTable
 		eyebrow="Cosa comprendono"
 		title="Le quattro combinazioni"
-		lede="Ogni colonna dice a quali attività dà accesso. Il prezzo non sta nelle colonne: dipende da fascia d'età, durata e modalità di pagamento, e lo trovi spiegato in fondo alla tabella — <strong>si parte da 69&#8239;€ al mese</strong>."
 		suMisura
 	/>
 

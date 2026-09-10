@@ -470,7 +470,7 @@ export default defineConfig({
                 label: "Colonne",
                 list: true,
                 description:
-                  "Solo per le tabelle che hanno più di un orario al giorno (es. Zona Relax: Accensione, In temperatura, Spegnimento). Lasciale vuote per la tabella semplice a due colonne, dove basta il campo Orario di ogni riga.",
+                  "Solo per le tabelle che hanno più di un orario al giorno (per esempio Accensione, In temperatura, Spegnimento). Lasciale vuote per la tabella semplice a due colonne, dove basta il campo Orario di ogni riga.",
               },
               {
                 type: "object",

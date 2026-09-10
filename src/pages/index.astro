@@ -67,6 +67,14 @@ const clubGallery = [
 				<p class="lede">
 					Sugli stessi campi in terra rossa si incontrano chi gioca da una vita e chi impara oggi; i bambini della <strong>Young School</strong> crescono accanto agli adulti del tennis, del nuoto e del triathlon. Non servono presentazioni per entrare: basta la voglia di fare sport, e di farlo bene. Il resto lo mettono <strong>istruttori certificati</strong>, spazi curati in ogni dettaglio e un'accoglienza che si sente dal primo giorno.
 				</p>
+				{/* Le altre due anime del gruppo, che non stanno su questo sito:
+				    dopo il racconto del club è il punto in cui uno si chiede
+				    cos'altro c'è. Aprono in una tab nuova perché portano su un
+				    altro dominio. */}
+				<div class="chi-siamo-link">
+					<a class="btn btn-outline" href="https://business.ronchiverdi.it" target="_blank" rel="noopener">Ronchiverdi Business</a>
+					<a class="btn btn-outline" href="https://business.ronchiverdi.it/elements" target="_blank" rel="noopener">Ristorante Elements</a>
+				</div>
 			</div>
 			<div class="chi-siamo-media">
 				<img class="chi-siamo-img chi-siamo-img--main" src={url("images/chi-siamo-1.jpg")} alt="Area funzionale Ronchiverdi" />
@@ -619,6 +627,12 @@ const clubGallery = [
 			margin: 0 0 1.25rem;
 			max-width: none;
 		}
+		.chi-siamo-link {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			margin-top: 1.75rem;
+		}
 		.chi-siamo-media {
 			position: relative;
 			padding: 0 1.5rem 2.5rem 0;
@@ -657,10 +671,21 @@ const clubGallery = [
 				margin-inline: auto;
 				max-width: 34rem;
 			}
+			.chi-siamo-link {
+				justify-content: center;
+			}
 			.chi-siamo-media {
 				max-width: 26rem;
 				margin: 0 auto;
 				padding: 0 1.25rem 2.25rem 0;
+			}
+		}
+		/* Quando non stanno più in riga, uno sopra l'altro a piena larghezza:
+		   impilati alle loro larghezze naturali resterebbero due bottoni di
+		   misura diversa, centrati e sfalsati. */
+		@media (max-width: 560px) {
+			.chi-siamo-link {
+				flex-direction: column;
 			}
 		}
 

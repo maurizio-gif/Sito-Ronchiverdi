@@ -39,15 +39,6 @@ const faq = faqDiPagina("planning");
 		<HoursTable rows={gymFloor.rows} />
 	</section>
 
-	<section class="planning-section">
-		<div class="planning-section__head">
-			<h2>{zonaRelax.title}</h2>
-			<p class="lede">Accensione, temperatura e spegnimento di sauna e bagno di vapore.</p>
-		</div>
-		<HoursTable rows={zonaRelax.rows} columns={zonaRelax.columns} />
-		{zonaRelax.note && <p class="planning-section__nota">{zonaRelax.note}</p>}
-	</section>
-
 	{sezioni.map((sezione) => (
 		<section class="planning-section">
 			<div class="planning-section__head">
@@ -59,6 +50,15 @@ const faq = faqDiPagina("planning");
 			<WeeklySchedule id={sezione.id} lessons={sezione.lessons} schedule={sezione.schedule} />
 		</section>
 	))}
+
+	<section class="planning-section">
+		<div class="planning-section__head">
+			<h2>{zonaRelax.title}</h2>
+			<p class="lede">Apertura e chiusura di sauna, bagno di vapore e percorso benessere.</p>
+		</div>
+		<HoursTable rows={zonaRelax.rows} />
+		{zonaRelax.note && <p class="planning-section__nota">{zonaRelax.note}</p>}
+	</section>
 
 	<Faq items={faq} />
 
