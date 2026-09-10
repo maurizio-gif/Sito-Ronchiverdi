@@ -4,8 +4,8 @@
     {
       "slug": "young-school",
       "title": "Young School Triathlon",
-      "eyebrow": "5–13 anni",
-      "descrizione": "Nuoto, bici e corsa in un percorso solo, per bambini e ragazzi dai 5 ai 13 anni. Gli allenamenti sono dal lunedì al venerdì, con gruppi divisi per età e livello: la frequenza si sceglie in base a quanto si vuole fare.",
+      "eyebrow": "6–13 anni",
+      "descrizione": "Nuoto, bici e corsa in un percorso solo, per bambini e ragazzi dai 6 ai 13 anni. Gli allenamenti sono dal lunedì al venerdì, con gruppi divisi per età e livello: la frequenza si sceglie in base a quanto si vuole fare.",
       "punti": [
         "Gruppi divisi per età e livello, dal lunedì al venerdì",
         "Tesseramenti FITRI e FIDAL compresi, più la t-shirt Ronchiverdi",
@@ -16,7 +16,7 @@
       "dettagli": [
         {
           "label": "Età",
-          "valore": "5–13 anni"
+          "valore": "6–13 anni"
         },
         {
           "label": "Periodo",
