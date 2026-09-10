@@ -4,6 +4,7 @@
     {
       "id": "gym-floor",
       "title": "Gym Floor",
+      "intro": "Skill Area, Area Cardio e Isotonica, Pesi liberi e cavi e l'area funzionale Lacertosus: quattro zone sotto lo stesso orario.",
       "rows": [
         {
           "label": "Lunedì – Venerdì",
@@ -12,6 +13,37 @@
         {
           "label": "Sabato, domenica e festivi",
           "hours": "9:00 – 20:00"
+        }
+      ]
+    },
+    {
+      "id": "piscine-indoor",
+      "title": "Piscine indoor",
+      "intro": "Le vasche coperte, dove si svolgono nuoto libero, corsi e scuola nuoto.",
+      "rows": [
+        {
+          "label": "Lunedì – Venerdì",
+          "hours": "7:00 – 22:00"
+        },
+        {
+          "label": "Sabato, domenica e festivi",
+          "hours": "9:00 – 20:00"
+        }
+      ]
+    },
+    {
+      "id": "piscina-esterna",
+      "title": "Piscina esterna",
+      "intro": "Aperta d'estate, tutti i giorni: vasca all'aperto, prati del solarium e bar estivo.",
+      "note": "Stagione indicativa dai primi giorni di giugno al 15 settembre, compatibilmente con il meteo. Ad agosto, durante la manutenzione ordinaria delle vasche interne, la balneazione si allarga a 9:00 – 21:00.",
+      "rows": [
+        {
+          "label": "Balneazione",
+          "hours": "10:00 – 20:00"
+        },
+        {
+          "label": "Aree solarium",
+          "hours": "dalle 9:00"
         }
       ]
     },
@@ -44,6 +76,21 @@
         {
           "label": "Sabato, domenica e festivi",
           "hours": "9:00 – 20:00"
+        }
+      ]
+    },
+    {
+      "id": "nuoto-libero",
+      "title": "Nuoto Libero",
+      "note": "Vasca grande indoor, senza prenotazione. Nel corso della giornata il numero di corsie riservate al nuoto libero cambia con la fascia oraria: da 2 a 5. Orari indicativi, che possono subire variazioni. Aggiornato al 09/09/2026.",
+      "rows": [
+        {
+          "label": "Lunedì – Venerdì",
+          "hours": "7:00 – 21:30"
+        },
+        {
+          "label": "Sabato e domenica",
+          "hours": "9:00 – 19:30"
         }
       ]
     },
@@ -609,18 +656,15 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "kick-to-donuts",
-              "trainer": "Denise"
+              "lesson": "kick-to-donuts"
             },
             {
               "time": "13.00 – 13.45",
-              "lesson": "hydrobike",
-              "trainer": "Denise"
+              "lesson": "hydrobike"
             },
             {
               "time": "19.00 – 20.00",
-              "lesson": "hit-choreography",
-              "trainer": "Noemi"
+              "lesson": "hit-choreography"
             }
           ]
         },
@@ -629,18 +673,15 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "aquastep",
-              "trainer": "Denise"
+              "lesson": "aquastep"
             },
             {
               "time": "12.30 – 13.15",
-              "lesson": "aqua-double-level",
-              "trainer": "Katherine"
+              "lesson": "aqua-double-level"
             },
             {
               "time": "19.00 – 19.45",
-              "lesson": "donuts-smile",
-              "trainer": "Noemi"
+              "lesson": "donuts-smile"
             }
           ]
         },
@@ -650,23 +691,19 @@
             {
               "time": "7.30 – 8.15",
               "lesson": "water-cross",
-              "trainer": "Adrian",
               "note": "dal 16/9/26"
             },
             {
               "time": "11.00 – 11.45",
-              "lesson": "kick-core",
-              "trainer": "Mattia"
+              "lesson": "kick-core"
             },
             {
               "time": "13.00 – 13.45",
-              "lesson": "aqua-functional-combo",
-              "trainer": "Valentina"
+              "lesson": "aqua-functional-combo"
             },
             {
               "time": "19.00 – 19.45",
-              "lesson": "aquatrekking",
-              "trainer": "Noemi"
+              "lesson": "aquatrekking"
             }
           ]
         },
@@ -675,18 +712,15 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "aqua-cardio-tone",
-              "trainer": "Katherine"
+              "lesson": "aqua-cardio-tone"
             },
             {
               "time": "12.30 – 13.15",
-              "lesson": "hydrobike",
-              "trainer": "Katherine"
+              "lesson": "hydrobike"
             },
             {
               "time": "19.00 – 19.45",
-              "lesson": "acquakickboxing",
-              "trainer": "Noemi"
+              "lesson": "acquakickboxing"
             }
           ]
         },
@@ -695,18 +729,15 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "aqua-functional-combo",
-              "trainer": "Valentina"
+              "lesson": "aqua-functional-combo"
             },
             {
               "time": "12.30 – 13.15",
-              "lesson": "aqua-functional-combo",
-              "trainer": "Valentina"
+              "lesson": "aqua-functional-combo"
             },
             {
               "time": "19.00 – 19.45",
-              "lesson": "extreme-power-step",
-              "trainer": "Noemi"
+              "lesson": "extreme-power-step"
             }
           ]
         },
@@ -715,13 +746,11 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "aqua-wave-blast",
-              "trainer": "Noemi"
+              "lesson": "aqua-wave-blast"
             },
             {
               "time": "13.00 – 20.00",
-              "lesson": "aquatrekking",
-              "trainer": "Noemi"
+              "lesson": "aquatrekking"
             }
           ]
         },
@@ -730,8 +759,7 @@
           "slots": [
             {
               "time": "11.00 – 11.45",
-              "lesson": "aqua-surprise",
-              "trainer": "Trainer a rotazione"
+              "lesson": "aqua-surprise"
             }
           ]
         }

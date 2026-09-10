@@ -116,7 +116,7 @@ export const faq: FaqItem[] = [
 		id: "planning-gli-orari-mostrati-sono-sempre-aggiornati",
 		pagina: "planning",
 		q: "Gli orari mostrati sono sempre aggiornati?",
-		a: "I palinsesti Corsi Fitness e Acqua Fitness e gli orari Gym Floor sono aggiornati; il planning del Nuoto Libero è al momento una bozza in fase di aggiornamento."
+		a: "Sì, gli orari e i palinsesti pubblicati qui sono aggiornati. Eventuali variazioni dell'ultimo momento sono sempre verificabili sull'App del Club.",
 	},
 	{
 		id: "planning-cosa-succede-se-un-corso-non-e-disponibile-nella-fascia-che-mi-interes",

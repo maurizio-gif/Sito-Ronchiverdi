@@ -24,7 +24,7 @@ const serviceHref = (s) => (s.data.external ? s.data.href : url(s.data.href));
 
 const clubLinks = [
 	{ href: url("/"), label: "Home" },
-	{ href: url("/planning"), label: "Planning" },
+	{ href: url("/planning"), label: "Planning orari" },
 	{ href: url("/abbonamenti"), label: "Abbonamenti" },
 	{ href: url("/eventi"), label: "Eventi" },
 	{ href: url("/blog"), label: "Blog" },
@@ -255,6 +255,25 @@ const enti = [
 			<span>P. IVA 11173030013 · La società applica il MOG</span>
 			<span>Safeguarding: <a href="mailto:safeguarding@ronchiverdi.it">safeguarding@ronchiverdi.it</a></span>
 		</address>
+	</div>
+
+	{/* La firma di chi ha fatto il sito: ultima riga, sotto i dati
+	    societari. Il lettering del logo è color crema, quindi vive solo su
+	    fondo scuro come questo. Larghezza e altezza sono dichiarate nel
+	    rapporto del file (993x192) perché il footer non sobbalzi quando
+	    l'immagine arriva. */}
+	<div class="footer-firma">
+		<span>Powered by</span>
+		<a href="https://www.ready2digital.it" target="_blank" rel="noopener">
+			<img
+				src={url("ready2digital.png")}
+				alt="Ready2Digital"
+				width="114"
+				height="22"
+				loading="lazy"
+				decoding="async"
+			/>
+		</a>
 	</div>
 </footer>
 
@@ -638,6 +657,37 @@ const enti = [
 	.legal-list a:active {
 		transform: scale(0.97);
 		transition-duration: 0.05s;
+	}
+
+	.footer-firma {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.55rem;
+		margin: 2rem auto 0;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: rgba(246, 239, 222, 0.4);
+	}
+	/* Il logo è più chiaro del testo che lo introduce: la firma è un credito,
+	   non un richiamo, e a piena opacità tirerebbe l'occhio via dai dati del
+	   club che le stanno sopra. */
+	.footer-firma a {
+		display: block;
+		line-height: 0;
+	}
+	.footer-firma img {
+		display: block;
+		width: auto;
+		height: 1.25rem;
+		opacity: 0.75;
+		transition: opacity 0.25s ease;
+	}
+	.footer-firma a:hover img,
+	.footer-firma a:focus-visible img {
+		opacity: 1;
 	}
 
 	.footer-bottom {

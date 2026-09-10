@@ -38,6 +38,12 @@ const facts = [
 
 // Le tre fasce, ognuna con la sua ragione: la balneazione, il solarium che
 // apre un'ora prima, e l'ampliamento di agosto.
+//
+// ATTENZIONE: gli stessi orari stanno anche nel blocco "piscina-esterna" di
+// src/content/schedules/planning.json, che alimenta la fascia delle aree in
+// cima al planning. Qui le fasce hanno una nota per riga e là no, quindi le
+// due copie non si possono ancora unire: chi cambia un orario lo cambi in
+// entrambi i posti.
 const orari = [
 	{
 		voce: "Balneazione",
