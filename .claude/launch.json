@@ -9,13 +9,6 @@
       "autoPort": true
     },
     {
-      "name": "astro-preview",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview"],
-      "port": 4321,
-      "autoPort": true
-    },
-    {
       "name": "sito-astro",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["astro", "dev"],
