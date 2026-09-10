@@ -79,16 +79,6 @@
           "description": "Una lezione adatta a tutti indipendentemente dal livello di preparazione. Un'ottima opportunità per migliorare la mobilità e la flessibilità del corpo. Può aiutare ad alleviare le tensioni, a prevenire gli infortuni, migliorare la performance sportiva e favorire il benessere generale."
         },
         {
-          "id": "hi-energy-wake-up",
-          "name": "Hi Energy Wake Up",
-          "description": "Iniziare la giornata con una energica attivazione è una bella sfida. 45 minuti di lavoro funzionale con una fase di stretching finale vi darà la giusta carica per partire con slancio."
-        },
-        {
-          "id": "qi-cong",
-          "name": "Qi Cong",
-          "description": "Una pratica dolce che unisce respirazione, movimento lento e concentrazione, ispirata alle discipline orientali. Aiuta a sciogliere le tensioni, migliorare l'equilibrio e ritrovare calma ed energia, con un lavoro adatto a ogni livello."
-        },
-        {
           "id": "pilates",
           "name": "Pilates Matwork",
           "description": "Concentrazione, controllo, centratura, fluidità, precisione e respirazione. Ecco i 6 principi pilastro della tecnica di Pilates Matwork. Questi parametri saranno i temi fondamentali della lezione. Allenare forza e flessibilità con il sussidio di piccoli attrezzi, trovare un equilibrio stabile, destabilizzare per ritrovare la giusta postura saranno gli obiettivi principali della vostra lezione."
@@ -155,7 +145,7 @@
         },
         {
           "id": "power-pump-tone",
-          "name": "Power Pump",
+          "name": "Power Pump & Tone",
           "description": "La lezione di Power Pump prevede l'uso di un bilanciere, manubri e di uno step utilizzato come base d'appoggio. Gli insegnanti offrono varianti e modifiche per garantire che ciascun partecipante possa lavorare secondo le proprie capacità. Gli esercizi vengono eseguiti in modo ritmico accompagnati da una musica coinvolgente ed energica creando così l'atmosfera ideale per una resa efficace."
         },
         {
@@ -187,6 +177,16 @@
           "id": "jolly-class",
           "name": "Jolly Class",
           "description": "Il format jolly della domenica: una lezione a tema variabile, pensata per completare la settimana con un allenamento diverso di volta in volta, adatto a tutta la sala."
+        },
+        {
+          "id": "taichi",
+          "name": "Tai Chi",
+          "description": "Una pratica lenta e continua di origine cinese: sequenze di movimenti guidati dal respiro, eseguiti senza sforzo e senza impatto. Scioglie le tensioni, allena equilibrio e coordinazione e lascia una calma che resta anche dopo la lezione. Adatta a ogni livello e a ogni età."
+        },
+        {
+          "id": "functional-wake-up",
+          "name": "Functional Wake Up",
+          "description": "Iniziare la giornata con una energica attivazione è una bella sfida. 45 minuti di lavoro funzionale con una fase di stretching finale vi darà la giusta carica per partire con slancio."
         }
       ],
       "days": [
@@ -203,7 +203,7 @@
             },
             {
               "time": "11.30 – 12.30",
-              "lesson": "qi-cong"
+              "lesson": "taichi"
             },
             {
               "time": "13.00 – 14.00",
@@ -231,10 +231,10 @@
             },
             {
               "time": "18.00 – 19.00",
-              "lesson": "body-power"
+              "lesson": "full-body-workout"
             },
             {
-              "time": "18.30 – 19.00",
+              "time": "18.15 – 19.00",
               "lesson": "hyrox-workout"
             },
             {
@@ -246,7 +246,7 @@
               "lesson": "indoor-cycling"
             },
             {
-              "time": "19.30 – 20.30",
+              "time": "19.45 – 20.30",
               "lesson": "hyrox-workout"
             }
           ]
@@ -255,8 +255,8 @@
           "day": "martedi",
           "slots": [
             {
-              "time": "7.45 – 8.30",
-              "lesson": "hi-energy-wake-up"
+              "time": "7.30 – 8.15",
+              "lesson": "functional-wake-up"
             },
             {
               "time": "9.30 – 10.30",
@@ -295,8 +295,12 @@
               "lesson": "full-body-workout"
             },
             {
-              "time": "18.30 – 19.15",
+              "time": "18.30 – 19.30",
               "lesson": "hyrox-workout"
+            },
+            {
+              "time": "18.30 – 19.30",
+              "lesson": "indoor-cycling"
             },
             {
               "time": "19.00 – 20.00",
@@ -336,15 +340,15 @@
               "lesson": "movida-fitness"
             },
             {
-              "time": "17.15 – 18.15",
+              "time": "17.00 – 18.00",
               "lesson": "flex-mobility"
             },
             {
-              "time": "18.15 – 19.15",
+              "time": "18.00 – 19.00",
               "lesson": "full-body-workout"
             },
             {
-              "time": "18.30 – 19.15",
+              "time": "18.15 – 19.00",
               "lesson": "hyrox-workout"
             },
             {
@@ -356,7 +360,7 @@
               "lesson": "pilates-creativo"
             },
             {
-              "time": "19.30 – 20.30",
+              "time": "19.45 – 20.30",
               "lesson": "hyrox-workout"
             }
           ]
@@ -366,7 +370,7 @@
           "slots": [
             {
               "time": "7.30 – 8.15",
-              "lesson": "hi-energy-wake-up"
+              "lesson": "functional-wake-up"
             },
             {
               "time": "9.30 – 10.30",
@@ -393,7 +397,7 @@
               "lesson": "indoor-cycling"
             },
             {
-              "time": "13.15 – 14.15",
+              "time": "13.15 – 14.00",
               "lesson": "hyrox-workout"
             },
             {
@@ -413,7 +417,7 @@
               "lesson": "full-body-workout"
             },
             {
-              "time": "18.30 – 19.15",
+              "time": "18.30 – 19.30",
               "lesson": "hyrox-workout"
             },
             {
@@ -458,7 +462,7 @@
               "lesson": "full-body-workout"
             },
             {
-              "time": "18.30 – 19.15",
+              "time": "18.15 – 19.00",
               "lesson": "hyrox-workout"
             },
             {
@@ -480,7 +484,7 @@
             },
             {
               "time": "10.30 – 11.30",
-              "lesson": "hiit-training"
+              "lesson": "zumba"
             },
             {
               "time": "11.00 – 11.50",
@@ -488,7 +492,7 @@
             },
             {
               "time": "11.30 – 12.30",
-              "lesson": "zumba"
+              "lesson": "hiit-training"
             },
             {
               "time": "11.30 – 12.30",
@@ -513,7 +517,8 @@
             }
           ]
         }
-      ]
+      ],
+      "intro": "Un palinsesto completo di 74 lezioni settimanali, pensato per ogni esigenza e livello: tonificazione, Pilates, mobilità, Yoga e discipline musicali, sempre all'insegna del movimento, dell'energia e della condivisione."
     },
     {
       "id": "acqua-fitness",
