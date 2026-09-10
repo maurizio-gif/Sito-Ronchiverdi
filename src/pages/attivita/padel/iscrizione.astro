@@ -7,7 +7,7 @@ import PageHero from "../../../components/PageHero.astro";
 import Faq from "../../../components/Faq.astro";
 import { url } from "../../../lib/paths";
 import ListinoCorsi from "../../../components/ListinoCorsi.astro";
-import { EMAIL_CERTIFICATI, INVIO_NON_AGONISTICO } from "../../../data/certificatoMedico";
+import { INVIO_NON_AGONISTICO } from "../../../data/certificatoMedico";
 import { faqDiPagina } from "../../../data/faq";
 import { getListinoAggiornatoAl, getPercorso } from "../../../lib/listiniSport";
 import "../../../styles/iscrizione.css";
@@ -108,7 +108,7 @@ const procedura = [
 				<dl class="isc-list">
 					<div class="isc-list__row">
 						<dt>Certificato medico</dt>
-						<dd>Di idoneità sportiva non agonistica, richiesto sopra i 6 anni. Si invia in allegato a <a href={`mailto:${EMAIL_CERTIFICATI}`}>{EMAIL_CERTIFICATI}</a>.</dd>
+						<dd set:html={`Di idoneità sportiva non agonistica, richiesto sopra i 6 anni. ${INVIO_NON_AGONISTICO}`} />
 					</div>
 					<div class="isc-list__row">
 						<dt>Regolamento firmato</dt>
