@@ -12,7 +12,8 @@
 //   4. manda ogni pagina vista a /api/track, che su Vercel scrive sessione e
 //      pageview su Supabase: così sono tracciate TUTTE le sessioni, non solo
 //      quelle che compilano un form;
-//   5. espone getTrackingPayload() — i campi che i form allegano a /api/lead —
+//   5. espone getTrackingPayload() — i campi che i form allegano a /api/lead,
+//      session id e visitor id compresi —
 //      e pushDataLayer() per l'evento generate_lead verso GTM.
 //
 // Tutte le scritture su Supabase passano da function Vercel (/api/track e
@@ -34,6 +35,22 @@
 // Il consenso NON blocca l'invio delle UTM a /api/lead: sono dati che l'utente
 // ci sta consegnando insieme al form, con la sua privacy policy accettata,
 // non tracciamento di terze parti.
+
+/**
+ * true quando l'ultima chiamata a getSessionId() ha aperto una sessione nuova
+ * che il pannello non conosce ancora.
+ *
+ * Serve al caso della scheda lasciata aperta: dopo mezz'ora di inattività la
+ * sessione scade e ne nasce una con un id nuovo, ma se in quel momento la
+ * persona non carica nessuna pagina — sta compilando il form, non naviga —
+ * quell'id non arriva mai a /api/track. Il lead partirebbe con un session_id
+ * che nella tabella `sessioni` non esiste, e nel CRM la richiesta risulterebbe
+ * senza nessuna visita alle spalle.
+ *
+ * Si azzera in inviaAlPannello(), che è il punto in cui la sessione viene
+ * scritta davvero.
+ */
+var sessioneDaRegistrare = false;
 
 var SESSION_KEY = "rv_session";
 var FIRST_TOUCH_KEY = "rv_first_touch";
@@ -150,6 +167,7 @@ export function getSessionId() {
 
 	if (expired) {
 		s = { id: uuid(), start: now(), ts: now(), n: s && s.n ? s.n + 1 : 1 };
+		sessioneDaRegistrare = true;
 	} else {
 		s.ts = now();
 	}
@@ -326,7 +344,9 @@ function inviaAlPannello(soloSessione) {
 
 	var payload = getTrackingPayload();
 	payload.solo_sessione = soloSessione === true;
-	payload.visitor_id = getVisitorId();
+	// Da qui in poi la sessione è (o sta per essere) in tabella: il debito
+	// verso il form è saldato.
+	sessioneDaRegistrare = false;
 	payload.pagina = window.location.pathname;
 	payload.titolo = document.title ? String(document.title).slice(0, 300) : null;
 	payload.lingua = navigator.language || null;
@@ -357,6 +377,12 @@ export function getTrackingPayload() {
 
 	var payload = {
 		session_id: getSessionId(),
+		// L'id del visitatore viaggia con il form, non solo con la sessione:
+		// è l'unica chiave che lega a una persona riconosciuta anche le visite
+		// dei giorni prima e dopo, che con il solo session_id resterebbero
+		// slegate. Senza consenso è null, e il lead resta legato alla sola
+		// visita in cui è stato compilato.
+		visitor_id: getVisitorId(),
 		ga_session_id: getGaSessionId(),
 		ga_client_id: getGaClientId(),
 		consent_analytics: hasConsentFor("analytics"),
@@ -378,9 +404,19 @@ export function getTrackingPayload() {
 	return payload;
 }
 
-/** Aggiunge i campi di provenienza a un payload di form, senza sovrascriverlo. */
+/**
+ * Aggiunge i campi di provenienza a un payload di form, senza sovrascriverlo.
+ *
+ * È anche il punto in cui una sessione appena rigenerata viene registrata:
+ * chi ha lasciato la pagina aperta mezz'ora e poi ha compilato riparte con un
+ * id nuovo, e se non lo spedissimo adesso il lead porterebbe un session_id che
+ * in `sessioni` non esiste. La pagina corrente è la prima di quella sessione,
+ * quindi è un pageview a tutti gli effetti — è anche quello che farebbe GA4.
+ */
 export function withTracking(payload) {
-	return Object.assign({}, getTrackingPayload(), payload || {});
+	var provenienza = getTrackingPayload();
+	if (sessioneDaRegistrare) trackPageview();
+	return Object.assign({}, provenienza, payload || {});
 }
 
 /**

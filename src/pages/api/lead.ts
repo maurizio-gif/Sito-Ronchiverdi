@@ -65,6 +65,11 @@ export async function POST({ request }: { request: Request }) {
 	// arriva senza UTM, e i campi restano semplicemente nulli.
 	const tracking = {
 		session_id: str(body.session_id),
+		// Identificativo persistente del visitatore, quando il consenso lo
+		// permette: è la chiave con cui il CRM può mettere accanto alla persona
+		// anche le visite di altri giorni, che con il solo session_id — che vale
+		// per una visita sola — resterebbero slegate.
+		visitor_id: str(body.visitor_id),
 		ga_session_id: str(body.ga_session_id),
 		ga_client_id: str(body.ga_client_id),
 		utm_source: str(body.utm_source),
@@ -92,7 +97,7 @@ export async function POST({ request }: { request: Request }) {
 		consent_advertisement: body.consent_advertisement === true,
 	};
 
-	const { data: inserito, error } = await supabase.from("form_contatti").insert({
+	const datiLead = {
 		origine: str(body.origine) ?? "lead-modal",
 		pagina: str(body.pagina),
 		cta: str(body.cta),
@@ -124,9 +129,30 @@ export async function POST({ request }: { request: Request }) {
 		minore_cognome: str(body.minoreCognome),
 		minore_data_nascita: str(body.minoreDataNascita),
 		...tracking,
-	})
-	.select("id, token_gestione")
-	.single();
+	};
+
+	let { data: inserito, error } = await supabase
+		.from("form_contatti")
+		.insert(datiLead)
+		.select("id, token_gestione")
+		.single();
+
+	// La colonna visitor_id arriva con una migration (vedi
+	// scripts/sql/2026-09-11-visitor-id-e-sessione-del-lead.sql). Se il deploy
+	// la precede, l'insert fallisce e la richiesta andrebbe persa: per un dato
+	// statistico non si butta via un contatto. Si riprova senza, e l'errore in
+	// console dice cosa manca.
+	if (error && /visitor_id/.test(error.message)) {
+		console.error(
+			"form_contatti.visitor_id non esiste ancora: eseguire scripts/sql/2026-09-11-visitor-id-e-sessione-del-lead.sql. Il lead viene salvato senza."
+		);
+		const { visitor_id: _senzaColonna, ...senzaVisitor } = datiLead;
+		({ data: inserito, error } = await supabase
+			.from("form_contatti")
+			.insert(senzaVisitor)
+			.select("id, token_gestione")
+			.single());
+	}
 
 	if (error) {
 		console.error("Errore inserimento form_contatti:", error.message);
@@ -163,9 +189,49 @@ export async function POST({ request }: { request: Request }) {
 
 	// Marca la sessione come convertita, così il tasso di conversione per
 	// campagna si legge direttamente da campagne_rendimento. Non è bloccante:
-	// se la riga di sessione non è mai arrivata (utente con JS parziale, o
-	// /api/track non raggiunto) il lead resta comunque salvato.
+	// qualunque cosa vada storta qui, il lead è già salvato.
 	if (tracking.session_id) {
+		// Prima però la sessione deve esistere, e non è scontato: /api/track può
+		// non essere mai arrivato (JS parziale, blocco pubblicità, richiesta
+		// annullata al cambio pagina). Senza questa riga il lead porterebbe un
+		// session_id che non corrisponde a niente, e nel CRM la richiesta
+		// risulterebbe senza nessuna visita alle spalle.
+		//
+		// La riga ricostruita qui ha zero pagine viste — le pagine non le
+		// sappiamo — ma tiene la provenienza che il form ci ha portato, che è
+		// quello che serve all'attribuzione. `ignoreDuplicates` perché nel caso
+		// normale la sessione c'è già, e va lasciata com'è: quella vera, con le
+		// sue pagine, l'ha scritta /api/track.
+		const { error: errCreazione } = await supabase.from("sessioni").upsert(
+			{
+				session_id: tracking.session_id,
+				visitor_id: tracking.visitor_id,
+				ga_session_id: tracking.ga_session_id,
+				ga_client_id: tracking.ga_client_id,
+				utm_source: tracking.utm_source,
+				utm_medium: tracking.utm_medium,
+				utm_campaign: tracking.utm_campaign,
+				utm_term: tracking.utm_term,
+				utm_content: tracking.utm_content,
+				utm_id: tracking.utm_id,
+				gclid: tracking.gclid,
+				gbraid: tracking.gbraid,
+				wbraid: tracking.wbraid,
+				fbclid: tracking.fbclid,
+				ttclid: tracking.ttclid,
+				msclkid: tracking.msclkid,
+				li_fat_id: tracking.li_fat_id,
+				landing_page: tracking.landing_page ?? str(body.pagina),
+				referrer: tracking.referrer,
+				consent_analytics: tracking.consent_analytics,
+				consent_advertisement: tracking.consent_advertisement,
+			},
+			{ onConflict: "session_id", ignoreDuplicates: true }
+		);
+		if (errCreazione) {
+			console.error("Sessione del lead non ricostruita:", errCreazione.message);
+		}
+
 		const { error: errSessione } = await supabase.rpc("marca_sessione_convertita", {
 			p_session_id: tracking.session_id,
 		});
