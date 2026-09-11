@@ -1,5 +1,10 @@
 // Avviso via email di una nuova richiesta dal sito, verso la casella della
-// segreteria (form@ronchiverdi.it).
+// segreteria (form@ronchiverdi.it). È il registro di tutto quello che entra:
+// parte per ogni richiesta, di qualunque percorso.
+//
+// L'avviso al responsabile dell'attività — con i dati in chiaro e il pulsante
+// per il CRM — è un'altra email e sta in notificaResponsabile.ts. I campi
+// della richiesta sono gli stessi per entrambe, e stanno in campiLead.ts.
 //
 // Passa dall'API HTTP di SendGrid con una fetch, senza aggiungere dipendenze
 // al progetto (@sendgrid/mail non serve per una sola chiamata: sarebbe un
@@ -10,64 +15,7 @@
 // mandare un'email non è un motivo per far vedere un errore a chi ha appena
 // compilato il form.
 
-type CampiLead = Record<string, unknown>;
-
-function testo(v: unknown): string | null {
-	return typeof v === "string" && v.trim() ? v.trim() : null;
-}
-
-/** Cosa ha chiesto la persona, in una riga da mettere nell'oggetto. */
-function tipoRichiesta(body: CampiLead): string {
-	const azione = testo(body.azione);
-	// Chi arriva dal banco (guest register) va distinto in oggetto: la
-	// segreteria deve vedere subito che quella persona era in sede, non che
-	// ha scritto dal sito.
-	if (testo(body.origine) === "walk-in") {
-		return azione === "appuntamento" ? "Walk-in · tour prenotato" : "Walk-in · registrazione";
-	}
-	if (azione === "appuntamento") return "Appuntamento in sede";
-	if (azione === "telefonata") return "Richiesta di telefonata";
-	if (azione === "messaggio") return "Messaggio";
-	if (testo(body.origine) === "chinesis-inline") return "Richiesta Chinesis";
-	if (testo(body.origine) === "fitness-manager-inline") return "Consulenza Fitness Manager";
-	return "Richiesta informazioni";
-}
-
-function righe(body: CampiLead): string[] {
-	const nome = [testo(body.nome), testo(body.cognome)].filter(Boolean).join(" ");
-	const minore = [testo(body.minoreNome), testo(body.minoreCognome)].filter(Boolean).join(" ");
-	const dettagli = Array.isArray(body.dettagli)
-		? body.dettagli.filter((d) => typeof d === "string").join(", ")
-		: null;
-	const azione = testo(body.azione);
-	const conAppuntamento = azione === "appuntamento" || azione === "telefonata";
-
-	const voci: [string, string | null][] = [
-		["Attività", testo(body.attivitaLabel)],
-		["Operatore al banco", testo(body.operatore)],
-		["Settore", testo(body.settore)],
-		["Nome", nome || null],
-		["Email", testo(body.email)],
-		["Cellulare", testo(body.cellulare)],
-		["Data di nascita", testo(body.dataNascita)],
-		["Bambino/a", minore || null],
-		["Data di nascita bambino/a", testo(body.minoreDataNascita)],
-		["Quando", [testo(body.dataScelta), testo(body.oraScelta)].filter(Boolean).join(" alle ") || null],
-		["Interessi", dettagli || null],
-		// Per un appuntamento o una telefonata l'etichetta dice "Oggetto": è
-		// quello che serve sapere prima di presentarsi o di chiamare, e
-		// chiamarlo "Messaggio" lo farebbe sembrare un commento accessorio.
-		[
-			conAppuntamento ? "Oggetto" : "Messaggio",
-			testo(body.messaggioTesto) ?? testo(body.oggetto) ?? testo(body.messaggio),
-		],
-		["Marketing", body.marketing === true ? "acconsente" : "no"],
-		["Pagina", testo(body.pagina)],
-		["Provenienza", [testo(body.utm_source), testo(body.utm_campaign)].filter(Boolean).join(" · ") || null],
-	];
-
-	return voci.filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`);
-}
+import { campiLeadTesto, nomeCompleto, tipoRichiesta, type CampiLead } from "./campiLead";
 
 export async function notificaLead(body: CampiLead): Promise<void> {
 	const apiKey = import.meta.env.SENDGRID_API_KEY;
@@ -83,9 +31,10 @@ export async function notificaLead(body: CampiLead): Promise<void> {
 	}
 
 	const tipo = tipoRichiesta(body);
-	const chi = [testo(body.nome), testo(body.cognome)].filter(Boolean).join(" ") || "senza nome";
-	const corpo = righe(body).join("\n");
-	const emailPersona = testo(body.email);
+	const chi = nomeCompleto(body) ?? "senza nome";
+	const corpo = campiLeadTesto(body);
+	const emailPersona =
+		typeof body.email === "string" && body.email.trim() ? body.email.trim() : null;
 
 	try {
 		const risposta = await fetch("https://api.sendgrid.com/v3/mail/send", {

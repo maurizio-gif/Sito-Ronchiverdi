@@ -4,6 +4,7 @@
 // Supabase con la service_role key, mai esposta al client.
 import { createClient } from "@supabase/supabase-js";
 import { notificaLead } from "../../lib/notificaLead";
+import { notificaResponsabile } from "../../lib/notificaResponsabile";
 import { confermaAlCliente } from "../../lib/emailCliente";
 import { risolviOperatore } from "../../lib/operatori";
 
@@ -163,6 +164,14 @@ export async function POST({ request }: { request: Request }) {
 	// notificaLead: la richiesta è già salvata, e un problema col servizio di
 	// posta non deve diventare un errore in faccia a chi ha compilato il form.
 	await notificaLead(body);
+
+	// Avviso al responsabile dell'attività, dove quel percorso ne ha uno (la
+	// Young School, i corsi di tennis, il Summer Camp): stessi dati, più il
+	// pulsante per aprire il CRM. Chi lavora la richiesta la vede arrivare
+	// senza passare dalla segreteria. Anche qui l'errore resta dentro.
+	// Con l'id della riga appena scritta il pulsante dell'email apre quella
+	// richiesta, non la dashboard.
+	await notificaResponsabile(body, inserito?.id ? String(inserito.id) : null);
 
 	// Conferma a chi ha compilato. Per un appuntamento porta il link che
 	// permette di spostarlo o annullarlo da solo: senza, l'unico modo per
