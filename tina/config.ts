@@ -146,7 +146,7 @@ export default defineConfig({
                 type: "string",
                 name: "daPrezzo",
                 label: "Si parte da",
-                description: "Rata mensile su base annuale, es. \"69€\".",
+                description: "Rata mensile su base annuale, es. \"79€\".",
                 required: true,
               },
             ],

@@ -90,7 +90,7 @@ export const faq: FaqItem[] = [
 		id: "abbonamenti-il-prezzo-mostrato-e-mensile",
 		pagina: "abbonamenti",
 		q: "Quanto costa un abbonamento?",
-		a: "Si parte da 69 € al mese, riferiti alla rata mensile di un abbonamento annuale. Non c'è un prezzo unico per formula, perché la quota dipende dalla fascia d'età, dalla durata scelta e dalla modalità di pagamento: la definiamo insieme in base alla tua situazione. Prenota un tour o contatta la reception per un preventivo."
+		a: "Si parte da 79 € al mese, riferiti alla rata mensile di un abbonamento annuale. Non c'è un prezzo unico per formula, perché la quota dipende dalla fascia d'età, dalla durata scelta e dalla modalità di pagamento: la definiamo insieme in base alla tua situazione. Prenota un tour o contatta la reception per un preventivo."
 	},
 	{
 		id: "abbonamenti-cosa-include-l-abbonamento-swim",
