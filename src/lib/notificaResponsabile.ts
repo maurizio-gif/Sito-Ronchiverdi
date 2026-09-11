@@ -35,16 +35,22 @@ const TITOLO = "C'è una nuova richiesta";
  * un domani il CRM può cambiare indirizzo, e un link in un'email vive per
  * giorni.
  */
-function linkCrm(): string {
+function linkCrm(idRichiesta: string | null): string {
 	const base = (import.meta.env.CRM_URL ?? "https://crm.ronchiverdi.it").replace(/\/+$/, "");
-	return `${base}/dashboard`;
+	// Con l'id si va sulla richiesta, che si apre da sola e viene segnata; il
+	// canale in cui finisce lo calcola il CRM, che è l'unico a saperlo (vedi
+	// app/dashboard/richiesta/[id] di quel repository). Senza id — una
+	// richiesta che per qualche motivo non è stata salvata — resta la
+	// dashboard: un pulsante che porta nel pannello vale più di nessun
+	// pulsante.
+	return idRichiesta ? `${base}/dashboard/richiesta/${encodeURIComponent(idRichiesta)}` : `${base}/dashboard`;
 }
 
-function contenuto(body: CampiLead, destinatario: string) {
+function contenuto(body: CampiLead, destinatario: string, idRichiesta: string | null) {
 	const tipo = tipoRichiesta(body);
 	const chi = nomeCompleto(body) ?? "una persona senza nome";
 	const attivita = typeof body.attivitaLabel === "string" ? body.attivitaLabel.trim() : "";
-	const crm = linkCrm();
+	const crm = linkCrm(idRichiesta);
 
 	// L'apertura dice in una riga quello che serve per decidere se leggere
 	// subito o dopo: che tipo di richiesta è, di chi, e per quale attività.
@@ -58,9 +64,9 @@ function contenuto(body: CampiLead, destinatario: string) {
 		${riquadro(campiLead(body))}
 		${bottone(crm, "Accedi al CRM")}
 		<p style="margin:14px 0 0;font-size:13px;">
-			Nel CRM la richiesta si prende in carico e si scrive com'è andata, così il club sa
-			sempre a che punto è. Rispondendo a questa email scrivi invece direttamente a chi
-			l'ha mandata.
+			Il pulsante apre questa richiesta nel CRM, dove si prende in carico e si scrive
+			com'è andata: così il club sa sempre a che punto è. Rispondendo a questa email
+			scrivi invece direttamente a chi l'ha mandata.
 		</p>`
 	);
 
@@ -72,8 +78,8 @@ ${campiLeadTesto(body)}
 
 Accedi al CRM: ${crm}
 
-Nel CRM la richiesta si prende in carico e si scrive com'è andata. Rispondendo a
-questa email scrivi direttamente a chi l'ha mandata.
+Il pulsante apre questa richiesta nel CRM, dove si prende in carico e si scrive
+com'è andata. Rispondendo a questa email scrivi direttamente a chi l'ha mandata.
 `;
 
 	return { html, testo, tipo, chi, attivita };
@@ -87,7 +93,10 @@ questa email scrivi direttamente a chi l'ha mandata.
  * l'avviso alla segreteria è già partito. Un problema col servizio di posta
  * non deve diventare un errore in faccia a chi ha appena compilato il form.
  */
-export async function notificaResponsabile(body: CampiLead): Promise<void> {
+export async function notificaResponsabile(
+	body: CampiLead,
+	idRichiesta?: string | null
+): Promise<void> {
 	const referente = referentePerLead({
 		attivita: typeof body.attivita === "string" ? body.attivita : null,
 		settore: typeof body.settore === "string" ? body.settore : null,
@@ -96,12 +105,15 @@ export async function notificaResponsabile(body: CampiLead): Promise<void> {
 
 	if (!referente) return;
 
-	// Un referente può avere solo il telefono — il Padel oggi è così. Non è un
-	// errore: è un percorso che si lavora al telefono, e va detto nei log
-	// perché è l'unico modo di accorgersi che manca un indirizzo.
+	// Un referente può avere solo il telefono: il Padel è così per scelta del
+	// club — quel percorso si lavora al telefono e su WhatsApp, e nessuno
+	// controlla una casella. Non è quindi una riga da completare: se un
+	// domani quel referente avrà un indirizzo in src/data/referenti.ts,
+	// l'email comincerà a partire da sola. La riga nei log serve solo a
+	// rendere visibile la scelta a chi legge i log e non il codice.
 	if (!referente.email) {
 		console.log(
-			`Avviso al responsabile non inviato: ${riferimentoCompleto(referente) || "il referente"} non ha un indirizzo email in src/data/referenti.ts`
+			`Avviso al responsabile non inviato: ${riferimentoCompleto(referente) || "il referente"} non ha un indirizzo email (percorso da lavorare al telefono)`
 		);
 		return;
 	}
@@ -118,7 +130,7 @@ export async function notificaResponsabile(body: CampiLead): Promise<void> {
 		return;
 	}
 
-	const { html, testo, tipo, chi } = contenuto(body, nomeReferente(referente));
+	const { html, testo, tipo, chi } = contenuto(body, nomeReferente(referente), idRichiesta ?? null);
 	const emailPersona = typeof body.email === "string" && body.email.trim() ? body.email.trim() : null;
 
 	try {
