@@ -494,14 +494,29 @@ const utiliStampa = ID_STAMPA.map((id) => {
 			/* Fascia sabbia con filetto oro: un titolo in serif senza
 			   campitura, schiacciato tra due griglie, si legge come una riga
 			   di testo qualunque — e sopra la griglia dei corsi non si capiva
-			   che fosse il suo titolo. */
+			   che fosse il suo titolo.
+			
+			   I due filetti, però, non sono decorazione: sono quello che
+			   tiene in piedi il titolo dove la campitura non arriva. Safari su
+			   iPhone non stampa gli sfondi e non ha nemmeno la casella per
+			   chiederglielo — `print-color-adjust: exact` lì non basta — e
+			   sul foglio restava una riga di testo sospesa fra due griglie,
+			   che chi guardava non leggeva più come un titolo. I bordi
+			   invece si stampano sempre: non sono "grafica di sfondo" per
+			   nessun browser.
+			
+			   Per lo stesso motivo il colore del testo è scritto qui e non
+			   ereditato: un titolo che conta sulla campitura per staccarsi
+			   deve funzionare anche senza. */
 			.planning-section__head h2,
 			.stampa-utili h2 {
 				display: block !important;
 				margin: 0 !important;
 				padding: 1.2mm 2.5mm !important;
+				color: #1c1c18 !important;
 				background: #f0ead9 !important;
 				border-left: 2pt solid #8b6c14 !important;
+				border-bottom: 0.6pt solid #8b6c14 !important;
 				font-family: var(--font-serif) !important;
 				font-size: 13pt !important;
 				font-weight: 600 !important;
