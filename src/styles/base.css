@@ -221,6 +221,32 @@ a {
   transform: none;
 }
 
+/* Su carta non si scorre.
+   
+   Queste animazioni partono da opacity: 0 e diventano visibili quando
+   l'IntersectionObserver di Layout.astro vede l'elemento entrare nello
+   schermo. Stampando o salvando in PDF non scorre niente: tutto quello che
+   non era ancora comparso resta trasparente, e Chrome nel PDF non lo scrive
+   proprio — sul planning sparivano i titoli delle sezioni, che sono h2 e
+   quindi animati come tutti gli altri.
+   
+   Non è un difetto di quella pagina ma della stampa di qualunque pagina,
+   quindi la correzione sta qui accanto alle animazioni e non nel foglio di
+   stampa del planning. */
+@media print {
+  [data-anim],
+  [data-anim="reveal"],
+  [data-anim="from-left"],
+  [data-anim="scale"],
+  [data-anim="pop"],
+  [data-anim="fade"] {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-anim],
   [data-anim="reveal"],
