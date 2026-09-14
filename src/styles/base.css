@@ -2,6 +2,15 @@
   box-sizing: border-box;
 }
 
+/* Le foto del sito sono avvolte in <picture> per poter offrire AVIF e WebP con
+   il JPEG come ripiego (vedi src/components/FontiImmagine.astro). `contents`
+   toglie il <picture> dal layout: l'<img> resta figlio diretto del contenitore
+   che aveva prima, e tutte le regole scritte per lui — object-fit, width: 100%,
+   posizionamento in flex e grid — continuano a valere senza modifiche. */
+picture {
+  display: contents;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);

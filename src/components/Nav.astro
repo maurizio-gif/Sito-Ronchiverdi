@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
+import FontiImmagine from "./FontiImmagine.astro";
 
 const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
 const allActivities = (await getCollection("activities")).filter((a) => a.data.visible !== false);
@@ -22,7 +23,10 @@ const links = [
 
 <nav class="nav">
 	<a href={url("/")} class="nav-logo">
-		<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" />
+		<picture>
+			<FontiImmagine src="logo-ronchiverdi-sport.png" />
+			<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" />
+		</picture>
 	</a>
 
 	<ul class="nav-links">

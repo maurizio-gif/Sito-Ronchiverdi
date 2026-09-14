@@ -6,6 +6,7 @@ import IconFacts from "../components/IconFacts.astro";
 import EventExpiryGuard from "../components/EventExpiryGuard.astro";
 import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../lib/events";
 import { url } from "../lib/paths";
+import FontiImmagine from "../components/FontiImmagine.astro";
 
 const eventi = await getUpcomingEvents();
 const renderizzati = await Promise.all(
@@ -75,7 +76,10 @@ const facts = [
 						<article class="event" id={entry.id} data-event-until={untilAttr(entry.data.date, entry.data.endDate)}>
 							{entry.data.image && (
 								<div class="event__media">
-									<img src={url(entry.data.image)} alt={entry.data.title} loading="lazy" />
+									<picture>
+										<FontiImmagine src={entry.data.image} />
+										<img src={url(entry.data.image)} alt={entry.data.title} loading="lazy" />
+									</picture>
 									<span class="event__badge" aria-hidden="true">
 										<strong>{badge.giorno}</strong>
 										<span>{badge.mese}</span>

@@ -22,6 +22,7 @@ import Layout from "../layouts/Layout.astro";
 import LeadModal from "../components/LeadModal.astro";
 import { ISCRIZIONI } from "../data/areaRiservata";
 import { url } from "../lib/paths";
+import FontiImmagine from "../components/FontiImmagine.astro";
 
 const address = "Corso Moncalieri 466, Torino";
 const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
@@ -112,7 +113,10 @@ const sezioni = [
 >
 	<main class="lk">
 		<header class="lk__head">
-			<img class="lk__logo" src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="46" />
+			<picture>
+				<FontiImmagine src="logo-ronchiverdi-sport.png" />
+				<img class="lk__logo" src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="46" />
+			</picture>
 			<p class="lk__eyebrow">Club sportivo · Torino</p>
 			<h1 class="lk__title">Tutto Ronchiverdi, <em>da qui</em></h1>
 			<p class="lk__lede">

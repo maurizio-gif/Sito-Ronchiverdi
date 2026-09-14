@@ -9,6 +9,7 @@ import { getSchedule } from "../../lib/schedules";
 const nuotoLibero = await getSchedule("nuoto-libero");
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 
 const faq = faqDiPagina("nuoto-libero");
@@ -56,7 +57,10 @@ const faq = faqDiPagina("nuoto-libero");
 
 	<section class="split">
 		<div class="split__media">
-			<img src={url("images/activities/scuola-nuoto-adulti.jpg")} alt="Piscina interna Ronchiverdi" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/scuola-nuoto-adulti.jpg" />
+				<img src={url("images/activities/scuola-nuoto-adulti.jpg")} alt="Piscina interna Ronchiverdi" loading="lazy" />
+			</picture>
 		</div>
 		<div class="split__content">
 			<span class="eyebrow">Corsie garantite</span>

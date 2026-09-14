@@ -14,6 +14,7 @@ const gymFloorHours = await getHours("gym-floor");
 const gymFloorTrainerHours = await getHours("gym-floor-trainer");
 import { url } from "../../lib/paths";
 import { faqDiPagina, APP_URL } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 
 const facts = [
@@ -243,7 +244,10 @@ const faq = faqDiPagina("gym-floor");
 			</p>
 		</div>
 		<div class="about__media">
-			<img src={url("images/activities/gym-floor-pesi-liberi.jpg")} alt="Sala pesi del Gym Floor Ronchiverdi con macchinari a cavi e panche" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/gym-floor-pesi-liberi.jpg" />
+				<img src={url("images/activities/gym-floor-pesi-liberi.jpg")} alt="Sala pesi del Gym Floor Ronchiverdi con macchinari a cavi e panche" loading="lazy" />
+			</picture>
 		</div>
 	</section>
 

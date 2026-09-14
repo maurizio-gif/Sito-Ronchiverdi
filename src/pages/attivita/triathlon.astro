@@ -6,6 +6,7 @@ import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
 import { EMAIL_CERTIFICATI } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const facts = [
 	{
@@ -124,7 +125,10 @@ const faq = faqDiPagina("triathlon");
 
 	<nav class="intro-grid" aria-label="Vai alla sezione">
 		<a class="intro-col" href="#young">
-			<img class="intro-col__bg" src={url("images/activities/triathlon-young.jpg")} alt="" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/triathlon-young.jpg" />
+				<img class="intro-col__bg" src={url("images/activities/triathlon-young.jpg")} alt="" loading="lazy" />
+			</picture>
 			<div class="intro-col__scrim"></div>
 			<span class="intro-col__index">01</span>
 			<span class="intro-col__body">
@@ -137,7 +141,10 @@ const faq = faqDiPagina("triathlon");
 			</span>
 		</a>
 		<a class="intro-col" href="#academy">
-			<img class="intro-col__bg" src={url("images/activities/nuoto.jpg")} alt="" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/nuoto.jpg" />
+				<img class="intro-col__bg" src={url("images/activities/nuoto.jpg")} alt="" loading="lazy" />
+			</picture>
 			<div class="intro-col__scrim"></div>
 			<span class="intro-col__index">02</span>
 			<span class="intro-col__body">
@@ -150,7 +157,10 @@ const faq = faqDiPagina("triathlon");
 			</span>
 		</a>
 		<a class="intro-col" href="#master">
-			<img class="intro-col__bg" src={url("images/activities/triathlon.jpg")} alt="" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/triathlon.jpg" />
+				<img class="intro-col__bg" src={url("images/activities/triathlon.jpg")} alt="" loading="lazy" />
+			</picture>
 			<div class="intro-col__scrim"></div>
 			<span class="intro-col__index">03</span>
 			<span class="intro-col__body">
@@ -168,7 +178,10 @@ const faq = faqDiPagina("triathlon");
 
 	<section class="about">
 		<div class="about__media">
-			<img src={url("images/services/piscina-esterna.jpg")} alt="Piscina esterna di Ronchiverdi" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/services/piscina-esterna.jpg" />
+				<img src={url("images/services/piscina-esterna.jpg")} alt="Piscina esterna di Ronchiverdi" loading="lazy" />
+			</picture>
 		</div>
 		<div class="about__content">
 			<span class="eyebrow">Perché qui</span>
@@ -186,7 +199,10 @@ const faq = faqDiPagina("triathlon");
 		<span class="section-frame__tag">Young School · 6–13 anni</span>
 		<section class="split">
 			<div class="split__media young-school-photo">
-				<img src={url("images/activities/triathlon-young.jpg")} alt="Uscita dalla frazione di nuoto durante una gara di triathlon" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/triathlon-young.jpg" />
+					<img src={url("images/activities/triathlon-young.jpg")} alt="Uscita dalla frazione di nuoto durante una gara di triathlon" loading="lazy" />
+				</picture>
 			</div>
 			<div class="split__content">
 				<span class="eyebrow">Young School Triathlon</span>
@@ -241,7 +257,10 @@ const faq = faqDiPagina("triathlon");
 		<span class="section-frame__tag">Academy · 14–23 anni</span>
 		<section class="split split--reverse">
 			<div class="split__media">
-				<img src={url("images/activities/nuoto.jpg")} alt="Allenamento in piscina della Triathlon Academy" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/nuoto.jpg" />
+					<img src={url("images/activities/nuoto.jpg")} alt="Allenamento in piscina della Triathlon Academy" loading="lazy" />
+				</picture>
 			</div>
 			<div class="split__content">
 				<span class="eyebrow">Triathlon Academy</span>
@@ -279,7 +298,10 @@ const faq = faqDiPagina("triathlon");
 		<span class="section-frame__tag">Age Group Senior Master · dai 23 anni</span>
 		<section class="split">
 			<div class="split__media">
-				<img src={url("images/activities/triathlon.jpg")} alt="Atleta Age Group Senior Master della squadra Triathlon Ronchiverdi in gara" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/triathlon.jpg" />
+					<img src={url("images/activities/triathlon.jpg")} alt="Atleta Age Group Senior Master della squadra Triathlon Ronchiverdi in gara" loading="lazy" />
+				</picture>
 			</div>
 			<div class="split__content">
 				<span class="eyebrow">Triathlon Age Group Senior Master</span>

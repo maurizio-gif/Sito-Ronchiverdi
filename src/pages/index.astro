@@ -4,6 +4,8 @@ import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
 import EventExpiryGuard from "../components/EventExpiryGuard.astro";
 import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../lib/events";
+import FontiImmagine from "../components/FontiImmagine.astro";
+import { sfondoImmagine } from "../lib/immagini";
 
 const byOrder = (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0);
 const allActivities = (await getCollection("activities")).filter((a) => a.data.visible !== false);
@@ -126,7 +128,10 @@ const clubGallery = [
 					playsinline
 					preload="metadata"
 				></video>
-				<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="La piscina esterna di Ronchiverdi con lettini e ombrelloni, circondata dal verde" />
+				<picture>
+					<FontiImmagine src="images/chi-siamo-2.jpg" />
+					<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="La piscina esterna di Ronchiverdi con lettini e ombrelloni, circondata dal verde" />
+				</picture>
 			</div>
 		</div>
 	</section>
@@ -223,7 +228,7 @@ const clubGallery = [
 					{activitiesAdulti.map((a, i) => (
 						<a class="act-card" href={activityHref(a)}>
 							<div class="act-card__clip">
-								<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
+								<div class="act-card__img" style={sfondoImmagine(a.data.image)} />
 								<div class="act-card__scrim"></div>
 								<div class="act-card__body">
 									<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
@@ -263,7 +268,7 @@ const clubGallery = [
 					{activitiesJunior.map((a, i) => (
 						<a class="act-card" href={activityHref(a)}>
 							<div class="act-card__clip">
-								<div class="act-card__img" style={`background-image:url(${url(a.data.image)})`} />
+								<div class="act-card__img" style={sfondoImmagine(a.data.image)} />
 								<div class="act-card__scrim"></div>
 								<div class="act-card__body">
 									<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
@@ -316,7 +321,7 @@ const clubGallery = [
 					{services.map((s, i) => (
 						<a class="act-card" href={serviceHref(s)} target={s.data.external ? "_blank" : undefined} rel={s.data.external ? "noopener" : undefined}>
 							<div class="act-card__clip">
-								<div class="act-card__img" style={`background-image:url(${url(s.data.image)})`} />
+								<div class="act-card__img" style={sfondoImmagine(s.data.image)} />
 								<div class="act-card__scrim"></div>
 								<div class="act-card__body">
 									<span class="act-card__num">{String(i + 1).padStart(2, "0")}</span>
@@ -433,7 +438,10 @@ const clubGallery = [
 		<div class="club-gallery">
 			{clubGallery.map((photo, i) => (
 				<button type="button" class={`club-gallery__item club-gallery__item--${photo.size}`} data-gallery-index={i}>
-					<img src={url(photo.src)} alt={photo.alt} loading="lazy" />
+					<picture>
+						<FontiImmagine src={photo.src} />
+						<img src={url(photo.src)} alt={photo.alt} loading="lazy" />
+					</picture>
 					<span class="club-gallery__scrim" aria-hidden="true"></span>
 					<span class="club-gallery__caption">{photo.caption}</span>
 				</button>
@@ -468,7 +476,11 @@ const clubGallery = [
 			currentIndex = (i + galleryButtons.length) % galleryButtons.length;
 			const item = galleryButtons[currentIndex];
 			const img = item.querySelector("img");
-			lightboxImg.src = img.src;
+			// `currentSrc` è il file che il browser ha davvero scelto fra quelli
+			// del <picture>: l'AVIF o il WebP, già scaricato per la miniatura.
+			// Riusarlo apre la lightbox all'istante e senza una seconda foto in
+			// rete; `src` resta il ripiego per i browser senza <picture>.
+			lightboxImg.src = img.currentSrc || img.src;
 			lightboxImg.alt = img.alt;
 			lightboxCaption.textContent = item.querySelector(".club-gallery__caption").textContent;
 		}
@@ -517,7 +529,7 @@ const clubGallery = [
 					return (
 						<a class="evento-card" href={url(`/eventi/${e.id}`)} data-event-until={untilAttr(e.data.date, e.data.endDate)}>
 							<span class="evento-card__media">
-								{e.data.image && <img src={url(e.data.image)} alt="" loading="lazy" />}
+								{e.data.image && <picture><FontiImmagine src={e.data.image} /><img src={url(e.data.image)} alt="" loading="lazy" /></picture>}
 								<span class="evento-card__badge" aria-hidden="true">
 									<strong>{badge.giorno}</strong>
 									<span>{badge.mese}</span>
