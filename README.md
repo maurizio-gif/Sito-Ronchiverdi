@@ -228,7 +228,48 @@ Due cose da sapere:
   Facebook e LinkedIn non leggono tutti AVIF e WebP: un'anteprima che non si
   vede vale meno dei kB risparmiati), `favicon.png` e `apple-touch-icon.png`
   (li legge il browser fuori dall'HTML, senza possibilità di alternative), e i
-  poster dei video, che l'attributo `poster` accetta in un formato solo.
+  fermo immagine passati all'attributo `poster` di un `<video>`, che accetta un
+  formato solo. L'hero della home non è più fra questi: il suo fermo immagine è
+  diventato un `<img>` vero proprio per poterlo servire in AVIF — vedi
+  "L'hero della home" qui sotto.
+
+## L'hero della home
+
+Il primo schermo della home è una **foto (`<img>`) con il video sopra**, non un
+`<video>` con il suo `poster`. Se si torna alla forma di prima si rompe una
+cosa che non si vede guardando la pagina.
+
+Il primo schermo è l'elemento che Google misura come LCP, e il poster di un
+`<video>` è il tipo di elemento LCP più fragile che esista: vale solo quando
+l'immagine è decodificata e dipinta, e siccome il video occupa tutto lo schermo
+nessun altro elemento può superarlo in dimensione. Finché il poster non arriva
+non esiste **nessun** candidato — e PageSpeed, invece di un tempo, rispondeva
+`NO_LCP`, che porta con sé anche il Total Blocking Time.
+
+Misurato sul banco di prova (Moto G Power emulato, 4G lenta, CPU 4x):
+
+| | LCP |
+|---|---|
+| `<video poster="…">`, com'era | 4,4 s |
+| `<img>` + video sopra | **2,4 s** |
+
+Come sta insieme:
+
+- La foto ha `fetchpriority="high"` e passa da `<picture>`, quindi arriva in
+  AVIF: 60 kB invece di 148.
+- Il video **non ha più `poster`** (sarebbe la stessa immagine scaricata due
+  volte) e parte a `opacity: 0`, scoprendosi solo sull'evento `playing`, cioè
+  quando ha davvero un fotogramma. A opacità 0 non è un elemento dipinto e non
+  si candida come LCP.
+- La foto resta sotto al video per sempre, non viene rimossa: è lei che si vede
+  se il video non arriva, se l'autoplay viene negato, o mentre carica.
+- Lo script dell'hero seleziona `video.hero-bg`, non `.hero-bg`: quella classe
+  adesso ce l'hanno in due, e prendere l'`<img>` significherebbe chiamare
+  `play()` su un'immagine.
+
+Non è stato messo `preload="none"` sul video: farebbe risparmiare traffico, ma
+è un suggerimento che i browser trattano in modo diverso quando c'è `autoplay`,
+e l'hero non è il posto dove tirare a indovinare.
 
 ## Immagini per le anteprime social
 

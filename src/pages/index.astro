@@ -35,16 +35,52 @@ const clubGallery = [
 	description="Ronchiverdi, storico club sportivo di Torino: tennis, padel, 4 piscine, fitness, Young School, ristorante e coworking. 35.000 mq nel verde, 7 giorni su 7."
 >
 	<header class="hero">
+		{/* Il primo schermo è questa foto, ed è un <img> vero — non l'attributo
+		    `poster` del video qui sotto, che è quello che c'era prima.
+
+		    La differenza non è estetica: il primo schermo è l'elemento che
+		    Google misura come LCP, e il poster di un <video> è il tipo di
+		    elemento LCP più fragile che ci sia. Vale solo quando l'immagine è
+		    decodificata e dipinta, il <video> occupa tutto lo schermo quindi
+		    nessun altro elemento può superarlo in dimensione, e finché il
+		    poster non arriva non esiste alcun candidato: è così che PageSpeed
+		    finiva per rispondere NO_LCP invece di un tempo. Misurato sul banco
+		    di prova (Moto G Power, 4G lenta, CPU 4x): 4,4 s col poster, 2,4 s
+		    con l'immagine qui sotto — che è poi il momento del primo disegno,
+		    cioè il minimo ottenibile senza toccare altro.
+
+		    Essendo un <img> passa anche da <picture>, quindi il primo schermo
+		    arriva in AVIF: 60 kB invece dei 148 del JPEG.
+
+		    L'immagine resta sotto al video per sempre, non viene tolta quando
+		    il video parte: è lei che si vede se il video non arriva, se
+		    l'autoplay viene negato, o mentre si carica. */}
+		<picture>
+			<FontiImmagine src="images/hero-video-poster.jpg" />
+			<img
+				class="hero-bg"
+				src={url("images/hero-video-poster.jpg")}
+				alt=""
+				fetchpriority="high"
+				decoding="async"
+				width="1600"
+				height="900"
+			/>
+		</picture>
 		{/* Video di sfondo: muto, in loop e senza comandi, sta al posto di una
-		    foto e va trattato come tale. Il poster è il primo fotogramma del
-		    video, non la foto dei campi che serve alle anteprime social: così
-		    all'avvio l'immagine non "salta".
+		    foto e va trattato come tale. Non ha più un `poster`, che sarebbe la
+		    stessa immagine scaricata due volte: sopra c'è già.
+		    Resta trasparente finché non ha un fotogramma da mostrare, così non
+		    copre la foto con un rettangolo vuoto e non si candida a sua volta
+		    come elemento LCP. Quanto a quando scaricarlo, non cambia niente
+		    rispetto a prima: `preload="none"` farebbe risparmiare traffico ma
+		    è un suggerimento che i browser trattano in modi diversi quando
+		    c'è `autoplay`, e l'hero non è il posto dove tirare a indovinare.
 		    Il file deve restare in fast start, altrimenti da telefono il video
-		    resta fermo sul poster: ci pensa scripts/prepara-video.mjs. */}
+		    resta fermo sull'immagine: ci pensa scripts/prepara-video.mjs. */}
 		<video
-			class="hero-bg"
+			class="hero-bg hero-bg--video"
 			src={url("videos/hero.mp4")}
-			poster={url("images/hero-video-poster.jpg")}
 			aria-hidden="true"
 			autoplay
 			muted
@@ -72,7 +108,9 @@ const clubGallery = [
 	    caso in cui il sistema fermi un video già partito: un `pause` che
 	    nessuno ha chiesto va letto come un rifiuto. */}
 	<script>
-		const heroVideo = document.querySelector(".hero-bg");
+		// `.hero-bg` ora ce l'hanno in due, la foto e il video: il selettore
+		// deve dire quale dei due, o si prende l'<img> e `play()` non esiste.
+		const heroVideo = document.querySelector("video.hero-bg");
 
 		if (heroVideo) {
 			const gesti = ["pointerdown", "touchstart", "keydown", "scroll"];
@@ -83,7 +121,21 @@ const clubGallery = [
 			const arma = () => gesti.forEach((g) => window.addEventListener(g, riprova, { passive: true }));
 			const disarma = () => gesti.forEach((g) => window.removeEventListener(g, riprova, { passive: true }));
 
-			heroVideo.addEventListener("playing", disarma);
+			// Il video si scopre solo quando ha davvero un fotogramma da
+			// mostrare: prima di allora sopra la foto ci sarebbe un rettangolo
+			// vuoto. Finché non succede — video lento, autoplay negato, rete
+			// che non ce la fa — si vede la foto, che è il caso buono.
+			const scopri = () => {
+				heroVideo.classList.add("is-riprodotto");
+				disarma();
+			};
+
+			heroVideo.addEventListener("playing", scopri);
+			// Al ritorno sul sito il video è in cache e può essere già partito
+			// prima che questo script venga eseguito: in quel caso l'evento
+			// `playing` è passato e nessuno lo richiama, lasciando l'hero
+			// fermo sulla foto con il video che gira sotto, invisibile.
+			if (!heroVideo.paused && heroVideo.readyState >= 3) scopri();
 			heroVideo.addEventListener("pause", () => {
 				if (!heroVideo.ended) arma();
 			});
@@ -582,6 +634,22 @@ const clubGallery = [
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+		}
+		/* Il video sta sopra la foto e si scopre quando ha qualcosa da
+		   mostrare. A opacità 0 non è un elemento dipinto, quindi non entra
+		   nella gara per l'LCP e il primo schermo resta quello della foto. */
+		.hero-bg--video {
+			opacity: 0;
+			transition: opacity 0.6s ease;
+		}
+		.hero-bg--video.is-riprodotto {
+			opacity: 1;
+		}
+		/* Chi ha chiesto meno animazioni non ha chiesto uno stacco brusco. */
+		@media (prefers-reduced-motion: reduce) {
+			.hero-bg--video {
+				transition: none;
+			}
 		}
 		.hero-scrim {
 			position: absolute;
