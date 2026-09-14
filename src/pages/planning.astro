@@ -10,6 +10,7 @@ import Faq from "../components/Faq.astro";
 import { getAllSchedules, getHours } from "../lib/schedules";
 import { APP_URL, faq, faqDiPagina } from "../data/faq";
 import { TELEFONO_CLUB } from "../lib/scuolaNuoto";
+import FontiImmagine from "../components/FontiImmagine.astro";
 
 const zonaRelax = await getHours("zona-relax");
 const nuotoLibero = await getHours("nuoto-libero");
@@ -84,7 +85,10 @@ const utiliStampa = ID_STAMPA.map((id) => {
 	    quando risale. La data si genera alla build, che è il momento in cui
 	    i dati sono stati letti. */}
 	<div class="stampa-testa" aria-hidden="true">
-		<img src={url("logo-ronchiverdi-stampa.png")} alt="" />
+		<picture>
+			<FontiImmagine src="logo-ronchiverdi-stampa.png" />
+			<img src={url("logo-ronchiverdi-stampa.png")} alt="" />
+		</picture>
 		<div class="stampa-testa__testo">
 			<span class="stampa-testa__eyebrow">Ronchiverdi Sport Club · Torino</span>
 			<strong>Planning</strong>

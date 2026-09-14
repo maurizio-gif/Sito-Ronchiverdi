@@ -7,6 +7,7 @@ import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
 // Orari dal file unico editabile da Tina (src/content/schedules/planning.json).
 import { getHours } from "../../lib/schedules";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const orari = await getHours("zona-relax");
 
@@ -65,14 +66,17 @@ const faq = faqDiPagina("spa");
 					data-lightbox={i}
 					aria-label={`Ingrandisci: ${foto.titolo}`}
 				>
-					<img
-						src={url(`images/services/${foto.src}.jpg`)}
-						alt={foto.alt}
-						loading="lazy"
-						decoding="async"
-						width="1400"
-						height="933"
-					/>
+					<picture>
+						<FontiImmagine src={`images/services/${foto.src}.jpg`} />
+						<img
+							src={url(`images/services/${foto.src}.jpg`)}
+							alt={foto.alt}
+							loading="lazy"
+							decoding="async"
+							width="1400"
+							height="933"
+						/>
+					</picture>
 					<span class="spa-shot__veil"></span>
 					<span class="spa-shot__caption">
 						<span class="spa-shot__title">{foto.titolo}</span>
@@ -448,8 +452,17 @@ const faq = faqDiPagina("spa");
 			const foto = shots.map((s) => {
 				const el = s.querySelector("img");
 				const t = s.querySelector(".spa-shot__title");
-				return { src: el.getAttribute("src"), alt: el.getAttribute("alt"), titolo: t ? t.textContent : "" };
+				return { el, alt: el.getAttribute("alt"), titolo: t ? t.textContent : "" };
 			});
+
+			// Il file da mostrare si decide all'apertura, non adesso: le
+			// miniature sono `loading="lazy"` e `currentSrc` — cioè il file che
+			// il browser ha davvero scelto fra quelli del <picture>, l'AVIF o il
+			// WebP — resta vuoto finché la foto non entra nello schermo.
+			// Leggendolo al momento giusto la lightbox riusa l'immagine già
+			// scaricata invece di scaricarne una seconda; l'attributo `src`
+			// resta il ripiego per i browser senza <picture>.
+			const sorgente = (f) => f.el.currentSrc || f.el.getAttribute("src");
 
 			let indice = 0;
 			// Da dove si è aperta la lightbox, per restituire il fuoco alla
@@ -458,7 +471,7 @@ const faq = faqDiPagina("spa");
 
 			const mostra = (i) => {
 				indice = (i + foto.length) % foto.length;
-				img.setAttribute("src", foto[indice].src);
+				img.setAttribute("src", sorgente(foto[indice]));
 				img.setAttribute("alt", foto[indice].alt);
 				cap.textContent = foto[indice].titolo;
 			};

@@ -7,6 +7,9 @@
   },
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
+    "immagini": "node scripts/converti-immagini.mjs",
+    "prebuild": "npm run immagini",
+    "prebuild:cloud": "npm run immagini",
     "build": "tinacms build --local --skip-cloud-checks && astro build",
     "build:cloud": "tinacms build && astro build",
     "preview": "astro preview",
@@ -20,6 +23,7 @@
     "@supabase/supabase-js": "^2.112.4",
     "@tinacms/cli": "^2.5.3",
     "astro": "^7.1.6",
+    "sharp": "^0.35.3",
     "tinacms": "^3.10.0"
   }
 }

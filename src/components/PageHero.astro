@@ -1,5 +1,6 @@
 ---
 import { url } from "../lib/paths";
+import FontiImmagine from "./FontiImmagine.astro";
 
 interface Props {
 	image: string;
@@ -25,7 +26,10 @@ const hasExtra = Astro.slots.has("default");
 	</div>
 	<div class="page-hero__media">
 		<div class="page-hero__frame">
-			<img class="page-hero__img" src={url(image)} alt={imageAlt} />
+			<picture>
+				<FontiImmagine src={image} />
+				<img class="page-hero__img" src={url(image)} alt={imageAlt} />
+			</picture>
 		</div>
 		{hasStat && (
 			<div class="page-hero__stat">

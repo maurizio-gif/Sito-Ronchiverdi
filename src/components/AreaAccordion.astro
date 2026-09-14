@@ -1,5 +1,6 @@
 ---
 import { url } from "../lib/paths";
+import FontiImmagine from "./FontiImmagine.astro";
 
 interface Photo {
 	src: string;
@@ -50,7 +51,10 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 					<div class="area__slideshow" data-slideshow>
 						<div class="slideshow__frame">
 							{area.photos.map((p, j) => (
-								<img class={`slideshow__img${j === 0 ? " is-active" : ""}`} src={url(p.src)} alt={p.alt} loading="lazy" />
+								<picture>
+									<FontiImmagine src={p.src} />
+									<img class={`slideshow__img${j === 0 ? " is-active" : ""}`} src={url(p.src)} alt={p.alt} loading="lazy" />
+								</picture>
 							))}
 							{area.photos.length > 1 && (
 								<>

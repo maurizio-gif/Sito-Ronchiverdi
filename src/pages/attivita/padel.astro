@@ -10,6 +10,7 @@ import { getHours } from "../../lib/schedules";
 const tennisPadelHours = await getHours("tennis-padel");
 import { url } from "../../lib/paths";
 import { faqDiPagina, WANSPORT_URL } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 
 const facts = [
@@ -85,7 +86,10 @@ const faq = faqDiPagina("padel");
 		<span class="section-frame__tag">Sezione Adulti</span>
 		<div class="adulti-intro">
 			<div class="adulti-intro__media">
-				<img src={url("images/activities/padel-campo.jpg")} alt="Campo da padel coperto di Ronchiverdi visto da fondo campo" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/padel-campo.jpg" />
+					<img src={url("images/activities/padel-campo.jpg")} alt="Campo da padel coperto di Ronchiverdi visto da fondo campo" loading="lazy" />
+				</picture>
 			</div>
 			<div class="adulti-intro__content">
 				<span class="eyebrow">Adulti</span>
@@ -124,7 +128,10 @@ const faq = faqDiPagina("padel");
 		<span class="section-frame__tag">Sezione Young School</span>
 		<section class="young-intro">
 			<div class="young-intro__media">
-				<img src={url("images/activities/padel-racchetta.jpg")} alt="Presa della racchetta da padel durante una lezione" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/padel-racchetta.jpg" />
+					<img src={url("images/activities/padel-racchetta.jpg")} alt="Presa della racchetta da padel durante una lezione" loading="lazy" />
+				</picture>
 			</div>
 			<div class="young-intro__content">
 				<span class="eyebrow">Young School Padel</span>

@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { url } from "../lib/paths";
+import FontiImmagine from "../components/FontiImmagine.astro";
 
 // /blog era anche l'indirizzo dell'indice sul vecchio sito: tenerlo qui evita
 // un redirect e conserva quello che la pagina aveva già accumulato.
@@ -61,13 +62,16 @@ const schema = {
 				<article class="blog-card" data-cat={p.data.categoria}>
 					<a class="blog-card__link" href={url(`/post/${p.data.slug}`)}>
 						<span class="blog-card__media">
-							<img
-								src={url(p.data.image)}
-								alt={p.data.imageAlt}
-								loading={i < 3 ? "eager" : "lazy"}
-								width="600"
-								height="400"
-							/>
+							<picture>
+								<FontiImmagine src={p.data.image} />
+								<img
+									src={url(p.data.image)}
+									alt={p.data.imageAlt}
+									loading={i < 3 ? "eager" : "lazy"}
+									width="600"
+									height="400"
+								/>
+							</picture>
 						</span>
 						<span class="blog-card__cat">{p.data.categoria}</span>
 						<h2 class="blog-card__title">{p.data.title}</h2>

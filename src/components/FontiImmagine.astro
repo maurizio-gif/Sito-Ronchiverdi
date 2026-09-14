@@ -1,0 +1,32 @@
+---
+// I <source> AVIF e WebP di una foto, da mettere dentro un <picture> prima
+// dell'immagine.
+//
+// Il componente emette *solo* i <source>, e il tag dell'immagine resta scritto
+// nella pagina che lo usa. Non è un dettaglio: gli stili di Astro sono limitati
+// al componente in cui stanno, e una regola come `.about__media img` smette di
+// applicarsi se l'immagine viene generata da un altro componente. Tenendola
+// dov'è, tutto il CSS esistente continua a valere e l'unica differenza è il
+// <picture> che la avvolge — reso trasparente al layout da
+// `picture { display: contents }` in base.css.
+//
+// Uso:
+//   <picture>
+//     <FontiImmagine src="images/activities/padel.jpg" />
+//     … qui il tag dell'immagine, con lo stesso percorso passato a url() …
+//   </picture>
+//
+// Se l'immagine non è stata convertita non esce nulla e resta la sola immagine
+// originale.
+import { fontiModerne } from "../lib/immagini";
+
+interface Props {
+	/** Percorso dentro public/, con o senza slash iniziale. */
+	src: string;
+}
+
+const { src } = Astro.props;
+const fonti = fontiModerne(src);
+---
+
+{fonti.map((fonte) => <source type={fonte.type} srcset={fonte.srcset} />)}

@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# I formati moderni delle foto: Git li riconosce già come binari dal contenuto,
+# ma dichiararlo evita che una checkout su Windows provi a normalizzare i
+# fine-riga dentro un file compresso.
+*.avif binary
+*.webp binary

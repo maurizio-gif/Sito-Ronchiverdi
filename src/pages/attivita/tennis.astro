@@ -5,6 +5,7 @@ import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const facts = [
 	{
@@ -122,7 +123,10 @@ const faq = faqDiPagina("tennis");
 
 	<nav class="intro-grid" aria-label="Vai alla sezione">
 		<a class="intro-col" href="#adulti">
-			<img class="intro-col__bg" src={url("images/activities/tennis.jpg")} alt="" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/tennis.jpg" />
+				<img class="intro-col__bg" src={url("images/activities/tennis.jpg")} alt="" loading="lazy" />
+			</picture>
 			<div class="intro-col__scrim"></div>
 			<span class="intro-col__index">01</span>
 			<span class="intro-col__body">
@@ -135,7 +139,10 @@ const faq = faqDiPagina("tennis");
 			</span>
 		</a>
 		<a class="intro-col" href="#young">
-			<img class="intro-col__bg" src={url("images/activities/tennis-young.jpg")} alt="" loading="lazy" />
+			<picture>
+				<FontiImmagine src="images/activities/tennis-young.jpg" />
+				<img class="intro-col__bg" src={url("images/activities/tennis-young.jpg")} alt="" loading="lazy" />
+			</picture>
 			<div class="intro-col__scrim"></div>
 			<span class="intro-col__index">02</span>
 			<span class="intro-col__body">
@@ -155,7 +162,10 @@ const faq = faqDiPagina("tennis");
 		<span class="section-frame__tag">Sezione Adulti</span>
 		<div class="adulti-intro">
 			<div class="adulti-intro__media">
-				<img src={url("images/attivita/tennis-adulti-gruppo.jpg")} alt="Giocatori di tennis di età diverse sui campi in terra rossa di Ronchiverdi" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/attivita/tennis-adulti-gruppo.jpg" />
+					<img src={url("images/attivita/tennis-adulti-gruppo.jpg")} alt="Giocatori di tennis di età diverse sui campi in terra rossa di Ronchiverdi" loading="lazy" />
+				</picture>
 			</div>
 			<div class="adulti-intro__content">
 				<span class="eyebrow">Adulti</span>
@@ -233,7 +243,10 @@ const faq = faqDiPagina("tennis");
 		<span class="section-frame__tag">Sezione Young School</span>
 		<section class="young-intro">
 			<div class="young-intro__media young-school-photo">
-				<img src={url("images/activities/tennis-young.jpg")} alt="Young School Tennis a Ronchiverdi" loading="lazy" />
+				<picture>
+					<FontiImmagine src="images/activities/tennis-young.jpg" />
+					<img src={url("images/activities/tennis-young.jpg")} alt="Young School Tennis a Ronchiverdi" loading="lazy" />
+				</picture>
 			</div>
 			<div class="young-intro__content">
 				<span class="eyebrow">Young School Tennis</span>

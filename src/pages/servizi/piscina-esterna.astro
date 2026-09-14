@@ -17,6 +17,7 @@ import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
 import { faqDiPagina } from "../../data/faq";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const facts = [
 	{
@@ -150,11 +151,14 @@ const faq = faqDiPagina("piscina-esterna");
 	    desktop e si alza verso il telefono, dove una striscia mostrerebbe
 	    troppo poco. */}
 	<figure class="notturna">
-		<img
-			src={url("images/club/notturna.jpg")}
-			alt="La piscina esterna di Ronchiverdi illuminata di sera, vista dall'alto, con il solarium e l'area bar"
-			loading="lazy"
-		/>
+		<picture>
+			<FontiImmagine src="images/club/notturna.jpg" />
+			<img
+				src={url("images/club/notturna.jpg")}
+				alt="La piscina esterna di Ronchiverdi illuminata di sera, vista dall'alto, con il solarium e l'area bar"
+				loading="lazy"
+			/>
+		</picture>
 		<figcaption>
 			D'estate la piscina è anche il punto di ritrovo della sera: la vasca
 			grande, i prati del solarium e il bar estivo.

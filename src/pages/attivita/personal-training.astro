@@ -6,6 +6,7 @@ import IconFacts from "../../components/IconFacts.astro";
 import TriplePack from "../../components/TriplePack.astro";
 import prefissi from "../../data/prefissi-telefonici";
 import { url } from "../../lib/paths";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const trainers = (await getCollection("trainers")).sort(
 	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
@@ -93,7 +94,10 @@ const facts = [
 			{trainers.map((t) => (
 				<article class="pt-card" tabindex="0">
 					<div class="pt-card__clip">
-						<img class="pt-card__img" src={url(t.data.photo)} alt={`Foto di ${t.data.name}`} loading="lazy" />
+						<picture>
+							<FontiImmagine src={t.data.photo} />
+							<img class="pt-card__img" src={url(t.data.photo)} alt={`Foto di ${t.data.name}`} loading="lazy" />
+						</picture>
 						<div class="pt-card__scrim"></div>
 						<div class="pt-card__body">
 							<strong class="pt-card__name">{t.data.name}</strong>

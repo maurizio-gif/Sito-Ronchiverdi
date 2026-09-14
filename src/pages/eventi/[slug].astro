@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import { getUpcomingEvents, badgeDate, formatRange, untilAttr } from "../../lib/events";
 import { url } from "../../lib/paths";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 // Una pagina per ogni evento in programma, così il link è condivisibile.
 // Gli eventi passati non vengono generati: sparisce anche la loro pagina.
@@ -83,7 +84,7 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 					return (
 						<a class="altro-card" href={url(`/eventi/${e.id}`)} data-event-until={untilAttr(e.data.date, e.data.endDate)}>
 							<span class="altro-card__media">
-								{e.data.image && <img src={url(e.data.image)} alt="" loading="lazy" />}
+								{e.data.image && <picture><FontiImmagine src={e.data.image} /><img src={url(e.data.image)} alt="" loading="lazy" /></picture>}
 								<span class="altro-card__badge" aria-hidden="true">
 									<strong>{badge.giorno}</strong>
 									<span>{badge.mese}</span>

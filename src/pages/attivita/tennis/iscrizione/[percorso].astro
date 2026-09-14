@@ -21,6 +21,7 @@ import {
 	type PercorsoSport,
 } from "../../../../lib/listiniSport";
 import "../../../../styles/iscrizione.css";
+import FontiImmagine from "../../../../components/FontiImmagine.astro";
 
 export async function getStaticPaths() {
 	const percorsi = await getPercorsi("tennis");
@@ -112,7 +113,10 @@ const faq = faqDiPagina("tennis-iscrizione");
 				.map((p) => (
 					<a class="altro-percorso" href={url(`/attivita/tennis/iscrizione/${p.slug}`)}>
 						<span class="altro-percorso__media">
-							<img src={url(p.image)} alt="" loading="lazy" />
+							<picture>
+								<FontiImmagine src={p.image} />
+								<img src={url(p.image)} alt="" loading="lazy" />
+							</picture>
 						</span>
 						<span class="altro-percorso__testi">
 							<span class="altro-percorso__eta">{p.eyebrow}</span>

@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import PageHero from "../../components/PageHero.astro";
 import { url } from "../../lib/paths";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 // Gli indirizzi restano quelli del vecchio sito: /post/<slug>, con lo slug
 // identico all'originale. È il motivo per cui questi 18 articoli non hanno
@@ -91,7 +92,10 @@ const schema = {
 				{altri.map((p) => (
 					<a class="post-card" href={url(`/post/${p.data.slug}`)}>
 						<span class="post-card__media">
-							<img src={url(p.data.image)} alt={p.data.imageAlt} loading="lazy" width="600" height="400" />
+							<picture>
+								<FontiImmagine src={p.data.image} />
+								<img src={url(p.data.image)} alt={p.data.imageAlt} loading="lazy" width="600" height="400" />
+							</picture>
 						</span>
 						<span class="post-card__cat">{p.data.categoria}</span>
 						<span class="post-card__title">{p.data.title}</span>

@@ -7,6 +7,7 @@ import { url } from "../../lib/paths";
 import { INVIO_NON_AGONISTICO } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
 import { getCorsiNuoto } from "../../lib/scuolaNuoto";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const facts = [
 	{
@@ -96,7 +97,10 @@ const faq = faqDiPagina("scuola-nuoto");
 			{programs.map((p) => (
 				<article class="program-card">
 					<div class="program-card__media">
-						<img src={url(p.image)} alt={p.title} loading="lazy" />
+						<picture>
+							<FontiImmagine src={p.image} />
+							<img src={url(p.image)} alt={p.title} loading="lazy" />
+						</picture>
 						<span class="program-card__age">
 							<svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 8.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2.5 14a5.5 5.5 0 0 1 11 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
 							{p.ageLabel}

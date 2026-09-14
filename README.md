@@ -180,6 +180,56 @@ curriculum non hanno ragione di finire anche in una casella di posta, dove
 restano per sempre e nessuno li cancella. Il rovescio è che nessuno viene
 avvisato: la sezione Curriculum va aperta.
 
+## Formato delle foto (AVIF e WebP)
+
+Le foto del sito sono servite in **AVIF**, con **WebP** e il **JPEG/PNG
+originale** come ripieghi. Sono ~15 MB di foto citate nelle pagine: in AVIF
+diventano 4 MB, in WebP 6 MB. È la voce più pesante di ogni pagina, e quella
+che PageSpeed segnalava per prima.
+
+Gli originali **non vengono sostituiti**: accanto a `piscina-esterna.jpg` lo
+script scrive `piscina-esterna.avif` e `piscina-esterna.webp`, e la pagina li
+propone in quest'ordine. Chi ha un browser degli ultimi anni scarica un quarto
+dei byte, chi ne ha uno vecchio vede comunque la foto.
+
+```sh
+npm run immagini          # converte quel che manca
+npm run immagini -- --forza   # rigenera tutto (~15 minuti da zero)
+```
+
+Gira già da solo prima di ogni build (`prebuild` in package.json), quindi **una
+foto caricata da TinaCMS viene convertita al primo deploy** senza che nessuno
+debba ricordarsene. I file già convertiti vengono saltati: a regime la passata
+dura pochi secondi.
+
+Come sono collegate nelle pagine:
+
+- **Nei tag immagine** — `<picture>` con dentro `<FontiImmagine src="…" />` e
+  poi l'`<img>` di sempre. Il componente emette solo i `<source>`, e l'`<img>`
+  resta scritto nella pagina: gli stili di Astro valgono solo dentro il
+  componente in cui stanno, e una regola come `.about__media img` smetterebbe
+  di applicarsi a un'immagine generata altrove. Il `<picture>` è tolto dal
+  layout da `picture { display: contents }` in `base.css`, così tutto il CSS
+  scritto per l'`<img>` continua a valere.
+- **Negli sfondi CSS** (le card dei caroselli in home) — `sfondoImmagine()` da
+  `src/lib/immagini.ts`, che scrive due `background-image`: prima l'originale,
+  poi `image-set()`. I browser che `image-set()` non lo capiscono scartano la
+  seconda riga e tengono la prima.
+
+Due cose da sapere:
+
+- **`src/data/immagini-ottimizzate.json` è l'elenco di cosa esiste davvero**, e
+  le pagine si fidano solo di quello. Non è pignoleria: `<picture>` sceglie la
+  prima sorgente di un tipo che il browser dichiara di saper leggere e **non
+  torna indietro** se quel file dà 404 — al posto della foto resta il vuoto.
+  Una foto caricata da TinaCMS e non ancora convertita semplicemente non è in
+  elenco, e viene servita nel formato in cui è stata caricata.
+- **Restano fuori dalla conversione** `public/og/` (i crawler di WhatsApp,
+  Facebook e LinkedIn non leggono tutti AVIF e WebP: un'anteprima che non si
+  vede vale meno dei kB risparmiati), `favicon.png` e `apple-touch-icon.png`
+  (li legge il browser fuori dall'HTML, senza possibilità di alternative), e i
+  poster dei video, che l'attributo `poster` accetta in un formato solo.
+
 ## Immagini per le anteprime social
 
 `public/og/` contiene le immagini 1200x630 usate da Open Graph (WhatsApp,

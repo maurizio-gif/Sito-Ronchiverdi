@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { url } from "../lib/paths";
 import { getHours } from "../lib/schedules";
 import { ISCRIZIONI } from "../data/areaRiservata";
+import FontiImmagine from "./FontiImmagine.astro";
 
 const gymFloorHours = await getHours("gym-floor");
 
@@ -129,7 +130,10 @@ const enti = [
 
 	<div class="footer-grid">
 		<div class="footer-brand">
-			<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="40" />
+			<picture>
+				<FontiImmagine src="logo-ronchiverdi-sport.png" />
+				<img src={url("logo-ronchiverdi-sport.png")} alt="Ronchiverdi Sport Club" height="40" />
+			</picture>
 			<p class="muted footer-blurb">
 				Club sportivo a Torino: tennis, padel, nuoto, fitness e young
 				school, in <strong>35.000 mq</strong> tra indoor e outdoor.
@@ -207,7 +211,7 @@ const enti = [
 				{[0, 1].map((copy) => (
 					<ul class="marquee__group" aria-hidden={copy === 1 ? "true" : undefined}>
 						{enti.map((e) => (
-							<li><img class:list={{ "is-negativo": e.negativo }} src={url(e.src)} alt={copy === 1 ? "" : e.alt} loading="lazy" /></li>
+							<li><picture><FontiImmagine src={e.src} /><img class:list={{ "is-negativo": e.negativo }} src={url(e.src)} alt={copy === 1 ? "" : e.alt} loading="lazy" /></picture></li>
 						))}
 					</ul>
 				))}
@@ -265,14 +269,17 @@ const enti = [
 	<div class="footer-firma">
 		<span>Powered by</span>
 		<a href="https://www.ready2digital.it" target="_blank" rel="noopener">
-			<img
-				src={url("ready2digital.png")}
-				alt="Ready2Digital"
-				width="114"
-				height="22"
-				loading="lazy"
-				decoding="async"
-			/>
+			<picture>
+				<FontiImmagine src="ready2digital.png" />
+				<img
+					src={url("ready2digital.png")}
+					alt="Ready2Digital"
+					width="114"
+					height="22"
+					loading="lazy"
+					decoding="async"
+				/>
+			</picture>
 		</a>
 	</div>
 </footer>
