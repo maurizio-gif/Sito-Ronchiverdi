@@ -20,7 +20,14 @@ const MIME: Record<string, string> = {
 	png: "image/png",
 };
 
-const formatiDisponibili = manifest as Record<string, string[]>;
+/** Per ogni originale: l'impronta da cui è stato convertito — che serve solo
+ *  allo script, per sapere cosa rifare — e i formati disponibili. */
+interface VoceManifest {
+	origine: string;
+	formati: string[];
+}
+
+const convertite = manifest as Record<string, VoceManifest>;
 
 /** Normalizza alla forma usata come chiave nel manifest: "/images/foo.jpg". */
 function chiave(percorso: string): string {
@@ -39,7 +46,7 @@ export interface FonteImmagine {
  */
 export function fontiModerne(percorso: string): FonteImmagine[] {
 	const originale = chiave(percorso);
-	const formati = formatiDisponibili[originale] ?? [];
+	const formati = convertite[originale]?.formati ?? [];
 	return formati.map((formato) => ({
 		type: MIME[formato],
 		srcset: url(originale.replace(/\.(jpe?g|png)$/i, `.${formato}`)),

@@ -31,9 +31,18 @@
 // un file. È la differenza fra un'immagine alleggerita e un'immagine rotta —
 // <picture> sceglie la prima sorgente che il browser dichiara di saper leggere,
 // e se quel file non esiste mostra il vuoto senza ripiegare sul JPEG.
+//
+// Nel manifest sta anche l'impronta del file di partenza, ed è quella a dire
+// se una foto va riconvertita. Guardare le date non funziona: git non
+// conserva le date di modifica, e a ogni clone (cioè a ogni build in CI) le
+// riscrive tutte nello stesso istante, in ordine alfabetico. `spa.avif` viene
+// prima di `spa.jpg`, quindi il derivato risulta *più vecchio* del suo
+// originale e sembra da rifare — un quarto delle foto del sito, dieci minuti
+// di CPU a ogni deploy, per riprodurre file identici a quelli già presenti.
 
 import sharp from "sharp";
-import { readdirSync, statSync, existsSync, mkdirSync, writeFileSync, unlinkSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, existsSync, mkdirSync, writeFileSync, unlinkSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const ROOT = process.cwd();
@@ -67,10 +76,23 @@ function scorri(cartella, raccolti = []) {
 	return raccolti;
 }
 
-/** true se il derivato esiste ed è più recente dell'originale. */
-function giaAggiornato(originale, derivato) {
-	if (forza || !existsSync(derivato)) return false;
-	return statSync(derivato).mtimeMs >= statSync(originale).mtimeMs;
+/** Impronta del contenuto di un file. 16 cifre esadecimali bastano: qui serve
+ *  a dire "è cambiato?", non a difendersi da nessuno. */
+function impronta(file) {
+	return createHash("sha1").update(readFileSync(file)).digest("hex").slice(0, 16);
+}
+
+/** Il manifest della passata precedente, se c'è: dice quali originali erano
+ *  già stati convertiti e con che contenuto. */
+function manifestPrecedente() {
+	if (forza || !existsSync(MANIFEST)) return {};
+	try {
+		return JSON.parse(readFileSync(MANIFEST, "utf8"));
+	} catch {
+		// Un manifest illeggibile non è un motivo per fermarsi: si riconverte
+		// tutto e lo si riscrive sano.
+		return {};
+	}
 }
 
 const kB = (byte) => Math.round(byte / 1024);
@@ -82,7 +104,9 @@ async function converti() {
 		.filter((rel) => !ESCLUSI.some((regola) => regola.test(rel)))
 		.sort();
 
-	/** Percorso originale → formati disponibili, nell'ordine di preferenza. */
+	const precedente = manifestPrecedente();
+
+	/** Percorso originale → impronta della sorgente e formati disponibili. */
 	const manifest = {};
 	let byteOriginali = 0;
 	let byteAvif = 0;
@@ -94,13 +118,24 @@ async function converti() {
 		const pesoOriginale = statSync(assoluto).size;
 		byteOriginali += pesoOriginale;
 
+		const origine = impronta(assoluto);
+		// La foto è la stessa dell'ultima passata: i suoi derivati, se sono
+		// ancora al loro posto, vanno bene così.
+		const invariata = precedente[`/${rel}`]?.origine === origine;
+
 		const formatiOk = [];
 
 		for (const formato of ["avif", "webp"]) {
 			const relDerivato = rel.replace(/\.(jpe?g|png)$/i, `.${formato}`);
 			const assDerivato = path.join(PUBLIC, relDerivato);
+			// Un formato che l'ultima volta era stato scartato (derivato più
+			// pesante dell'originale) resta scartato finché la foto non cambia:
+			// senza questo controllo verrebbe riprovato — e riscartato — ogni
+			// volta, che è il caso peggiore, tutto il lavoro e nessun file.
+			const scartatoPrima = invariata && !precedente[`/${rel}`].formati.includes(formato);
+			const giaPronto = invariata && (existsSync(assDerivato) || scartatoPrima);
 
-			if (!giaAggiornato(assoluto, assDerivato)) {
+			if (!giaPronto) {
 				mkdirSync(path.dirname(assDerivato), { recursive: true });
 				const buffer = await sharp(assoluto)
 					.rotate() // applica l'orientamento EXIF prima di perderlo
@@ -137,8 +172,8 @@ async function converti() {
 			}
 		}
 
-		if (formatiOk.length) manifest[`/${rel}`] = formatiOk;
-		else {
+		manifest[`/${rel}`] = { origine, formati: formatiOk };
+		if (!formatiOk.length) {
 			// Nessun formato moderno conviene: il conteggio finale deve
 			// comunque tornare, quindi l'originale conta per sé.
 			byteAvif += pesoOriginale;
