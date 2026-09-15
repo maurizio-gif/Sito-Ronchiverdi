@@ -302,10 +302,6 @@
           "day": "martedi",
           "slots": [
             {
-              "time": "7.30 – 8.15",
-              "lesson": "functional-wake-up"
-            },
-            {
               "time": "9.30 – 10.30",
               "lesson": "full-body-workout"
             },
@@ -538,11 +534,11 @@
               "lesson": "indoor-cycling"
             },
             {
-              "time": "11.30 – 12.30",
+              "time": "11.00 – 12.00",
               "lesson": "hiit-training"
             },
             {
-              "time": "11.30 – 12.30",
+              "time": "11.00 – 12.00",
               "lesson": "hybrid-arena-workout"
             },
             {
