@@ -35,7 +35,7 @@
       "id": "piscina-esterna",
       "title": "Piscina esterna",
       "intro": "Aperta d'estate, tutti i giorni: vasca all'aperto, prati del solarium e bar estivo.",
-      "note": "Stagione indicativa dai primi giorni di giugno al 15 settembre, compatibilmente con il meteo. Ad agosto, durante la manutenzione ordinaria delle vasche interne, la balneazione si allarga a 9:00 – 21:00.",
+      "note": "Stagione dai primi giorni di giugno al 21 settembre 2026, compatibilmente con il meteo. Ad agosto, durante la manutenzione ordinaria delle vasche interne, la balneazione si allarga a 9:00 – 21:00. Dal 22 settembre, terminata la balneazione, le aree solarium del piano vasca e dei prati restano fruibili dalle 10:00 alle 19:00.",
       "rows": [
         {
           "label": "Balneazione",
@@ -302,10 +302,6 @@
           "day": "martedi",
           "slots": [
             {
-              "time": "7.30 – 8.15",
-              "lesson": "functional-wake-up"
-            },
-            {
               "time": "9.30 – 10.30",
               "lesson": "full-body-workout"
             },
@@ -538,11 +534,11 @@
               "lesson": "indoor-cycling"
             },
             {
-              "time": "11.30 – 12.30",
+              "time": "11.00 – 12.00",
               "lesson": "hiit-training"
             },
             {
-              "time": "11.30 – 12.30",
+              "time": "11.00 – 12.00",
               "lesson": "hybrid-arena-workout"
             },
             {

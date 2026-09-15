@@ -414,7 +414,7 @@ export const faq: FaqItem[] = [
 		id: "piscina-esterna-in-che-periodo-dell-anno-e-aperta",
 		pagina: "piscina-esterna",
 		q: "In che periodo dell'anno è aperta?",
-		a: "La piscina esterna è aperta indicativamente dai primi giorni di giugno al 15 settembre, compatibilmente con le condizioni meteorologiche."
+		a: "La piscina esterna è aperta dai primi giorni di giugno al 21 settembre 2026, compatibilmente con le condizioni meteorologiche. Terminata la balneazione restano comunque fruibili, dalle 10:00 alle 19:00, le aree solarium del piano vasca e dei prati."
 	},
 	{
 		id: "piscina-esterna-cosa-posso-fare-oltre-a-nuotare",

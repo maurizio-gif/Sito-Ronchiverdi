@@ -23,7 +23,7 @@ const facts = [
 	{
 		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.5" /><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>`,
 		label: "Stagione",
-		html: "Aperta indicativamente dai <strong>primi giorni di giugno al 15 settembre</strong>, compatibilmente con le condizioni meteorologiche.",
+		html: "Aperta dai <strong>primi giorni di giugno al 21 settembre 2026</strong>, compatibilmente con le condizioni meteorologiche.",
 	},
 	{
 		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" /><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`,
@@ -37,8 +37,9 @@ const facts = [
 	},
 ];
 
-// Le tre fasce, ognuna con la sua ragione: la balneazione, il solarium che
-// apre un'ora prima, e l'ampliamento di agosto.
+// Le quattro fasce, ognuna con la sua ragione: la balneazione, il solarium
+// che apre un'ora prima, l'ampliamento di agosto e le sole aree solarium
+// dopo la chiusura della balneazione a fine stagione.
 //
 // ATTENZIONE: gli stessi orari stanno anche nel blocco "piscina-esterna" di
 // src/content/schedules/planning.json, che alimenta la fascia delle aree in
@@ -60,6 +61,11 @@ const orari = [
 		voce: "Agosto · chiusura vasche interne",
 		quando: "9:00 – 21:00",
 		nota: "Durante la manutenzione ordinaria delle piscine indoor, generalmente prevista in agosto, gli orari della piscina esterna vengono ampliati.",
+	},
+	{
+		voce: "Dal 22 settembre · fine balneazione",
+		quando: "Aree solarium, 10:00 – 19:00",
+		nota: "Terminata la balneazione per la stagione, piano vasca e prati restano comunque fruibili in questa fascia oraria.",
 	},
 ];
 
@@ -97,7 +103,7 @@ const faq = faqDiPagina("piscina-esterna");
 	<PageHero image="images/services/piscina-esterna-hero.jpg" imageAlt="Piscina esterna Ronchiverdi" eyebrow="Servizi">
 		<Fragment slot="title">Piscina <em class="accent">Esterna</em></Fragment>
 		<Fragment slot="lede">Una piscina scoperta immersa nel verde del club, il punto di ritrovo dell'estate: corsie per il nuoto libero, le attività del palinsesto all'aperto e un ampio solarium sui prati.</Fragment>
-		<p class="dates-banner">Apertura: <strong>inizio giugno</strong> — <strong>15 settembre</strong>, compatibilmente col meteo</p>
+		<p class="dates-banner">Apertura: <strong>inizio giugno</strong> — <strong>21 settembre 2026</strong>, compatibilmente col meteo</p>
 	</PageHero>
 
 	<IconFacts
@@ -112,8 +118,9 @@ const faq = faqDiPagina("piscina-esterna");
 			<span class="eyebrow">Orari</span>
 			<h2>Quando si nuota</h2>
 			<p class="lede" style="margin-inline:auto">
-				La balneazione ha la sua fascia, i prati aprono un'ora prima, e ad
-				agosto la manutenzione delle vasche interne allarga la giornata.
+				La balneazione ha la sua fascia, i prati aprono un'ora prima, ad
+				agosto la manutenzione delle vasche interne allarga la giornata, e
+				dopo la chiusura restano fruibili le sole aree solarium.
 			</p>
 		</div>
 		<dl class="orari-lista">
