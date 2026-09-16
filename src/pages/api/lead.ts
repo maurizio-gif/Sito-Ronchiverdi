@@ -135,7 +135,7 @@ export async function POST({ request }: { request: Request }) {
 	let { data: inserito, error } = await supabase
 		.from("form_contatti")
 		.insert(datiLead)
-		.select("id, token_gestione")
+		.select("id, token_gestione, persona_id")
 		.single();
 
 	// La colonna visitor_id arriva con una migration (vedi
@@ -151,13 +151,54 @@ export async function POST({ request }: { request: Request }) {
 		({ data: inserito, error } = await supabase
 			.from("form_contatti")
 			.insert(senzaVisitor)
-			.select("id, token_gestione")
+			.select("id, token_gestione, persona_id")
 			.single());
 	}
 
 	if (error) {
 		console.error("Errore inserimento form_contatti:", error.message);
 		return json({ ok: false, error: "db_error" }, 500);
+	}
+
+	// Walk-in senza tour prenotato: chi si presenta al banco senza fissare un
+	// orario è già in sede, quindi il tour va fatto adesso — non quando una
+	// venditrice ricontrolla l'elenco. Si crea subito una voce in agenda con
+	// l'ora esatta della registrazione, agganciata alla persona (non alla
+	// richiesta: l'evento deve restare anche se la trattativa si chiude e si
+	// riapre — vedi lib/eventi.ts nel CRM) e SENZA assegnatario: come le
+	// trattative aperte al banco (trova_o_crea_opportunita,
+	// p_senza_assegnazione), nasce libera così la prima venditrice disponibile
+	// se la prende, invece che restare del banco.
+	//
+	// "Prenota un tour" (azione === "appuntamento") resta fuori: quella persona
+	// ha già scelto un orario futuro, e la voce di agenda per quel caso è un
+	// intervento separato.
+	if (datiLead.origine === "walk-in" && datiLead.azione !== "appuntamento" && inserito?.persona_id) {
+		const adesso = new Date();
+		const data = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Rome" }).format(adesso);
+		const ora = new Intl.DateTimeFormat("en-GB", {
+			timeZone: "Europe/Rome",
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+		}).format(adesso);
+
+		const { error: errEvento } = await supabase.from("task").insert({
+			titolo: `${nome} ${cognome}`.trim(),
+			tipo: "appuntamento_in_sede",
+			data,
+			ora,
+			durata_minuti: 30,
+			note: datiLead.attivita_label
+				? `Walk-in registrato al banco: tour da fare subito. Interesse: ${datiLead.attivita_label}.`
+				: "Walk-in registrato al banco: tour da fare subito.",
+			assegnato_a: null,
+			entita: "persona",
+			entita_id: inserito.persona_id,
+		});
+		if (errEvento) {
+			console.error("Evento del walk-in non creato:", errEvento.message);
+		}
 	}
 
 	// Avviso alla segreteria. Dopo l'insert e con l'errore ingoiato dentro
