@@ -100,11 +100,11 @@
       "note": "Sauna e bagno di vapore vanno in riscaldamento poco prima dell'apertura: dall'orario di apertura sono in temperatura.",
       "rows": [
         {
-          "label": "Lunedì – Venerdì",
+          "label": "Lunedì – Giovedì",
           "hours": "9:00 – 22:00"
         },
         {
-          "label": "Sabato e domenica",
+          "label": "Venerdì – Domenica",
           "hours": "10:00 – 20:00"
         }
       ]
