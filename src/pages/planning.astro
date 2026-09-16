@@ -8,7 +8,14 @@ import Faq from "../components/Faq.astro";
 // il file unico editabile da Tina: le sezioni qui sotto sono le stesse che
 // vedono le pagine delle singole attività.
 import { getAllSchedules, getHours } from "../lib/schedules";
+import { DAYS } from "../data/schedules";
 import { APP_URL, faq, faqDiPagina } from "../data/faq";
+
+// L'Allenamento Nuoto va in vasca solo tre giorni: mostrare anche gli altri
+// come "giornata di riposo" appesantiva la sezione senza dire niente.
+const GIORNI_ALLENAMENTO_NUOTO = DAYS.filter((d) =>
+	["martedi", "giovedi", "venerdi"].includes(d.key),
+);
 import { TELEFONO_CLUB } from "../lib/scuolaNuoto";
 import FontiImmagine from "../components/FontiImmagine.astro";
 
@@ -133,7 +140,12 @@ const utiliStampa = ID_STAMPA.map((id) => {
 					Il palinsesto settimanale. Clicca su una lezione per leggerne la descrizione.
 				</p>
 			</div>
-			<WeeklySchedule id={sezione.id} lessons={sezione.lessons} schedule={sezione.schedule} />
+			<WeeklySchedule
+				id={sezione.id}
+				lessons={sezione.lessons}
+				schedule={sezione.schedule}
+				days={sezione.id === "allenamento-nuoto" ? GIORNI_ALLENAMENTO_NUOTO : undefined}
+			/>
 			{/* La nota stava in corsivo in coda al lede, sopra la griglia:
 			    «soggetto a variazioni» si legge dopo aver guardato un orario,
 			    non prima. Il link all'app è sempre lo stesso e vale per ogni

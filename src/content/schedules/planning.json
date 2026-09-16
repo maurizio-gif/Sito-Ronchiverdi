@@ -762,6 +762,52 @@
       ]
     },
     {
+      "id": "allenamento-nuoto",
+      "title": "Allenamento Nuoto",
+      "intro": "Allenamenti di nuoto in corsia, seguiti da allenatori: tecnica, resistenza e programmazione dell'allenamento per chi sa già nuotare e vuole migliorare.",
+      "note": "Il palinsesto può subire variazioni: verifica sempre gli aggiornamenti sull'App del Club.",
+      "lessons": [
+        {
+          "id": "swim-training",
+          "name": "Swim Training",
+          "description": "Allenamento di nuoto in vasca seguito da un allenatore, con lavoro su tecnica, resistenza e programmazione dell'allenamento."
+        }
+      ],
+      "days": [
+        {
+          "day": "martedi",
+          "slots": [
+            {
+              "time": "13.15 – 14.15",
+              "lesson": "swim-training"
+            },
+            {
+              "time": "19.30 – 20.30",
+              "lesson": "swim-training"
+            }
+          ]
+        },
+        {
+          "day": "giovedi",
+          "slots": [
+            {
+              "time": "19.30 – 20.30",
+              "lesson": "swim-training"
+            }
+          ]
+        },
+        {
+          "day": "venerdi",
+          "slots": [
+            {
+              "time": "13.15 – 14.15",
+              "lesson": "swim-training"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "nuoto-libero",
       "title": "Nuoto Libero",
       "note": "Corsie della vasca grande indoor. Orari indicativi, che possono subire variazioni. Aggiornato al 09/09/2026.",
