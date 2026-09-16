@@ -17,15 +17,17 @@ interface Props {
 	id: string;
 	lessons: Record<string, Lesson>;
 	schedule: Record<string, Slot[]>;
+	/** Sottoinsieme di DAYS da mostrare, per i palinsesti attivi solo in alcuni giorni. */
+	days?: typeof DAYS;
 }
 
-const { id, lessons, schedule } = Astro.props;
+const { id, lessons, schedule, days = DAYS } = Astro.props;
 const modalId = `planning-modal-${id}`;
 ---
 
 <div class="planning-scroll">
 	<div class="planning-grid">
-		{DAYS.map((day) => (
+		{days.map((day) => (
 			<div class="planning-day">
 				<div class="planning-day__head">
 					<span class="planning-day__short">{day.short}</span>
