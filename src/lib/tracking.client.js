@@ -101,6 +101,22 @@ function removeKey(store, key) {
 	} catch (e) {}
 }
 
+/**
+ * true quando la pagina è aperta dal link "Apri il Guest Register" del
+ * pannello interno (sezione Phone In / Email In della CRM): chi clicca da lì
+ * è la segreteria, sul PC del banco — non il lead sul suo telefono — e non
+ * deve nascere nessuna sessione. Senza questo, un PC condiviso usato più
+ * volte per aprire quella pagina finirebbe per sembrare un solo visitatore
+ * con decine di sessioni sparse su giorni diversi.
+ */
+function eModalitaStaff() {
+	try {
+		return new URLSearchParams(window.location.search).get("staff") === "1";
+	} catch (e) {
+		return false;
+	}
+}
+
 function isEmptyTouch(touch) {
 	if (!touch) return true;
 	for (var i = 0; i < UTM_PARAMS.length; i++) if (touch[UTM_PARAMS[i]]) return false;
@@ -372,6 +388,32 @@ function inviaAlPannello(soloSessione) {
  * perché corrispondono uno a uno alle colonne di form_contatti.
  */
 export function getTrackingPayload() {
+	// In modalità staff niente session_id, niente visitor_id, niente UTM: sono
+	// tutti dati di UNA visita, e questa non lo è. Ritorna prima di chiamare
+	// getSessionId(), che altrimenti ne scriverebbe uno in sessionStorage e
+	// segnerebbe sessioneDaRegistrare — riportando la sessione dalla porta
+	// sul retro, al primo trackPageview() o submit di form utile.
+	if (eModalitaStaff()) {
+		var vuoto = {
+			session_id: null,
+			visitor_id: null,
+			ga_session_id: null,
+			ga_client_id: null,
+			consent_analytics: false,
+			consent_advertisement: false,
+			landing_page: null,
+			referrer: null,
+			first_touch_at: null,
+		};
+		UTM_PARAMS.concat(CLICK_IDS).forEach(function (key) {
+			vuoto[key] = null;
+		});
+		UTM_PARAMS.forEach(function (key) {
+			vuoto["first_" + key] = null;
+		});
+		return vuoto;
+	}
+
 	var first = getTouch(FIRST_TOUCH_KEY) || {};
 	var last = getTouch(LAST_TOUCH_KEY) || first;
 
@@ -452,6 +494,9 @@ export function trackLead(state) {
  */
 export function initTracking() {
 	if (typeof window === "undefined") return;
+	// Vedi eModalitaStaff(): questa non è una visita, non le si apre nessuna
+	// sessione — né automaticamente al caricamento, né poi in getTrackingPayload().
+	if (eModalitaStaff()) return;
 	getSessionId();
 	updateTouches();
 	trackPageview();
