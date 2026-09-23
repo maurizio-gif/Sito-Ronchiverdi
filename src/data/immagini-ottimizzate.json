@@ -1419,6 +1419,24 @@
 			]
 		}
 	},
+	"/images/team/giorgia-givonetti.jpg": {
+		"origine": "c258fa09c6deae5a",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/team/giorgio-radici.jpg": {
 		"origine": "635d46624d236154",
 		"formati": [
@@ -1432,6 +1450,24 @@
 			],
 			"webp": [
 				320
+			]
+		}
+	},
+	"/images/team/leandro-moura.jpg": {
+		"origine": "094dbe2f7bba646a",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
 			]
 		}
 	},
