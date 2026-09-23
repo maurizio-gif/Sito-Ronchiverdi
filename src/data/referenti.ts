@@ -94,6 +94,23 @@ export const referentiYoungDiretto: Record<string, Referente> = {
 export const referentiPerOrigine: Record<string, Referente> = {};
 
 /**
+ * Abbonamento Club e Family restano senza referente di attività (vedi sotto):
+ * un appuntamento in sede lo lavora chiunque sia in segreteria quel giorno.
+ * Un messaggio libero, però, non ha nessuno che lo aspetta a un orario
+ * preciso, e non può restare nella sola casella generica della segreteria:
+ * lo segue Carola Porcella.
+ *
+ * Non un Referente: qui serve solo l'indirizzo per l'avviso interno (vedi
+ * notificaResponsabile.ts), niente telefono o WhatsApp da esporre. Non
+ * compare mai nell'email al cliente, che per questi due percorsi resta
+ * generica di proposito.
+ */
+export const emailMessaggioClubEFamily: Record<string, { nome: string; email: string }> = {
+	"club-adulti": { nome: "Carola Porcella", email: "c.porcella@ronchiverdi.it" },
+	family: { nome: "Carola Porcella", email: "c.porcella@ronchiverdi.it" },
+};
+
+/**
  * Il referente di una richiesta, o null se quel percorso non ne ha uno.
  *
  * Restano senza referente, di proposito, l'Abbonamento Club e il Family: là

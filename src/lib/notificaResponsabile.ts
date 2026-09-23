@@ -15,9 +15,17 @@
 //
 // I percorsi senza responsabile non mandano niente, ed è voluto: Abbonamento
 // Club e Family li lavora la segreteria, e avvisare un responsabile di
-// attività sarebbe avvisare la persona sbagliata.
+// attività sarebbe avvisare la persona sbagliata. Fa eccezione il messaggio
+// libero di quei due percorsi — senza un appuntamento che qualcuno in
+// segreteria prenderà comunque in carico — che va a Carola Porcella (vedi
+// emailMessaggioClubEFamily in src/data/referenti.ts).
 
-import { referentePerLead, riferimentoCompleto, nomeReferente } from "../data/referenti";
+import {
+	referentePerLead,
+	riferimentoCompleto,
+	nomeReferente,
+	emailMessaggioClubEFamily,
+} from "../data/referenti";
 import { campiLead, campiLeadTesto, nomeCompleto, tipoRichiesta, type CampiLead } from "./campiLead";
 import { bottone, esc, impagina, riquadro } from "./emailLayout";
 
@@ -97,13 +105,22 @@ export async function notificaResponsabile(
 	body: CampiLead,
 	idRichiesta?: string | null
 ): Promise<void> {
+	const attivita = typeof body.attivita === "string" ? body.attivita : null;
+	const azione = typeof body.azione === "string" ? body.azione : null;
+
 	const referente = referentePerLead({
-		attivita: typeof body.attivita === "string" ? body.attivita : null,
+		attivita,
 		settore: typeof body.settore === "string" ? body.settore : null,
 		origine: typeof body.origine === "string" ? body.origine : null,
 	});
 
-	if (!referente) return;
+	// Il messaggio libero di Abbonamento Club e Family: quei due percorsi non
+	// hanno un referente di attività (sopra), ma per quel caso specifico
+	// l'avviso va comunque a una persona precisa.
+	const messaggioClubEFamily =
+		!referente && azione === "messaggio" && attivita ? emailMessaggioClubEFamily[attivita] : null;
+
+	if (!referente && !messaggioClubEFamily) return;
 
 	// Un referente può avere solo il telefono: il Padel è così per scelta del
 	// club — quel percorso si lavora al telefono e su WhatsApp, e nessuno
@@ -111,12 +128,15 @@ export async function notificaResponsabile(
 	// domani quel referente avrà un indirizzo in src/data/referenti.ts,
 	// l'email comincerà a partire da sola. La riga nei log serve solo a
 	// rendere visibile la scelta a chi legge i log e non il codice.
-	if (!referente.email) {
+	if (referente && !referente.email) {
 		console.log(
 			`Avviso al responsabile non inviato: ${riferimentoCompleto(referente) || "il referente"} non ha un indirizzo email (percorso da lavorare al telefono)`
 		);
 		return;
 	}
+
+	const destinatarioEmail = referente?.email ?? messaggioClubEFamily!.email;
+	const destinatarioNome = referente ? nomeReferente(referente) : messaggioClubEFamily!.nome;
 
 	const apiKey = import.meta.env.SENDGRID_API_KEY;
 	// Stesso mittente dell'avviso alla segreteria: è la stessa famiglia di
@@ -130,7 +150,7 @@ export async function notificaResponsabile(
 		return;
 	}
 
-	const { html, testo, tipo, chi } = contenuto(body, nomeReferente(referente), idRichiesta ?? null);
+	const { html, testo, tipo, chi } = contenuto(body, destinatarioNome, idRichiesta ?? null);
 	const emailPersona = typeof body.email === "string" && body.email.trim() ? body.email.trim() : null;
 
 	try {
@@ -141,7 +161,7 @@ export async function notificaResponsabile(
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				personalizations: [{ to: [{ email: referente.email }] }],
+				personalizations: [{ to: [{ email: destinatarioEmail }] }],
 				from: { email: da, name: "Sito Ronchiverdi" },
 				// Rispondere all'avviso scrive a chi ha compilato, senza
 				// ricopiarne l'indirizzo a mano: è il gesto più probabile.
