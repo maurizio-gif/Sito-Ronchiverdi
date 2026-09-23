@@ -66,6 +66,15 @@ const QUALITA = {
 	webp: { quality: 75, effort: 5 },
 };
 
+// Larghezze intermedie, oltre al file a piena risoluzione: coprono il logo
+// (badge da un centinaio di pixel), le anteprime nelle slideshow e le foto a
+// mezza larghezza degli hero, senza dover indovinare caso per caso quanto
+// grande serva davvero un'immagine. Una larghezza si scarta quando la foto di
+// partenza non è abbastanza più grande di lei (SOGLIA_RIDUZIONE): produrre un
+// "-1080" da un originale di 1150px non risparmierebbe quasi nulla.
+const LARGHEZZE = [320, 640, 1080];
+const SOGLIA_RIDUZIONE = 150;
+
 /** Tutti i file sotto `cartella`, ricorsivamente, come percorsi assoluti. */
 function scorri(cartella, raccolti = []) {
 	for (const voce of readdirSync(cartella, { withFileTypes: true })) {
@@ -106,11 +115,13 @@ async function converti() {
 
 	const precedente = manifestPrecedente();
 
-	/** Percorso originale → impronta della sorgente e formati disponibili. */
+	/** Percorso originale → impronta della sorgente, formati e larghezze
+	 *  disponibili. */
 	const manifest = {};
 	let byteOriginali = 0;
 	let byteAvif = 0;
 	let byteWebp = 0;
+	let byteVarianti = 0;
 	let generati = 0;
 
 	for (const rel of sorgenti) {
@@ -123,7 +134,24 @@ async function converti() {
 		// ancora al loro posto, vanno bene così.
 		const invariata = precedente[`/${rel}`]?.origine === origine;
 
+		// La larghezza reale serve per decidere quali formati intermedi
+		// generare, e finisce nel manifest così <picture> sa a che punto
+		// del suo srcset sta il file a piena risoluzione. Ricalcolarla ogni
+		// volta costerebbe una decodifica per foto anche quando non è
+		// cambiato nulla: se l'originale è lo stesso, la si eredita.
+		const larghezzaOriginale =
+			invariata && precedente[`/${rel}`].larghezzaOriginale
+				? precedente[`/${rel}`].larghezzaOriginale
+				: (await sharp(assoluto).rotate().metadata()).width;
+
+		// Le larghezze che vale la pena produrre per questa foto: quelle
+		// abbastanza più piccole dell'originale da risparmiare qualcosa (vedi
+		// SOGLIA_RIDUZIONE). Un'icona da 200px non genera nessuna variante,
+		// una foto da 2000px le genera tutte.
+		const larghezzeApplicabili = LARGHEZZE.filter((w) => larghezzaOriginale - w >= SOGLIA_RIDUZIONE);
+
 		const formatiOk = [];
+		const variantiOk = {};
 
 		for (const formato of ["avif", "webp"]) {
 			const relDerivato = rel.replace(/\.(jpe?g|png)$/i, `.${formato}`);
@@ -164,15 +192,41 @@ async function converti() {
 				}
 			}
 
-			if (existsSync(assDerivato)) {
-				formatiOk.push(formato);
-				const peso = statSync(assDerivato).size;
-				if (formato === "avif") byteAvif += peso;
-				else byteWebp += peso;
+			if (!existsSync(assDerivato)) continue;
+			formatiOk.push(formato);
+			const peso = statSync(assDerivato).size;
+			if (formato === "avif") byteAvif += peso;
+			else byteWebp += peso;
+
+			// Le varianti più piccole, una per larghezza applicabile. A
+			// differenza del file a piena risoluzione non c'è un caso di
+			// scarto (rimpicciolire pesa sempre meno), quindi "già pronta"
+			// vuol dire solo che il file esiste ed è della stessa foto.
+			const larghezzeOk = [];
+			for (const w of larghezzeApplicabili) {
+				const relVariante = rel.replace(/\.(jpe?g|png)$/i, `-${w}.${formato}`);
+				const assVariante = path.join(PUBLIC, relVariante);
+				const variantePronta = invariata && existsSync(assVariante);
+
+				if (!variantePronta) {
+					const bufferVariante = await sharp(assoluto)
+						.rotate()
+						.resize({ width: w })
+						[formato](QUALITA[formato])
+						.toBuffer();
+					writeFileSync(assVariante, bufferVariante);
+					generati++;
+					if (!silenzioso) console.log(`  + ${relVariante}  ${kB(bufferVariante.length)} kB`);
+				}
+
+				if (!existsSync(assVariante)) continue;
+				larghezzeOk.push(w);
+				byteVarianti += statSync(assVariante).size;
 			}
+			variantiOk[formato] = larghezzeOk;
 		}
 
-		manifest[`/${rel}`] = { origine, formati: formatiOk };
+		manifest[`/${rel}`] = { origine, formati: formatiOk, larghezzaOriginale, varianti: variantiOk };
 		if (!formatiOk.length) {
 			// Nessun formato moderno conviene: il conteggio finale deve
 			// comunque tornare, quindi l'originale conta per sé.
@@ -192,6 +246,7 @@ async function converti() {
 			`  originali  ${kB(byteOriginali)} kB`,
 			`  webp       ${kB(byteWebp)} kB  (-${percentuale(byteWebp)}%)`,
 			`  avif       ${kB(byteAvif)} kB  (-${percentuale(byteAvif)}%)`,
+			`  varianti   ${kB(byteVarianti)} kB  (larghezze ${LARGHEZZE.join(", ")}px, oltre alla piena risoluzione)`,
 			`Manifest: ${path.relative(ROOT, MANIFEST)}`,
 		].join("\n")
 	);

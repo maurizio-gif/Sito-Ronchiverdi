@@ -18,15 +18,28 @@
 //
 // Se l'immagine non è stata convertita non esce nulla e resta la sola immagine
 // originale.
+//
+// Quando il manifest ha più larghezze per una foto, il `srcset` di ciascun
+// <source> le elenca tutte: perché il browser scelga quella giusta, e non
+// sempre la più grande, gli va detto quanto spazio occupa davvero l'immagine
+// nella pagina — è a questo che serve `sizes`. Va sull'attributo di ogni
+// <source>, non su quello dell'<img>: nella scelta della sorgente, il
+// browser legge la larghezza di ciascun <source> per conto suo, e senza
+// questo prop assumerebbe che l'immagine sia larga quanto lo schermo
+// (100vw), riscaricando foto grandi anche dove serve solo una miniatura.
 import { fontiModerne } from "../lib/immagini";
 
 interface Props {
 	/** Percorso dentro public/, con o senza slash iniziale. */
 	src: string;
+	/** Quanto è larga l'immagine in pagina, nella sintassi dell'attributo
+	 *  `sizes`. Da dare solo se il chiamante mostra la foto più piccola
+	 *  della piena larghezza schermo. */
+	sizes?: string;
 }
 
-const { src } = Astro.props;
+const { src, sizes } = Astro.props;
 const fonti = fontiModerne(src);
 ---
 
-{fonti.map((fonte) => <source type={fonte.type} srcset={fonte.srcset} />)}
+{fonti.map((fonte) => <source type={fonte.type} srcset={fonte.srcset} sizes={sizes} />)}
