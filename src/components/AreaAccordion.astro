@@ -52,7 +52,7 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 						<div class="slideshow__frame">
 							{area.photos.map((p, j) => (
 								<picture>
-									<FontiImmagine src={p.src} />
+									<FontiImmagine src={p.src} sizes="(max-width: 900px) 100vw, 50vw" />
 									<img class={`slideshow__img${j === 0 ? " is-active" : ""}`} src={url(p.src)} alt={p.alt} loading="lazy" />
 								</picture>
 							))}

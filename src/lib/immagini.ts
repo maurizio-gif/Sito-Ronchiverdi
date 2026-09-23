@@ -21,10 +21,14 @@ const MIME: Record<string, string> = {
 };
 
 /** Per ogni originale: l'impronta da cui è stato convertito — che serve solo
- *  allo script, per sapere cosa rifare — e i formati disponibili. */
+ *  allo script, per sapere cosa rifare —, i formati disponibili, la
+ *  larghezza in pixel della foto di partenza e, per formato, le larghezze
+ *  intermedie generate oltre alla piena risoluzione (es. "foo-640.avif"). */
 interface VoceManifest {
 	origine: string;
 	formati: string[];
+	larghezzaOriginale?: number;
+	varianti?: Record<string, number[]>;
 }
 
 const convertite = manifest as Record<string, VoceManifest>;
@@ -43,14 +47,38 @@ export interface FonteImmagine {
  * Le alternative moderne disponibili per `percorso`, dalla più leggera in giù.
  * Array vuoto se l'immagine non è stata convertita: in quel caso il chiamante
  * non emette alcun <source> e resta il solo <img> con l'originale.
+ *
+ * Quando il manifest conosce le larghezze intermedie di un formato, il
+ * `srcset` le elenca tutte insieme al file a piena risoluzione, con il
+ * descrittore "Nw" che dice al browser quanto misura ciascuna — così su uno
+ * schermo piccolo, o su un'immagine mostrata a metà pagina, non scarica una
+ * foto pensata per lo schermo intero. Se il manifest non ha ancora quella
+ * larghezza (formato non ancora rigenerato) resta il comportamento di prima:
+ * un solo file, senza descrittore.
  */
 export function fontiModerne(percorso: string): FonteImmagine[] {
 	const originale = chiave(percorso);
-	const formati = convertite[originale]?.formati ?? [];
-	return formati.map((formato) => ({
-		type: MIME[formato],
-		srcset: url(originale.replace(/\.(jpe?g|png)$/i, `.${formato}`)),
-	}));
+	const voce = convertite[originale];
+	const formati = voce?.formati ?? [];
+
+	return formati.map((formato) => {
+		const fileFormato = originale.replace(/\.(jpe?g|png)$/i, `.${formato}`);
+		const larghezze = voce?.varianti?.[formato] ?? [];
+
+		if (!voce?.larghezzaOriginale || !larghezze.length) {
+			return { type: MIME[formato], srcset: url(fileFormato) };
+		}
+
+		const candidati = [
+			...larghezze.map((w) => ({ w, file: fileFormato.replace(`.${formato}`, `-${w}.${formato}`) })),
+			{ w: voce.larghezzaOriginale, file: fileFormato },
+		].sort((a, b) => a.w - b.w);
+
+		return {
+			type: MIME[formato],
+			srcset: candidati.map((c) => `${url(c.file)} ${c.w}w`).join(", "),
+		};
+	});
 }
 
 /**

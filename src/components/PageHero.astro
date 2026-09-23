@@ -27,7 +27,7 @@ const hasExtra = Astro.slots.has("default");
 	<div class="page-hero__media">
 		<div class="page-hero__frame">
 			<picture>
-				<FontiImmagine src={image} />
+				<FontiImmagine src={image} sizes="(max-width: 860px) 100vw, 45vw" />
 				<img class="page-hero__img" src={url(image)} alt={imageAlt} />
 			</picture>
 		</div>
