@@ -4,622 +4,1635 @@
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 990,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/acqua-fitness-hydrobike.jpg": {
 		"origine": "2a2f7a7fee928736",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 891,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/acqua-fitness.jpg": {
 		"origine": "d291af60887aaebf",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1080,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/acquaticita-baby.jpg": {
 		"origine": "8988a236ac5c55bc",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/cardio-isotonici-treadmill.jpg": {
 		"origine": "23946ac715a1555f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/cardio-isotonici.jpg": {
 		"origine": "ca6e2246bc1c5561",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/fitness.jpg": {
 		"origine": "d4e8afd255f19bcb",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/gym-floor-cardio.jpg": {
 		"origine": "19c447123ad36df4",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/gym-floor-cavi.jpg": {
 		"origine": "fdb22544d8ee87e0",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/gym-floor-pesi-liberi.jpg": {
 		"origine": "f2321abe6727b4af",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/gym-floor.jpg": {
 		"origine": "dea1e79d9c23d64f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/hyrox.jpg": {
 		"origine": "9075a844f0c22c7c",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1365,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/nuoto-open.jpg": {
 		"origine": "886f5f0e7b5c8452",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/nuoto-propaganda.jpg": {
 		"origine": "149a1dc5b21504b6",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/nuoto.jpg": {
 		"origine": "185185a36b1ea9f3",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/padel-campo.jpg": {
 		"origine": "f143a57ef57b2848",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/padel-racchetta.jpg": {
 		"origine": "dd53dc436b37a0dc",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 900,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/padel.jpg": {
 		"origine": "29cae55928b544ca",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/personal-training-card.jpg": {
 		"origine": "be65e2eb1c0da123",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 706,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/activities/personal-training.jpg": {
 		"origine": "679d4f3727da030e",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1255,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/running.jpg": {
 		"origine": "036402a80e19f2d2",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 900,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/scuola-nuoto-adulti.jpg": {
 		"origine": "6ebe8dea4d97cec7",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/scuola-nuoto-young.jpg": {
 		"origine": "79f11c56b26993fa",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/skill-area-funzionale.jpg": {
 		"origine": "ad49e9ce64a96ddc",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/skill-area.jpg": {
 		"origine": "c2247066132499ba",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/tennis-young.jpg": {
 		"origine": "d7543391e6d3a14e",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 928,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/tennis.jpg": {
 		"origine": "27196fe20718d793",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/activities/triathlon-young.jpg": {
 		"origine": "60ad4fd458dd967f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/activities/triathlon.jpg": {
 		"origine": "43f3dd0f0b7bf72e",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 799,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/attivita/scuola-nuoto-hero.jpg": {
 		"origine": "3951d3efab54b0d3",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/attivita/tennis-adulti-gruppo.jpg": {
 		"origine": "03e37ed1cdabf775",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/attivita/tennis-hero.jpg": {
 		"origine": "6688e50099952e2f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/chi-siamo-2.jpg": {
 		"origine": "813995d61b2a257f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1000,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/chi-siamo-video-poster.jpg": {
 		"origine": "e47d57b2569e2a97",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 576,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/club/gym-specchio.jpg": {
 		"origine": "9838a879771bd04d",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/club/lacertosus.jpg": {
 		"origine": "7c75e4f576371660",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/club/lounge-alt.jpg": {
 		"origine": "8b3e54de130105c8",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/club/notturna.jpg": {
 		"origine": "d206be2383e21cd2",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1800,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/club/piscina-esterna-alt.jpg": {
 		"origine": "b7430b1489baddad",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 800,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/club/reception.jpg": {
 		"origine": "d671be6c4d695df0",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/club/spa-alt.jpg": {
 		"origine": "4901295c2097a5f4",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/club/tennis-dettaglio.jpg": {
 		"origine": "37553de9c4ae13b9",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 800,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/federazioni/coni.png": {
 		"origine": "39f252911546f592",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 157,
+		"varianti": {
+			"avif": [],
+			"webp": []
+		}
 	},
 	"/images/federazioni/csi.png": {
 		"origine": "bec2014cbded7d78",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 160,
+		"varianti": {
+			"avif": [],
+			"webp": []
+		}
 	},
 	"/images/federazioni/fidal.png": {
 		"origine": "e8a4446d456f0347",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 200,
+		"varianti": {
+			"avif": [],
+			"webp": []
+		}
 	},
 	"/images/federazioni/fin.png": {
 		"origine": "756dfb0631704c80",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 620,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/federazioni/fitp.png": {
 		"origine": "25fb99ad9723e0a3",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 512,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/federazioni/fitri.png": {
 		"origine": "efa9b2fddcd9dde6",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 988,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/hero-poster.jpg": {
 		"origine": "c81cb10b8e1cc434",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hero-video-poster.jpg": {
 		"origine": "a7f7a72d4bbfb009",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/allenamento-gruppo.jpg": {
 		"origine": "8a97a1a5d9fbf985",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/battle-ropes.jpg": {
 		"origine": "14bd8bc4ac2f3810",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/corsa-outdoor.jpg": {
 		"origine": "229525619f2abcbc",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/functional-area.jpg": {
 		"origine": "7cfa3dcdd0a1f9e8",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/squat-lacertosus.jpg": {
 		"origine": "bd870f32f5ca1857",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/hyrox/team-lacertosus.jpg": {
 		"origine": "926bc0820712ce3e",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/business-lounge.jpg": {
 		"origine": "b63c23bad8550b88",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/chinesis-hero.jpg": {
 		"origine": "8690768a0743243d",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1800,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/chinesis.jpg": {
 		"origine": "4703b81927181b67",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 933,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/services/piscina-esterna-hero.jpg": {
 		"origine": "044e5c478a106a53",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1800,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/piscina-esterna.jpg": {
 		"origine": "8db82a6c6cd9d7f0",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/ristorante-elements.jpg": {
 		"origine": "fe96565734da8d71",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-bagno-vapore.jpg": {
 		"origine": "4c90c113ae2ad0d9",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-cascata-ghiaccio.jpg": {
 		"origine": "56755c9b98ab237a",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-hero.jpg": {
 		"origine": "ad704c5508a882a2",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/images/services/spa-percorso.jpg": {
 		"origine": "740b7ce0c6fb4e1d",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-relax-zone.jpg": {
 		"origine": "5b63bf7568d99fd1",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-sauna.jpg": {
 		"origine": "ccf489d26cb48514",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa-tisaneria.jpg": {
 		"origine": "f45263dc634ed70f",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/services/spa.jpg": {
 		"origine": "f71b48b8d98e1db1",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1400,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/images/team/alessandro-pescarolo.jpg": {
 		"origine": "8a2c7cd6b2a587c4",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/andrea-lemma.jpg": {
 		"origine": "e3df46366358b2e9",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/andrea-occelli.jpg": {
 		"origine": "88507c1efdbcc01c",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/andrea-spanu.jpg": {
 		"origine": "157b39bf4db072a3",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/angela-pinto.jpg": {
 		"origine": "5a3617ffb5de482c",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/fabiano-brugnaro.jpg": {
 		"origine": "23bb74872a2535ba",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/giorgio-radici.jpg": {
 		"origine": "635d46624d236154",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/lorenzo-todaro.jpg": {
 		"origine": "15042902dcda0549",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/lorenzo-zarbo.jpg": {
 		"origine": "ffe2d426c837e686",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/loris-citterio.jpg": {
 		"origine": "6628f351d38011fa",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/paolo-bognanni.jpg": {
 		"origine": "da4ac6dd80ecc7ce",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/simone-laruffa.jpg": {
 		"origine": "78bb03263b2a3c66",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/sonia-dotta.jpg": {
 		"origine": "c6bb22d75356dd0a",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/stefano-intagliata.jpg": {
 		"origine": "67029b99f57f6390",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/team/valentina-drago.jpg": {
 		"origine": "a50beb29605bfa54",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/images/young-school-teaser.jpg": {
 		"origine": "5aabc0bc0d7209f3",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	},
 	"/logo-ronchiverdi-sport.png": {
 		"origine": "97971c9ba6732ce4",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 2362,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
 	},
 	"/logo-ronchiverdi-stampa.png": {
 		"origine": "7c33cf4ae3939418",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 683,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
 	},
 	"/ready2digital.png": {
 		"origine": "1c8ae1750b9c7487",
 		"formati": [
 			"avif",
 			"webp"
-		]
+		],
+		"larghezzaOriginale": 993,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
 	}
 }
