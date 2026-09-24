@@ -6,11 +6,25 @@ import IconFacts from "../../components/IconFacts.astro";
 import TriplePack from "../../components/TriplePack.astro";
 import prefissi from "../../data/prefissi-telefonici";
 import { url } from "../../lib/paths";
-import FontiImmagine from "../../components/FontiImmagine.astro";
+import TrainerCard from "../../components/TrainerCard.astro";
 
 const trainers = (await getCollection("trainers")).sort(
 	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
 );
+
+// I Fitness Manager non sono sempre anche Personal Trainer: coordinano il
+// team e abbinano il cliente al PT giusto, ma non necessariamente allenano
+// loro stessi. Vivono nella stessa collection (stessa scheda, stesso file
+// markdown) ma vanno mostrati in una sezione a parte, non mescolati al team
+// dei PT.
+const personalTrainers = trainers.filter((t) => t.data.role !== "Fitness Manager");
+const fitnessManagers = trainers.filter((t) => t.data.role === "Fitness Manager");
+
+// La griglia dei Fitness Manager sta tutta su una riga sola: la larghezza
+// segue il numero di persone invece di un valore fisso, altrimenti con più
+// di due la griglia va a capo (col numero di oggi va bene, ma non è detto
+// che restino sempre due).
+const fmGridWidth = fitnessManagers.length * 22 + Math.max(fitnessManagers.length - 1, 0) * 1.5;
 
 // I contatti dei trainer non compaiono più nelle schede: la richiesta passa
 // dal Fitness Manager, che valuta obiettivo e disponibilità e fa l'abbinamento.
@@ -81,6 +95,22 @@ const facts = [
 
 	<TriplePack ctaHref="#richiedi-personal" ctaLabel="Richiedi il tuo personal" />
 
+	{fitnessManagers.length > 0 && (
+		<section class="fm-team">
+			<div class="team__head">
+				<span class="eyebrow">Il tuo punto di riferimento</span>
+				<h2>I nostri Fitness Manager</h2>
+				<p class="lede" style="margin-inline:auto">
+					Non sono sempre anche personal trainer: sono chi ti ascolta, valuta il tuo obiettivo e ti abbina il professionista più adatto a te.
+				</p>
+			</div>
+
+			<div class="pt-grid pt-grid--fm" style={`--fm-count:${fitnessManagers.length}; max-width:${fmGridWidth}rem;`}>
+				{fitnessManagers.map((t) => <TrainerCard trainer={t} />)}
+			</div>
+		</section>
+	)}
+
 	<section class="team">
 		<div class="team__head">
 			<span class="eyebrow">Il team</span>
@@ -91,38 +121,7 @@ const facts = [
 		</div>
 
 		<div class="pt-grid">
-			{trainers.map((t) => (
-				<article class="pt-card" tabindex="0">
-					<div class="pt-card__clip">
-						<picture>
-							<FontiImmagine src={t.data.photo} />
-							<img class="pt-card__img" src={url(t.data.photo)} alt={`Foto di ${t.data.name}`} loading="lazy" />
-						</picture>
-						<div class="pt-card__scrim"></div>
-						<div class="pt-card__body">
-							<strong class="pt-card__name">{t.data.name}</strong>
-							{t.data.role && <span class="pt-card__role">{t.data.role}</span>}
-
-							<span class="pt-card__hint">Formazione e competenze <span aria-hidden="true">&rarr;</span></span>
-
-							<div class="pt-card__reveal">
-								{t.data.formazione && t.data.formazione.length > 0 && (
-									<div class="pt-card__group">
-										<span class="pt-card__group-label">Formazione</span>
-										<ul>{t.data.formazione.map((f) => <li>{f}</li>)}</ul>
-									</div>
-								)}
-								{t.data.competenze && t.data.competenze.length > 0 && (
-									<div class="pt-card__group">
-										<span class="pt-card__group-label">Competenze</span>
-										<ul>{t.data.competenze.map((c) => <li>{c}</li>)}</ul>
-									</div>
-								)}
-							</div>
-						</div>
-					</div>
-				</article>
-			))}
+			{personalTrainers.map((t) => <TrainerCard trainer={t} />)}
 		</div>
 
 		{/* Un pulsante per tutto il team, non uno per scheda: quindici pulsanti
@@ -384,7 +383,7 @@ const facts = [
 		.team {
 			max-width: 88rem;
 			margin: 0 auto;
-			padding: 5rem 1.5rem 6rem;
+			padding: 0 1.5rem 6rem;
 		}
 		.team__head {
 			max-width: 42rem;
@@ -398,150 +397,6 @@ const facts = [
 			gap: 1.5rem;
 		}
 
-		.pt-card {
-			position: relative;
-			aspect-ratio: 3 / 4;
-			border-radius: 20px;
-			background: var(--bg-dark);
-			box-shadow: 0 0 22px rgba(28, 28, 24, 0.22);
-			cursor: pointer;
-			transform: translateY(0) scale(1);
-			transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-		}
-		.pt-card:hover,
-		.pt-card.is-open,
-		.pt-card:focus-visible {
-			transform: translateY(-8px) scale(1.015);
-			box-shadow: 0 0 34px rgba(28, 28, 24, 0.3);
-		}
-		.pt-card:focus-visible {
-			outline: 2px solid var(--accent-on-dark);
-			outline-offset: 3px;
-		}
-		.pt-card__clip {
-			position: absolute;
-			inset: 0;
-			border-radius: 20px;
-			overflow: hidden;
-		}
-		.pt-card__img {
-			position: absolute;
-			inset: 0;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 0.5s ease;
-		}
-		.pt-card:hover .pt-card__img,
-		.pt-card.is-open .pt-card__img {
-			transform: scale(1.06);
-		}
-		.pt-card__scrim {
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(180deg, rgba(28, 28, 24, 0) 38%, rgba(28, 28, 24, 0.86) 74%, rgba(28, 28, 24, 1) 92%);
-			transition: background 0.35s ease;
-		}
-		.pt-card:hover .pt-card__scrim,
-		.pt-card.is-open .pt-card__scrim {
-			background: linear-gradient(180deg, rgba(28, 28, 24, 0.25) 0%, rgba(28, 28, 24, 0.94) 60%, rgba(28, 28, 24, 1) 92%);
-		}
-		.pt-card__body {
-			position: absolute;
-			inset: 0;
-			z-index: 1;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-end;
-			padding: 1.35rem;
-		}
-		.pt-card__name {
-			display: block;
-			font-family: var(--font-serif);
-			font-weight: 500;
-			font-size: var(--text-xl);
-			color: var(--text-on-dark);
-			line-height: 1.15;
-		}
-		.pt-card__role {
-			display: block;
-			margin-top: 2px;
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-weight: 600;
-			letter-spacing: 0.06em;
-			text-transform: uppercase;
-			color: var(--accent-on-dark);
-		}
-		.pt-card__hint {
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-			margin-top: 10px;
-			font-family: var(--font-sans);
-			font-size: var(--text-2xs);
-			font-weight: 600;
-			letter-spacing: 0.04em;
-			color: rgba(246, 239, 222, 0.75);
-			transition: opacity 0.25s ease;
-		}
-		.pt-card:hover .pt-card__hint,
-		.pt-card.is-open .pt-card__hint {
-			opacity: 0;
-			position: absolute;
-			pointer-events: none;
-		}
-
-		.pt-card__reveal {
-			max-height: 0;
-			opacity: 0;
-			overflow: hidden;
-			transform: translateY(8px);
-			transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease;
-		}
-		.pt-card:hover .pt-card__reveal,
-		.pt-card.is-open .pt-card__reveal {
-			max-height: 22rem;
-			opacity: 1;
-			transform: translateY(0);
-			margin-top: 8px;
-		}
-		.pt-card__group {
-			margin-bottom: 8px;
-		}
-		.pt-card__group-label {
-			display: block;
-			font-family: var(--font-sans);
-			font-size: 0.66rem;
-			font-weight: 600;
-			letter-spacing: 0.08em;
-			text-transform: uppercase;
-			color: var(--accent-on-dark);
-			margin-bottom: 3px;
-		}
-		.pt-card__group ul {
-			list-style: none;
-			margin: 0;
-			padding: 0;
-			font-family: var(--font-sans);
-			font-size: 0.76rem;
-			line-height: 1.5;
-			color: rgba(246, 239, 222, 0.85);
-		}
-		.pt-card__group li {
-			position: relative;
-			padding-left: 0.85em;
-		}
-		.pt-card__group li::before {
-			content: "";
-			position: absolute;
-			left: 0;
-			top: 0.62em;
-			width: 3px;
-			height: 3px;
-			border-radius: 50%;
-			background: var(--accent-on-dark);
-		}
 		/* L'unica azione del blocco team: chiude la griglia e porta al form. */
 		.pt-cta {
 			margin-top: 2.75rem;
@@ -566,18 +421,36 @@ const facts = [
 				grid-template-columns: repeat(2, 1fr);
 				gap: 1rem;
 			}
-			.pt-card__reveal,
-			.pt-card:hover .pt-card__reveal,
-			.pt-card.is-open .pt-card__reveal {
-				max-height: 26rem;
-			}
 		}
 		@media (max-width: 480px) {
 			.pt-grid {
 				grid-template-columns: 1fr;
 			}
-			.pt-card {
-				aspect-ratio: 4 / 5;
+		}
+
+		/* Griglia dei Fitness Manager: sono pochi, quindi restano su un'unica
+		   riga (la larghezza è calcolata in pagina in base a quanti sono,
+		   vedi fmGridWidth) invece di allungarsi su tutte le colonne dei PT.
+		   Vanno a capo solo dove non c'è fisicamente spazio per stare in riga. */
+		.fm-team {
+			max-width: 88rem;
+			margin: 0 auto;
+			padding: 5rem 1.5rem 6rem;
+		}
+		.pt-grid--fm {
+			margin: 0 auto;
+			grid-template-columns: repeat(var(--fm-count, 3), 1fr);
+		}
+		@media (max-width: 760px), (orientation: portrait) {
+			.pt-grid--fm {
+				grid-template-columns: repeat(2, 1fr);
+				max-width: 46rem;
+			}
+		}
+		@media (max-width: 560px) {
+			.pt-grid--fm {
+				grid-template-columns: 1fr;
+				max-width: 22rem;
 			}
 		}
 

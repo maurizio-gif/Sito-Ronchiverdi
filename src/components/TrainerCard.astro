@@ -1,0 +1,212 @@
+---
+// Scheda foto/nome/ruolo di un membro dello staff (collection "trainers"),
+// con formazione e competenze che si rivelano al passaggio del mouse o al
+// tocco. Estratta da personal-training.astro per essere condivisa fra la
+// griglia dei Personal Trainer e quella dei Fitness Manager: stessa scheda,
+// due liste di persone diverse.
+import type { CollectionEntry } from "astro:content";
+import FontiImmagine from "./FontiImmagine.astro";
+import { url } from "../lib/paths";
+
+interface Props {
+	trainer: CollectionEntry<"trainers">;
+}
+
+const { trainer: t } = Astro.props;
+---
+
+<article class="pt-card" tabindex="0">
+	<div class="pt-card__clip">
+		<picture>
+			<FontiImmagine src={t.data.photo} />
+			<img class="pt-card__img" src={url(t.data.photo)} alt={`Foto di ${t.data.name}`} loading="lazy" />
+		</picture>
+		<div class="pt-card__scrim"></div>
+		<div class="pt-card__body">
+			<strong class="pt-card__name">{t.data.name}</strong>
+			{t.data.role && <span class="pt-card__role">{t.data.role}</span>}
+
+			{(t.data.formazione?.length || t.data.competenze?.length) ? (
+				<span class="pt-card__hint">Formazione e competenze <span aria-hidden="true">&rarr;</span></span>
+			) : null}
+
+			<div class="pt-card__reveal">
+				{t.data.formazione && t.data.formazione.length > 0 && (
+					<div class="pt-card__group">
+						<span class="pt-card__group-label">Formazione</span>
+						<ul>{t.data.formazione.map((f) => <li>{f}</li>)}</ul>
+					</div>
+				)}
+				{t.data.competenze && t.data.competenze.length > 0 && (
+					<div class="pt-card__group">
+						<span class="pt-card__group-label">Competenze</span>
+						<ul>{t.data.competenze.map((c) => <li>{c}</li>)}</ul>
+					</div>
+				)}
+			</div>
+		</div>
+	</div>
+</article>
+
+<style>
+	.pt-card {
+		position: relative;
+		aspect-ratio: 3 / 4;
+		border-radius: 20px;
+		background: var(--bg-dark);
+		box-shadow: 0 0 22px rgba(28, 28, 24, 0.22);
+		cursor: pointer;
+		transform: translateY(0) scale(1);
+		transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	.pt-card:hover,
+	.pt-card.is-open,
+	.pt-card:focus-visible {
+		transform: translateY(-8px) scale(1.015);
+		box-shadow: 0 0 34px rgba(28, 28, 24, 0.3);
+	}
+	.pt-card:focus-visible {
+		outline: 2px solid var(--accent-on-dark);
+		outline-offset: 3px;
+	}
+	.pt-card__clip {
+		position: absolute;
+		inset: 0;
+		border-radius: 20px;
+		overflow: hidden;
+	}
+	.pt-card__img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s ease;
+	}
+	.pt-card:hover .pt-card__img,
+	.pt-card.is-open .pt-card__img {
+		transform: scale(1.06);
+	}
+	.pt-card__scrim {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(28, 28, 24, 0) 38%, rgba(28, 28, 24, 0.86) 74%, rgba(28, 28, 24, 1) 92%);
+		transition: background 0.35s ease;
+	}
+	.pt-card:hover .pt-card__scrim,
+	.pt-card.is-open .pt-card__scrim {
+		background: linear-gradient(180deg, rgba(28, 28, 24, 0.25) 0%, rgba(28, 28, 24, 0.94) 60%, rgba(28, 28, 24, 1) 92%);
+	}
+	.pt-card__body {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		padding: 1.35rem;
+	}
+	.pt-card__name {
+		display: block;
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: var(--text-xl);
+		color: var(--text-on-dark);
+		line-height: 1.15;
+	}
+	.pt-card__role {
+		display: block;
+		margin-top: 2px;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent-on-dark);
+	}
+	.pt-card__hint {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		margin-top: 10px;
+		font-family: var(--font-sans);
+		font-size: var(--text-2xs);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: rgba(246, 239, 222, 0.75);
+		transition: opacity 0.25s ease;
+	}
+	.pt-card:hover .pt-card__hint,
+	.pt-card.is-open .pt-card__hint {
+		opacity: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.pt-card__reveal {
+		max-height: 0;
+		opacity: 0;
+		overflow: hidden;
+		transform: translateY(8px);
+		transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease;
+	}
+	.pt-card:hover .pt-card__reveal,
+	.pt-card.is-open .pt-card__reveal {
+		max-height: 22rem;
+		opacity: 1;
+		transform: translateY(0);
+		margin-top: 8px;
+	}
+	.pt-card__group {
+		margin-bottom: 8px;
+	}
+	.pt-card__group-label {
+		display: block;
+		font-family: var(--font-sans);
+		font-size: 0.66rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent-on-dark);
+		margin-bottom: 3px;
+	}
+	.pt-card__group ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-family: var(--font-sans);
+		font-size: 0.76rem;
+		line-height: 1.5;
+		color: rgba(246, 239, 222, 0.85);
+	}
+	.pt-card__group li {
+		position: relative;
+		padding-left: 0.85em;
+	}
+	.pt-card__group li::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0.62em;
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: var(--accent-on-dark);
+	}
+
+	@media (max-width: 760px), (orientation: portrait) {
+		/* Solo per lo stato aperto: se il selettore include anche
+		   .pt-card__reveal da solo, il pannello chiuso resta con opacity 0
+		   ma occupa comunque lo spazio, spingendo nome e hint verso l'alto
+		   della card invece che in fondo. */
+		.pt-card:hover .pt-card__reveal,
+		.pt-card.is-open .pt-card__reveal {
+			max-height: 26rem;
+		}
+	}
+	@media (max-width: 480px) {
+		.pt-card {
+			aspect-ratio: 4 / 5;
+		}
+	}
+</style>
