@@ -205,6 +205,11 @@ const facts = [
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+			/* Le locandine sono verticali: da larga (desktop) la card taglia
+			   i lati, da stretta (mobile, sotto) taglia sopra/sotto. Ancorare
+			   in alto a sinistra tiene titolo e testo dentro l'inquadratura
+			   invece che il resto della foto o la fascia più bassa. */
+			object-position: left top;
 		}
 		.event__badge {
 			position: absolute;
@@ -320,6 +325,12 @@ const facts = [
 				gap: 0;
 			}
 			.event__media {
+				/* Il minimo automatico dei grid item ("min-width: auto") li
+				   impedisce di restringersi sotto la larghezza "naturale" che
+				   "aspect-ratio" ricava da "min-height": il riquadro risultava
+				   più largo della card e veniva tagliato su entrambi i lati. */
+				min-width: 0;
+				width: 100%;
 				min-height: 14rem;
 				aspect-ratio: 16 / 9;
 			}
