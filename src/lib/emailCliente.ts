@@ -309,6 +309,75 @@ Ronchiverdi Sport Club · ${INDIRIZZO_CLUB} · ${TELEFONO_CLUB}
 	return { oggetto, html, testo };
 }
 
+// ── Candidature ───────────────────────────────────────────────────────────
+
+export type DatiCandidatura = {
+	nome: string;
+	email: string;
+	/** Chiave e etichetta dell'area scelta nel modulo (src/data/lavoraConNoi.ts). */
+	area: string | null;
+	areaLabel: string | null;
+	/**
+	 * Falso quando il CV non ha retto la verifica e la candidatura è stata
+	 * salvata senza allegato (vedi /api/candidatura): l'email allora non dice
+	 * che il curriculum è arrivato, perché la segreteria glielo richiederà.
+	 */
+	conCv: boolean;
+};
+
+/**
+ * Conferma di ricezione a chi si candida da /lavora-con-noi.
+ *
+ * Serve a non lasciare nessuno in sospeso, senza promettere quello che non
+ * possiamo mantenere: la candidatura è arrivata, la leggiamo, e ci si sente
+ * solo se il profilo interessa — lo dice il responsabile dell'area, non la
+ * segreteria. Detto una volta sola e con garbo, così il silenzio che segue ha
+ * già una spiegazione.
+ *
+ * Il tono è più composto delle altre email ("Gentile", non "Ciao"): chi si
+ * candida si presenta per un lavoro, non chiede un orario. Resta il "tu" del
+ * resto del sito e della pagina Lavora con noi.
+ *
+ * Dentro non c'è niente di quello che la persona ha scritto né il curriculum,
+ * solo il nome e l'area: la privacy promette che la candidatura non viaggia
+ * per email, e questa è una ricevuta, non una copia.
+ */
+function contenutoConfermaCandidatura(d: DatiCandidatura) {
+	const oggetto = "Abbiamo ricevuto la tua candidatura";
+	// "per l'area «Un'altra strada»" non si legge: la voce libera resta senza area.
+	const area = d.areaLabel && d.area !== "altro" ? d.areaLabel : null;
+	const perArea = area ? ` per l'area «${area}»` : "";
+	const arrivata = d.conCv
+		? `la tua candidatura${perArea} e il tuo curriculum ci sono arrivati correttamente`
+		: `la tua candidatura${perArea} ci è arrivata correttamente`;
+
+	const html = impagina(
+		"Candidatura ricevuta",
+		`<p style="margin:0 0 14px;">Gentile ${esc(d.nome)},</p>
+		 <p style="margin:0 0 14px;">grazie per l'interesse che hai dimostrato verso Ronchiverdi Sport Club e per il tempo che hai dedicato a raccontarci di te. Ti confermiamo che ${esc(arrivata)}.</p>
+		 <p style="margin:0 0 14px;">Ogni candidatura viene letta con attenzione. Qualora il tuo profilo risultasse in linea con le esigenze del club, sarà il <strong style="color:#1c1c18;">responsabile di riferimento</strong> a contattarti direttamente per conoscerti meglio. Dato il numero di candidature che riceviamo, ti chiediamo di comprendere se non potremo dare un riscontro personale a ciascuna.</p>
+		 <p style="margin:0 0 14px;">La tua candidatura resterà comunque nel nostro archivio: se in futuro si presentasse un'opportunità adatta a te, potremo riprenderla in considerazione.</p>
+		 <p style="margin:0 0 14px;">Ti ringraziamo ancora e ti auguriamo il meglio per il tuo percorso.</p>
+		 <p style="margin:0;">Con i migliori saluti,<br /><span style="color:#1c1c18;">Ronchiverdi Sport Club</span></p>`
+	);
+	const testo = `Gentile ${d.nome},
+
+grazie per l'interesse che hai dimostrato verso Ronchiverdi Sport Club e per il tempo che hai dedicato a raccontarci di te. Ti confermiamo che ${arrivata}.
+
+Ogni candidatura viene letta con attenzione. Qualora il tuo profilo risultasse in linea con le esigenze del club, sarà il responsabile di riferimento a contattarti direttamente per conoscerti meglio. Dato il numero di candidature che riceviamo, ti chiediamo di comprendere se non potremo dare un riscontro personale a ciascuna.
+
+La tua candidatura resterà comunque nel nostro archivio: se in futuro si presentasse un'opportunità adatta a te, potremo riprenderla in considerazione.
+
+Ti ringraziamo ancora e ti auguriamo il meglio per il tuo percorso.
+
+Con i migliori saluti,
+Ronchiverdi Sport Club
+
+${INDIRIZZO_CLUB} · ${TELEFONO_CLUB}
+`;
+	return { oggetto, html, testo };
+}
+
 // ── Invio ─────────────────────────────────────────────────────────────────
 
 /**
@@ -410,4 +479,11 @@ Quando vuoi riprovare ci trovi sul sito o allo ${TELEFONO_CLUB}.
 	const { html, testo } = contenutoConfermaAppuntamento(d);
 	const quando = d.data ? `${dataLunga(d.data)}${d.ora ? ` alle ${d.ora}` : ""}` : "";
 	return invia(d.email, `Nuovo orario: ${quando}`, html, testo);
+}
+
+/** Conferma di ricezione di una candidatura da /lavora-con-noi. */
+export async function confermaCandidatura(d: DatiCandidatura): Promise<boolean> {
+	if (!d.email) return false;
+	const { oggetto, html, testo } = contenutoConfermaCandidatura(d);
+	return invia(d.email, oggetto, html, testo);
 }

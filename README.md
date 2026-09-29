@@ -174,11 +174,18 @@ SQL Editor di Supabase. Le candidature le legge il pannello
 (APP-RONCHIVERDI, sezione *Curriculum*), che scarica il CV con una URL firmata:
 il bucket resta privato e non è raggiungibile da un indirizzo pubblico.
 
-A differenza delle richieste dai moduli, **una candidatura non manda nessuna
-email**: vive solo nel pannello. I dati di chi si candida e il rimando al suo
-curriculum non hanno ragione di finire anche in una casella di posta, dove
-restano per sempre e nessuno li cancella. Il rovescio è che nessuno viene
-avvisato: la sezione Curriculum va aperta.
+A differenza delle richieste dai moduli, **una candidatura non avvisa la
+segreteria per email**: vive solo nel pannello. I dati di chi si candida e il
+rimando al suo curriculum non hanno ragione di finire anche in una casella di
+posta, dove restano per sempre e nessuno li cancella. Il rovescio è che nessuno
+viene avvisato: la sezione Curriculum va aperta.
+
+A chi si candida, invece, parte una **ricevuta** (`confermaCandidatura` in
+`src/lib/emailCliente.ts`): la candidatura è arrivata e, se il profilo
+interessa, lo ricontatta il responsabile di riferimento. Dentro ci sono solo il
+nome e l'area scelta, niente di quello che ha scritto né il curriculum. Stesso
+mittente e stesse variabili SendGrid delle altre conferme; senza
+`SENDGRID_API_KEY` non parte e la candidatura resta comunque salvata.
 
 ## Formato delle foto (AVIF e WebP)
 
