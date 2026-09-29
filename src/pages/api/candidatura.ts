@@ -9,6 +9,7 @@
 // scripts/sql/2026-09-08-candidature.sql.
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CV_BUCKET, CV_MAX_BYTE, percorsoValido } from "../../lib/candidature";
+import { confermaCandidatura } from "../../lib/emailCliente";
 
 export const prerender = false;
 
@@ -149,10 +150,22 @@ export async function POST({ request }: { request: Request }) {
 		return json({ ok: false, error: "db_error" }, 500);
 	}
 
-	// Nessun avviso email, a differenza delle richieste dal sito (vedi
-	// notificaLead): una candidatura vive solo nel pannello, sezione
-	// Curriculum. Il motivo è che i dati di chi si candida — e il rimando al
-	// suo curriculum — non hanno ragione di finire anche in una casella di
-	// posta, dove restano per sempre e nessuno li cancella.
+	// Nessun avviso email alla segreteria, a differenza delle richieste dal
+	// sito (vedi notificaLead): una candidatura vive solo nel pannello, sezione
+	// Curriculum. I dati di chi si candida — e il rimando al suo curriculum —
+	// non hanno ragione di finire anche in una casella di posta, dove restano
+	// per sempre e nessuno li cancella.
+	//
+	// A chi si candida parte invece una ricevuta: nome e area, niente di quello
+	// che ha scritto. Serve a non lasciarlo in sospeso. Come in /api/lead,
+	// l'errore resta dentro: la candidatura è già salva.
+	await confermaCandidatura({
+		nome,
+		email,
+		area: str(body.area, 60),
+		areaLabel: str(body.areaLabel, 120),
+		conCv: cv !== null,
+	});
+
 	return json({ ok: true }, 200);
 }
