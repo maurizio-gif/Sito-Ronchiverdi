@@ -23,11 +23,11 @@
       "rows": [
         {
           "label": "Lunedì – Venerdì",
-          "hours": "7:00 – 22:00"
+          "hours": "7:00 – 21:30"
         },
         {
           "label": "Sabato, domenica e festivi",
-          "hours": "9:00 – 20:00"
+          "hours": "9:00 – 19:30"
         }
       ]
     },
