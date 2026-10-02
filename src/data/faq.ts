@@ -679,6 +679,12 @@ export const faq: FaqItem[] = [
 
 	// ── Chinesis ─────────────────────────────────────────────────────────
 	{
+		id: "chinesis-posso-usufruire-dei-servizi-anche-se-non-sono-socio-del-club",
+		pagina: "chinesis",
+		q: "Posso usufruire dei servizi anche se non sono socio del club?",
+		a: "Sì, puoi usufruire dei servizi di Chinesis Postural Lab anche se non sei socio: le porte sono aperte a tutti. Basta contattarci per fissare la tua prima valutazione, al resto pensiamo noi."
+	},
+	{
 		id: "chinesis-serve-una-valutazione-prima-di-iniziare-un-trattamento",
 		pagina: "chinesis",
 		q: "Serve una valutazione prima di iniziare un trattamento?",
@@ -695,6 +701,24 @@ export const faq: FaqItem[] = [
 		pagina: "chinesis",
 		q: "Cos'è il Pilates Reformer?",
 		a: "È un allenamento su una macchina dedicata, il Reformer, che lavora su rinforzo muscolare e controllo posturale."
+	},
+	{
+		id: "chinesis-dove-si-trova-il-chinesis-postural-lab",
+		pagina: "chinesis",
+		q: "Dove si trova il Chinesis Postural Lab?",
+		a: "Dalla reception prendi l'ascensore -1 e segui le indicazioni."
+	},
+	{
+		id: "chinesis-come-posso-chiedere-informazioni",
+		pagina: "chinesis",
+		q: "Come posso chiedere informazioni?",
+		html: `<p>Contatta direttamente il n. <a href="tel:330213763">330213763</a> oppure scrivi a <a href="mailto:chinesis@ronchiverdi.it">chinesis@ronchiverdi.it</a>.</p>`
+	},
+	{
+		id: "chinesis-quali-pagamenti-sono-accettati",
+		pagina: "chinesis",
+		q: "Quali pagamenti sono accettati?",
+		a: "Puoi pagare con carte, bonifico e contanti."
 	},
 ];
 
