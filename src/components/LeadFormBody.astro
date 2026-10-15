@@ -444,7 +444,7 @@ const { prefix } = Astro.props;
 
 <!-- ─── STEP 2-DATI-PADEL · Dati dell'adulto (Corsi Padel) ──────────── -->
 <div class="lf__body" data-step="2-dati-padel" hidden>
-	<p class="lf__sub">Ultimo passaggio: i tuoi dati per questa richiesta.</p>
+	<p class="lf__sub">Ultimo passaggio: i dati di chi farà il corso. Se chiedi per qualcun altro, scrivi i suoi, non i tuoi.</p>
 
 	<div class="lf__grid">
 		<div class="lf__field">
@@ -595,7 +595,11 @@ const { prefix } = Astro.props;
 
 <!-- ─── STEP 4-DATI · Contatto, condiviso dai tre percorsi ──────────── -->
 <div class="lf__body" data-step="4-dati" hidden>
-	<p class="lf__sub">Un'ultima cosa: come possiamo raggiungerti?</p>
+	<!-- I dati della persona interessata, non di chi compila: capita che
+	     scriva il marito per la moglie, e la richiesta finisce intestata a
+	     chi non si iscriverà — la vendita poi non la ritrova (il CRM
+	     riconosce la persona dai suoi dati) e la trattativa va chiusa a mano. -->
+	<p class="lf__sub">Un'ultima cosa: i dati della persona interessata. Se chiedi per qualcun altro, scrivi i suoi, non i tuoi.</p>
 
 	<div class="lf__grid">
 		<div class="lf__field">
