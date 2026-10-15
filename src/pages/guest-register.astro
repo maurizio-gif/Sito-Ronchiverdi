@@ -79,7 +79,12 @@ const mappaAttivita = Object.fromEntries(
 
 		<!-- ─── Registrati ──────────────────────────────────────────────── -->
 		<div class="gr__panel" data-gr-step="registrati" hidden>
-			<h2 class="gr__panel-title">I tuoi dati</h2>
+			<!-- I dati di chi vuole iscriversi, non di chi compila: al banco
+			     capita che registri il marito per la moglie, e la richiesta
+			     finisce intestata a chi non si iscriverà — la vendita poi non la
+			     ritrova e la trattativa va chiusa a mano. -->
+			<h2 class="gr__panel-title">I dati di chi vuole iscriversi</h2>
+			<p class="gr__panel-sub">Se sei qui per qualcun altro, scrivi i suoi dati, non i tuoi.</p>
 
 			<div class="gr__grid" data-gr-campi="registrati">
 				<div class="gr__field">
@@ -156,7 +161,8 @@ const mappaAttivita = Object.fromEntries(
 			<div class="gr__giorni" id="gr-giorni"></div>
 			<div class="gr__slots" id="gr-slots" hidden></div>
 
-			<h2 class="gr__panel-title gr__panel-title--sep">I tuoi dati</h2>
+			<h2 class="gr__panel-title gr__panel-title--sep">I dati di chi vuole iscriversi</h2>
+			<p class="gr__panel-sub">Se sei qui per qualcun altro, scrivi i suoi dati, non i tuoi.</p>
 
 			<div class="gr__grid" data-gr-campi="tour">
 				<div class="gr__field">

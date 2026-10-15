@@ -91,7 +91,13 @@ export async function POST({ request }: { request: Request }) {
 	if (azione === "annulla") {
 		const { error } = await supabase
 			.from("form_contatti")
-			.update({ appuntamento_annullato_il: new Date().toISOString() })
+			.update({
+				appuntamento_annullato_il: new Date().toISOString(),
+				// Chi ha annullato, per lo storico dell'appuntamento: lo scrive
+				// un trigger sul database (form_contatti_storico_appuntamento,
+				// vedi scripts/sql/2026-10-15-storico-appuntamento.sql nel CRM).
+				appuntamento_modificato_da: "cliente",
+			})
 			.eq("token_gestione", token);
 
 		if (error) {
@@ -157,6 +163,8 @@ export async function POST({ request }: { request: Request }) {
 			// Il promemoria riparte da zero: quello dell'orario vecchio non
 			// deve più valere, e il nuovo va mandato due ore prima del nuovo.
 			promemoria_inviato_il: null,
+			// Chi ha spostato, per lo storico (vedi l'annullamento qui sopra).
+			appuntamento_modificato_da: "cliente",
 		})
 		.eq("token_gestione", token);
 
