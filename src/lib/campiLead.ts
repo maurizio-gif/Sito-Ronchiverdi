@@ -39,6 +39,9 @@ export function tipoRichiesta(body: CampiLead): string {
 	// Chi arriva dal banco (guest register) va distinto in oggetto: la
 	// segreteria deve vedere subito che quella persona era in sede, non che
 	// ha scritto dal sito.
+	if (testo(body.origine) === "evento") {
+		return azione === "appuntamento" ? "Evento · tour prenotato" : "Evento · registrazione";
+	}
 	if (testo(body.origine) === "walk-in") {
 		return azione === "appuntamento" ? "Walk-in · tour prenotato" : "Walk-in · registrazione";
 	}
