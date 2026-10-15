@@ -7,6 +7,7 @@ import { notificaLead } from "../../lib/notificaLead";
 import { notificaResponsabile } from "../../lib/notificaResponsabile";
 import { confermaAlCliente } from "../../lib/emailCliente";
 import { risolviOperatore } from "../../lib/operatori";
+import { AZIONE_RICHIAMO, eFasciaRichiamo } from "../../lib/fasceRichiamo";
 
 export const prerender = false;
 
@@ -109,6 +110,12 @@ export async function POST({ request }: { request: Request }) {
 		azione: str(body.azione),
 		data_scelta: str(body.dataScelta),
 		ora_scelta: str(body.oraScelta),
+		// «Richiamami»: la fascia in cui vuole essere chiamata. Solo su quel
+		// percorso e solo se è una delle tre — il vincolo sul database
+		// rifiuterebbe l'intera richiesta per un valore sbagliato, e una
+		// richiesta persa è peggio di una fascia mancante.
+		fascia_oraria:
+			str(body.azione) === AZIONE_RICHIAMO && eFasciaRichiamo(body.fascia) ? body.fascia : null,
 		// Una colonna sola per "il testo che ha scritto la persona": il
 		// messaggio del percorso libero e l'oggetto di un appuntamento o di una
 		// telefonata sono la stessa cosa per chi lavora la richiesta, e `azione`
@@ -234,6 +241,7 @@ export async function POST({ request }: { request: Request }) {
 			attivitaId: str(body.attivita),
 			settore: str(body.settore),
 			origine: str(body.origine),
+			fascia: datiLead.fascia_oraria,
 		});
 	}
 

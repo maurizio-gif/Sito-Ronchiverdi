@@ -47,7 +47,7 @@ export function initLeadForm(root, options) {
 
 	// Ramificazioni: attività scelta → step successivo. Le attività con
 	// contactFlow "azione" (oggi: Abbonamento Club e Family) propongono
-	// appuntamento in sede o messaggio; "settore-tennis" (Young School Tennis)
+	// appuntamento in sede o richiamami; "settore-tennis" (Young School Tennis)
 	// fa scegliere il settore e poi raccoglie i dati: dal genitore per il
 	// Settore Scuola, dall'atleta (con il genitore solo se minorenne) per il
 	// Settore Competizione;
@@ -145,7 +145,8 @@ export function initLeadForm(root, options) {
 		attivita: "Scegli l'attività che ti interessa per continuare.",
 		giorno: "Scegli un giorno per continuare.",
 		orario: "Scegli un orario per continuare.",
-		messaggio: "Scrivi la tua richiesta prima di continuare.",
+		fascia: "Scegli in che fascia preferisci essere chiamato.",
+		richiamami: "Scrivi cosa ti serve prima di continuare.",
 		oggetto: "Scrivi di cosa vorresti parlare prima di continuare.",
 		nome: "Inserisci il tuo nome.",
 		cognome: "Inserisci il tuo cognome.",
@@ -186,6 +187,9 @@ export function initLeadForm(root, options) {
 			dataScelta: null,
 			oraScelta: null,
 			messaggioTesto: "",
+			// «Richiamami»: la fascia scelta (mattina, pomeriggio, sera) — le
+			// stesse chiavi del CRM e della colonna form_contatti.fascia_oraria.
+			fascia: null,
 			// L'oggetto dell'appuntamento: cosa la persona vuole discutere in
 			// sede. Finisce nella stessa colonna del messaggio (vedi
 			// api/lead.ts), perché per la segreteria è la stessa cosa — il testo
@@ -362,11 +366,11 @@ export function initLeadForm(root, options) {
 		);
 	}
 
-	// Il sottotitolo del passo messaggio cambia se ci si arriva da un giorno
-	// senza orari: lì abbiamo promesso una risposta in pochi minuti, e la
-	// promessa va ripetuta dove si scrive, non lasciata alle spalle.
-	function setSubMessaggio(testo) {
-		var sub = getStep("3-messaggio").querySelector(".lf__sub");
+	// Il sottotitolo del passo richiamami cambia se ci si arriva da un giorno
+	// senza orari per l'appuntamento: lì abbiamo appena detto che ti
+	// chiamiamo noi, e va ripetuto dove si sceglie la fascia.
+	function setSubRichiamami(testo) {
+		var sub = getStep("3-richiamami").querySelector(".lf__sub");
 		if (!sub) return;
 		if (!sub.dataset.originale) sub.dataset.originale = sub.textContent;
 		sub.textContent = testo || sub.dataset.originale;
@@ -380,9 +384,9 @@ export function initLeadForm(root, options) {
 		btn.addEventListener("click", function () {
 			var azione = btn.dataset.azione;
 			state.azione = azione;
-			if (azione === "messaggio") {
-				setSubMessaggio(null);
-				showStep("3-messaggio");
+			if (azione === "richiamami") {
+				setSubRichiamami(null);
+				showStep("3-richiamami");
 			} else {
 				buildPicker(azione);
 				showStep("3-" + azione);
@@ -984,22 +988,22 @@ export function initLeadForm(root, options) {
 				var testo = document.createElement("p");
 				testo.className = "lf__picker-empty";
 				testo.textContent =
-					"Per questo giorno non ci sono orari disponibili. Scrivici lo stesso: leggiamo la richiesta e ti ricontattiamo nel giro di pochi minuti.";
+					"Per questo giorno non ci sono orari disponibili. Dicci quando preferisci e ti chiamiamo noi.";
 
 				var vai = document.createElement("button");
 				vai.type = "button";
 				vai.className = "btn btn-outline lf__picker-fallback-btn";
-				vai.textContent = "Scrivici un messaggio";
+				vai.textContent = "Richiamami";
 				vai.addEventListener("click", function () {
 					// Cambia percorso, non solo schermata: la richiesta deve
-					// partire come messaggio, senza giorno e ora appesi.
-					state.azione = "messaggio";
+					// partire come richiamami, senza giorno e ora appesi.
+					state.azione = "richiamami";
 					state.dataScelta = null;
 					state.oraScelta = null;
-					setSubMessaggio(
-						"Scrivici qui: leggiamo la richiesta e ti ricontattiamo nel giro di pochi minuti."
+					setSubRichiamami(
+						"Nessun orario libero quel giorno: scegli la fascia che preferisci e ti chiamiamo noi."
 					);
-					showStep("3-messaggio");
+					showStep("3-richiamami");
 				});
 
 				vuoto.appendChild(testo);
@@ -1074,15 +1078,34 @@ export function initLeadForm(root, options) {
 		});
 	}
 
-	// ── STEP 3-MESSAGGIO ─────────────────────────────────────────────────
-	var messaggioNext = root.querySelector("#" + P + "-messaggio-next");
-	if (messaggioNext) {
-		messaggioNext.addEventListener("click", function () {
-			var s = getStep("3-messaggio");
+	// ── STEP 3-RICHIAMAMI ────────────────────────────────────────────────
+	// Le fasce si comportano come radio: una sola scelta, e cambiarla toglie
+	// la precedente.
+	var fasce = root.querySelectorAll("#" + P + "-fasce .lf__fascia");
+	fasce.forEach(function (btn) {
+		btn.addEventListener("click", function () {
+			state.fascia = btn.dataset.fascia;
+			fasce.forEach(function (altro) {
+				var scelto = altro === btn;
+				altro.classList.toggle("is-selected", scelto);
+				altro.setAttribute("aria-checked", scelto ? "true" : "false");
+			});
+			clearError(getStep("3-richiamami"));
+		});
+	});
+
+	var richiamamiNext = root.querySelector("#" + P + "-richiamami-next");
+	if (richiamamiNext) {
+		richiamamiNext.addEventListener("click", function () {
+			var s = getStep("3-richiamami");
 			clearError(s);
-			var testo = root.querySelector("#" + P + "-messaggio-testo");
+			if (!state.fascia) {
+				showError(s, ERR.fascia);
+				return;
+			}
+			var testo = root.querySelector("#" + P + "-richiamami-testo");
 			if (!testo.value.trim()) {
-				showError(s, ERR.messaggio);
+				showError(s, ERR.richiamami);
 				testo.focus();
 				return;
 			}
@@ -1095,7 +1118,7 @@ export function initLeadForm(root, options) {
 	var datiBack = root.querySelector("#" + P + "-dati-back");
 	if (datiBack) {
 		datiBack.addEventListener("click", function () {
-			showStep(state.azione === "messaggio" ? "3-messaggio" : "3-" + state.azione);
+			showStep("3-" + state.azione);
 		});
 	}
 
@@ -1169,9 +1192,16 @@ export function initLeadForm(root, options) {
 		return GIORNI_LUNGHI[d.getDay()] + " " + d.getDate() + " " + MESI_LUNGHI[d.getMonth()];
 	}
 
+	// Come si legge la fascia nel riepilogo: «Ti chiamiamo di sera (17 – 20)».
+	var FASCE_TESTO = {
+		mattina: "mattina (9 – 13)",
+		pomeriggio: "pomeriggio (13 – 17)",
+		sera: "sera (17 – 20)",
+	};
+
 	var CONFERMA = {
 		appuntamento: { titolo: "Ti aspettiamo <em>al Club!</em>" },
-		messaggio: { titolo: "Messaggio <em>ricevuto!</em>" },
+		richiamami: { titolo: "Ti <em>richiamiamo noi!</em>" },
 	};
 
 	function inviaRichiesta() {
@@ -1193,13 +1223,15 @@ export function initLeadForm(root, options) {
 		if (titolo) titolo.innerHTML = CONFERMA[state.azione].titolo;
 
 		var rows = [["Attività", state.attivitaLabel]];
-		if (state.azione !== "messaggio") {
+		if (state.azione === "richiamami") {
+			rows.push(["Quando", "Ti chiamiamo di " + FASCE_TESTO[state.fascia]]);
+		} else {
 			rows.push(["Quando", fmtDataLunga(state.dataScelta) + " · ore " + state.oraScelta]);
 		}
 		rows.push(["Nome", state.nome + " " + state.cognome]);
 		rows.push(["Email", state.email]);
 		rows.push(["Cellulare", state.cellulare]);
-		if (state.azione === "messaggio") rows.push(["Richiesta", state.messaggioTesto]);
+		if (state.azione === "richiamami") rows.push(["Richiesta", state.messaggioTesto]);
 		else if (state.oggetto) rows.push(["Oggetto", state.oggetto]);
 
 		var box = root.querySelector("#" + P + "-confirm-summary");
@@ -1228,7 +1260,7 @@ export function initLeadForm(root, options) {
 			c.checked = false;
 		});
 		[
-			"#" + P + "-messaggio-testo",
+			"#" + P + "-richiamami-testo",
 			"#" + P + "-dati-nome",
 			"#" + P + "-dati-cognome",
 			"#" + P + "-dati-email",
@@ -1292,6 +1324,10 @@ export function initLeadForm(root, options) {
 			slots.hidden = true;
 		}
 		if (nextAppuntamento) nextAppuntamento.disabled = true;
+		fasce.forEach(function (btn) {
+			btn.classList.remove("is-selected");
+			btn.setAttribute("aria-checked", "false");
+		});
 		root.querySelectorAll(".lf__error").forEach(function (err) {
 			err.hidden = true;
 		});

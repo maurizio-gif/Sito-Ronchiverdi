@@ -10,6 +10,8 @@
 // è l'ultima perché è la cosa che si guarda meno spesso e quasi mai prima di
 // alzare il telefono.
 
+import { AZIONE_RICHIAMO, eFasciaRichiamo, testoFascia } from "./fasceRichiamo";
+
 export type CampiLead = Record<string, unknown>;
 
 function testo(v: unknown): string | null {
@@ -42,6 +44,11 @@ export function tipoRichiesta(body: CampiLead): string {
 	}
 	if (azione === "appuntamento") return "Appuntamento in sede";
 	if (azione === "telefonata") return "Richiesta di telefonata";
+	// La fascia già in oggetto: chi apre la casella vede subito quando va
+	// chiamata, senza aprire l'email.
+	if (azione === AZIONE_RICHIAMO) {
+		return eFasciaRichiamo(body.fascia) ? `Richiamami · ${testoFascia(body.fascia)}` : "Richiamami";
+	}
 	if (azione === "messaggio") return "Messaggio";
 	if (testo(body.origine) === "chinesis-inline") return "Richiesta Chinesis";
 	if (testo(body.origine) === "fitness-manager-inline") return "Consulenza Fitness Manager";
@@ -79,13 +86,20 @@ export function campiLead(body: CampiLead): [string, string][] {
 		["Attività", testo(body.attivitaLabel)],
 		["Settore", testo(body.settore)],
 		["Per chi", audience === "junior" ? "Young School (junior)" : audience],
-		["Quando", [giorno(body.dataScelta), testo(body.oraScelta)].filter(Boolean).join(" alle ") || null],
+		[
+			"Quando",
+			azione === AZIONE_RICHIAMO
+				? eFasciaRichiamo(body.fascia)
+					? `da richiamare, fascia ${testoFascia(body.fascia)}`
+					: "da richiamare"
+				: [giorno(body.dataScelta), testo(body.oraScelta)].filter(Boolean).join(" alle ") || null,
+		],
 		["Interessi", dettagli || null],
 		// Per un appuntamento o una telefonata l'etichetta dice "Oggetto": è
 		// quello che serve sapere prima di presentarsi o di chiamare, e
 		// chiamarlo "Messaggio" lo farebbe sembrare un commento accessorio.
 		[
-			conAppuntamento ? "Oggetto" : "Messaggio",
+			conAppuntamento ? "Oggetto" : azione === AZIONE_RICHIAMO ? "Cosa le serve" : "Messaggio",
 			testo(body.messaggioTesto) ?? testo(body.oggetto) ?? testo(body.messaggio),
 		],
 		["Marketing", body.marketing === true ? "acconsente" : "no"],

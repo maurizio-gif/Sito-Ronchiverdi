@@ -100,7 +100,7 @@ const { prefix } = Astro.props;
 
 <!-- ─── STEP 2 · Segnaposto: qui iniziano le ramificazioni ──────────── -->
 <!-- Lo step successivo cambia in base all'attività scelta (dati, domande
-     specifiche, poi appuntamento in sede o messaggio). Finché i rami non sono
+     specifiche, poi appuntamento in sede o richiamami). Finché i rami non sono
      definiti questo pannello mostra il ramo che verrebbe imboccato: serve a
      verificare in anteprima che lo step 1 instradi bene.
 
@@ -114,7 +114,7 @@ const { prefix } = Astro.props;
 	<p class="lf__placeholder">
 		<strong>Prossimo step da definire.</strong> In base a questa scelta il form
 		proseguirà con le domande specifiche del percorso e con la proposta di
-		contatto (appuntamento in sede o messaggio).
+		contatto (appuntamento in sede o richiamami).
 	</p>
 
 	<div class="lf__actions">
@@ -138,13 +138,17 @@ const { prefix } = Astro.props;
 			<span class="lf__choice-arr" aria-hidden="true">→</span>
 		</button>
 
-		<button class="lf__choice" type="button" data-azione="messaggio">
+		<!-- «Richiamami» ha preso il posto del «Messaggio» (ottobre 2026): chi
+		     scriveva aspettava una risposta per email, e una consulenza al
+		     telefono converte di più. La persona sceglie solo la fascia, non il
+		     giorno — vedi STEP 3-RICHIAMAMI. -->
+		<button class="lf__choice" type="button" data-azione="richiamami">
 			<span class="lf__choice-icon" aria-hidden="true">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5" /><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
 			</span>
 			<span class="lf__choice-texts">
-				<span class="lf__choice-label">Messaggio</span>
-				<span class="lf__choice-sub">Scrivici, ti rispondiamo via email</span>
+				<span class="lf__choice-label">Richiamami</span>
+				<span class="lf__choice-sub">Scegli quando preferisci, ti chiamiamo noi</span>
 			</span>
 			<span class="lf__choice-arr" aria-hidden="true">→</span>
 		</button>
@@ -552,18 +556,37 @@ const { prefix } = Astro.props;
 	<p class="lf__error" hidden role="alert"></p>
 </div>
 
-<!-- ─── STEP 3-MESSAGGIO · Testo libero ──────────────────────────────── -->
-<div class="lf__body" data-step="3-messaggio" hidden>
-	<p class="lf__sub">Scrivici la tua richiesta: ti risponderemo il prima possibile.</p>
+<!-- ─── STEP 3-RICHIAMAMI · Fascia oraria e cosa ti serve ─────────────── -->
+<!-- Solo la fascia, tutti i giorni: la consulente non è legata a un giorno,
+     ma se la persona ha scelto «sera» la chiama di sera. Le chiavi (mattina,
+     pomeriggio, sera) sono le stesse del CRM — FASCE_RICHIAMO in lib/agenda.ts
+     e il vincolo su form_contatti.fascia_oraria: vanno cambiate insieme. -->
+<div class="lf__body" data-step="3-richiamami" hidden>
+	<p class="lf__sub">In che fascia preferisci che ti chiamiamo? Tutti i giorni.</p>
+
+	<div class="lf__fasce" id={`${prefix}-fasce`} role="radiogroup" aria-label="Fascia oraria">
+		<button class="lf__fascia" type="button" role="radio" aria-checked="false" data-fascia="mattina">
+			<span class="lf__fascia-label">Mattina</span>
+			<span class="lf__fascia-ore">9 – 13</span>
+		</button>
+		<button class="lf__fascia" type="button" role="radio" aria-checked="false" data-fascia="pomeriggio">
+			<span class="lf__fascia-label">Pomeriggio</span>
+			<span class="lf__fascia-ore">13 – 17</span>
+		</button>
+		<button class="lf__fascia" type="button" role="radio" aria-checked="false" data-fascia="sera">
+			<span class="lf__fascia-label">Sera</span>
+			<span class="lf__fascia-ore">17 – 20</span>
+		</button>
+	</div>
 
 	<div class="lf__field">
-		<label for={`${prefix}-messaggio-testo`}>Il tuo messaggio <span aria-hidden="true">*</span></label>
-		<textarea id={`${prefix}-messaggio-testo`} name="messaggio" rows="5" placeholder="Raccontaci cosa cerchi o quali domande hai…"></textarea>
+		<label for={`${prefix}-richiamami-testo`}>Cosa ti serve? <span aria-hidden="true">*</span></label>
+		<textarea id={`${prefix}-richiamami-testo`} name="messaggio" rows="4" placeholder="Es. vorrei capire quale abbonamento fa per me e gli orari della piscina…"></textarea>
 	</div>
 
 	<div class="lf__actions">
 		<button class="lf__back" data-step-back="2-scelta" type="button">← Indietro</button>
-		<button class="btn lf__next" id={`${prefix}-messaggio-next`} type="button">
+		<button class="btn lf__next" id={`${prefix}-richiamami-next`} type="button">
 			Continua <span class="lf__arrow">→</span>
 		</button>
 	</div>

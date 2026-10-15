@@ -96,9 +96,9 @@ export const referentiPerOrigine: Record<string, Referente> = {};
 /**
  * Abbonamento Club e Family restano senza referente di attività (vedi sotto):
  * un appuntamento in sede lo lavora chiunque sia in segreteria quel giorno.
- * Un messaggio libero, però, non ha nessuno che lo aspetta a un orario
- * preciso, e non può restare nella sola casella generica della segreteria:
- * lo segue Carola Porcella.
+ * Un «Richiamami» (prima un messaggio libero), però, non ha nessuno che lo
+ * aspetta a un orario preciso, e non può restare nella sola casella generica
+ * della segreteria: lo segue Carola Porcella.
  *
  * Non un Referente: qui serve solo l'indirizzo per l'avviso interno (vedi
  * notificaResponsabile.ts), niente telefono o WhatsApp da esporre. Non
