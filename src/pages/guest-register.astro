@@ -11,6 +11,11 @@
 //      disponibile, la persona si fissa la visita da sola, sugli stessi
 //      orari liberi che vede il form del sito.
 //
+// Eventi: lo stesso link col parametro `?utm_source=evento` (vedi il QR) manda
+// `origine: "evento"` invece di "walk-in". Il database tratta le due allo
+// stesso modo (opportunità da assegnare), ma il CRM le mostra come fonti
+// distinte e non nasce la voce di agenda "tour da fare subito".
+//
 // La differenza col form del sito è tutta nella provenienza: `origine` dice
 // "walk-in" invece di "lead-modal", e il campo `operatore` porta chi era al
 // banco. Su quella base il trigger del database apre sempre l'opportunità
@@ -257,6 +262,18 @@ const mappaAttivita = Object.fromEntries(
 	const radice = document.querySelector(".gr");
 	if (radice) inizializza(radice);
 
+	// Il QR di un evento punta a /guest-register?utm_source=evento&utm_medium=qr
+	// &utm_campaign=<nome-evento>. Le UTM viaggiano comunque con il lead
+	// (withTracking); qui serve solo a distinguere l'origine.
+	function eDaEvento() {
+		try {
+			const q = new URLSearchParams(location.search);
+			return (q.get("utm_source") || "").trim().toLowerCase() === "evento";
+		} catch (e) {
+			return false;
+		}
+	}
+
 	function inizializza(radice) {
 		// Etichetta e platea di ogni attività, serializzate dal componente
 		// Astro: i testi restano definiti una volta sola in
@@ -356,8 +373,11 @@ const mappaAttivita = Object.fromEntries(
 			return {
 				// La provenienza è il punto di tutta la pagina: da qui il CRM sa
 				// che questa persona era in sede, e il database apre
-				// l'opportunità da assegnare.
-				origine: "walk-in",
+				// l'opportunità da assegnare. Se il link è quello del QR di un
+				// evento (?utm_source=evento) la fonte diventa "evento": stessa
+				// pagina, stesso form, ma il lead non si confonde con chi è
+				// entrato dal banco.
+				origine: eDaEvento() ? "evento" : "walk-in",
 				pagina: location.pathname,
 				cta: "Guest register",
 				// `attivita` resta una: è il campo su cui il CRM instrada la
