@@ -1,5 +1,8 @@
-// Promemoria di un'ora prima, per le visite in sede e le telefonate
+// Promemoria di due ore prima, per le visite in sede e le telefonate
 // prenotate dal sito.
+//
+// Era un'ora prima fino a ottobre 2026: due ore lasciano a chi non può venire
+// il tempo di spostare o annullare, e al club quello di riassegnare il posto.
 //
 // Non è un endpoint pubblico: lo chiama uno schedulatore ogni cinque minuti
 // (vercel.json, sezione "crons") portando un segreto. Vercel manda da sé
@@ -11,7 +14,7 @@
 // promemoria che un indirizzo che chiunque può far partire a raffica.
 //
 // Perché uno schedulatore esterno e non un timer: una funzione serverless
-// vive il tempo della richiesta, non può "aspettare fino a un'ora prima".
+// vive il tempo della richiesta, non può "aspettare fino a due ore prima".
 //
 // Idempotente per costruzione: la riga aggiornata è solo quella che aveva
 // promemoria_inviato_il nullo, quindi due giri ravvicinati non mandano due
@@ -28,7 +31,7 @@ export const prerender = false;
 // bersaglio. La finestra è più ampia dell'intervallo dello schedulatore
 // (5 minuti): se un giro salta, il successivo recupera invece di perdere
 // l'invio per sempre.
-const ANTICIPO_MINUTI = 60;
+const ANTICIPO_MINUTI = 120;
 const FINESTRA_MINUTI = 20;
 
 function json(data: unknown, status: number) {
@@ -36,6 +39,18 @@ function json(data: unknown, status: number) {
 		status,
 		headers: { "Content-Type": "application/json" },
 	});
+}
+
+/**
+ * L'istante di un giorno e un'ora di Roma. Il server è in UTC e Roma è a +1 o
+ * +2 secondo l'ora legale: si legge la data come se fosse UTC e si corregge
+ * dello scarto che Roma ha in quel momento.
+ */
+function istanteRoma(giorno: string, ora: string): Date {
+	const comeUtc = new Date(`${giorno}T${ora}:00Z`);
+	const aRoma = new Date(comeUtc.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
+	const aUtc = new Date(comeUtc.toLocaleString("en-US", { timeZone: "UTC" }));
+	return new Date(comeUtc.getTime() - (aRoma.getTime() - aUtc.getTime()));
 }
 
 function minutiDi(ora: string): number {
@@ -79,7 +94,7 @@ async function esegui(request: Request): Promise<Response> {
 	const { data: righe, error } = await supabase
 		.from("form_contatti")
 		.select(
-			"id, token_gestione, azione, data_scelta, ora_scelta, nome, email, cellulare, attivita_label"
+			"id, token_gestione, azione, data_scelta, ora_scelta, nome, email, cellulare, attivita_label, created_at"
 		)
 		.eq("data_scelta", oggi)
 		.in("azione", ["appuntamento", "telefonata"])
@@ -92,10 +107,18 @@ async function esegui(request: Request): Promise<Response> {
 		return json({ ok: false, errore: "errore_lettura" }, 500);
 	}
 
+	// Chi ha prenotato a ridosso (il tour si prenota con due ore di preavviso)
+	// ha appena ricevuto la conferma: un promemoria a pochi minuti di distanza
+	// sarebbe la stessa email due volte. Fra le due deve passare almeno
+	// un'ora, quindi il promemoria parte solo se la prenotazione è arrivata
+	// più di tre ore prima dell'appuntamento.
 	const daAvvisare = (righe ?? []).filter((r) => {
 		if (!r.ora_scelta) return false;
 		const m = minutiDi(String(r.ora_scelta));
-		return m >= da && m <= a;
+		if (m < da || m > a) return false;
+		const appuntamento = istanteRoma(oggi, String(r.ora_scelta).slice(0, 5));
+		const prenotato = new Date(String(r.created_at));
+		return appuntamento.getTime() - prenotato.getTime() > (ANTICIPO_MINUTI + 60) * 60_000;
 	});
 
 	let inviati = 0;

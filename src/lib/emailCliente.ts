@@ -1,5 +1,5 @@
 // Email che il sito manda a chi compila un form: la conferma di quello che
-// ha appena chiesto e, per gli appuntamenti, il promemoria un'ora prima.
+// ha appena chiesto e, per gli appuntamenti, il promemoria due ore prima.
 //
 // Sono cosa diversa da notificaLead.ts, che avvisa la segreteria: lì basta un
 // testo semplice letto da chi lavora le richieste, qui il messaggio lo legge
@@ -310,13 +310,13 @@ function contenutoPromemoria(d: DatiAppuntamento) {
 	const link = linkGestione(d.token);
 	const oggetto =
 		d.azione === "telefonata"
-			? `Ti chiamiamo fra un'ora${d.ora ? `, alle ${d.ora}` : ""}`
-			: `Ti aspettiamo fra un'ora${d.ora ? `, alle ${d.ora}` : ""}`;
+			? `Ti chiamiamo fra due ore${d.ora ? `, alle ${d.ora}` : ""}`
+			: `Ti aspettiamo fra due ore${d.ora ? `, alle ${d.ora}` : ""}`;
 
 	const html = impagina(
 		"Promemoria",
 		`<p style="margin:0 0 14px;">${esc(saluto(d.nome))}</p>
-		 <p style="margin:0 0 4px;">ti ricordiamo la tua ${esc(tipo)} di oggi, fra circa un'ora.</p>
+		 <p style="margin:0 0 4px;">ti ricordiamo la tua ${esc(tipo)} di oggi, fra circa due ore.</p>
 		 ${riquadro(righeAppuntamento(d))}
 		 ${
 				d.azione === "telefonata"
@@ -332,7 +332,7 @@ function contenutoPromemoria(d: DatiAppuntamento) {
 		.join("\n");
 	const testo = `${saluto(d.nome)}
 
-ti ricordiamo la tua ${tipo} di oggi, fra circa un'ora.
+ti ricordiamo la tua ${tipo} di oggi, fra circa due ore.
 
 ${dettagli}
 
@@ -476,7 +476,7 @@ export async function confermaAlCliente(d: DatiAppuntamento): Promise<boolean> {
 	return invia(d.email, oggetto, html, testo);
 }
 
-/** Promemoria di un'ora prima. */
+/** Promemoria di due ore prima. */
 export async function promemoriaAlCliente(d: DatiAppuntamento): Promise<boolean> {
 	if (!d.email || !d.data) return false;
 	const { oggetto, html, testo } = contenutoPromemoria(d);
