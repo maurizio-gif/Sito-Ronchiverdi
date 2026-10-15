@@ -15,10 +15,11 @@
 //
 // I percorsi senza responsabile non mandano niente, ed è voluto: Abbonamento
 // Club e Family li lavora la segreteria, e avvisare un responsabile di
-// attività sarebbe avvisare la persona sbagliata. Fa eccezione il messaggio
-// libero di quei due percorsi — senza un appuntamento che qualcuno in
-// segreteria prenderà comunque in carico — che va a Carola Porcella (vedi
-// emailMessaggioClubEFamily in src/data/referenti.ts).
+// attività sarebbe avvisare la persona sbagliata. Fa eccezione il «Richiamami»
+// di quei due percorsi (prima il messaggio libero, che ha sostituito) — senza
+// un appuntamento che qualcuno in segreteria prenderà comunque in carico —
+// che va a Carola Porcella (vedi emailMessaggioClubEFamily in
+// src/data/referenti.ts).
 
 import {
 	referentePerLead,
@@ -27,6 +28,7 @@ import {
 	emailMessaggioClubEFamily,
 } from "../data/referenti";
 import { campiLead, campiLeadTesto, nomeCompleto, tipoRichiesta, type CampiLead } from "./campiLead";
+import { AZIONE_RICHIAMO } from "./fasceRichiamo";
 import { bottone, esc, impagina, riquadro } from "./emailLayout";
 
 const ENDPOINT = "https://api.sendgrid.com/v3/mail/send";
@@ -114,11 +116,14 @@ export async function notificaResponsabile(
 		origine: typeof body.origine === "string" ? body.origine : null,
 	});
 
-	// Il messaggio libero di Abbonamento Club e Family: quei due percorsi non
+	// Il «Richiamami» di Abbonamento Club e Family (e il messaggio libero che
+	// ha sostituito, per le richieste arrivate prima): quei due percorsi non
 	// hanno un referente di attività (sopra), ma per quel caso specifico
 	// l'avviso va comunque a una persona precisa.
 	const messaggioClubEFamily =
-		!referente && azione === "messaggio" && attivita ? emailMessaggioClubEFamily[attivita] : null;
+		!referente && (azione === AZIONE_RICHIAMO || azione === "messaggio") && attivita
+			? emailMessaggioClubEFamily[attivita]
+			: null;
 
 	if (!referente && !messaggioClubEFamily) return;
 

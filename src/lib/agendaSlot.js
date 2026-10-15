@@ -49,7 +49,8 @@ export var ORARI_CLUB = {
 // chiamata si fissa per i prossimi giorni, non fra due settimane.
 //
 // La telefonata resta qui pur non essendo più prenotabile dal sito: il modulo
-// contatti offre l'appuntamento in sede o il messaggio, ma le telefonate già
+// contatti offre l'appuntamento in sede o il «Richiamami» (una fascia, non
+// uno slot: non passa da qui), ma le telefonate già
 // fissate vanno ancora spostate: la pagina /appuntamento e l'endpoint che
 // esegue lo spostamento leggono queste regole per sapere quali orari offrire.
 // Togliendola, spostare una chiamata già presa in agenda ricadrebbe sul passo

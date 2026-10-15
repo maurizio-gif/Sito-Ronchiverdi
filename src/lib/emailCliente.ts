@@ -24,6 +24,7 @@ import {
 	impagina,
 	riquadro,
 } from "./emailLayout";
+import { AZIONE_RICHIAMO, FASCE_RICHIAMO, eFasciaRichiamo } from "./fasceRichiamo";
 
 const ENDPOINT = "https://api.sendgrid.com/v3/mail/send";
 
@@ -50,6 +51,8 @@ export type DatiAppuntamento = {
 	attivitaId?: string | null;
 	settore?: string | null;
 	origine?: string | null;
+	/** «Richiamami»: la fascia scelta (vedi src/lib/fasceRichiamo.ts). */
+	fascia?: string | null;
 };
 
 /**
@@ -178,7 +181,7 @@ function saluto(nome: string | null): string {
 	return nome ? `Ciao ${nome},` : "Ciao,";
 }
 
-// ── I quattro messaggi ────────────────────────────────────────────────────
+// ── I messaggi ────────────────────────────────────────────────────────
 
 /**
  * Conferma di una richiesta senza appuntamento.
@@ -226,6 +229,38 @@ Ronchiverdi Sport Club · ${INDIRIZZO_CLUB}
 	const testo = `${saluto(nome)}
 
 grazie per averci scritto: la tua richiesta è arrivata allo staff del club e ti rispondiamo il prima possibile, di solito nel giro di pochi minuti negli orari di segreteria.
+
+Se nel frattempo hai bisogno di noi, ci trovi allo ${TELEFONO_CLUB}.
+
+Ronchiverdi Sport Club · ${INDIRIZZO_CLUB}
+`;
+	return { oggetto, html, testo };
+}
+
+/**
+ * Conferma di un «Richiamami»: ti chiamiamo noi, nella fascia che hai scelto.
+ *
+ * Nessun giorno promesso, perché la persona non l'ha scelto e la consulente
+ * non è legata a una data: la promessa è la fascia, ed è quella che si
+ * ripete. Niente link per spostare o annullare: non c'è un appuntamento.
+ */
+function contenutoConfermaRichiamo(
+	nome: string | null,
+	fascia: string | null | undefined
+): { oggetto: string; html: string; testo: string } {
+	const oggetto = "Ti richiamiamo noi";
+	const f = eFasciaRichiamo(fascia) ? FASCE_RICHIAMO[fascia] : null;
+	const quando = f ? `di ${f.etichetta.toLowerCase()}, fra le ${f.ore.replace(" – ", " e le ")}` : "il prima possibile";
+
+	const html = impagina(
+		"Ti richiamiamo noi",
+		`<p style="margin:0 0 14px;">${esc(saluto(nome))}</p>
+		 <p style="margin:0 0 14px;">grazie per la tua richiesta: è arrivata allo staff del club, e una nostra consulente ti chiamerà <strong style="color:#1c1c18;">${esc(quando)}</strong>.</p>
+		 <p style="margin:0;">Se nel frattempo hai bisogno di noi, ci trovi allo <strong style="color:#1c1c18;">${esc(TELEFONO_CLUB)}</strong>.</p>`
+	);
+	const testo = `${saluto(nome)}
+
+grazie per la tua richiesta: è arrivata allo staff del club, e una nostra consulente ti chiamerà ${quando}.
 
 Se nel frattempo hai bisogno di noi, ci trovi allo ${TELEFONO_CLUB}.
 
@@ -435,7 +470,9 @@ export async function confermaAlCliente(d: DatiAppuntamento): Promise<boolean> {
 	const { oggetto, html, testo } =
 		eAppuntamento && d.data
 			? contenutoConfermaAppuntamento(d)
-			: contenutoConfermaMessaggio(d.nome, referenteDi(d));
+			: d.azione === AZIONE_RICHIAMO
+				? contenutoConfermaRichiamo(d.nome, d.fascia)
+				: contenutoConfermaMessaggio(d.nome, referenteDi(d));
 	return invia(d.email, oggetto, html, testo);
 }
 
