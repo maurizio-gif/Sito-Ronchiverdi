@@ -155,7 +155,7 @@ export async function POST({ request }: { request: Request }) {
 			data_scelta: data,
 			ora_scelta: ora,
 			// Il promemoria riparte da zero: quello dell'orario vecchio non
-			// deve più valere, e il nuovo va mandato un'ora prima del nuovo.
+			// deve più valere, e il nuovo va mandato due ore prima del nuovo.
 			promemoria_inviato_il: null,
 		})
 		.eq("token_gestione", token);

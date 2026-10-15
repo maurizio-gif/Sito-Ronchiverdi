@@ -6,9 +6,10 @@ Cosa riceve chi compila un form sul sito, e cosa serve perché funzioni.
 
 | Quando | Cosa arriva | Da dove parte |
 | --- | --- | --- |
-| Form inviato, percorso "Messaggio" | "Abbiamo ricevuto il tuo messaggio" | `POST /api/lead` |
+| Form inviato, percorso "Richiamami" (Club e Family) | "Ti richiamiamo noi", con la fascia scelta | `POST /api/lead` |
+| Form inviato, percorso "Messaggio" (richieste arrivate prima del Richiamami) | "Abbiamo ricevuto il tuo messaggio" | `POST /api/lead` |
 | Form inviato, visita in sede o telefonata | Conferma con data, ora, luogo e il pulsante **Sposta o annulla** | `POST /api/lead` |
-| Un'ora prima dell'appuntamento | Promemoria con gli stessi dati e lo stesso pulsante | `GET /api/promemoria`, chiamato dal cron |
+| Due ore prima dell'appuntamento | Promemoria con gli stessi dati e lo stesso pulsante | `GET /api/promemoria`, chiamato dal cron |
 | Il cliente sposta l'appuntamento | Conferma del nuovo orario | `POST /api/appuntamento` |
 | Il cliente annulla | Conferma dell'annullamento | `POST /api/appuntamento` |
 
