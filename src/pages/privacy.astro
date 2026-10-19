@@ -12,9 +12,12 @@ import { url } from "../lib/paths";
 //   - src/pages/api/candidatura.ts → campi e curriculum di chi si candida
 //   - src/lib/notificaLead.ts    → avviso email alla segreteria via SendGrid
 //   - src/lib/emailCliente.ts    → conferme e promemoria, senza tracciamento
-//   - APP-RONCHIVERDI, supabase/functions/_shared/voucher-email-testi.ts e
-//     lib/voucher-email.ts → email del voucher con pixel e click tracciati
-//     (sezione #email, linkata dal piede di quelle email)
+//   - APP-RONCHIVERDI, lib/email.ts (opzione `traccia`) → comunicazioni di
+//     servizio con pixel e click tracciati, oggi le email del voucher
+//     (supabase/functions/_shared/voucher-email-testi.ts). La sezione #email
+//     è scritta per categoria, non per singola email: ogni email tracciata
+//     porta in fondo la nota con il link a #email. Tracciare un'email
+//     promozionale non rientra in questa sezione: serve il consenso.
 //   - src/pages/api/track.ts     → dati di navigazione di sessioni e pagine
 //   - src/lib/tracking.client.js → chiavi in sessionStorage/localStorage e consenso
 //   - src/layouts/Layout.astro   → banner cookie CookieYes
@@ -115,7 +118,7 @@ const destinatari = [
 	{
 		nome: "Twilio SendGrid",
 		ruolo:
-			"Invio delle email del sito (avvisi alla segreteria, conferme e promemoria a chi compila i moduli o si candida) e delle email del voucher della visita medica ai soci, con la registrazione di consegna, apertura e clic descritta sopra",
+			"Invio delle email: avvisi alla segreteria, conferme e promemoria a chi compila i moduli o si candida, comunicazioni di servizio ai soci; per le comunicazioni tracciate, anche la registrazione di consegna, apertura e clic descritta sopra",
 		dove: "Stati Uniti",
 	},
 	{
@@ -182,7 +185,7 @@ const conservazione = [
 		quanto: "24 mesi dall'invio, salvo che diventino un rapporto di lavoro o di collaborazione",
 	},
 	{ cosa: "Dati di navigazione (sessioni e pagine viste)", quanto: "26 mesi" },
-	{ cosa: "Consegna, apertura e clic delle email del voucher", quanto: "24 mesi dall'invio" },
+	{ cosa: "Consegna, apertura e clic delle comunicazioni di servizio tracciate", quanto: "24 mesi dall'invio" },
 	{ cosa: "Prova del consenso ai cookie", quanto: "12 mesi" },
 	{ cosa: "Log tecnici del server", quanto: "Il tempo previsto dal fornitore di hosting" },
 ];
@@ -210,7 +213,7 @@ const conservazione = [
 			<li>Non vendiamo i tuoi dati e non li cediamo a terzi per finalità commerciali loro.</li>
 			<li>Le comunicazioni promozionali partono solo se hai spuntato la casella facoltativa, e puoi disdirle quando vuoi.</li>
 			<li>I cookie non necessari partono solo dopo il tuo consenso sul banner, che puoi cambiare in qualsiasi momento.</li>
-			<li>Solo le email del voucher della visita medica registrano apertura e clic, per avere conferma che ti siano arrivate; le altre email non sono tracciate.</li>
+			<li>Registriamo apertura e clic solo di alcune comunicazioni di servizio importanti, per avere conferma che ti siano arrivate, e lo scriviamo in fondo a ciascuna di quelle email.</li>
 			<li>Le regole del Club — iscrizione, abbonamenti, uso degli spazi — stanno nei <a href={url("/termini-e-condizioni")}>Termini e Condizioni</a>.</li>
 		</ul>
 	</aside>
@@ -392,14 +395,12 @@ const conservazione = [
 	<section class="legal-section" id="email">
 		<h2>Tracciamento delle email</h2>
 		<p>
-			Le email che ti mandiamo dal sito — conferme, promemoria e risposte ai
-			moduli — <strong>non contengono strumenti di tracciamento</strong>: non
-			sappiamo se le apri né su quali link fai clic.
-		</p>
-		<p>
-			Fanno eccezione le <strong>email del voucher della visita medica</strong>{" "}
-			che mandiamo ai soci: quella con il codice e quella che avvisa che il
-			codice è stato utilizzato. In queste email:
+			Alcune <strong>comunicazioni di servizio</strong> che ti mandiamo sono
+			importanti per te: contengono un codice personale, una scadenza,
+			un'istruzione da seguire o un avviso da non perdere. Oggi, per esempio,
+			sono le email del voucher della visita medica inclusa nell'abbonamento:
+			quella con il codice e quella che avvisa che il codice è stato
+			utilizzato. In queste comunicazioni:
 		</p>
 		<ul>
 			<li>
@@ -409,10 +410,16 @@ const conservazione = [
 			<li>i link passano dal nostro fornitore di invio, che registra il clic prima di portarti alla pagina.</li>
 		</ul>
 		<p>
+			Le riconosci perché <strong>lo scriviamo in fondo a ciascuna</strong>,
+			con un link a questa pagina. Le email senza quella nota — conferme,
+			promemoria e risposte ai moduli del sito comprese — non contengono
+			strumenti di tracciamento.
+		</p>
+		<p>
 			Lo facciamo <strong>solo per avere conferma che la comunicazione ti sia
-			arrivata e l'abbia vista</strong>: il codice è personale, vale una volta
-			sola e ha una scadenza, e la seconda email serve ad accorgersi subito di
-			un uso che non hai fatto tu. Per ogni email conserviamo la data e l'ora di
+			arrivata e l'abbia vista</strong>, così da non lasciarti senza
+			un'informazione che ti serve e da poterti ricontattare se non è arrivata.
+			Per ogni email conserviamo la data e l'ora di
 			consegna, di apertura e di clic, e quale link hai aperto.{" "}
 			<strong>Non conserviamo il tuo indirizzo IP né il tipo di dispositivo o
 			di programma di posta</strong>, e non usiamo questi dati per comunicazioni
@@ -420,7 +427,7 @@ const conservazione = [
 		</p>
 		<div class="legal-cards">
 			<article class="legal-card">
-				<h3>Email del voucher della visita medica</h3>
+				<h3>Comunicazioni di servizio tracciate</h3>
 				<dl>
 					<div>
 						<dt>Base giuridica</dt>
