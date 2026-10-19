@@ -50,6 +50,11 @@ export async function notificaLead(body: CampiLead): Promise<void> {
 				// ricopiarne l'indirizzo a mano.
 				...(emailPersona ? { reply_to: { email: emailPersona } } : {}),
 				subject: `${tipo} — ${chi}`,
+				// Niente tracciamento, come in emailCliente.ts: è un avviso interno.
+				tracking_settings: {
+					open_tracking: { enable: false },
+					click_tracking: { enable: false, enable_text: false },
+				},
 				content: [{ type: "text/plain", value: `${tipo}\n\n${corpo}\n` }],
 			}),
 		});
