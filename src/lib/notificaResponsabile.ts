@@ -172,6 +172,11 @@ export async function notificaResponsabile(
 				// ricopiarne l'indirizzo a mano: è il gesto più probabile.
 				...(emailPersona ? { reply_to: { email: emailPersona } } : {}),
 				subject: `${TITOLO} — ${tipo} · ${chi}`,
+				// Niente tracciamento, come in emailCliente.ts: è un avviso interno.
+				tracking_settings: {
+					open_tracking: { enable: false },
+					click_tracking: { enable: false, enable_text: false },
+				},
 				// Prima il testo e poi l'HTML: SendGrid vuole le parti in
 				// ordine crescente di ricchezza, e chi legge in chiaro riceve
 				// comunque tutti i dati.

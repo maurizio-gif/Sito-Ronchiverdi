@@ -436,6 +436,15 @@ async function invia(a: string, oggetto: string, html: string, testo: string): P
 				from: { email: MITTENTE_EMAIL, name: MITTENTE_NOME },
 				reply_to: { email: RISPOSTE_A },
 				subject: oggetto,
+				// Niente pixel di apertura né link riscritti, qualunque cosa dica
+				// l'impostazione generale dell'account SendGrid: le Linee guida del
+				// Garante sui tracking pixel (provv. 284/2026) li ammettono solo con
+				// un'informativa data prima, che queste email non hanno. Per
+				// accenderli serve prima quella nota nel testo.
+				tracking_settings: {
+					open_tracking: { enable: false },
+					click_tracking: { enable: false, enable_text: false },
+				},
 				content: [
 					// L'ordine conta per la specifica MIME: prima il testo, poi l'HTML.
 					{ type: "text/plain", value: testo },
