@@ -74,18 +74,23 @@ const etichetta = (r: RigaListino) =>
 						{r.dettaglio && <span class="listino__periodo">{r.dettaglio}</span>}
 						{r.nota && <span class="listino__dettaglio">{r.nota}</span>}
 					</td>
+					{/* Il nome del link per gli screen reader è il testo che si vede,
+					    più corso e "nuova scheda" in testo nascosto. Un aria-label al
+					    posto del testo non conterrebbe parola per parola quello che si
+					    legge, e chi usa i comandi vocali dice quello che legge
+					    (WCAG 2.5.3). */}
 					<td data-etichetta="Non soci">
 						<a
 							class="prezzo-box"
 							href={scheda(r.idNonSoci)}
 							target="_blank"
 							rel="noopener"
-							aria-label={`Iscriviti a ${etichetta(r)}, listino non soci, ${euro(r.prezzoNonSoci)}`}
 						>
-							<span class="prezzo-box__etichetta">Non soci</span>
-							<span class="prezzo-box__cifra">{euro(r.prezzoNonSoci)}</span>
+							<span class="prezzo-box__etichetta">Non soci</span>{" "}
+							<span class="prezzo-box__cifra">{euro(r.prezzoNonSoci)}</span>{" "}
 							<span class="prezzo-box__cta">
 								Iscriviti
+								<span class="sr-only">a {etichetta(r)} (si apre in una nuova scheda)</span>
 								<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
 							</span>
 						</a>
@@ -96,12 +101,12 @@ const etichetta = (r: RigaListino) =>
 							href={scheda(r.idSoci)}
 							target="_blank"
 							rel="noopener"
-							aria-label={`Iscriviti a ${etichetta(r)}, listino soci del club, ${euro(r.prezzoSoci)}`}
 						>
-							<span class="prezzo-box__etichetta">Soci del club</span>
-							<span class="prezzo-box__cifra">{euro(r.prezzoSoci)}</span>
+							<span class="prezzo-box__etichetta">Soci del club</span>{" "}
+							<span class="prezzo-box__cifra">{euro(r.prezzoSoci)}</span>{" "}
 							<span class="prezzo-box__cta">
 								Iscriviti
+								<span class="sr-only">a {etichetta(r)} (si apre in una nuova scheda)</span>
 								<svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10L10 4M10 4H5M10 4v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
 							</span>
 						</a>

@@ -685,7 +685,7 @@ function risolvi(html: string): string {
 								</ul>
 							)}
 							{c.tabella && (
-								<div class="legal-table-wrap">
+								<div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabella, scorre in orizzontale">
 									<table class="legal-table">
 										<thead>
 											<tr>{c.tabella.intestazioni.map((t) => <th scope="col">{t}</th>)}</tr>

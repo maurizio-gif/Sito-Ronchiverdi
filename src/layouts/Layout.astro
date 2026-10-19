@@ -113,8 +113,13 @@ const structuredData = {
 		{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 	</head>
 	<body>
+		{/* Primo elemento raggiungibile col Tab: chi naviga da tastiera o con
+		    lo screen reader salta la barra e arriva dritto ai contenuti. */}
+		<a class="salta-al-contenuto" href="#contenuto">Salta al contenuto</a>
 		{!senzaNavigazione && <Nav />}
-		<slot />
+		<main id="contenuto" tabindex="-1">
+			<slot />
+		</main>
 		{!senzaNavigazione && <Footer />}
 		{/* Le due modali servono i pulsanti della barra, del footer e delle
 		    pagine: senza navigazione non c'è niente che le apra, e sarebbero

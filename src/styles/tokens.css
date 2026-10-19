@@ -15,10 +15,10 @@
   --border-dark: rgba(246, 239, 222, 0.14);
 
   /* Accento (oro/bronzo) */
-  --accent: #8b6c14; /* su sfondi chiari */
+  --accent: #765c10; /* su sfondi chiari: almeno 4,5:1 anche sulla sabbia (--bg-alt), soglia WCAG AA */
   --accent-on-dark: #c8991f; /* variante più chiara, su sfondi neri */
-  --accent-hover: #6e5610;
-  --accent-tint: rgba(139, 108, 20, 0.1); /* badge, sfondo leggero su chiaro */
+  --accent-hover: #5e490d;
+  --accent-tint: rgba(118, 92, 16, 0.1); /* badge, sfondo leggero su chiaro */
 
   /* Tipografia */
   --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif; /* corpo del testo, UI, titoli secondari */

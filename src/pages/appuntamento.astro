@@ -52,7 +52,7 @@ const quando = appuntamento?.data
 	description="Sposta o annulla il tuo appuntamento al Ronchiverdi Sport Club."
 	noindex={true}
 >
-	<main class="app-page">
+	<div class="app-page">
 		{problema === "link" && (
 			<section class="app-card app-card--avviso">
 				<span class="eyebrow">Appuntamento</span>
@@ -174,7 +174,7 @@ const quando = appuntamento?.data
 				</p>
 			</section>
 		)}
-	</main>
+	</div>
 
 	<script>
 		import { initGestioneAppuntamento } from "../lib/gestioneAppuntamento.client.js";

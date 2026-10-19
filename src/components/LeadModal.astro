@@ -411,10 +411,12 @@ import { referentiPerClient } from "../data/referenti";
 		flex-shrink: 0;
 		margin: 0;
 	}
+	/* Testo nella variante scura dell'oro: sulla tinta della scelta attiva
+	   l'oro normale resta sotto 4,5:1. */
 	.lf__chip:has(input:checked) {
 		border-color: var(--accent);
 		background: var(--accent-tint);
-		color: var(--accent);
+		color: var(--accent-hover);
 	}
 
 	/* ── Riga azioni ─────────────────────────────────────────────────── */
@@ -891,10 +893,13 @@ import { referentiPerClient } from "../data/referenti";
 		width: 100%;
 		transition: border-color 0.16s ease;
 	}
+	/* Il fuoco ispessisce il bordo oltre a colorarlo: il solo cambio di
+	   colore su 1px è troppo poco per vedere dove si sta scrivendo. */
 	.lf__field input:focus,
 	.lf__field textarea:focus {
 		outline: none;
 		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
 	}
 	.lf__field textarea {
 		resize: vertical;
@@ -924,6 +929,7 @@ import { referentiPerClient } from "../data/referenti";
 	.lf__field > select:focus {
 		outline: none;
 		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
 	}
 	.lf__input--error {
 		border-color: #a33327 !important;
@@ -956,6 +962,7 @@ import { referentiPerClient } from "../data/referenti";
 	.lf__tel-prefisso:focus {
 		outline: none;
 		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
 		position: relative;
 		z-index: 1;
 	}
@@ -1005,7 +1012,6 @@ import { referentiPerClient } from "../data/referenti";
 	}
 	.lf__consent-item span em {
 		font-style: normal;
-		opacity: 0.75;
 	}
 
 	/* ── Schermata di conferma ─────────────────────────────────────────── */

@@ -107,14 +107,14 @@ const { eyebrow, title, lede, items } = Astro.props;
 	.fact-card p {
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		color: var(--text-on-dark);
-		opacity: 0.72;
+		/* Attenuato col colore e non con l'opacità: l'opacità del paragrafo
+		   si somma a quella dei figli e spegneva anche l'oro dei <strong>. */
+		color: rgba(246, 239, 222, 0.72);
 		line-height: 1.65;
 		margin: 0;
 	}
 	.fact-card p :global(strong) {
 		color: var(--accent-on-dark);
-		opacity: 1;
 	}
 	@media (max-width: 760px), (orientation: portrait) {
 		.facts-grid {

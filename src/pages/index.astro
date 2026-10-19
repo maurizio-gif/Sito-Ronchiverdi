@@ -79,6 +79,7 @@ const clubGallery = [
 		    Il file deve restare in fast start, altrimenti da telefono il video
 		    resta fermo sull'immagine: ci pensa scripts/prepara-video.mjs. */}
 		<video
+			id="hero-video"
 			class="hero-bg hero-bg--video"
 			src={url("videos/hero.mp4")}
 			aria-hidden="true"
@@ -87,6 +88,14 @@ const clubGallery = [
 			loop
 			playsinline
 		></video>
+		{/* Un video che si muove da solo per più di cinque secondi deve
+		    potersi fermare (WCAG 2.2.2): il pulsante sta nell'angolo, sopra
+		    velo e alone. Il comportamento è nello script dei due video più
+		    sotto. */}
+		<button type="button" class="video-pausa video-pausa--hero" data-video-pausa="hero-video" aria-label="Metti in pausa il video">
+			<svg class="video-pausa__pausa" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="2" width="2.6" height="10" rx="0.6" fill="currentColor" /><rect x="8.4" y="2" width="2.6" height="10" rx="0.6" fill="currentColor" /></svg>
+			<svg class="video-pausa__play" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.9 1.7a.6.6 0 0 0-.9.5Z" fill="currentColor" /></svg>
+		</button>
 		<div class="hero-scrim"></div>
 		<div class="hero-spot"></div>
 		<div class="hero-content">
@@ -101,6 +110,43 @@ const clubGallery = [
 		</div>
 	</header>
 
+	<script>
+		// Pulsanti pausa/riproduci dei due video della home. Chi ha chiesto
+		// al dispositivo di ridurre le animazioni li trova già fermi, sulla
+		// foto: il video parte solo se lo chiede lui. `data-fermato` è il
+		// segnale che lo script dell'hero legge per non farli ripartire.
+		const ridurreMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		document.querySelectorAll("[data-video-pausa]").forEach((btn) => {
+			const video = document.getElementById(btn.dataset.videoPausa);
+			if (!video) return;
+
+			const aggiorna = () => {
+				const fermo = Boolean(video.dataset.fermato);
+				btn.classList.toggle("is-fermo", fermo);
+				btn.setAttribute("aria-label", fermo ? "Riproduci il video" : "Metti in pausa il video");
+			};
+
+			if (ridurreMovimento) {
+				video.dataset.fermato = "1";
+				video.removeAttribute("autoplay");
+				video.pause();
+			}
+			aggiorna();
+
+			btn.addEventListener("click", () => {
+				if (video.dataset.fermato) {
+					delete video.dataset.fermato;
+					video.play().catch(() => {});
+				} else {
+					video.dataset.fermato = "1";
+					video.pause();
+				}
+				aggiorna();
+			});
+		});
+	</script>
+
 	{/* L'autoplay è un permesso, non un diritto: il Risparmio energetico di
 	    iOS e il risparmio dati di Android lo negano, e in quel caso la Hero
 	    resta su un fermo immagine e sembra rotta. Il permesso però arriva al
@@ -114,7 +160,12 @@ const clubGallery = [
 
 		if (heroVideo) {
 			const gesti = ["pointerdown", "touchstart", "keydown", "scroll"];
-			const riprova = () => heroVideo.play().catch(() => {});
+			// Chi ha fermato il video col pulsante l'ha fermato: il prossimo
+			// gesto non è un permesso a ripartire.
+			const riprova = () => {
+				if (heroVideo.dataset.fermato) return;
+				heroVideo.play().catch(() => {});
+			};
 
 			// Riagganciare la stessa funzione non duplica l'ascoltatore, quindi
 			// arma e disarma si possono richiamare senza tenere il conto.
@@ -137,10 +188,10 @@ const clubGallery = [
 			// fermo sulla foto con il video che gira sotto, invisibile.
 			if (!heroVideo.paused && heroVideo.readyState >= 3) scopri();
 			heroVideo.addEventListener("pause", () => {
-				if (!heroVideo.ended) arma();
+				if (!heroVideo.ended && !heroVideo.dataset.fermato) arma();
 			});
 
-			heroVideo.play().catch(arma);
+			if (!heroVideo.dataset.fermato) heroVideo.play().catch(arma);
 		}
 	</script>
 
@@ -170,6 +221,7 @@ const clubGallery = [
 				    il primo fotogramma, così il riquadro non resta nero nei
 				    decimi prima che il video parta. */}
 				<video
+					id="chi-siamo-video"
 					class="chi-siamo-img chi-siamo-img--main"
 					src={url("videos/chi-siamo.mp4")}
 					poster={url("images/chi-siamo-video-poster.jpg")}
@@ -180,6 +232,10 @@ const clubGallery = [
 					playsinline
 					preload="metadata"
 				></video>
+				<button type="button" class="video-pausa video-pausa--chi-siamo" data-video-pausa="chi-siamo-video" aria-label="Metti in pausa il video">
+					<svg class="video-pausa__pausa" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="2" width="2.6" height="10" rx="0.6" fill="currentColor" /><rect x="8.4" y="2" width="2.6" height="10" rx="0.6" fill="currentColor" /></svg>
+					<svg class="video-pausa__play" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.9 1.7a.6.6 0 0 0-.9.5Z" fill="currentColor" /></svg>
+				</button>
 				<picture>
 					<FontiImmagine src="images/chi-siamo-2.jpg" />
 					<img class="chi-siamo-img chi-siamo-img--accent" src={url("images/chi-siamo-2.jpg")} alt="La piscina esterna di Ronchiverdi con lettini e ombrelloni, circondata dal verde" />
@@ -650,6 +706,43 @@ const clubGallery = [
 			.hero-bg--video {
 				transition: none;
 			}
+		}
+		.video-pausa {
+			position: absolute;
+			z-index: 2;
+			display: grid;
+			place-items: center;
+			width: 2.5rem;
+			height: 2.5rem;
+			padding: 0;
+			border: 1px solid rgba(246, 239, 222, 0.5);
+			border-radius: 50%;
+			background: rgba(28, 28, 24, 0.55);
+			color: var(--text-on-dark);
+			cursor: pointer;
+			transition: background 0.2s ease;
+		}
+		.video-pausa:hover {
+			background: rgba(28, 28, 24, 0.8);
+		}
+		.video-pausa:focus-visible {
+			outline: 2px solid var(--text-on-dark);
+			outline-offset: 2px;
+		}
+		.video-pausa__play,
+		.video-pausa.is-fermo .video-pausa__pausa {
+			display: none;
+		}
+		.video-pausa.is-fermo .video-pausa__play {
+			display: block;
+		}
+		.video-pausa--hero {
+			right: 1.25rem;
+			bottom: 1.25rem;
+		}
+		.video-pausa--chi-siamo {
+			top: 0.75rem;
+			left: 0.75rem;
 		}
 		.hero-scrim {
 			position: absolute;

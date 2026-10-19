@@ -1,0 +1,178 @@
+---
+import Legale from "../layouts/Legale.astro";
+import { url } from "../lib/paths";
+
+// Dichiarazione di accessibilità del sito, con le informazioni che il
+// D.Lgs. 82/2022 (recepimento dell'European Accessibility Act, Dir. UE
+// 2019/882) chiede a chi offre servizi ai consumatori: come il servizio
+// soddisfa i requisiti, cosa non è ancora accessibile, come segnalarlo.
+//
+// Come la privacy, descrive il sito com'è davvero. La parte che invecchia è
+// la sezione #stato: va rivista a ogni verifica (almeno una volta l'anno) e
+// a ogni intervento importante sul sito, aggiornando la data qui sotto e il
+// metodo in #valutazione. Le correzioni di ottobre 2026 sono nel commit che
+// ha introdotto questa pagina.
+//
+// DA CONFERMARE CON IL CLUB PRIMA DEL GO-LIVE:
+//   - il recapito per le segnalazioni (oggi info@ronchiverdi.it) e il tempo
+//     di risposta promesso in #segnalazioni;
+//   - chiedere a TeamSystem la dichiarazione di accessibilità del negozio
+//     InForYou, e linkarla in #non-accessibili quando arriva;
+//   - con il consulente legale, il riferimento ad AgID come autorità a cui
+//     rivolgersi in #reclamo (AgID vigila sui servizi coperti dal decreto;
+//     le segnalazioni passano dal Difensore civico per il digitale).
+
+const indice = [
+	{ href: "#stato", label: "Stato di conformità" },
+	{ href: "#non-accessibili", label: "Cosa non è ancora accessibile" },
+	{ href: "#come", label: "Come è fatto il sito" },
+	{ href: "#valutazione", label: "Come l'abbiamo verificato" },
+	{ href: "#segnalazioni", label: "Segnalare un problema" },
+	{ href: "#reclamo", label: "Se la risposta non basta" },
+];
+---
+
+<Legale
+	title="Dichiarazione di accessibilità — Ronchiverdi Sport Club Torino"
+	description="Quanto è accessibile il sito di Ronchiverdi Sport Club, cosa non lo è ancora, come lo abbiamo verificato e come segnalarci un problema."
+	eyebrow="Dichiarazione di accessibilità"
+	titolo="Un sito per tutti,"
+	titoloAccento="anche da tastiera"
+	aggiornamento="2026-10-19"
+	indice={indice}
+>
+	<Fragment slot="lede">
+		Vogliamo che informazioni, orari, prezzi e moduli del club siano usabili da
+		chiunque, anche con un lettore di schermo, con la sola tastiera o con il
+		testo ingrandito. Qui diciamo a che punto siamo, senza giri di parole.
+	</Fragment>
+
+	<aside class="legal-summary" slot="sintesi">
+		<p class="legal-summary__title">In sintesi</p>
+		<ul>
+			<li>Il sito è <strong>parzialmente conforme</strong> alle WCAG 2.1 livello AA: le pagine del club rispettano i criteri, alcuni servizi di terzi no o non li abbiamo potuti verificare.</li>
+			<li>Gli acquisti e le iscrizioni online si concludono sul negozio InForYou di TeamSystem, che non gestiamo noi.</li>
+			<li>Se qualcosa non funziona per te, scrivici o chiamaci: ti aiutiamo per un'altra strada e correggiamo il sito.</li>
+		</ul>
+	</aside>
+
+	<section class="legal-section" id="stato">
+		<h2>Stato di conformità</h2>
+		<p>
+			Questa dichiarazione riguarda il sito <strong>ronchiverdi.it</strong> di
+			Ronchiverdi Sport Club S.S.D. a r.l., sede operativa in Corso Moncalieri
+			466/16, 10133 Torino, P. IVA e C.F. 11173030013.
+		</p>
+		<p>
+			Il riferimento è la norma europea <strong>UNI CEI EN 301 549</strong>, che
+			per i siti web rimanda alle Web Content Accessibility Guidelines
+			(<strong>WCAG</strong>) <strong>2.1, livello AA</strong>. Il sito è{" "}
+			<strong>parzialmente conforme</strong>: le pagine e i moduli del club
+			rispettano i criteri, con le eccezioni elencate nella sezione successiva,
+			che riguardano soprattutto servizi forniti da terzi.
+		</p>
+	</section>
+
+	<section class="legal-section" id="non-accessibili">
+		<h2>Cosa non è ancora accessibile</h2>
+		<h3>Servizi di terzi</h3>
+		<ul>
+			<li>
+				<strong>Negozio online InForYou (TeamSystem).</strong> I pulsanti
+				"Iscriviti" dei listini aprono il negozio del gestionale del club, dove si
+				conclude l'acquisto. È un servizio del fornitore: non possiamo
+				modificarlo e non ne abbiamo verificato l'accessibilità. Se non riesci a
+				completare un acquisto, l'iscrizione si fa anche in segreteria o per
+				telefono.
+			</li>
+			<li>
+				<strong>Banner dei cookie (CookieYes).</strong> È fornito da un servizio
+				esterno; lo usiamo nella configurazione standard e non ne abbiamo
+				verificato a fondo il comportamento con i lettori di schermo.
+			</li>
+			<li>
+				<strong>Mappa di Google incorporata nel piè di pagina.</strong> La mappa
+				in sé non è navigabile da tastiera in modo completo. Sotto c'è sempre
+				l'indirizzo in chiaro e il link "Apri in Maps".
+			</li>
+		</ul>
+		<h3>Documenti</h3>
+		<ul>
+			<li>
+				I <strong>documenti PDF</strong> scaricabili, come la nomina del
+				responsabile Safeguarding, non sono stati preparati come PDF accessibili
+				e potrebbero non essere letti correttamente da un lettore di schermo. Su
+				richiesta te ne mandiamo il contenuto in un formato accessibile.
+			</li>
+		</ul>
+		<h3>Limiti della verifica</h3>
+		<ul>
+			<li>
+				Non abbiamo ancora provato il sito con utenti che usano tecnologie
+				assistive. Lo faremo alla prossima revisione di questa dichiarazione.
+			</li>
+		</ul>
+	</section>
+
+	<section class="legal-section" id="come">
+		<h2>Come è fatto il sito</h2>
+		<p>Le pagine del club sono costruite per funzionare in questi modi:</p>
+		<ul>
+			<li><strong>Tastiera.</strong> Tutto si usa con la sola tastiera; il primo Tab porta a "Salta al contenuto", e l'elemento attivo è sempre evidenziato.</li>
+			<li><strong>Lettori di schermo.</strong> Ogni pagina ha titoli per orientarsi, regioni riconoscibili (navigazione, contenuto, piè di pagina) e testi alternativi per le immagini che dicono qualcosa.</li>
+			<li><strong>Moduli.</strong> Ogni campo ha la sua etichetta, i campi obbligatori sono dichiarati anche ai lettori di schermo, e gli errori vengono annunciati e riportano il cursore sul campo da correggere.</li>
+			<li><strong>Finestre.</strong> Le schede che si aprono sopra la pagina (contatti, area riservata, dettaglio delle lezioni) prendono il fuoco, si chiudono con Esc e lo restituiscono al pulsante da cui sono partite.</li>
+			<li><strong>Leggibilità.</strong> I testi hanno un contrasto di almeno 4,5:1 sullo sfondo, e il sito resta usabile con il testo ingrandito al 200% e su schermi stretti.</li>
+			<li><strong>Movimento.</strong> I video che partono da soli hanno un pulsante per fermarli. Se nel tuo dispositivo hai chiesto di ridurre le animazioni, il sito le spegne e i video restano fermi finché non li avvii tu.</li>
+		</ul>
+	</section>
+
+	<section class="legal-section" id="valutazione">
+		<h2>Come l'abbiamo verificato</h2>
+		<p>
+			Questa dichiarazione è stata redatta il <strong>19 ottobre 2026</strong>{" "}
+			sulla base di un'<strong>autovalutazione</strong> fatta da chi sviluppa il
+			sito:
+		</p>
+		<ul>
+			<li>verifica automatica di tutte le pagine del sito con lo strumento axe-core, sui criteri WCAG 2.1 e 2.2 di livello A e AA;</li>
+			<li>controllo manuale della navigazione da tastiera, dei moduli di contatto e iscrizione e delle finestre di dialogo;</li>
+			<li>correzione dei problemi trovati, e nuova verifica automatica dopo le correzioni.</li>
+		</ul>
+		<p>
+			La rivediamo almeno una volta l'anno e ogni volta che il sito cambia in
+			modo importante.
+		</p>
+	</section>
+
+	<section class="legal-section" id="segnalazioni">
+		<h2>Segnalare un problema o chiedere un'alternativa</h2>
+		<p>
+			Se una parte del sito non è accessibile per te, o se ti serve un contenuto
+			in un altro formato, scrivici: ti diamo l'informazione o completiamo la
+			richiesta per un'altra strada, e correggiamo il sito. Indica la pagina e
+			cosa stavi cercando di fare.
+		</p>
+		<p class="legal-contatti">
+			<span>Email: <a href="mailto:info@ronchiverdi.it?subject=Accessibilit%C3%A0%20del%20sito">info@ronchiverdi.it</a></span>
+			<span>Telefono: <a href="tel:+390116612146">011 6612146</a></span>
+			<span>In segreteria: Corso Moncalieri 466/16, 10133 Torino</span>
+		</p>
+		<p>Rispondiamo entro 30 giorni, di solito molto prima.</p>
+	</section>
+
+	<section class="legal-section" id="reclamo">
+		<h2>Se la risposta non basta</h2>
+		<p>
+			Se non ricevi risposta, o la risposta non è soddisfacente, puoi rivolgerti
+			all'<strong>Agenzia per l'Italia Digitale (AgID)</strong>, che vigila sul
+			rispetto degli obblighi di accessibilità dei servizi previsti dal
+			D.Lgs. 82/2022 —{" "}
+			<a href="https://www.agid.gov.it/it/accessibilita" target="_blank" rel="noopener">agid.gov.it/accessibilita</a>.
+		</p>
+		<p>
+			Per come trattiamo i dati che ci mandi con una segnalazione vale la{" "}
+			<a href={url("/privacy")}>Privacy Policy</a>.
+		</p>
+	</section>
+</Legale>
