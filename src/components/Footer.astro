@@ -49,6 +49,7 @@ const legalLinks = [
 	// /regolamento ci reindirizza (vedi astro.config.mjs).
 	{ href: url("/termini-e-condizioni"), label: "Termini e Condizioni" },
 	{ href: url("/privacy"), label: "Privacy" },
+	{ href: url("/accessibilita"), label: "Accessibilità" },
 	// La nomina del Safeguarding è il verbale d'assemblea in PDF, non una
 	// pagina: si apre in una scheda nuova come tutti i documenti, così chi lo
 	// legge non perde il sito. "Codice di Condotta" è stato tolto perché non
@@ -676,7 +677,8 @@ const enti = [
 		font-size: var(--text-2xs);
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
-		color: rgba(246, 239, 222, 0.4);
+		/* Sotto 0.5 il testo scende sotto 4,5:1 sul nero del footer (soglia WCAG AA). */
+		color: rgba(246, 239, 222, 0.6);
 	}
 	/* Il logo è più chiaro del testo che lo introduce: la firma è un credito,
 	   non un richiamo, e a piena opacità tirerebbe l'occhio via dai dati del

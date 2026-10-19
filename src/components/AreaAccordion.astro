@@ -360,22 +360,31 @@ const { items, open = 0, equipmentLabel = "Scopri i macchinari" } = Astro.props;
 		position: absolute;
 		left: 0;
 		right: 0;
-		bottom: 0.9rem;
+		bottom: 0.4rem;
 		display: flex;
 		justify-content: center;
-		gap: 0.4rem;
 	}
+	/* Il pulsante è un quadrato di 24px (area minima per il tocco, WCAG
+	   2.5.8); il pallino che si vede è disegnato dentro, più piccolo. */
 	.slideshow__dot {
+		display: grid;
+		place-items: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+	}
+	.slideshow__dot::before {
+		content: "";
 		width: 0.5rem;
 		height: 0.5rem;
-		padding: 0;
 		border-radius: 50%;
-		border: none;
 		background: rgba(246, 239, 222, 0.45);
-		cursor: pointer;
 		transition: background 0.25s ease, transform 0.25s ease;
 	}
-	.slideshow__dot.is-active {
+	.slideshow__dot.is-active::before {
 		background: var(--accent-on-dark);
 		transform: scale(1.25);
 	}

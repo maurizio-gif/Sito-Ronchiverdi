@@ -100,15 +100,15 @@ const faq = faqDiPagina("chinesis");
 			<div class="lf__grid">
 				<div class="lf__field">
 					<label for="cf-nome">Nome <span aria-hidden="true">*</span></label>
-					<input id="cf-nome" name="nome" type="text" autocomplete="given-name" />
+					<input id="cf-nome" aria-required="true" name="nome" type="text" autocomplete="given-name" />
 				</div>
 				<div class="lf__field">
 					<label for="cf-cognome">Cognome <span aria-hidden="true">*</span></label>
-					<input id="cf-cognome" name="cognome" type="text" autocomplete="family-name" />
+					<input id="cf-cognome" aria-required="true" name="cognome" type="text" autocomplete="family-name" />
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="cf-email">Email <span aria-hidden="true">*</span></label>
-					<input id="cf-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+					<input id="cf-email" aria-required="true" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="cf-cellulare">Cellulare <span aria-hidden="true">*</span></label>
@@ -118,7 +118,7 @@ const faq = faqDiPagina("chinesis");
 								<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 							))}
 						</select>
-						<input id="cf-cellulare" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+						<input id="cf-cellulare" aria-required="true" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 					</div>
 				</div>
 				<div class="lf__field lf__field--full">

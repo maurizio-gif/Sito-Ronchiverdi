@@ -199,15 +199,15 @@ const { prefix } = Astro.props;
 	<div class="lf__grid">
 		<div class="lf__field">
 			<label for={`${prefix}-dy-gen-nome`}>Nome del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-gen-nome`} type="text" autocomplete="given-name" />
+			<input id={`${prefix}-dy-gen-nome`} aria-required="true" type="text" autocomplete="given-name" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dy-gen-cognome`}>Cognome del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-gen-cognome`} type="text" autocomplete="family-name" />
+			<input id={`${prefix}-dy-gen-cognome`} aria-required="true" type="text" autocomplete="family-name" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dy-gen-email`}>Email del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-gen-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+			<input id={`${prefix}-dy-gen-email`} aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dy-gen-cellulare`}>Cellulare del genitore <span aria-hidden="true">*</span></label>
@@ -217,20 +217,20 @@ const { prefix } = Astro.props;
 						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 					))}
 				</select>
-				<input id={`${prefix}-dy-gen-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+				<input id={`${prefix}-dy-gen-cellulare`} aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 			</div>
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dy-bam-nome`}>Nome del bambino/a <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-bam-nome`} type="text" />
+			<input id={`${prefix}-dy-bam-nome`} aria-required="true" type="text" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dy-bam-cognome`}>Cognome del bambino/a <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-bam-cognome`} type="text" />
+			<input id={`${prefix}-dy-bam-cognome`} aria-required="true" type="text" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dy-bam-nascita`}>Data di nascita del bambino/a <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dy-bam-nascita`} type="date" />
+			<input id={`${prefix}-dy-bam-nascita`} aria-required="true" type="date" />
 		</div>
 	</div>
 
@@ -269,15 +269,15 @@ const { prefix } = Astro.props;
 		<p class="lf__group-label">Atleta</p>
 		<div class="lf__field">
 			<label for={`${prefix}-dc-atl-nome`}>Nome dell'atleta <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-atl-nome`} type="text" />
+			<input id={`${prefix}-dc-atl-nome`} aria-required="true" type="text" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dc-atl-cognome`}>Cognome dell'atleta <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-atl-cognome`} type="text" />
+			<input id={`${prefix}-dc-atl-cognome`} aria-required="true" type="text" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dc-atl-nascita`}>Data di nascita dell'atleta <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-atl-nascita`} type="date" />
+			<input id={`${prefix}-dc-atl-nascita`} aria-required="true" type="date" />
 		</div>
 
 		<!-- Contatti dell'atleta: solo se maggiorenne. Per un minorenne il
@@ -285,7 +285,7 @@ const { prefix } = Astro.props;
 		     non aiuterebbe nessuno. -->
 		<div class="lf__field lf__field--full" id={`${prefix}-dc-atl-email-wrap`} hidden>
 			<label for={`${prefix}-dc-atl-email`}>Email dell'atleta <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-atl-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+			<input id={`${prefix}-dc-atl-email`} aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 		</div>
 		<div class="lf__field lf__field--full" id={`${prefix}-dc-atl-cellulare-wrap`} hidden>
 			<label for={`${prefix}-dc-atl-cellulare`}>Cellulare dell'atleta <span aria-hidden="true">*</span></label>
@@ -295,7 +295,7 @@ const { prefix } = Astro.props;
 						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 					))}
 				</select>
-				<input id={`${prefix}-dc-atl-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+				<input id={`${prefix}-dc-atl-cellulare`} aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 			</div>
 		</div>
 	</div>
@@ -307,15 +307,15 @@ const { prefix } = Astro.props;
 		<p class="lf__group-note">L'atleta è minorenne: la richiesta viene intestata a chi se ne prende cura.</p>
 		<div class="lf__field">
 			<label for={`${prefix}-dc-gen-nome`}>Nome del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-gen-nome`} type="text" autocomplete="given-name" />
+			<input id={`${prefix}-dc-gen-nome`} aria-required="true" type="text" autocomplete="given-name" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dc-gen-cognome`}>Cognome del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-gen-cognome`} type="text" autocomplete="family-name" />
+			<input id={`${prefix}-dc-gen-cognome`} aria-required="true" type="text" autocomplete="family-name" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dc-gen-email`}>Email del genitore <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dc-gen-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+			<input id={`${prefix}-dc-gen-email`} aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dc-gen-cellulare`}>Cellulare del genitore <span aria-hidden="true">*</span></label>
@@ -325,7 +325,7 @@ const { prefix } = Astro.props;
 						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 					))}
 				</select>
-				<input id={`${prefix}-dc-gen-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+				<input id={`${prefix}-dc-gen-cellulare`} aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 			</div>
 		</div>
 	</div>
@@ -449,15 +449,15 @@ const { prefix } = Astro.props;
 	<div class="lf__grid">
 		<div class="lf__field">
 			<label for={`${prefix}-dp-nome`}>Nome <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dp-nome`} type="text" autocomplete="given-name" />
+			<input id={`${prefix}-dp-nome`} aria-required="true" type="text" autocomplete="given-name" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dp-cognome`}>Cognome <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dp-cognome`} type="text" autocomplete="family-name" />
+			<input id={`${prefix}-dp-cognome`} aria-required="true" type="text" autocomplete="family-name" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dp-email`}>Email <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dp-email`} type="email" autocomplete="email" placeholder="nome@esempio.com" />
+			<input id={`${prefix}-dp-email`} aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dp-cellulare`}>Cellulare <span aria-hidden="true">*</span></label>
@@ -467,7 +467,7 @@ const { prefix } = Astro.props;
 						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 					))}
 				</select>
-				<input id={`${prefix}-dp-cellulare`} type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+				<input id={`${prefix}-dp-cellulare`} aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 			</div>
 		</div>
 	</div>
@@ -544,7 +544,7 @@ const { prefix } = Astro.props;
 
 	<div class="lf__field lf__field--oggetto">
 		<label for={`${prefix}-appuntamento-oggetto`}>Di cosa vorresti parlare? <span aria-hidden="true">*</span></label>
-		<textarea id={`${prefix}-appuntamento-oggetto`} name="oggetto" rows="4" placeholder="Es. vorrei informazioni sull'abbonamento Family e vedere la piscina…"></textarea>
+		<textarea id={`${prefix}-appuntamento-oggetto`} aria-required="true" name="oggetto" rows="4" placeholder="Es. vorrei informazioni sull'abbonamento Family e vedere la piscina…"></textarea>
 	</div>
 
 	<div class="lf__actions">
@@ -581,7 +581,7 @@ const { prefix } = Astro.props;
 
 	<div class="lf__field">
 		<label for={`${prefix}-richiamami-testo`}>Cosa ti serve? <span aria-hidden="true">*</span></label>
-		<textarea id={`${prefix}-richiamami-testo`} name="messaggio" rows="4" placeholder="Es. vorrei capire quale abbonamento fa per me e gli orari della piscina…"></textarea>
+		<textarea id={`${prefix}-richiamami-testo`} aria-required="true" name="messaggio" rows="4" placeholder="Es. vorrei capire quale abbonamento fa per me e gli orari della piscina…"></textarea>
 	</div>
 
 	<div class="lf__actions">
@@ -604,15 +604,15 @@ const { prefix } = Astro.props;
 	<div class="lf__grid">
 		<div class="lf__field">
 			<label for={`${prefix}-dati-nome`}>Nome <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dati-nome`} name="nome" type="text" autocomplete="given-name" />
+			<input id={`${prefix}-dati-nome`} aria-required="true" name="nome" type="text" autocomplete="given-name" />
 		</div>
 		<div class="lf__field">
 			<label for={`${prefix}-dati-cognome`}>Cognome <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dati-cognome`} name="cognome" type="text" autocomplete="family-name" />
+			<input id={`${prefix}-dati-cognome`} aria-required="true" name="cognome" type="text" autocomplete="family-name" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dati-email`}>Email <span aria-hidden="true">*</span></label>
-			<input id={`${prefix}-dati-email`} name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+			<input id={`${prefix}-dati-email`} aria-required="true" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 		</div>
 		<div class="lf__field lf__field--full">
 			<label for={`${prefix}-dati-cellulare`}>Cellulare <span aria-hidden="true">*</span></label>
@@ -622,7 +622,7 @@ const { prefix } = Astro.props;
 						<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 					))}
 				</select>
-				<input id={`${prefix}-dati-cellulare`} name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+				<input id={`${prefix}-dati-cellulare`} aria-required="true" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 			</div>
 		</div>
 	</div>

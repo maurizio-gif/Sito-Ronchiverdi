@@ -204,15 +204,15 @@ const fotoSessioni = [
 			<div class="lf__grid">
 				<div class="lf__field">
 					<label for="fm-nome">Nome <span aria-hidden="true">*</span></label>
-					<input id="fm-nome" name="nome" type="text" autocomplete="given-name" />
+					<input id="fm-nome" aria-required="true" name="nome" type="text" autocomplete="given-name" />
 				</div>
 				<div class="lf__field">
 					<label for="fm-cognome">Cognome <span aria-hidden="true">*</span></label>
-					<input id="fm-cognome" name="cognome" type="text" autocomplete="family-name" />
+					<input id="fm-cognome" aria-required="true" name="cognome" type="text" autocomplete="family-name" />
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="fm-email">Email <span aria-hidden="true">*</span></label>
-					<input id="fm-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+					<input id="fm-email" aria-required="true" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="fm-cellulare">Cellulare <span aria-hidden="true">*</span></label>
@@ -222,12 +222,12 @@ const fotoSessioni = [
 								<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 							))}
 						</select>
-						<input id="fm-cellulare" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+						<input id="fm-cellulare" aria-required="true" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 					</div>
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="fm-nascita">Data di nascita <span aria-hidden="true">*</span></label>
-					<input id="fm-nascita" name="dataNascita" type="date" autocomplete="bday" />
+					<input id="fm-nascita" aria-required="true" name="dataNascita" type="date" autocomplete="bday" />
 				</div>
 				<div class="lf__field lf__field--full">
 					<label for="fm-messaggio">Qualcosa che dobbiamo sapere? <em>(facoltativo)</em></label>
@@ -538,7 +538,6 @@ const fotoSessioni = [
 			font-style: normal;
 			text-transform: none;
 			letter-spacing: 0.04em;
-			opacity: 0.75;
 		}
 		.fm-nota {
 			margin: 0;

@@ -61,19 +61,19 @@ const { text, align = "start", direction = "up" } = Astro.props;
 		width: max-content;
 		max-width: min(13rem, 70vw);
 		text-align: left;
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 0.15s ease, transform 0.15s ease;
+		/* Chiuso è fuori dal layout, non solo trasparente: anche invisibile
+		   un fumetto vicino al bordo allargava la pagina e la faceva scorrere
+		   di lato sui telefoni stretti (WCAG 1.4.10). Il testo resta comunque
+		   nell'aria-label del pulsante. */
+		display: none;
 		z-index: 5;
 		box-shadow: 0 8px 20px rgba(28, 28, 24, 0.25);
 	}
 	.info-tip--start .info-tip__bubble {
 		left: -10px;
-		transform: translateY(4px);
 	}
 	.info-tip--end .info-tip__bubble {
 		right: -10px;
-		transform: translateY(4px);
 	}
 	.info-tip__bubble::after {
 		content: "";
@@ -91,7 +91,6 @@ const { text, align = "start", direction = "up" } = Astro.props;
 	.info-tip--down .info-tip__bubble {
 		bottom: auto;
 		top: calc(100% + 9px);
-		transform: translateY(-4px);
 	}
 	.info-tip--down .info-tip__bubble::after {
 		top: auto;
@@ -101,8 +100,6 @@ const { text, align = "start", direction = "up" } = Astro.props;
 	}
 	.info-tip:hover .info-tip__bubble,
 	.info-tip__icon:focus-visible + .info-tip__bubble {
-		opacity: 1;
-		transform: translateY(0);
-		pointer-events: auto;
+		display: block;
 	}
 </style>

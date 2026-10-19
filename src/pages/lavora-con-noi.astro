@@ -80,15 +80,15 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 				<div class="lf__grid">
 					<div class="lf__field">
 						<label for="cd-nome">Nome <span aria-hidden="true">*</span></label>
-						<input id="cd-nome" name="nome" type="text" autocomplete="given-name" />
+						<input id="cd-nome" aria-required="true" name="nome" type="text" autocomplete="given-name" />
 					</div>
 					<div class="lf__field">
 						<label for="cd-cognome">Cognome <span aria-hidden="true">*</span></label>
-						<input id="cd-cognome" name="cognome" type="text" autocomplete="family-name" />
+						<input id="cd-cognome" aria-required="true" name="cognome" type="text" autocomplete="family-name" />
 					</div>
 					<div class="lf__field lf__field--full">
 						<label for="cd-email">Email <span aria-hidden="true">*</span></label>
-						<input id="cd-email" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+						<input id="cd-email" aria-required="true" name="email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
 					</div>
 					<div class="lf__field lf__field--full">
 						<label for="cd-cellulare">Cellulare <span aria-hidden="true">*</span></label>
@@ -98,7 +98,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 									<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 								))}
 							</select>
-							<input id="cd-cellulare" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+							<input id="cd-cellulare" aria-required="true" name="cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
 						</div>
 					</div>
 					<div class="lf__field">
@@ -114,7 +114,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 					</div>
 					<div class="lf__field lf__field--full">
 						<label for="cd-area">Area per cui ti candidi <span aria-hidden="true">*</span></label>
-						<select id="cd-area" name="area">
+						<select id="cd-area" aria-required="true" name="area">
 							<option value="">Scegli un'area</option>
 							{AREE.map((a) => <option value={a.chiave}>{a.label}</option>)}
 						</select>
@@ -122,7 +122,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 					<div class="lf__field lf__field--full">
 						<label for="cd-presentazione">Parlaci di te <span aria-hidden="true">*</span></label>
 						<textarea
-							id="cd-presentazione"
+							id="cd-presentazione" aria-required="true"
 							name="presentazione"
 							rows="6"
 							placeholder="Chi sei, cosa sai fare, perché ti interessa Ronchiverdi. Non serve un testo formale: quello che conta è capire con chi stiamo parlando."
@@ -142,7 +142,7 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 						<label for="cd-cv">Curriculum <span aria-hidden="true">*</span></label>
 						<div class="lcn-file">
 							<input
-								id="cd-cv"
+								id="cd-cv" aria-required="true"
 								name="cv"
 								type="file"
 								accept={CV_ACCEPT}

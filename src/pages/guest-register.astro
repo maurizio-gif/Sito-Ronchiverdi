@@ -47,7 +47,7 @@ const mappaAttivita = Object.fromEntries(
 	noindex
 	senzaNavigazione
 >
-	<main class="gr" data-attivita={JSON.stringify(mappaAttivita)}>
+	<div class="gr" data-attivita={JSON.stringify(mappaAttivita)}>
 		<header class="gr__head">
 			<span class="eyebrow">Ronchiverdi Sport Club</span>
 			<h1>Benvenuto in <em class="accent">Ronchiverdi</em></h1>
@@ -94,15 +94,15 @@ const mappaAttivita = Object.fromEntries(
 			<div class="gr__grid" data-gr-campi="registrati">
 				<div class="gr__field">
 					<label for="gr-r-nome">Nome <span aria-hidden="true">*</span></label>
-					<input id="gr-r-nome" type="text" autocomplete="given-name" data-gr="nome" />
+					<input id="gr-r-nome" aria-required="true" type="text" autocomplete="given-name" data-gr="nome" />
 				</div>
 				<div class="gr__field">
 					<label for="gr-r-cognome">Cognome <span aria-hidden="true">*</span></label>
-					<input id="gr-r-cognome" type="text" autocomplete="family-name" data-gr="cognome" />
+					<input id="gr-r-cognome" aria-required="true" type="text" autocomplete="family-name" data-gr="cognome" />
 				</div>
 				<div class="gr__field gr__field--full">
 					<label for="gr-r-email">Email <span aria-hidden="true">*</span></label>
-					<input id="gr-r-email" type="email" autocomplete="email" placeholder="nome@esempio.com" data-gr="email" />
+					<input id="gr-r-email" aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" data-gr="email" />
 				</div>
 				<div class="gr__field gr__field--full">
 					<label for="gr-r-cellulare">Cellulare <span aria-hidden="true">*</span></label>
@@ -112,11 +112,11 @@ const mappaAttivita = Object.fromEntries(
 								<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 							))}
 						</select>
-						<input id="gr-r-cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" data-gr="cellulare" />
+						<input id="gr-r-cellulare" aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" data-gr="cellulare" />
 					</div>
 				</div>
 				<fieldset class="gr__field gr__field--full gr__chips">
-					<legend>Attività di interesse <span aria-hidden="true">*</span></legend>
+					<legend>Attività di interesse <span aria-hidden="true">*</span><span class="sr-only">(obbligatorio)</span></legend>
 					{leadActivityGroups.map((gruppo) => (
 						<div class="gr__chip-gruppo">
 							<p class="gr__chip-gruppo-label">{gruppo.label}</p>
@@ -172,15 +172,15 @@ const mappaAttivita = Object.fromEntries(
 			<div class="gr__grid" data-gr-campi="tour">
 				<div class="gr__field">
 					<label for="gr-t-nome">Nome <span aria-hidden="true">*</span></label>
-					<input id="gr-t-nome" type="text" autocomplete="given-name" data-gr="nome" />
+					<input id="gr-t-nome" aria-required="true" type="text" autocomplete="given-name" data-gr="nome" />
 				</div>
 				<div class="gr__field">
 					<label for="gr-t-cognome">Cognome <span aria-hidden="true">*</span></label>
-					<input id="gr-t-cognome" type="text" autocomplete="family-name" data-gr="cognome" />
+					<input id="gr-t-cognome" aria-required="true" type="text" autocomplete="family-name" data-gr="cognome" />
 				</div>
 				<div class="gr__field gr__field--full">
 					<label for="gr-t-email">Email <span aria-hidden="true">*</span></label>
-					<input id="gr-t-email" type="email" autocomplete="email" placeholder="nome@esempio.com" data-gr="email" />
+					<input id="gr-t-email" aria-required="true" type="email" autocomplete="email" placeholder="nome@esempio.com" data-gr="email" />
 				</div>
 				<div class="gr__field gr__field--full">
 					<label for="gr-t-cellulare">Cellulare <span aria-hidden="true">*</span></label>
@@ -190,11 +190,11 @@ const mappaAttivita = Object.fromEntries(
 								<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
 							))}
 						</select>
-						<input id="gr-t-cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" data-gr="cellulare" />
+						<input id="gr-t-cellulare" aria-required="true" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" data-gr="cellulare" />
 					</div>
 				</div>
 				<fieldset class="gr__field gr__field--full gr__chips">
-					<legend>Attività di interesse <span aria-hidden="true">*</span></legend>
+					<legend>Attività di interesse <span aria-hidden="true">*</span><span class="sr-only">(obbligatorio)</span></legend>
 					{leadActivityGroups.map((gruppo) => (
 						<div class="gr__chip-gruppo">
 							<p class="gr__chip-gruppo-label">{gruppo.label}</p>
@@ -247,7 +247,7 @@ const mappaAttivita = Object.fromEntries(
 			     si registra qualcun altro, si va a vedere il club. -->
 			<a class="btn" href={url("/")}>Scopri il club</a>
 		</div>
-	</main>
+	</div>
 </Layout>
 
 <script>

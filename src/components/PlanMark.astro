@@ -5,7 +5,9 @@ interface Props {
 const { status } = Astro.props;
 
 // L'etichetta e' quello che legge chi usa uno screen reader: l'asterisco per
-// lui non esiste, quindi la condizione va detta per intero qui.
+// lui non esiste, quindi la condizione va detta per intero qui. Il role="img"
+// serve perché su uno <span> senza ruolo l'aria-label non vale (e molti
+// screen reader la ignorano).
 const labels = {
 	full: "Incluso",
 	seasonal: "Incluso da aprile a settembre; da ottobre a marzo a tariffa agevolata",
@@ -14,7 +16,7 @@ const labels = {
 };
 ---
 
-<span class={`mark mark--${status}`} aria-label={labels[status]}>
+<span class={`mark mark--${status}`} role="img" aria-label={labels[status]}>
 	{status === "full" && (
 		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 			<path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />

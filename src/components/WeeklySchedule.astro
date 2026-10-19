@@ -61,7 +61,9 @@ const modalId = `planning-modal-${id}`;
 	</div>
 </div>
 
-<div class="planning-modal" id={modalId} aria-hidden="true">
+{/* Chiusa resta nel DOM per la dissolvenza, quindi è `inert`: con il solo
+    aria-hidden la X restava raggiungibile col Tab pur essendo invisibile. */}
+<div class="planning-modal" id={modalId} inert>
 	<div class="planning-modal__backdrop" data-planning-close={id}></div>
 	<div class="planning-modal__panel" role="dialog" aria-modal="true" aria-labelledby={`${modalId}-title`}>
 		<button type="button" class="planning-modal__close" data-planning-close={id} aria-label="Chiudi">&times;</button>
@@ -76,6 +78,7 @@ const modalId = `planning-modal-${id}`;
 	const titleEl = document.getElementById(`${modalId}-title`);
 	const descEl = document.getElementById(`${modalId}-desc`);
 	const metaEl = document.getElementById(`${modalId}-meta`);
+	const closeBtn = modal.querySelector(".planning-modal__close");
 	let lastFocused = null;
 
 	// Oltre alla lezione, la scheda dice su quale fascia si è cliccato e la
@@ -91,13 +94,16 @@ const modalId = `planning-modal-${id}`;
 		descEl.textContent = lesson.description;
 		lastFocused = document.activeElement;
 		modal.classList.add("open");
-		modal.setAttribute("aria-hidden", "false");
+		modal.inert = false;
 		document.body.classList.add("planning-modal-locked");
+		// Il fuoco entra nella scheda: chi naviga da tastiera o con lo screen
+		// reader deve trovarsi dentro, non restare sul pulsante sotto.
+		closeBtn.focus();
 	}
 
 	function closeModal() {
 		modal.classList.remove("open");
-		modal.setAttribute("aria-hidden", "true");
+		modal.inert = true;
 		document.body.classList.remove("planning-modal-locked");
 		if (lastFocused) lastFocused.focus();
 	}
@@ -111,7 +117,14 @@ const modalId = `planning-modal-${id}`;
 	});
 
 	document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+		if (!modal.classList.contains("open")) return;
+		if (e.key === "Escape") closeModal();
+		// La X è l'unico elemento attivo della scheda: il Tab non deve
+		// scivolare sulla pagina dietro, coperta dal velo.
+		if (e.key === "Tab") {
+			e.preventDefault();
+			closeBtn.focus();
+		}
 	});
 </script>
 

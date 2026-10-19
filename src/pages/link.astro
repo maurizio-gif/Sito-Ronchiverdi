@@ -111,7 +111,7 @@ const sezioni = [
 	senzaNavigazione
 	noindex
 >
-	<main class="lk">
+	<div class="lk">
 		<header class="lk__head">
 			<picture>
 				<FontiImmagine src="logo-ronchiverdi-sport.png" sizes="120px" />
@@ -188,7 +188,7 @@ const sezioni = [
 			</p>
 			<p class="lk__tel"><a href="tel:+390116612146">011 6612146</a></p>
 		</footer>
-	</main>
+	</div>
 
 	{/* Senza navigazione il Layout non la stampa, ma i due pulsanti in cima
 	    ne hanno bisogno: è lo stesso form del resto del sito, con la stessa
@@ -316,8 +316,9 @@ const sezioni = [
 		line-height: 1.35;
 		color: rgba(246, 239, 222, 0.6);
 	}
+	/* Sull'oro del pulsante sotto 0.8 il testo scende sotto 4,5:1 (WCAG AA). */
 	.lk-btn--primario .lk-btn__nota {
-		color: rgba(28, 28, 24, 0.7);
+		color: rgba(28, 28, 24, 0.85);
 	}
 	.lk-btn__freccia {
 		flex: none;
