@@ -7,6 +7,7 @@ import TriplePack from "../../components/TriplePack.astro";
 import prefissi from "../../data/prefissi-telefonici";
 import { url } from "../../lib/paths";
 import TrainerCard from "../../components/TrainerCard.astro";
+import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const trainers = (await getCollection("trainers")).sort(
 	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
@@ -68,6 +69,12 @@ const facts = [
 		html: "Le sessioni si svolgono nel <strong>Gym Floor</strong>, in acqua o sui campi: ogni trainer sceglie lo spazio più adatto al tuo obiettivo.",
 	},
 ];
+
+const fotoSessioni = [
+	{ src: "images/shooting/pt-assistenza-hip-thrust.jpg", alt: "Il personal trainer corregge la posizione di una cliente durante un hip thrust" },
+	{ src: "images/shooting/pt-assistenza-trx.jpg", alt: "Il personal trainer guida una cliente in un esercizio con le cinghie TRX" },
+	{ src: "images/shooting/pt-hip-thrust-sorriso.jpg", alt: "Una cliente sorride durante un hip thrust seguita dal suo trainer" },
+];
 ---
 
 <Layout
@@ -90,6 +97,15 @@ const facts = [
 			Il personal training di Ronchiverdi mette a disposizione un team di trainer con formazioni e specializzazioni diverse — dalla ricomposizione corporea alla preparazione atletica, dal recupero funzionale all'allenamento in gravidanza. Guarda formazione e competenze di ciascuno, poi <strong>richiedi il tuo personal</strong>: il Fitness Manager valuta obiettivo, livello e disponibilità e ti abbina il trainer giusto.
 		</p>
 	</section>
+
+	<div class="pt-foto">
+		{fotoSessioni.map((f) => (
+			<picture>
+				<FontiImmagine src={f.src} sizes="(max-width: 760px) 100vw, 26rem" />
+				<img src={url(f.src)} alt={f.alt} loading="lazy" />
+			</picture>
+		))}
+	</div>
 
 	<IconFacts eyebrow="Perché il personal training" title="Cosa comprende il servizio" items={facts} />
 
@@ -373,6 +389,29 @@ const facts = [
 	</script>
 
 	<style>
+		.pt-foto {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.25rem;
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 0 1.5rem 4rem;
+		}
+		.pt-foto picture {
+			display: block;
+		}
+		.pt-foto img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 16px;
+		}
+		@media (max-width: 760px) {
+			.pt-foto {
+				grid-template-columns: 1fr;
+			}
+		}
 		.intro {
 			max-width: 52rem;
 			margin: 0 auto;

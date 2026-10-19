@@ -1,4 +1,58 @@
 {
+	"/images/SIMONE/Giorgio Mortara.jpeg": {
+		"origine": "9f104722453bec5d",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
+	"/images/SIMONE/Laura Cristina.jpeg": {
+		"origine": "9498f6734758afe0",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 827,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
+	"/images/SIMONE/Workshop Glutei.png": {
+		"origine": "af31b5d41a377faf",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1122,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/activities/acqua-fitness-card.jpg": {
 		"origine": "b19ee0ce6ed4dbb0",
 		"formati": [
@@ -801,6 +855,24 @@
 			]
 		}
 	},
+	"/images/eventi/workshop-glutei.png": {
+		"origine": "af31b5d41a377faf",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1122,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/federazioni/coni.png": {
 		"origine": "39f252911546f592",
 		"formati": [
@@ -1323,6 +1395,286 @@
 			]
 		}
 	},
+	"/images/shooting/cardio-consolle-technogym.jpg": {
+		"origine": "1f756b2cdee764fa",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-battle-rope.jpg": {
+		"origine": "cf43a2f86774691e",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-sled-push.jpg": {
+		"origine": "a4da8ce13131c0a6",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-sled.jpg": {
+		"origine": "a238c3dbcafab6e0",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-squat.jpg": {
+		"origine": "0f694b66143e2ced",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-trazioni.jpg": {
+		"origine": "d75317fdf8dd23c6",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/pesi-liberi-bilanciere.jpg": {
+		"origine": "7e16bafd447fc0a4",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/pesi-liberi-panca.jpg": {
+		"origine": "a168872c2f2d3840",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/pt-assistenza-hip-thrust.jpg": {
+		"origine": "4be03f061ffbc299",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/pt-assistenza-trx.jpg": {
+		"origine": "25c51dbc0dcd67c4",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/pt-hip-thrust-sorriso.jpg": {
+		"origine": "004ab65b886fd62f",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/skill-area-curl-manubrio.jpg": {
+		"origine": "3ec6917c5755539d",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/skill-area-squat-kettlebell.jpg": {
+		"origine": "9d21601d37cd6814",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/skill-area-squat.jpg": {
+		"origine": "6f13b221ef4a53fe",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
 	"/images/team/alessandro-pescarolo.jpg": {
 		"origine": "8a2c7cd6b2a587c4",
 		"formati": [
@@ -1437,6 +1789,24 @@
 			]
 		}
 	},
+	"/images/team/giorgio-mortara.jpeg": {
+		"origine": "9f104722453bec5d",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1200,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/team/giorgio-radici.jpg": {
 		"origine": "635d46624d236154",
 		"formati": [
@@ -1450,6 +1820,24 @@
 			],
 			"webp": [
 				320
+			]
+		}
+	},
+	"/images/team/laura-cristina.jpeg": {
+		"origine": "9498f6734758afe0",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 827,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
 			]
 		}
 	},
