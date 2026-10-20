@@ -1435,6 +1435,26 @@
 			]
 		}
 	},
+	"/images/shooting/lacertosus-front-squat.jpg": {
+		"origine": "10e49b9153fe33a6",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
 	"/images/shooting/lacertosus-sled-push.jpg": {
 		"origine": "a4da8ce13131c0a6",
 		"formati": [
@@ -1497,6 +1517,66 @@
 	},
 	"/images/shooting/lacertosus-trazioni.jpg": {
 		"origine": "d75317fdf8dd23c6",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-vogatore-coppia.jpg": {
+		"origine": "449489e82f9c8e71",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-vogatore-dettaglio.jpg": {
+		"origine": "6250a65c79a39f21",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1600,
+		"varianti": {
+			"avif": [
+				320,
+				640,
+				1080
+			],
+			"webp": [
+				320,
+				640,
+				1080
+			]
+		}
+	},
+	"/images/shooting/lacertosus-wall-ball-sled.jpg": {
+		"origine": "c0790cfb43886c83",
 		"formati": [
 			"avif",
 			"webp"

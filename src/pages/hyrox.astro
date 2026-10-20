@@ -14,6 +14,12 @@ import FontiImmagine from "../components/FontiImmagine.astro";
 // che il vecchio sito ha già indicizzato per "palestra hyrox a torino", e
 // spostarlo butterebbe via il posizionamento invece di ereditarlo.
 
+const fotoFunctional = [
+	{ src: "images/shooting/lacertosus-front-squat.jpg", alt: "Front squat al rack nella Functional Area Lacertosus" },
+	{ src: "images/shooting/lacertosus-vogatore-coppia.jpg", alt: "Due atleti al vogatore nella Functional Area Lacertosus" },
+	{ src: "images/shooting/lacertosus-vogatore-dettaglio.jpg", alt: "Dettaglio delle mani sull'impugnatura del vogatore Lacertosus" },
+];
+
 const facts = [
 	{
 		icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.8 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>`,
@@ -96,7 +102,7 @@ const faq = faqDiPagina("hyrox");
 	description="Palestra Hyrox a Torino: Ronchiverdi è affiliato ufficialmente HYROX, con la Functional Area powered by Lacertosus. Allenamento libero, sessioni guidate con coach certificati e gruppi di corsa, tutto compreso nell'abbonamento."
 	image="og/hyrox.jpg"
 >
-	<PageHero image="images/shooting/lacertosus-trazioni.jpg" imageAlt="Trazioni alla sbarra del rack nella Functional Area powered by Lacertosus di Ronchiverdi" eyebrow="Attività · Adulti">
+	<PageHero image="images/shooting/lacertosus-wall-ball-sled.jpg" imageAlt="La Functional Area Lacertosus di Ronchiverdi: un atleta ai wall ball e uno alla spinta della slitta" eyebrow="Attività · Adulti">
 		<Fragment slot="title">Built for <em class="accent">Hyrox</em>. Made in Ronchi.</Fragment>
 		<Fragment slot="lede">Cerchi una palestra Hyrox a Torino? Una sala progettata per la performance, con l'attrezzatura prevista dal regolamento ufficiale e coach certificati che ti allenano con metodo.</Fragment>
 		<div class="hyrox-hero-cta">
@@ -159,8 +165,8 @@ const faq = faqDiPagina("hyrox");
 	<section class="hyrox-attrezzatura">
 		<div class="hyrox-attrezzatura__media">
 			<picture>
-				<FontiImmagine src="images/shooting/lacertosus-sled-push.jpg" />
-				<img src={url("images/shooting/lacertosus-sled-push.jpg")} alt="Spinta della slitta carica nella Functional Area Lacertosus" loading="lazy" />
+				<FontiImmagine src="images/shooting/lacertosus-trazioni.jpg" />
+				<img src={url("images/shooting/lacertosus-trazioni.jpg")} alt="Trazioni alla sbarra del rack nella Functional Area Lacertosus" loading="lazy" />
 			</picture>
 		</div>
 		<div class="hyrox-attrezzatura__content">
@@ -180,6 +186,15 @@ const faq = faqDiPagina("hyrox");
 			<a class="btn btn-outline" href={url("/attivita/gym-floor#lacertosus")}>Scopri il Gym Floor</a>
 		</div>
 	</section>
+
+	<div class="hyrox-foto">
+		{fotoFunctional.map((f) => (
+			<picture>
+				<FontiImmagine src={f.src} sizes="(max-width: 760px) 100vw, 26rem" />
+				<img src={url(f.src)} alt={f.alt} loading="lazy" />
+			</picture>
+		))}
+	</div>
 
 	<section class="hyrox-palinsesto" id="palinsesto">
 		<div class="hyrox-palinsesto__head">
@@ -357,6 +372,30 @@ const faq = faqDiPagina("hyrox");
 		.hyrox-lista svg {
 			color: var(--accent);
 			flex-shrink: 0;
+		}
+
+		.hyrox-foto {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.25rem;
+			max-width: 78rem;
+			margin: 0 auto;
+			padding: 0 1.5rem 5rem;
+		}
+		.hyrox-foto picture {
+			display: block;
+		}
+		.hyrox-foto img {
+			display: block;
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 16px;
+		}
+		@media (max-width: 760px) {
+			.hyrox-foto {
+				grid-template-columns: 1fr;
+			}
 		}
 
 		.hyrox-palinsesto {
