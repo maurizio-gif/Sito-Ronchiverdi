@@ -23,6 +23,10 @@ export const GET: APIRoute = ({ site }) => {
 				"# Il guest register è la pagina del banco: serve a chi è in sede,",
 				"# non è un contenuto da far trovare a chi cerca su Google.",
 				"Disallow: /guest-register",
+				"",
+				"# Immagini caricate solo per essere usate da servizi esterni (es. InfoYou),",
+				"# non fanno parte delle pagine del sito.",
+				"Disallow: /media/",
 				...(sitemap ? ["", `Sitemap: ${sitemap}`] : []),
 			]
 		: [
