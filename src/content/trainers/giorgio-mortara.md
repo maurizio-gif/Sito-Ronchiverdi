@@ -1,7 +1,12 @@
 ---
 name: "Giorgio Mortara"
 role: "Fitness Manager"
-photo: "/images/team/giorgio-mortara.jpeg"
+photo: "/images/team/giorgio-mortara.jpg"
+ordineTriathlon: 1
+pagine:
+  - "personal-training"
+  - "triathlon"
+ruoloTriathlon: "Responsabile settore Triathlon"
 formazione:
   - "Allenatore Certificato FITRI (Federazione Italiana Triathlon)"
   - "Ideatore e coach della Young School Triathlon e della Triathlon Academy"

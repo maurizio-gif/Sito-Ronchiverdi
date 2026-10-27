@@ -10,9 +10,11 @@ import { url } from "../lib/paths";
 
 interface Props {
 	trainer: CollectionEntry<"trainers">;
+	/** Ruolo da mostrare al posto di quello della scheda (es. nella pagina Triathlon). */
+	role?: string;
 }
 
-const { trainer: t } = Astro.props;
+const { trainer: t, role = t.data.role } = Astro.props;
 ---
 
 <article class="pt-card" tabindex="0">
@@ -24,7 +26,7 @@ const { trainer: t } = Astro.props;
 		<div class="pt-card__scrim"></div>
 		<div class="pt-card__body">
 			<strong class="pt-card__name">{t.data.name}</strong>
-			{t.data.role && <span class="pt-card__role">{t.data.role}</span>}
+			{role && <span class="pt-card__role">{role}</span>}
 
 			{(t.data.formazione?.length || t.data.competenze?.length) ? (
 				<span class="pt-card__hint">Formazione e competenze <span aria-hidden="true">&rarr;</span></span>

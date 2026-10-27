@@ -4,6 +4,11 @@ photo: "/images/team/andrea-lemma.jpg"
 phone: "347 1786466"
 email: "actionlemma@gmail.com"
 instagram: "lemmaandrea"
+ordineTriathlon: 4
+pagine:
+  - "personal-training"
+  - "triathlon"
+ruoloTriathlon: "Preparatore Atletico Federale"
 formazione:
   - "Laurea magistrale in Scienze Motorie sportive"
   - "Preparatore fisico 2 Tennis (PF2)"

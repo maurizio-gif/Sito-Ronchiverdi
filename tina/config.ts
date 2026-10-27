@@ -623,7 +623,19 @@ export default defineConfig({
         fields: [
           { type: "string", name: "name", label: "Nome e cognome", isTitle: true, required: true },
           { type: "string", name: "role", label: "Ruolo (es. Fitness Manager)" },
+          { type: "string", name: "ruoloTriathlon", label: "Ruolo nella pagina Triathlon (se diverso)" },
+          { type: "number", name: "ordineTriathlon", label: "Ordine nella pagina Triathlon" },
           { type: "image", name: "photo", label: "Foto", required: true },
+          {
+            type: "string",
+            name: "pagine",
+            label: "Pagine in cui compare (vuoto = Personal Training)",
+            list: true,
+            options: [
+              { value: "personal-training", label: "Personal Training" },
+              { value: "triathlon", label: "Triathlon" },
+            ],
+          },
           { type: "string", name: "phone", label: "Telefono" },
           { type: "string", name: "email", label: "Email" },
           { type: "string", name: "instagram", label: "Instagram (handle, senza @)" },

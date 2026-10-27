@@ -9,7 +9,9 @@ import { url } from "../../lib/paths";
 import TrainerCard from "../../components/TrainerCard.astro";
 import FontiImmagine from "../../components/FontiImmagine.astro";
 
-const trainers = (await getCollection("trainers")).sort(
+const trainers = (await getCollection("trainers"))
+	.filter((t) => (t.data.pagine ?? ["personal-training"]).includes("personal-training"))
+	.sort(
 	(a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
 );
 

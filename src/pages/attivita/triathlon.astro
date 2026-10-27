@@ -4,6 +4,8 @@ import PageHero from "../../components/PageHero.astro";
 import Faq from "../../components/Faq.astro";
 import IconFacts from "../../components/IconFacts.astro";
 import { url } from "../../lib/paths";
+import { getCollection } from "astro:content";
+import TrainerCard from "../../components/TrainerCard.astro";
 import { EMAIL_CERTIFICATI } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
 import FontiImmagine from "../../components/FontiImmagine.astro";
@@ -108,6 +110,10 @@ const location = [
 
 
 const faq = faqDiPagina("triathlon");
+
+const staff = (await getCollection("trainers"))
+	.filter((t) => t.data.pagine?.includes("triathlon"))
+	.sort((a, b) => (a.data.ordineTriathlon ?? a.data.order ?? 0) - (b.data.ordineTriathlon ?? b.data.order ?? 0));
 ---
 
 <Layout
@@ -335,6 +341,21 @@ const faq = faqDiPagina("triathlon");
 		</div>
 	</div>
 
+	{staff.length > 0 && (
+		<section class="staff">
+			<div class="staff__head">
+				<span class="eyebrow">Chi ti allena</span>
+				<h2>Lo staff tecnico</h2>
+				<p class="lede" style="margin-inline:auto">
+					Passa il mouse su una scheda — o toccala da smartphone — per vedere formazione e competenze.
+				</p>
+			</div>
+			<div class="staff-grid">
+				{staff.map((t) => <TrainerCard trainer={t} role={t.data.ruoloTriathlon ?? t.data.role} />)}
+			</div>
+		</section>
+	)}
+
 	<section class="location">
 		<div class="location__head">
 			<span class="eyebrow eyebrow-dark">Dove ci si allena</span>
@@ -367,7 +388,53 @@ const faq = faqDiPagina("triathlon");
 		</div>
 	</section>
 
+	<script>
+		// Le schede si aprono al tocco: da smartphone l':hover non esiste.
+		document.querySelectorAll(".pt-card").forEach((card) => {
+			const toggle = () => card.classList.toggle("is-open");
+			card.addEventListener("click", toggle);
+			card.addEventListener("keydown", (e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					toggle();
+				}
+			});
+		});
+	</script>
+
 	<style>
+		.staff {
+			max-width: 88rem;
+			margin: 0 auto;
+			padding: 5.5rem 1.5rem;
+		}
+		.staff__head {
+			max-width: 42rem;
+			margin: 0 auto 3rem;
+			text-align: center;
+		}
+		.staff-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1.5rem;
+		}
+		@media (max-width: 1080px), (orientation: portrait) {
+			.staff-grid {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		@media (max-width: 760px), (orientation: portrait) {
+			.staff-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1rem;
+			}
+		}
+		@media (max-width: 480px) {
+			.staff-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
 		/* Pulsante inline dentro una risposta FAQ: il markup passato via `html`
 		   vive nel componente Faq, quindi serve :global(). */
 		:global(.faq-inline-btn) {
