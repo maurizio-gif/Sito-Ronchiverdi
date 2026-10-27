@@ -1771,13 +1771,29 @@
 			]
 		}
 	},
-	"/images/team/andrea-lemma.jpg": {
-		"origine": "e3df46366358b2e9",
+	"/images/team/andrea-gabba.jpg": {
+		"origine": "782757d1696d66a2",
 		"formati": [
 			"avif",
 			"webp"
 		],
-		"larghezzaOriginale": 570,
+		"larghezzaOriginale": 540,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
+	"/images/team/andrea-lemma.jpg": {
+		"origine": "16b983dc218427f9",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
 		"varianti": {
 			"avif": [
 				320
@@ -1835,6 +1851,54 @@
 			]
 		}
 	},
+	"/images/team/asia-rossi.jpg": {
+		"origine": "f1dba76920e49ed4",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
+	"/images/team/chiara-magrini.jpg": {
+		"origine": "577dadc8fb4814ec",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
+	"/images/team/emma-giaccone.jpg": {
+		"origine": "bc090c23e8182b4e",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
 	"/images/team/fabiano-brugnaro.jpg": {
 		"origine": "23bb74872a2535ba",
 		"formati": [
@@ -1869,21 +1933,19 @@
 			]
 		}
 	},
-	"/images/team/giorgio-mortara.jpeg": {
-		"origine": "9f104722453bec5d",
+	"/images/team/giorgio-mortara.jpg": {
+		"origine": "c7f6f1fb6fdc6ae2",
 		"formati": [
 			"avif",
 			"webp"
 		],
-		"larghezzaOriginale": 1200,
+		"larghezzaOriginale": 540,
 		"varianti": {
 			"avif": [
-				320,
-				640
+				320
 			],
 			"webp": [
-				320,
-				640
+				320
 			]
 		}
 	},
@@ -1987,6 +2049,22 @@
 			]
 		}
 	},
+	"/images/team/marco-gaveglio.jpg": {
+		"origine": "1d6ba7ec6fccee27",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
 	"/images/team/paolo-bognanni.jpg": {
 		"origine": "da4ac6dd80ecc7ce",
 		"formati": [
@@ -1994,6 +2072,22 @@
 			"webp"
 		],
 		"larghezzaOriginale": 570,
+		"varianti": {
+			"avif": [
+				320
+			],
+			"webp": [
+				320
+			]
+		}
+	},
+	"/images/team/simone-ferraris.jpg": {
+		"origine": "9df9561cb8f707eb",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 540,
 		"varianti": {
 			"avif": [
 				320

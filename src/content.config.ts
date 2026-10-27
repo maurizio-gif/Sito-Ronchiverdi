@@ -83,7 +83,14 @@ const trainers = defineCollection({
   schema: z.object({
     name: z.string(),
     role: z.string().optional(),
+    // Ruolo mostrato nella pagina Triathlon, quando differisce da `role`.
+    ruoloTriathlon: z.string().optional(),
+    // Posizione nella griglia della pagina Triathlon (se manca vale `order`).
+    ordineTriathlon: z.number().optional(),
     photo: z.string(),
+    // Pagine in cui compare la scheda. Se manca vale "personal-training",
+    // cosi' le schede gia' esistenti non cambiano.
+    pagine: z.array(z.enum(["personal-training", "triathlon"])).optional(),
     phone: z.string().optional(),
     email: z.string().optional(),
     instagram: z.string().optional(),
