@@ -32,6 +32,11 @@
 //     se l'utente accetta dopo l'atterraggio, il first touch già raccolto
 //     viene promosso in localStorage e il session id GA4 diventa leggibile.
 //
+// Pixel Meta (sezione "pixel Meta" più sotto): caricato direttamente da qui,
+// senza GTM, e solo con consenso advertisement. Eventi: PageView, Lead (al
+// posto di generate_lead) e Contact (clic su telefono, WhatsApp, email). Se un
+// giorno il pixel passa dentro GTM, va tolto da qui per non contare doppio.
+//
 // Il consenso NON blocca l'invio delle UTM a /api/lead: sono dati che l'utente
 // ci sta consegnando insieme al form, con la sua privacy policy accettata,
 // non tracciamento di terze parti.
@@ -432,14 +437,126 @@ export function pushDataLayer(event, extra) {
 	} catch (e) {}
 }
 
-/** Evento di conversione lead, chiamato dai form al POST riuscito. */
+// ------------------------------------------------------------ pixel Meta
+
+/**
+ * ID del pixel Meta, da impostare come PUBLIC_META_PIXEL_ID solo
+ * nell'ambiente di produzione di Vercel. Vuoto = il pixel non esiste: nessuno
+ * script caricato, nessuna richiesta a Meta (build locali e preview comprese).
+ */
+var META_PIXEL_ID = import.meta.env.PUBLIC_META_PIXEL_ID || "";
+
+var pixelMetaCaricato = false;
+
+/** Snippet ufficiale Meta, qui solo per non dipendere da un <script> inline. */
+function inizializzaFbq() {
+	if (window.fbq) return;
+	var n = (window.fbq = function () {
+		n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+	});
+	if (!window._fbq) window._fbq = n;
+	n.push = n;
+	n.loaded = true;
+	n.version = "2.0";
+	n.queue = [];
+	var s = document.createElement("script");
+	s.async = true;
+	s.src = "https://connect.facebook.net/en_US/fbevents.js";
+	document.head.appendChild(s);
+}
+
+/**
+ * Carica il pixel Meta solo con consenso advertisement di CookieYes.
+ *
+ * Non ci affidiamo al blocco automatico dei tag di CookieYes: decidiamo noi,
+ * leggendo lo stesso cookie che usa il resto del file. Senza consenso fbevents.js
+ * non viene nemmeno scaricato, quindi Meta non riceve niente (né IP, né _fbp).
+ * Se il consenso viene revocato dopo il caricamento, il pixel si ferma con
+ * fbq("consent", "revoke") e riparte con "grant" se l'utente cambia idea.
+ */
+function aggiornaPixelMeta() {
+	if (typeof window === "undefined" || !META_PIXEL_ID) return;
+
+	if (hasConsentFor("advertisement")) {
+		if (!pixelMetaCaricato) {
+			pixelMetaCaricato = true;
+			inizializzaFbq();
+			window.fbq("init", META_PIXEL_ID);
+			window.fbq("track", "PageView");
+		} else {
+			window.fbq("consent", "grant");
+		}
+	} else if (pixelMetaCaricato && window.fbq) {
+		window.fbq("consent", "revoke");
+	}
+}
+
+/** Evento Meta, solo se il pixel è attivo (ID presente e consenso dato). */
+function trackMeta(evento, parametri, eventId) {
+	if (!pixelMetaCaricato || !window.fbq || !hasConsentFor("advertisement")) return;
+	try {
+		window.fbq("track", evento, parametri || {}, eventId ? { eventID: eventId } : undefined);
+	} catch (e) {}
+}
+
+/**
+ * Evento di conversione lead, chiamato dai form al POST riuscito.
+ *
+ * Va a GTM (dataLayer) e al pixel Meta come evento standard "Lead", con lo
+ * stesso event_id: serve a Meta per non contare due volte il lead quando
+ * arriverà anche l'invio lato server (Conversions API).
+ *
+ * A Meta passiamo solo attività e origine del modulo: mai dati personali né
+ * informazioni sanitarie (certificato medico, patologie).
+ */
 export function trackLead(state) {
+	var eventId = uuid();
 	pushDataLayer("generate_lead", {
+		event_id: eventId,
 		lead_origine: (state && state.origine) || null,
 		lead_pagina: (state && state.pagina) || null,
 		lead_cta: (state && state.cta) || null,
 		lead_attivita: (state && state.attivita) || null,
 		lead_azione: (state && state.azione) || null,
+	});
+	trackMeta(
+		"Lead",
+		{
+			content_name: (state && state.attivita) || undefined,
+			content_category: (state && state.origine) || undefined,
+		},
+		eventId
+	);
+	return eventId;
+}
+
+/**
+ * Click su telefono, WhatsApp o email: contatto diretto, non ancora un lead
+ * in tabella. Evento "Contact" su Meta e click_contatto per GTM.
+ */
+function trackContatto(canale) {
+	pushDataLayer("click_contatto", { contatto_canale: canale });
+	trackMeta("Contact", { content_category: canale });
+}
+
+function canaleDaLink(href) {
+	if (/^tel:/i.test(href)) return "telefono";
+	if (/^mailto:/i.test(href)) return "email";
+	if (/^https?:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(href)) return "whatsapp";
+	return null;
+}
+
+/**
+ * Un solo listener sul documento: copre i link statici del footer e quelli
+ * che leadForm.client.js imposta a runtime (callBtn, waBtn, emailBtn).
+ */
+function ascoltaContatti() {
+	if (window.__rvContattiBound) return;
+	window.__rvContattiBound = true;
+	document.addEventListener("click", function (ev) {
+		var el = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
+		var canale = el ? canaleDaLink(el.getAttribute("href") || "") : null;
+		if (canale) trackContatto(canale);
 	});
 }
 
@@ -455,11 +572,14 @@ export function initTracking() {
 	getSessionId();
 	updateTouches();
 	trackPageview();
+	aggiornaPixelMeta();
+	ascoltaContatti();
 
 	if (!window.__rvTrackingConsentBound) {
 		window.__rvTrackingConsentBound = true;
 		document.addEventListener("cookieyes_consent_update", function () {
 			updateTouches();
+			aggiornaPixelMeta();
 			// Il consenso appena dato porta visitor_id e id GA4: si aggiorna la
 			// riga di sessione, senza contare un'altra pagina vista.
 			aggiornaSessione();
