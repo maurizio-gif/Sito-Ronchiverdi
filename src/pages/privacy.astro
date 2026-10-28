@@ -20,6 +20,7 @@ import { url } from "../lib/paths";
 //     promozionale non rientra in questa sezione: serve il consenso.
 //   - src/pages/api/track.ts     → dati di navigazione di sessioni e pagine
 //   - src/lib/tracking.client.js → chiavi in sessionStorage/localStorage e consenso
+//   - src/lib/tracking.client.js → anche pixel Meta (cookie _fbp/_fbc), con consenso marketing
 //   - src/layouts/Layout.astro   → banner cookie CookieYes
 //   - src/components/Footer.astro→ mappa Google incorporata
 //
@@ -86,6 +87,13 @@ const finalita = [
 		dati: "Dati di navigazione e identificativi di sessione, elencati sopra.",
 	},
 	{
+		titolo: "Misurare e migliorare le nostre campagne pubblicitarie",
+		testo:
+			"Se acconsenti ai cookie di marketing, il pixel di Meta (Facebook e Instagram) registra le pagine che visiti e le azioni compiute sul sito (invio di un modulo, clic su telefono, WhatsApp o email) per misurare i risultati delle nostre inserzioni e mostrarle a persone simili. A Meta non inviamo nome, email o telefono: solo l'azione compiuta e l'attività di interesse.",
+		base: "Art. 6.1.a GDPR — consenso, dato tramite il banner cookie per la categoria marketing.",
+		dati: "Dati di navigazione, identificativi del browser (cookie _fbp, _fbc), tipo di azione compiuta.",
+	},
+	{
 		titolo: "Tenere il sito in piedi e al sicuro",
 		testo:
 			"Far funzionare le pagine e i moduli, prevenire invii automatici e abusi dei moduli, conservare i log tecnici del server.",
@@ -131,6 +139,11 @@ const destinatari = [
 		ruolo: "Mappa Google incorporata nel footer e, con il tuo consenso, statistiche Google Analytics",
 		dove: "Unione Europea / Stati Uniti",
 	},
+	{
+		nome: "Meta Platforms Ireland Ltd.",
+		ruolo: "Pixel di Meta, con il tuo consenso al marketing: misura delle inserzioni su Facebook e Instagram",
+		dove: "Unione Europea / Stati Uniti",
+	},
 ];
 
 const cookie = [
@@ -164,6 +177,14 @@ const cookie = [
 		durata: "Fino a 2 anni",
 		scopo:
 			"Misurano visite e comportamento in forma aggregata. Vengono installati solo dopo il tuo consenso alle statistiche.",
+	},
+	{
+		nome: "_fbp, _fbc",
+		tipo: "Marketing",
+		chi: "Meta Platforms",
+		durata: "Fino a 90 giorni",
+		scopo:
+			"Permettono a Meta di collegare la tua visita a un'inserzione vista o cliccata su Facebook e Instagram, per misurarne i risultati. Vengono installati solo dopo il tuo consenso al marketing.",
 	},
 ];
 
