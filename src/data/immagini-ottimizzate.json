@@ -856,12 +856,12 @@
 		}
 	},
 	"/images/eventi/workshop-core.png": {
-		"origine": "68ce2aab8b5edde6",
+		"origine": "70b4bc00a8ecb6a1",
 		"formati": [
 			"avif",
 			"webp"
 		],
-		"larghezzaOriginale": 1122,
+		"larghezzaOriginale": 800,
 		"varianti": {
 			"avif": [
 				320,
