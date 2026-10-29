@@ -37,6 +37,16 @@ export function untilAttr(date: Date, endDate?: Date) {
 	return `${fine.getFullYear()}-${mese}-${giorno}`;
 }
 
+/**
+ * Data e ora di inizio come stringa locale senza fuso (YYYY-MM-DDTHH:MM:SS),
+ * per il conto alla rovescia: il browser la interpreta nel fuso di chi guarda,
+ * che per il Club coincide con l'orario scritto in locandina.
+ */
+export function startAttr(date: Date) {
+	const p = (n: number) => String(n).padStart(2, "0");
+	return `${untilAttr(date)}T${p(date.getHours())}:${p(date.getMinutes())}:00`;
+}
+
 /** Etichetta compatta per il badge: "12" + "set". */
 export function badgeDate(date: Date) {
 	return { giorno: giorno.format(date), mese: meseCorto.format(date).replace(".", "") };

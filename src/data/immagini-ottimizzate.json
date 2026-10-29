@@ -855,6 +855,24 @@
 			]
 		}
 	},
+	"/images/eventi/workshop-core.png": {
+		"origine": "68ce2aab8b5edde6",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 1122,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/eventi/workshop-glutei.png": {
 		"origine": "af31b5d41a377faf",
 		"formati": [
