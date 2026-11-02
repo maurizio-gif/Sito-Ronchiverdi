@@ -8,7 +8,6 @@ pagine:
 formazione:
   - "Aiuto Allenatore Federazione Italiana Triathlon"
   - "Istruttore Federazione Italiana di Atletica Leggera"
-competenze:
-  - "Specializzato nel mezzofondo"
+  - "Istruttore ginnastica metodica pilates"
 order: 21
 ---

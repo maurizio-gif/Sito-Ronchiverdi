@@ -9,10 +9,10 @@ pagine:
 ruoloTriathlon: "Responsabile settore Triathlon"
 formazione:
   - "Allenatore Certificato FITRI (Federazione Italiana Triathlon)"
-  - "Ideatore e coach della Young School Triathlon e della Triathlon Academy"
-  - "Coordina il settore giovanile, Senior e Master"
 competenze:
-  - "Oltre 900 gare portate a termine, tra cui 4 Iron Man"
+  - "Ideatore e coach della Young School Triathlon e della Triathlon Academy"
+  - "Coordina il settore giovanile, Senior e Master triathlon e running"
   - "Specializzato in sport di endurance: triathlon, duathlon e running"
+  - "Atleta master con oltre 900 gare portate a termine. Molte maratone e 3 Ironman"
 order: 18
 ---
