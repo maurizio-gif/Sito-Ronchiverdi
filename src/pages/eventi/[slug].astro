@@ -26,14 +26,15 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 	description={entry.data.summary}
 	image="og/eventi.jpg"
 >
-	<PageHero
-		image={entry.data.image ?? "images/club/notturna.jpg"}
-		imageAlt={entry.data.title}
-		eyebrow="Eventi e community"
-	>
-		<Fragment slot="title">{entry.data.title}</Fragment>
-		<Fragment slot="lede">{entry.data.summary}</Fragment>
-		<ul class="hero-meta">
+	{entry.data.image ? (
+		<PageHero
+			image={entry.data.image}
+			imageAlt={entry.data.title}
+			eyebrow="Eventi e community"
+		>
+			<Fragment slot="title">{entry.data.title}</Fragment>
+			<Fragment slot="lede">{entry.data.summary}</Fragment>
+			<ul class="hero-meta">
 			<li>
 				<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3.2" width="12" height="11" rx="1.6" stroke="currentColor" stroke-width="1.3" /><path d="M5.5 1.8v2.6M10.5 1.8v2.6M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg>
 				<span>{data}</span>
@@ -51,14 +52,53 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 				</li>
 			)}
 		</ul>
-	</PageHero>
+		</PageHero>
+	) : (
+		<header class="evento-head">
+			<p class="eyebrow">Eventi e community</p>
+			<h1>{entry.data.title}</h1>
+			<p class="lede">{entry.data.summary}</p>
+			<ul class="hero-meta">
+			<li>
+				<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3.2" width="12" height="11" rx="1.6" stroke="currentColor" stroke-width="1.3" /><path d="M5.5 1.8v2.6M10.5 1.8v2.6M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg>
+				<span>{data}</span>
+			</li>
+			{entry.data.orario && (
+				<li>
+					<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.3" /><path d="M8 4.6V8l2.4 1.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					<span>{entry.data.orario}</span>
+				</li>
+			)}
+			{entry.data.luogo && (
+				<li>
+					<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 14.5s4.7-4.1 4.7-8a4.7 4.7 0 1 0-9.4 0c0 3.9 4.7 8 4.7 8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" /><circle cx="8" cy="6.2" r="1.7" stroke="currentColor" stroke-width="1.3" /></svg>
+					<span>{entry.data.luogo}</span>
+				</li>
+			)}
+		</ul>
+			<div class="countdown countdown--head" data-countdown={startAttr(entry.data.date)} hidden>
+				<p class="countdown__label" data-cd-label>Mancano solo</p>
+				<div class="countdown__grid" role="timer" aria-live="off">
+					<div><strong data-cd="giorni">0</strong><span>giorni</span></div>
+					<div><strong data-cd="ore">0</strong><span>ore</span></div>
+					<div><strong data-cd="minuti">0</strong><span>minuti</span></div>
+					<div><strong data-cd="secondi">0</strong><span>secondi</span></div>
+				</div>
+			</div>
+			{entry.data.ctaHref && (
+				<a class="btn evento-head__cta" href={entry.data.ctaHref.startsWith("http") ? entry.data.ctaHref : url(entry.data.ctaHref)}>
+					{entry.data.ctaLabel ?? "Scopri di più"}
+				</a>
+			)}
+		</header>
+	)}
 
 	<article class="evento" data-event-until={untilAttr(entry.data.date, entry.data.endDate)}>
 		<p class="evento__passato" data-event-past hidden>
 			Questo appuntamento è già passato: dai un'occhiata ai <a href={url("/eventi")}>prossimi eventi in programma</a>.
 		</p>
 
-		<div class="countdown" data-countdown={startAttr(entry.data.date)} hidden>
+		{entry.data.image && <div class="countdown" data-countdown={startAttr(entry.data.date)} hidden>
 			<p class="countdown__label">Mancano solo</p>
 			<div class="countdown__grid" role="timer" aria-live="off">
 				<div><strong data-cd="giorni">0</strong><span>giorni</span></div>
@@ -67,14 +107,14 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 				<div><strong data-cd="secondi">0</strong><span>secondi</span></div>
 			</div>
 			<p class="countdown__note">Posti limitati: scrivici o passa in reception per prenotare il tuo.</p>
-		</div>
+		</div>}
 
 		<div class="evento__content">
 			<Content />
 		</div>
 
 		<div class="evento__cta">
-			{entry.data.ctaHref && (
+			{entry.data.image && entry.data.ctaHref && (
 				<a class="btn" href={entry.data.ctaHref.startsWith("http") ? entry.data.ctaHref : url(entry.data.ctaHref)}>
 					{entry.data.ctaLabel ?? "Scopri di più"}
 				</a>
@@ -146,6 +186,11 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 				campo("ore").textContent = String(Math.floor((s % 86400) / 3600)).padStart(2, "0");
 				campo("minuti").textContent = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
 				campo("secondi").textContent = String(s % 60).padStart(2, "0");
+				const etichetta = box.querySelector<HTMLElement>("[data-cd-label]");
+				if (etichetta) {
+					const g = Math.floor(s / 86400);
+					etichetta.textContent = g > 1 ? `Mancano solo ${g} giorni` : g === 1 ? "Manca solo 1 giorno" : "L'evento è oggi";
+				}
 				box.hidden = false;
 			};
 			const timer = setInterval(aggiorna, 1000);
@@ -182,6 +227,31 @@ const data = formatRange(entry.data.date, entry.data.endDate);
 			color: var(--accent);
 		}
 
+		/* Evento senza immagine: titolo, conto alla rovescia e link in un colpo d'occhio. */
+		.evento-head {
+			max-width: 46rem;
+			margin: 0 auto;
+			padding: 7rem 1.5rem 0;
+			text-align: center;
+		}
+		.evento-head h1 {
+			font-family: var(--font-serif);
+			color: var(--text);
+			margin: 0.35rem 0 1rem;
+		}
+		.evento-head .lede {
+			margin: 0 auto 1.5rem;
+			max-width: 32rem;
+		}
+		.evento-head .hero-meta {
+			justify-content: center;
+		}
+		.evento-head .countdown--head {
+			margin: 2.5rem 0 1.75rem;
+		}
+		.evento-head__cta {
+			display: inline-block;
+		}
 		.evento {
 			max-width: 46rem;
 			margin: 0 auto;

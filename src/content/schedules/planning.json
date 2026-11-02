@@ -82,7 +82,7 @@
     {
       "id": "nuoto-libero",
       "title": "Nuoto Libero",
-      "note": "Vasca grande indoor, senza prenotazione. Nel corso della giornata il numero di corsie riservate al nuoto libero cambia con la fascia oraria: da 2 a 5. Orari indicativi, che possono subire variazioni. Aggiornato al 09/09/2026.",
+      "note": "Vasca grande indoor, senza prenotazione. Nel corso della giornata il numero di corsie riservate al nuoto libero cambia con la fascia oraria: da 2 a 5. Orari indicativi, che possono subire variazioni. Aggiornato al 29/10/2026.",
       "rows": [
         {
           "label": "Lunedì – Venerdì",
@@ -810,7 +810,7 @@
     {
       "id": "nuoto-libero",
       "title": "Nuoto Libero",
-      "note": "Corsie della vasca grande indoor. Orari indicativi, che possono subire variazioni. Aggiornato al 05/10/2026.",
+      "note": "Corsie della vasca grande indoor. Orari indicativi, che possono subire variazioni. Aggiornato al 29/10/2026.",
       "lessons": [
         {
           "id": "nuoto-libero",
@@ -893,12 +893,12 @@
               "note": "2 corsie"
             },
             {
-              "time": "14.30 – 15.30",
+              "time": "14.30 – 15.00",
               "lesson": "nuoto-libero",
               "note": "5 corsie"
             },
             {
-              "time": "15.30 – 19.45",
+              "time": "15.00 – 19.45",
               "lesson": "nuoto-libero",
               "note": "2 corsie"
             },
@@ -963,14 +963,9 @@
               "note": "5 corsie"
             },
             {
-              "time": "14.30 – 20.00",
+              "time": "14.30 – 20.30",
               "lesson": "nuoto-libero",
               "note": "3 corsie"
-            },
-            {
-              "time": "20.00 – 21.30",
-              "lesson": "nuoto-libero",
-              "note": "5 corsie"
             }
           ]
         },
@@ -978,12 +973,12 @@
           "day": "giovedi",
           "slots": [
             {
-              "time": "7.00 – 11.00",
+              "time": "7.00 – 10.15",
               "lesson": "nuoto-libero",
               "note": "5 corsie"
             },
             {
-              "time": "11.00 – 12.00",
+              "time": "10.15 – 12.00",
               "lesson": "nuoto-libero",
               "note": "3 corsie"
             },
@@ -993,17 +988,12 @@
               "note": "5 corsie"
             },
             {
-              "time": "12.30 – 14.00",
+              "time": "12.30 – 14.30",
               "lesson": "nuoto-libero",
               "note": "3 corsie"
             },
             {
-              "time": "14.00 – 15.30",
-              "lesson": "nuoto-libero",
-              "note": "5 corsie"
-            },
-            {
-              "time": "15.30 – 19.00",
+              "time": "15.00 – 19.00",
               "lesson": "nuoto-libero",
               "note": "2 corsie"
             },
