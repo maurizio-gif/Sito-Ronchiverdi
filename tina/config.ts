@@ -51,6 +51,7 @@ export default defineConfig({
           { type: "string", name: "orario", label: "Orario" },
           { type: "string", name: "luogo", label: "Luogo" },
           { type: "image", name: "image", label: "Foto" },
+          { type: "image", name: "locandina", label: "Locandina (solo nell'elenco eventi)" },
           {
             type: "string",
             name: "summary",

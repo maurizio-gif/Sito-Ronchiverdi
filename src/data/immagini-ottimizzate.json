@@ -855,6 +855,24 @@
 			]
 		}
 	},
+	"/images/eventi/under-35-apericena.png": {
+		"origine": "90d84253b295e9de",
+		"formati": [
+			"avif",
+			"webp"
+		],
+		"larghezzaOriginale": 800,
+		"varianti": {
+			"avif": [
+				320,
+				640
+			],
+			"webp": [
+				320,
+				640
+			]
+		}
+	},
 	"/images/eventi/workshop-core.png": {
 		"origine": "70b4bc00a8ecb6a1",
 		"formati": [
