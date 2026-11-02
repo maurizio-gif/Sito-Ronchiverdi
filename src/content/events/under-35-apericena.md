@@ -1,6 +1,7 @@
 ---
 title: "Under 35 Ronchi Event: Apericena & DJ Set"
 date: 2026-11-19T20:00:00
+locandina: "/images/eventi/under-35-apericena.png"
 orario: "20:00 – 00:45"
 luogo: "Club House / Ristorante Ronchiverdi"
 summary: "Una serata dedicata ai soci Under 35 tra apericena, cocktail, musica e atmosfera club."

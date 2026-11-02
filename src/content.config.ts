@@ -45,6 +45,8 @@ const events = defineCollection({
     orario: z.string().optional(),
     luogo: z.string().optional(),
     image: z.string().optional(),
+    /** Locandina per la sola card in /eventi, senza cambiare l'impaginazione della pagina evento. */
+    locandina: z.string().optional(),
     summary: z.string(),
     ctaLabel: z.string().optional(),
     ctaHref: z.string().optional(),

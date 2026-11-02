@@ -73,12 +73,12 @@ const facts = [
 				{renderizzati.map(({ entry, Content }) => {
 					const badge = badgeDate(entry.data.date);
 					return (
-						<article class="event" id={entry.id} data-event-until={untilAttr(entry.data.date, entry.data.endDate)}>
-							{entry.data.image && (
+						<article class={entry.data.image || entry.data.locandina ? "event" : "event event--solo-testo"} id={entry.id} data-event-until={untilAttr(entry.data.date, entry.data.endDate)}>
+							{(entry.data.image ?? entry.data.locandina) && (
 								<div class="event__media">
 									<picture>
-										<FontiImmagine src={entry.data.image} />
-										<img src={url(entry.data.image)} alt={entry.data.title} loading="lazy" />
+										<FontiImmagine src={(entry.data.image ?? entry.data.locandina)!} />
+										<img src={url((entry.data.image ?? entry.data.locandina)!)} alt={entry.data.title} loading="lazy" />
 									</picture>
 									<span class="event__badge" aria-hidden="true">
 										<strong>{badge.giorno}</strong>
@@ -193,6 +193,11 @@ const facts = [
 			background: var(--bg-alt);
 			overflow: hidden;
 			scroll-margin-top: 7.5rem;
+		}
+		/* Senza locandina il corpo occupa tutta la card, non la sola colonna da 22rem. */
+		.event--solo-testo {
+			grid-template-columns: 1fr;
+			gap: 0;
 		}
 		.event__media {
 			position: relative;
