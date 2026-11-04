@@ -1163,6 +1163,17 @@ import { referentiPerClient } from "../data/referenti";
 		form.open(location.pathname, (trigger.textContent || "").trim(), trigger.dataset.interest);
 	});
 
+	// Link diretto al form: qualsiasi pagina con #contattaci nell'URL apre la
+	// modale (anche se l'hash cambia a pagina già caricata).
+	function apriDaHash() {
+		if (location.hash !== "#contattaci" || modal.open) return;
+		modal.showModal();
+		document.body.classList.add("lf-locked");
+		form.open(location.pathname, "Link diretto", undefined);
+	}
+	apriDaHash();
+	window.addEventListener("hashchange", apriDaHash);
+
 	// Chiusura dal backdrop: il click cade sul <dialog> stesso, non sul pannello.
 	modal.addEventListener("click", function (e) {
 		if (e.target === modal) chiudiEPulisci();
