@@ -18,6 +18,13 @@ import { url } from "../lib/paths";
 //     è scritta per categoria, non per singola email: ogni email tracciata
 //     porta in fondo la nota con il link a #email. Tracciare un'email
 //     promozionale non rientra in questa sezione: serve il consenso.
+//   - APP-RONCHIVERDI, app/dashboard/abbonamenti/check-sospensioni → documenti
+//     (certificati medici, trasferimenti di lavoro) caricati dalla segreteria
+//     col motivo di una sospensione, nel bucket privato sospensioni-documenti
+//     (scripts/sql/2026-11-04-sospensioni-documenti.sql). La sezione
+//     #sospensioni promette che, una volta visionati, vengono rimossi: la
+//     rimozione dal CRM non è ancora costruita, va fatta prima che la pagina
+//     vada online.
 //   - src/pages/api/track.ts     → dati di navigazione di sessioni e pagine
 //   - src/lib/tracking.client.js → chiavi in sessionStorage/localStorage e consenso
 //   - src/lib/tracking.client.js → anche pixel Meta (cookie _fbp/_fbc), con consenso marketing
@@ -33,6 +40,8 @@ import { url } from "../lib/paths";
 //     contitolarità dichiarata nell'informativa del gruppo;
 //   - eventuale nomina di un DPO e suo recapito;
 //   - i tempi di conservazione della tabella `conservazione`;
+//   - la base giuridica dei documenti delle sospensioni (consenso esplicito,
+//     art. 9.2.a, scelto come default prudenziale);
 //   - se Google Analytics 4 resterà fuori dal sito, va tolta la riga GA4 dalla
 //     tabella dei cookie e la menzione fra i destinatari.
 
@@ -43,6 +52,7 @@ const indice = [
 	{ href: "#minori", label: "Dati dei minori" },
 	{ href: "#cookie", label: "Cookie" },
 	{ href: "#email", label: "Tracciamento delle email" },
+	{ href: "#sospensioni", label: "Documenti per la sospensione" },
 	{ href: "#destinatari", label: "Chi vi accede" },
 	{ href: "#conservazione", label: "Per quanto tempo" },
 	{ href: "#diritti", label: "I tuoi diritti" },
@@ -120,7 +130,7 @@ const destinatari = [
 	{
 		nome: "Supabase Inc.",
 		ruolo:
-			"Database delle richieste dai moduli, delle candidature e delle sessioni di navigazione, e archivio privato dei curriculum",
+			"Database delle richieste dai moduli, delle candidature e delle sessioni di navigazione, e archivio privato dei curriculum e dei documenti giustificativi delle sospensioni",
 		dove: "Unione Europea",
 	},
 	{
@@ -205,6 +215,11 @@ const conservazione = [
 		cosa: "Candidature e curriculum ricevuti da Lavora con noi",
 		quanto: "24 mesi dall'invio, salvo che diventino un rapporto di lavoro o di collaborazione",
 	},
+	{
+		cosa: "Documenti per la sospensione dell'abbonamento (certificati medici, trasferimenti di lavoro)",
+		quanto:
+			"Rimossi una volta visionati dal personale autorizzato. La nota con il motivo della sospensione segue la conservazione del rapporto di abbonamento",
+	},
 	{ cosa: "Dati di navigazione (sessioni e pagine viste)", quanto: "26 mesi" },
 	{ cosa: "Consegna, apertura e clic delle comunicazioni di servizio tracciate", quanto: "24 mesi dall'invio" },
 	{ cosa: "Prova del consenso ai cookie", quanto: "12 mesi" },
@@ -218,7 +233,7 @@ const conservazione = [
 	eyebrow="Informativa privacy"
 	titolo="I tuoi dati,"
 	titoloAccento="in chiaro"
-	aggiornamento="2026-10-19"
+	aggiornamento="2026-11-04"
 	indice={indice}
 >
 	<Fragment slot="lede">
@@ -234,6 +249,7 @@ const conservazione = [
 			<li>Non vendiamo i tuoi dati e non li cediamo a terzi per finalità commerciali loro.</li>
 			<li>Le comunicazioni promozionali partono solo se hai spuntato la casella facoltativa, e puoi disdirle quando vuoi.</li>
 			<li>I cookie non necessari partono solo dopo il tuo consenso sul banner, che puoi cambiare in qualsiasi momento.</li>
+			<li>I documenti che giustificano una sospensione dell'abbonamento, come un certificato medico, vengono rimossi una volta visionati.</li>
 			<li>Registriamo apertura e clic solo di alcune comunicazioni di servizio importanti, per avere conferma che ti siano arrivate, e lo scriviamo in fondo a ciascuna di quelle email.</li>
 			<li>Le regole del Club — iscrizione, abbonamenti, uso degli spazi — stanno nei <a href={url("/termini-e-condizioni")}>Termini e Condizioni</a>.</li>
 		</ul>
@@ -283,7 +299,9 @@ const conservazione = [
 			informazioni su salute, certificati medici o altro va scritto nel campo
 			messaggio. Il certificato medico richiesto per l'attività sportiva si
 			consegna in segreteria, fuori da questo sito e con un'informativa
-			dedicata.
+			dedicata. Come trattiamo i documenti che giustificano una sospensione
+			dell'abbonamento è spiegato più sotto, in{" "}
+			<a href="#sospensioni">Documenti per la sospensione dell'abbonamento</a>.
 		</p>
 
 		<h3>Se ti candidi per lavorare con noi</h3>
@@ -479,6 +497,55 @@ const conservazione = [
 			resta completa e leggibile. Puoi anche opporti al trattamento scrivendo a{" "}
 			<a href="mailto:privacy@ronchiverdi.it">privacy@ronchiverdi.it</a>.
 		</p>
+	</section>
+
+	<section class="legal-section" id="sospensioni">
+		<h2>Documenti per la sospensione dell'abbonamento</h2>
+		<p>
+			Se chiedi di sospendere o prorogare l'abbonamento per un motivo di
+			salute, di lavoro o altro — una malattia, un trasferimento — la
+			segreteria può chiederti un documento che lo giustifichi, come un
+			<strong>certificato medico</strong> o una lettera di <strong>trasferimento
+			di lavoro</strong>. Il documento lo carica la segreteria nel pannello
+			interno del club: non passa dai moduli di questo sito.
+		</p>
+		<p>
+			Un certificato medico contiene dati relativi alla salute, che la legge
+			considera particolari (art. 9 GDPR). Per questo li trattiamo con più
+			cautela degli altri:
+		</p>
+		<ul>
+			<li>stanno in un archivio privato, senza un indirizzo pubblico, e li apre solo il personale del club autorizzato;</li>
+			<li>servono soltanto a verificare il motivo della sospensione, e non li comunichiamo a terzi;</li>
+			<li><strong>una volta visionati, i documenti vengono rimossi</strong>: non restano conservati.</li>
+		</ul>
+		<p>
+			Di tutto questo resta soltanto la nota scritta dal personale con il
+			motivo della sospensione, senza il documento.
+		</p>
+		<div class="legal-cards">
+			<article class="legal-card">
+				<h3>Documenti per la sospensione dell'abbonamento</h3>
+				<dl>
+					<div>
+						<dt>Dati</dt>
+						<dd>Il documento che consegni (certificato medico, trasferimento di lavoro o simili) e la nota con il motivo.</dd>
+					</div>
+					<div>
+						<dt>Base giuridica</dt>
+						<dd>
+							Art. 6.1.b GDPR per la gestione dell'abbonamento. Per i dati sulla
+							salute, art. 9.2.a GDPR — consenso esplicito, che dai consegnando
+							volontariamente il documento e che puoi revocare in ogni momento.
+						</dd>
+					</div>
+					<div>
+						<dt>Per quanto tempo</dt>
+						<dd>Fino a quando il personale autorizzato lo ha visionato, poi viene rimosso.</dd>
+					</div>
+				</dl>
+			</article>
+		</div>
 	</section>
 
 	<section class="legal-section" id="destinatari">
