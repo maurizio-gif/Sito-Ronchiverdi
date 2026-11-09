@@ -1,0 +1,256 @@
+---
+// Landing della newsletter «Porta un amico»: il socio scrive il proprio nome e
+// i dati dell'amico che vuole presentare. Il lead che nasce è l'amico — è lui
+// che va richiamato — con il socio accanto come «segnalato da».
+//
+// Non è indicizzata né in sitemap: ci si arriva solo dal link della newsletter
+// (e dalla reception), e un'iniziativa a tempo non deve restare a cercarsi un
+// posto nei risultati dopo il 30 novembre.
+//
+// Il limite dei primi 20 soci non è controllato qui: lo verifica la segreteria
+// quando l'amico sottoscrive. Chiudere la pagina da sola significherebbe
+// scartare segnalazioni che la reception potrebbe comunque onorare.
+import Layout from "../layouts/Layout.astro";
+import prefissi from "../data/prefissi-telefonici";
+---
+
+<Layout
+	title="Porta un amico — Ronchiverdi Sport Club"
+	description="Presenta un amico al Club: se sottoscrive un abbonamento annuale entro il 30 novembre, per te un Daily Pass di 3 giorni da regalare a un ospite."
+	noindex
+>
+	<section class="pua-intro">
+		<p class="eyebrow">Porta un amico</p>
+		<h1>Il tuo Club è ancora più bello <em class="accent">quando lo condividi.</em></h1>
+		<p class="lede" style="margin-inline:auto">
+			Presenta un amico che sottoscrive un abbonamento annuale entro il 30 novembre: per te un Daily Pass di 3 giorni
+			consecutivi da regalare a un ospite, da usare entro l'estate 2027. Iniziativa riservata ai primi 20 soci.
+		</p>
+	</section>
+
+	<section class="pua-form-section" id="segnala">
+		<form class="pua-form" id="pua-form" novalidate>
+			<fieldset class="pua-gruppo">
+				<legend>Chi sei</legend>
+				<div class="lf__grid">
+					<div class="lf__field">
+						<label for="pua-socio-nome">Il tuo nome <span aria-hidden="true">*</span></label>
+						<input id="pua-socio-nome" type="text" autocomplete="given-name" />
+					</div>
+					<div class="lf__field">
+						<label for="pua-socio-cognome">Il tuo cognome <span aria-hidden="true">*</span></label>
+						<input id="pua-socio-cognome" type="text" autocomplete="family-name" />
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="pua-gruppo">
+				<legend>Il tuo amico</legend>
+				<div class="lf__grid">
+					<div class="lf__field">
+						<label for="pua-nome">Nome <span aria-hidden="true">*</span></label>
+						<input id="pua-nome" type="text" autocomplete="off" />
+					</div>
+					<div class="lf__field">
+						<label for="pua-cognome">Cognome <span aria-hidden="true">*</span></label>
+						<input id="pua-cognome" type="text" autocomplete="off" />
+					</div>
+					<div class="lf__field lf__field--full">
+						<label for="pua-email">Email <span aria-hidden="true">*</span></label>
+						<input id="pua-email" type="email" autocomplete="off" placeholder="nome@esempio.com" />
+					</div>
+					<div class="lf__field lf__field--full">
+						<label for="pua-cellulare">Cellulare <span aria-hidden="true">*</span></label>
+						<div class="lf__tel">
+							<select id="pua-prefisso" class="lf__tel-prefisso" aria-label="Prefisso internazionale">
+								{prefissi.map((pf) => (
+									<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+								))}
+							</select>
+							<input id="pua-cellulare" type="tel" autocomplete="off" placeholder="3XX XXX XXXX" />
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="lf__consent">
+				<label class="lf__consent-item">
+					<input id="pua-amico-ok" type="checkbox" />
+					<span>Il mio amico sa che lo sto segnalando ed è d'accordo a essere contattato dal Club. <strong>(obbligatorio)</strong></span>
+				</label>
+				<label class="lf__consent-item">
+					<input id="pua-privacy" type="checkbox" />
+					<span>Ho letto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+				</label>
+			</div>
+
+			<p class="lf__error" id="pua-error" hidden role="alert"></p>
+
+			<button class="btn" type="submit" id="pua-invia">Segnala il tuo amico</button>
+			<p class="pua-nota">Preferisci farlo di persona? Rivolgiti alla Reception del Club.</p>
+		</form>
+
+		<div class="pua-conferma" id="pua-conferma" hidden>
+			<div class="lf__confirm-check" aria-hidden="true">
+				<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+			</div>
+			<h3>Segnalazione <em class="accent">ricevuta!</em></h3>
+			<p class="lede" style="margin-inline:auto" id="pua-conferma-testo"></p>
+		</div>
+	</section>
+
+	<script>
+		import { withTracking, trackLead } from "../lib/tracking.client.js";
+
+		const form = document.getElementById("pua-form");
+		const errorEl = document.getElementById("pua-error");
+		const confermaEl = document.getElementById("pua-conferma");
+		const confermaTesto = document.getElementById("pua-conferma-testo");
+		const inviaBtn = document.getElementById("pua-invia");
+
+		const campo = (id) => document.getElementById(id);
+
+		function emailValida(v) {
+			return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+		}
+
+		function telefonoValido(v) {
+			const cifre = v.replace(/[^0-9]/g, "");
+			if (!/^[0-9\s-]+$/.test(v.trim())) return false;
+			if (cifre.length < 6 || cifre.length > 14) return false;
+			if (/^(\d)\1+$/.test(cifre)) return false;
+			return true;
+		}
+
+		function errore(msg, el) {
+			errorEl.textContent = msg;
+			errorEl.hidden = false;
+			if (el) el.focus();
+		}
+
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			errorEl.hidden = true;
+
+			const socioNome = campo("pua-socio-nome");
+			const socioCognome = campo("pua-socio-cognome");
+			const nome = campo("pua-nome");
+			const cognome = campo("pua-cognome");
+			const email = campo("pua-email");
+			const cellulare = campo("pua-cellulare");
+			const amicoOk = campo("pua-amico-ok");
+			const privacy = campo("pua-privacy");
+
+			if (!socioNome.value.trim()) return errore("Scrivi il tuo nome.", socioNome);
+			if (!socioCognome.value.trim()) return errore("Scrivi il tuo cognome.", socioCognome);
+			if (!nome.value.trim()) return errore("Scrivi il nome del tuo amico.", nome);
+			if (!cognome.value.trim()) return errore("Scrivi il cognome del tuo amico.", cognome);
+			if (!emailValida(email.value)) return errore("Inserisci un indirizzo email valido per il tuo amico.", email);
+			if (!telefonoValido(cellulare.value)) return errore("Inserisci un numero di cellulare valido per il tuo amico.", cellulare);
+			if (!amicoOk.checked) return errore("Conferma che il tuo amico è d'accordo a essere contattato.", amicoOk);
+			if (!privacy.checked) return errore("Il consenso alla Privacy Policy è obbligatorio.", privacy);
+
+			inviaBtn.disabled = true;
+			inviaBtn.textContent = "Invio in corso…";
+
+			const socio = `${socioNome.value.trim()} ${socioCognome.value.trim()}`;
+			const datiLead = {
+				origine: "porta-un-amico",
+				pagina: location.pathname,
+				cta: "Segnala un amico",
+				// È l'amico il lead — la persona da richiamare — e interessa
+				// un abbonamento Club: così entra nel canale e nella
+				// trattativa di chi vende gli abbonamenti.
+				attivita: "club-adulti",
+				attivitaLabel: "Abbonamento Club",
+				nome: nome.value.trim(),
+				cognome: cognome.value.trim(),
+				email: email.value.trim(),
+				cellulare: `${campo("pua-prefisso").value} ${cellulare.value.trim()}`,
+				segnalatoDaNome: socioNome.value.trim(),
+				segnalatoDaCognome: socioCognome.value.trim(),
+				amicoInformato: true,
+				messaggio: `Segnalato dal socio ${socio} (iniziativa Porta un amico).`,
+				privacy: privacy.checked,
+				// Il consenso marketing non si dà per conto di un altro.
+				marketing: false,
+			};
+
+			try {
+				const res = await fetch("/api/lead", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(withTracking(datiLead)),
+				});
+				if (!res.ok) throw new Error("request failed");
+				trackLead(datiLead);
+			} catch {
+				inviaBtn.disabled = false;
+				inviaBtn.textContent = "Segnala il tuo amico";
+				return errore("Non siamo riusciti a inviare la segnalazione. Riprova, oppure rivolgiti alla Reception del Club.");
+			}
+
+			confermaTesto.textContent = `Grazie ${socioNome.value.trim()}! Il Club contatterà ${nome.value.trim()} a breve. Se sottoscrive un abbonamento annuale entro il 30 novembre, il tuo Daily Pass di 3 giorni ti aspetta in Reception.`;
+			form.hidden = true;
+			confermaEl.hidden = false;
+		});
+	</script>
+
+	<style>
+		.pua-intro {
+			background: var(--bg-alt);
+			text-align: center;
+			padding: 6rem 1.5rem 3rem;
+		}
+		.pua-intro h1 {
+			max-width: 40rem;
+			margin: 0 auto 1rem;
+		}
+		.pua-form-section {
+			background: var(--bg-alt);
+			padding: 1rem 1.5rem 6rem;
+		}
+		.pua-form {
+			max-width: 40rem;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			gap: 1.6rem;
+		}
+		.pua-gruppo {
+			border: 0;
+			margin: 0;
+			padding: 0;
+		}
+		.pua-gruppo legend {
+			padding: 0;
+			margin-bottom: 0.8rem;
+			font-size: var(--text-lg);
+		}
+		.pua-form .btn {
+			align-self: center;
+			border: none;
+		}
+		.pua-nota {
+			text-align: center;
+			margin: 0;
+			font-size: var(--text-sm);
+		}
+		.pua-conferma {
+			max-width: 34rem;
+			margin: 0 auto;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+		}
+		.pua-conferma .lf__confirm-check {
+			background: var(--bg);
+		}
+		.pua-form[hidden],
+		.pua-conferma[hidden] {
+			display: none !important;
+		}
+	</style>
+</Layout>

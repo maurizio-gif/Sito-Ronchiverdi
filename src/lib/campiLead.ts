@@ -42,6 +42,7 @@ export function tipoRichiesta(body: CampiLead): string {
 	if (testo(body.origine) === "evento") {
 		return azione === "appuntamento" ? "Evento · tour prenotato" : "Evento · registrazione";
 	}
+	if (testo(body.origine) === "porta-un-amico") return "Porta un amico";
 	if (testo(body.origine) === "walk-in") {
 		return azione === "appuntamento" ? "Walk-in · tour prenotato" : "Walk-in · registrazione";
 	}
@@ -81,6 +82,10 @@ export function campiLead(body: CampiLead): [string, string][] {
 
 	const voci: [string, string | null][] = [
 		["Nome", nomeCompleto(body)],
+		[
+			"Segnalato dal socio",
+			[testo(body.segnalatoDaNome), testo(body.segnalatoDaCognome)].filter(Boolean).join(" ") || null,
+		],
 		["Email", testo(body.email)],
 		["Cellulare", testo(body.cellulare)],
 		["Data di nascita", giorno(body.dataNascita)],
