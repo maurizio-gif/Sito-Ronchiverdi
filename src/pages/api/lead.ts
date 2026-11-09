@@ -136,6 +136,12 @@ export async function POST({ request }: { request: Request }) {
 		minore_nome: str(body.minoreNome),
 		minore_cognome: str(body.minoreCognome),
 		minore_data_nascita: str(body.minoreDataNascita),
+		// «Porta un amico»: il lead è l'amico, e il socio che l'ha segnalato
+		// resta accanto a lui. Nome e cognome come li ha scritti il socio: il
+		// collegamento alla sua scheda lo fa chi lavora il lead, nel CRM.
+		segnalato_da_nome: str(body.segnalatoDaNome),
+		segnalato_da_cognome: str(body.segnalatoDaCognome),
+		amico_informato: body.amicoInformato === true ? true : null,
 		...tracking,
 	};
 
@@ -158,6 +164,27 @@ export async function POST({ request }: { request: Request }) {
 		({ data: inserito, error } = await supabase
 			.from("form_contatti")
 			.insert(senzaVisitor)
+			.select("id, token_gestione, persona_id")
+			.single());
+	}
+
+	// Stesso discorso per le colonne del «Porta un amico»
+	// (scripts/sql/2026-11-09-porta-un-amico.sql nel CRM): il nome del socio
+	// è comunque nel messaggio, quindi un deploy che precede la migration non
+	// deve perdere la segnalazione.
+	if (error && /segnalato_da|amico_informato/.test(error.message)) {
+		console.error(
+			"Colonne del Porta un amico non ancora presenti su form_contatti: eseguire 2026-11-09-porta-un-amico.sql. Il lead viene salvato senza."
+		);
+		const {
+			segnalato_da_nome: _n,
+			segnalato_da_cognome: _c,
+			amico_informato: _a,
+			...senzaSegnalatore
+		} = datiLead;
+		({ data: inserito, error } = await supabase
+			.from("form_contatti")
+			.insert(senzaSegnalatore)
 			.select("id, token_gestione, persona_id")
 			.single());
 	}
@@ -225,7 +252,12 @@ export async function POST({ request }: { request: Request }) {
 	// permette di spostarlo o annullarlo da solo: senza, l'unico modo per
 	// disdire è telefonare, e chi non telefona non si presenta e basta.
 	// Stesso trattamento degli errori: la richiesta è già salva.
-	if (inserito?.token_gestione) {
+	//
+	// Non per «Porta un amico»: l'amico non ha scritto al club, l'ha segnalato
+	// un socio, e un'email di conferma a chi non ha chiesto niente è la prima
+	// cosa che farebbe sembrare quel contatto spam. Il primo messaggio gli
+	// arriva da chi lo richiama.
+	if (inserito?.token_gestione && datiLead.origine !== "porta-un-amico") {
 		await confermaAlCliente({
 			nome,
 			email,
