@@ -82,6 +82,16 @@ const structuredData = {
 			type="text/javascript"
 			src="https://cdn-cookieyes.com/client_data/c6534d8ba21a289ba21b246fdea24820/script.js"
 			is:inline></script>
+		<!-- Google Tag Manager (contenitore GTM-P2FRP7B7): subito dopo CookieYes,
+		     così il banner del consenso è già attivo quando i tag partono. -->
+		<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-P2FRP7B7" is:inline></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+		</script>
 		<link rel="icon" href={url("favicon.ico")} sizes="any" />
 		<link rel="icon" type="image/png" href={url("favicon.png")} />
 		<link rel="apple-touch-icon" href={url("apple-touch-icon.png")} />
