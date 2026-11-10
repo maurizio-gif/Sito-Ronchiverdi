@@ -75,8 +75,28 @@ const structuredData = {
 <html lang="it">
 	<head>
 		<meta charset="utf-8" />
-		<!-- CookieYes: primo script del <head>, così il blocco preventivo dei
-		     cookie di terze parti avviene prima che qualunque tag parta. -->
+		<!-- Google Consent Mode v2: stato iniziale "negato", impostato prima di
+		     CookieYes e di GTM. CookieYes manda poi l'aggiornamento quando la
+		     persona sceglie. Senza questo, i tag Google partono prima di sapere
+		     cosa ha deciso e CookieYes segnala "default consent set too late". -->
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("consent", "default", {
+				ad_storage: "denied",
+				ad_user_data: "denied",
+				ad_personalization: "denied",
+				analytics_storage: "denied",
+				functionality_storage: "denied",
+				personalization_storage: "denied",
+				security_storage: "granted",
+				wait_for_update: 500,
+			});
+		</script>
+		<!-- CookieYes: primo script esterno del <head>, così il blocco preventivo
+		     dei cookie di terze parti avviene prima che qualunque tag parta. -->
 		<script
 			id="cookieyes"
 			type="text/javascript"
