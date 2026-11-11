@@ -7,6 +7,7 @@ import { url } from "../../lib/paths";
 import { INVIO_NON_AGONISTICO } from "../../data/certificatoMedico";
 import { faqDiPagina } from "../../data/faq";
 import { getCorsiNuoto } from "../../lib/scuolaNuoto";
+import { linkProdotto } from "../../lib/portale";
 import FontiImmagine from "../../components/FontiImmagine.astro";
 
 const facts = [
@@ -204,7 +205,8 @@ const faq = faqDiPagina("scuola-nuoto");
 			Prima di acquistare puoi chiedere informazioni; dopo l'acquisto giorno e ora delle lezioni si concordano con Fabio al <a href="tel:+393807522285">380 752 2285</a>. Il carnet ha validità di 4 mesi.
 		</p>
 		<div class="famiglie__buttons">
-			<a class="btn" href="https://inforyou.teamsystem.com/ronchiverdi/store/20" target="_blank" rel="noopener">Acquista il carnet</a>
+			<a class="btn" href={linkProdotto(422)} target="_blank" rel="noopener">Carnet per 1 persona</a>
+			<a class="btn" href={linkProdotto(423)} target="_blank" rel="noopener">Carnet per 2 persone</a>
 			<button type="button" class="btn btn-outline" data-open-contact data-interest="club-adulti">Chiedi informazioni</button>
 		</div>
 	</section>
