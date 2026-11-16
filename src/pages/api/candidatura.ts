@@ -10,6 +10,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { CV_BUCKET, CV_MAX_BYTE, percorsoValido } from "../../lib/candidature";
 import { confermaCandidatura } from "../../lib/emailCliente";
+import { AREA_SPORTIVA, SPORT } from "../../data/lavoraConNoi";
 
 export const prerender = false;
 
@@ -66,6 +67,16 @@ async function verificaCv(
 	return { dimensione, tipo: metadati.mimetype ?? null };
 }
 
+/**
+ * Gli sport scelti nel modulo, ripuliti: solo chiavi note e solo se l'area è
+ * quella sportiva. Il corpo arriva dal browser, quindi non ci si fida.
+ */
+function categorieValide(area: string | null, v: unknown): string[] {
+	if (area !== AREA_SPORTIVA || !Array.isArray(v)) return [];
+	const note = new Set(SPORT.map((s) => s.chiave));
+	return [...new Set(v.filter((x): x is string => typeof x === "string" && note.has(x)))];
+}
+
 export async function POST({ request }: { request: Request }) {
 	let body: Record<string, unknown>;
 	try {
@@ -120,7 +131,7 @@ export async function POST({ request }: { request: Request }) {
 		}
 	}
 
-	const { error } = await supabase.from("candidature").insert({
+	const riga = {
 		nome,
 		cognome,
 		email,
@@ -143,7 +154,19 @@ export async function POST({ request }: { request: Request }) {
 		utm_source: str(body.utm_source),
 		utm_medium: str(body.utm_medium),
 		utm_campaign: str(body.utm_campaign),
+	};
+
+	let { error } = await supabase.from("candidature").insert({
+		...riga,
+		categorie: categorieValide(riga.area, body.categorie),
 	});
+	// Finestra fra deploy e migration (scripts/sql/2026-11-16-candidature-
+	// categorie.sql): senza la colonna si salva comunque, perdere una
+	// candidatura è il danno peggiore. La segreteria la smista a mano.
+	if (error && error.message.includes("categorie")) {
+		console.error("Colonna categorie non ancora nel database: salvo senza.");
+		({ error } = await supabase.from("candidature").insert(riga));
+	}
 
 	if (error) {
 		console.error("Errore inserimento candidatura:", error.message);

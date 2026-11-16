@@ -43,6 +43,20 @@ export function initCandidaturaForm() {
 	const fileInput = document.getElementById("cd-cv");
 	const fileNome = document.getElementById("cd-cv-nome");
 	const etichettaInvio = invia.textContent;
+	const areaSelect = document.getElementById("cd-area");
+	const sportBlocco = document.getElementById("cd-sport");
+
+	// Lo sport si chiede solo per l'area sportiva: è da lì che la candidatura
+	// arriva al responsabile giusto nel pannello.
+	function aggiornaSport() {
+		const visibile = areaSelect.value === sportBlocco.dataset.area;
+		sportBlocco.hidden = !visibile;
+		if (!visibile) {
+			sportBlocco.querySelectorAll("input:checked").forEach((c) => (c.checked = false));
+		}
+	}
+	areaSelect.addEventListener("change", aggiornaSport);
+	aggiornaSport();
 
 	function mostraErrore(messaggio, campo) {
 		errore.textContent = messaggio;
@@ -117,6 +131,10 @@ export function initCandidaturaForm() {
 		if (!EMAIL_RE.test(email.value)) return mostraErrore("Inserisci un indirizzo email valido.", email);
 		if (!telefonoValido(cellulare.value)) return mostraErrore("Inserisci un numero di cellulare valido.", cellulare);
 		if (!area.value) return mostraErrore("Scegli l'area per cui ti candidi.", area);
+		const sport = Array.from(sportBlocco.querySelectorAll("input:checked")).map((c) => c.value);
+		if (!sportBlocco.hidden && sport.length === 0) {
+			return mostraErrore("Indica per quale sport ti candidi.", sportBlocco.querySelector("input"));
+		}
 		if (presentazione.value.trim().length < 40) {
 			return mostraErrore("Raccontaci qualcosa in più di te: bastano poche righe.", presentazione);
 		}
@@ -155,6 +173,7 @@ export function initCandidaturaForm() {
 			citta: citta.value.trim(),
 			area: area.value,
 			areaLabel: scelta ? scelta.textContent.trim() : null,
+			categorie: sport,
 			disponibilita: disponibilita.value,
 			presentazione: presentazione.value.trim(),
 			esperienza: esperienza.value.trim(),

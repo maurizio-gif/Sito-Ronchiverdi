@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import prefissi from "../data/prefissi-telefonici";
 import { url } from "../lib/paths";
-import { AREE, DISPONIBILITA, MOTIVI } from "../data/lavoraConNoi";
+import { AREE, AREA_SPORTIVA, DISPONIBILITA, MOTIVI, SPORT } from "../data/lavoraConNoi";
 import { CV_ACCEPT, CV_FORMATI_TESTO, CV_MAX_MB } from "../lib/candidature";
 
 // Candidature spontanee. Il club non pubblica posizioni aperte — non ne ha un
@@ -119,6 +119,16 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 							{AREE.map((a) => <option value={a.chiave}>{a.label}</option>)}
 						</select>
 					</div>
+					<fieldset class="lf__field lf__field--full lcn-sport" id="cd-sport" data-area={AREA_SPORTIVA} hidden>
+						<legend>Per quale sport ti candidi? <span aria-hidden="true">*</span></legend>
+						<p class="lcn-nota">Puoi sceglierne più di uno: la tua candidatura arriva al responsabile di ciascuno.</p>
+						{SPORT.map((s) => (
+							<label class="lcn-sport__voce">
+								<input type="checkbox" name="sport" value={s.chiave} />
+								<span>{s.label}</span>
+							</label>
+						))}
+					</fieldset>
 					<div class="lf__field lf__field--full">
 						<label for="cd-presentazione">Parlaci di te <span aria-hidden="true">*</span></label>
 						<textarea
@@ -251,6 +261,29 @@ const ruoliTotali = AREE.reduce((n, a) => n + a.ruoli.length, 0);
 	}
 
 	.lcn-aree,
+	.lcn-sport {
+		border: 0;
+		padding: 0;
+		margin: 0;
+		min-width: 0;
+	}
+	.lcn-sport legend {
+		padding: 0;
+		margin-bottom: 0.25rem;
+		font-weight: 600;
+	}
+	.lcn-sport__voce {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.35rem 0;
+		cursor: pointer;
+	}
+	.lcn-sport__voce input {
+		width: auto;
+		flex: none;
+	}
+
 	.lcn-form-sezione {
 		margin-top: 4rem;
 		scroll-margin-top: 6rem;

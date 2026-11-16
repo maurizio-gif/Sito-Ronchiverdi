@@ -96,6 +96,31 @@ export const AREE: AreaLavoro[] = [
 	},
 ];
 
+/**
+ * L'area per cui il modulo chiede anche lo sport. Le altre aree (reception,
+ * manutenzione, ...) non hanno un responsabile di sport e restano solo nella
+ * sezione Curriculum della segreteria.
+ */
+export const AREA_SPORTIVA = "tecnici-sportivi";
+
+export interface SportLavoro {
+	/**
+	 * Chiave salvata in candidature.categorie. Ripetuta nel CRM
+	 * (lib/candidature.ts, CATEGORIE): da lì il pannello instrada la
+	 * candidatura al responsabile di quello sport. Non cambiarla.
+	 */
+	chiave: string;
+	label: string;
+}
+
+/** Gli sport fra cui scegliere (anche più di uno) quando l'area è quella sportiva. */
+export const SPORT: SportLavoro[] = [
+	{ chiave: "tennis-padel", label: "Tennis e padel" },
+	{ chiave: "nuoto", label: "Nuoto e assistenti bagnanti" },
+	{ chiave: "fitness", label: "Palestra, personal training e corsi fitness" },
+	{ chiave: "triathlon", label: "Triathlon e preparazione atletica" },
+];
+
 /** Disponibilità dichiarabile nel modulo: una sola scelta, per orientare la lettura. */
 export const DISPONIBILITA = [
 	"Full time",
