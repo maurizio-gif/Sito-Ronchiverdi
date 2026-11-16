@@ -1,0 +1,454 @@
+---
+// Landing della newsletter «Black Friday»: dal 16 al 30 novembre, inizi subito
+// e cominci a pagare da gennaio, con 12 mesi per farlo. Posti limitati.
+//
+// Non è indicizzata né in sitemap: ci si arriva dal link della newsletter (e
+// dalle sponsorizzate), e una promo a tempo non deve restare nei risultati di
+// ricerca dopo il 30 novembre. Dopo quella data basta togliere la pagina, o
+// metterle un avviso: i lead già arrivati restano nel CRM con la targhetta
+// «Black Friday».
+//
+// Il lead nasce con `origine = 'black-friday'`: è quella stringa che il CRM
+// legge per mettere la targhetta di campagna (vedi lib/provenienza.ts nel CRM).
+// La campagna di provenienza (UTM) resta quella con cui la persona è arrivata,
+// e per questo i link della newsletter portano utm_campaign=black-friday-2026.
+//
+// Il limite dei posti non è controllato qui: lo verifica la segreteria quando
+// richiama. Chiudere il form da soli significherebbe scartare richieste che la
+// reception potrebbe comunque onorare.
+import Layout from "../layouts/Layout.astro";
+import prefissi from "../data/prefissi-telefonici";
+---
+
+<Layout
+	title="Black Friday — Ronchiverdi Sport Club"
+	description="Inizia subito, paghi da gennaio: dal 16 al 30 novembre hai 12 mesi per pagare il tuo abbonamento. Posti limitati."
+	noindex
+>
+	<section class="bf">
+		<div class="bf__grid">
+			<div class="bf__copy">
+				<p class="bf__eyebrow">Dal 16 al 30 novembre · Posti limitati</p>
+				<h1 class="bf__title">Black<br />Friday</h1>
+				<span class="bf__rule" aria-hidden="true"></span>
+				<p class="bf__tagline">Inizia subito.<br />Paghi da gennaio.</p>
+
+				<ol class="bf__steps">
+					<li><strong>Oggi</strong><span>Parti subito con il tuo acquisto</span></li>
+					<li><strong>Gennaio</strong><span>Inizi a pagare</span></li>
+					<li><strong>12 mesi</strong><span>Per pagare, con calma</span></li>
+				</ol>
+			</div>
+
+			<div class="bf__card" id="richiedi">
+				<form class="bf-form" id="bf-form" novalidate>
+					<div class="bf__card-head">
+						<h2>Prenota la promo</h2>
+						<p>Lascia i tuoi dati: ti richiamiamo noi per spiegarti tutto.</p>
+					</div>
+
+					<div class="lf__grid">
+						<div class="lf__field">
+							<label for="bf-nome">Nome <span aria-hidden="true">*</span></label>
+							<input id="bf-nome" type="text" autocomplete="given-name" />
+						</div>
+						<div class="lf__field">
+							<label for="bf-cognome">Cognome <span aria-hidden="true">*</span></label>
+							<input id="bf-cognome" type="text" autocomplete="family-name" />
+						</div>
+						<div class="lf__field lf__field--full">
+							<label for="bf-email">Email <span aria-hidden="true">*</span></label>
+							<input id="bf-email" type="email" autocomplete="email" placeholder="nome@esempio.com" />
+						</div>
+						<div class="lf__field lf__field--full">
+							<label for="bf-cellulare">Cellulare <span aria-hidden="true">*</span></label>
+							<div class="lf__tel">
+								<select id="bf-prefisso" class="lf__tel-prefisso" aria-label="Prefisso internazionale">
+									{prefissi.map((pf) => (
+										<option value={pf.dial} selected={pf.dial === "+39"}>{pf.flag} {pf.dial}</option>
+									))}
+								</select>
+								<input id="bf-cellulare" type="tel" autocomplete="tel-national" placeholder="3XX XXX XXXX" />
+							</div>
+						</div>
+					</div>
+
+					<div class="lf__consent">
+						<label class="lf__consent-item">
+							<input id="bf-privacy" type="checkbox" />
+							<span>Ho letto la <a href="/privacy" target="_blank">Privacy Policy</a>. <strong>(obbligatorio)</strong></span>
+						</label>
+						<label class="lf__consent-item">
+							<input id="bf-marketing" type="checkbox" />
+							<span>Acconsento a ricevere comunicazioni promozionali dal Club. (facoltativo)</span>
+						</label>
+					</div>
+
+					<p class="lf__error" id="bf-error" hidden role="alert"></p>
+
+					<button class="bf__cta" type="submit" id="bf-invia">Prenota la promo &rarr;</button>
+					<p class="bf__nota">Promo valida fino al <strong>30 novembre</strong>. Preferisci parlarne di persona? Chiama il <a href="tel:+390116612146">011 661 2146</a>.</p>
+				</form>
+
+				<div class="bf-conferma" id="bf-conferma" hidden>
+					<div class="lf__confirm-check" aria-hidden="true">
+						<svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M4 13L10 19L22 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+					</div>
+					<h3>Richiesta <em class="accent">ricevuta!</em></h3>
+					<p class="lede" style="margin-inline:auto" id="bf-conferma-testo"></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="bf-ragioni">
+		<p class="eyebrow">Perch&eacute; adesso</p>
+		<h2>Tre buone ragioni <em class="accent">per non aspettare gennaio.</em></h2>
+		<ol class="bf-ragioni__lista">
+			<li>
+				<span class="bf-ragioni__n">01</span>
+				<p><strong>Gennaio sembra sempre il momento giusto.</strong> Ma &egrave; anche il mese in cui le buone intenzioni si scontrano con agende piene e rinvii. Chi comincia a novembre ci arriva gi&agrave; con il ritmo giusto.</p>
+			</li>
+			<li>
+				<span class="bf-ragioni__n">02</span>
+				<p><strong>Il costo non &egrave; pi&ugrave; un ostacolo.</strong> Inizi oggi, e il primo pagamento arriva solo a gennaio.</p>
+			</li>
+			<li>
+				<span class="bf-ragioni__n">03</span>
+				<p><strong>Dodici mesi per pagare, senza pesare.</strong> Distribuire la spesa su un anno intero ti lascia spazio per il tuo benessere, senza dover rinunciare ad altro.</p>
+			</li>
+		</ol>
+		<a class="bf-ragioni__link" href="#richiedi">Prenota la promo &rarr;</a>
+	</section>
+
+	<script>
+		import { withTracking, trackLead } from "../lib/tracking.client.js";
+
+		const form = document.getElementById("bf-form");
+		const errorEl = document.getElementById("bf-error");
+		const confermaEl = document.getElementById("bf-conferma");
+		const confermaTesto = document.getElementById("bf-conferma-testo");
+		const inviaBtn = document.getElementById("bf-invia");
+
+		const campo = (id) => document.getElementById(id);
+
+		function emailValida(v) {
+			return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+		}
+
+		function telefonoValido(v) {
+			const cifre = v.replace(/[^0-9]/g, "");
+			if (!/^[0-9\s-]+$/.test(v.trim())) return false;
+			if (cifre.length < 6 || cifre.length > 14) return false;
+			if (/^(\d)\1+$/.test(cifre)) return false;
+			return true;
+		}
+
+		function errore(msg, el) {
+			errorEl.textContent = msg;
+			errorEl.hidden = false;
+			if (el) el.focus();
+		}
+
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			errorEl.hidden = true;
+
+			const nome = campo("bf-nome");
+			const cognome = campo("bf-cognome");
+			const email = campo("bf-email");
+			const cellulare = campo("bf-cellulare");
+			const privacy = campo("bf-privacy");
+			const marketing = campo("bf-marketing");
+
+			if (!nome.value.trim()) return errore("Scrivi il tuo nome.", nome);
+			if (!cognome.value.trim()) return errore("Scrivi il tuo cognome.", cognome);
+			if (!emailValida(email.value)) return errore("Inserisci un indirizzo email valido.", email);
+			if (!telefonoValido(cellulare.value)) return errore("Inserisci un numero di cellulare valido.", cellulare);
+			if (!privacy.checked) return errore("Il consenso alla Privacy Policy è obbligatorio.", privacy);
+
+			inviaBtn.disabled = true;
+			inviaBtn.textContent = "Invio in corso…";
+
+			const datiLead = {
+				// La stringa che il CRM legge per la targhetta «Black Friday».
+				origine: "black-friday",
+				pagina: location.pathname,
+				cta: "Prenota la promo",
+				// Interessa un abbonamento Club: così entra nel canale e nella
+				// trattativa di chi vende gli abbonamenti.
+				attivita: "club-adulti",
+				attivitaLabel: "Abbonamento Club · Black Friday",
+				nome: nome.value.trim(),
+				cognome: cognome.value.trim(),
+				email: email.value.trim(),
+				cellulare: `${campo("bf-prefisso").value} ${cellulare.value.trim()}`,
+				messaggio: "Richiesta dalla promo Black Friday (inizia subito, paghi da gennaio).",
+				privacy: privacy.checked,
+				marketing: marketing.checked,
+			};
+
+			try {
+				const res = await fetch("/api/lead", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(withTracking(datiLead)),
+				});
+				if (!res.ok) throw new Error("request failed");
+				trackLead(datiLead);
+			} catch {
+				inviaBtn.disabled = false;
+				inviaBtn.textContent = "Prenota la promo \u2192";
+				return errore("Non siamo riusciti a inviare la richiesta. Riprova, oppure chiama il 011 661 2146.");
+			}
+
+			confermaTesto.textContent = `Grazie ${nome.value.trim()}! Ti contatteremo a breve per spiegarti la promo Black Friday. Ricorda: vale fino al 30 novembre, posti limitati.`;
+			form.hidden = true;
+			confermaEl.hidden = false;
+		});
+	</script>
+
+	<style>
+		/* Nero e oro come la newsletter. Sopra la piega: titolo e passaggi a
+		   sinistra, il form in una scheda crema a destra, così il pulsante si
+		   vede senza scorrere. Su mobile le colonne si impilano: prima la
+		   promessa, subito dopo il form. */
+		.bf {
+			--bf-nero: #1c1c18;
+			--bf-oro: #c8a038;
+			--bf-avorio: #f6efde;
+			background: var(--bf-nero);
+			color: var(--bf-avorio);
+			padding: 5.5rem 1.5rem 5rem;
+		}
+		.bf__grid {
+			max-width: 70rem;
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: 1fr minmax(0, 27rem);
+			gap: 4rem;
+			align-items: center;
+		}
+		.bf__eyebrow {
+			margin: 0 0 1.2rem;
+			font-size: var(--text-xs);
+			letter-spacing: 0.25em;
+			text-transform: uppercase;
+			font-weight: 600;
+			color: var(--bf-oro);
+		}
+		.bf__title {
+			margin: 0;
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(4.2rem, 11vw, 7.5rem);
+			line-height: 0.95;
+			color: var(--bf-avorio);
+		}
+		.bf__rule {
+			display: block;
+			width: 3.5rem;
+			height: 2px;
+			background: var(--bf-oro);
+			margin: 1.8rem 0 1.6rem;
+		}
+		.bf__tagline {
+			margin: 0;
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-weight: 500;
+			font-size: clamp(2rem, 4.5vw, 2.9rem);
+			line-height: 1.15;
+			color: var(--bf-oro);
+		}
+		.bf__steps {
+			list-style: none;
+			margin: 2.4rem 0 0;
+			padding: 0;
+			max-width: 26rem;
+		}
+		.bf__steps li {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 1rem;
+			padding: 0.95rem 0;
+			border-bottom: 1px solid #3a3a32;
+		}
+		.bf__steps li:first-child {
+			border-top: 1px solid #3a3a32;
+		}
+		.bf__steps strong {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: 2rem;
+			line-height: 1;
+			color: var(--bf-oro);
+		}
+		.bf__steps span {
+			font-size: var(--text-xs);
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			text-align: right;
+			color: var(--bf-avorio);
+		}
+
+		.bf__card {
+			background: var(--bf-avorio);
+			color: #1c1c18;
+			border-radius: 18px;
+			padding: 2rem 1.75rem 1.75rem;
+			box-shadow: 0 0 0 1px var(--bf-oro), 0 24px 60px rgba(0, 0, 0, 0.45);
+		}
+		.bf-form {
+			display: flex;
+			flex-direction: column;
+			gap: 1.2rem;
+		}
+		.bf__card-head h2 {
+			margin: 0 0 0.3rem;
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: 2rem;
+			line-height: 1.1;
+		}
+		.bf__card-head p {
+			margin: 0;
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+		}
+		.bf__cta {
+			border: none;
+			cursor: pointer;
+			border-radius: 999px;
+			background: var(--bf-nero);
+			color: var(--bf-oro);
+			font-family: inherit;
+			font-weight: 700;
+			font-size: 1rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			padding: 1.15rem 1.5rem;
+			transition: transform 0.15s ease, background 0.15s ease;
+		}
+		.bf__cta:hover:not(:disabled) {
+			background: #000;
+			transform: translateY(-1px);
+		}
+		.bf__cta:disabled {
+			opacity: 0.7;
+			cursor: default;
+		}
+		.bf__nota {
+			margin: 0;
+			text-align: center;
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+		}
+		.bf__nota a {
+			color: var(--accent);
+		}
+		.bf-conferma {
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+			padding: 1.5rem 0;
+		}
+		.bf-form[hidden],
+		.bf-conferma[hidden] {
+			display: none !important;
+		}
+
+		.bf-ragioni {
+			background: var(--bg);
+			text-align: center;
+			padding: 5rem 1.5rem 5.5rem;
+		}
+		.bf-ragioni h2 {
+			max-width: 36rem;
+			margin: 0.4rem auto 2.5rem;
+		}
+		.bf-ragioni__lista {
+			list-style: none;
+			margin: 0 auto;
+			padding: 0;
+			max-width: 58rem;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 2rem;
+			text-align: left;
+		}
+		.bf-ragioni__n {
+			display: block;
+			margin-bottom: 0.6rem;
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-size: 2.2rem;
+			line-height: 1;
+			color: var(--accent);
+		}
+		.bf-ragioni__lista p {
+			margin: 0;
+			line-height: 1.6;
+			color: var(--text-muted);
+		}
+		.bf-ragioni__lista strong {
+			color: #1c1c18;
+		}
+		.bf-ragioni__link {
+			display: inline-block;
+			margin-top: 2.5rem;
+			padding: 1rem 2.2rem;
+			border-radius: 999px;
+			background: #1c1c18;
+			color: #c8a038;
+			font-weight: 600;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			font-size: var(--text-xs);
+			text-decoration: none;
+		}
+
+		@media (max-width: 880px) {
+			.bf {
+				padding: 4.5rem 1.25rem 3rem;
+			}
+			.bf__grid {
+				grid-template-columns: 1fr;
+				gap: 2.5rem;
+			}
+			.bf__copy {
+				text-align: center;
+			}
+			.bf__title {
+				font-size: 4rem;
+			}
+			.bf__rule {
+				margin-block: 1.1rem;
+			}
+			.bf__tagline {
+				font-size: 1.8rem;
+			}
+			.bf__steps {
+				margin-top: 1.6rem;
+			}
+			.bf__steps li {
+				padding: 0.6rem 0;
+			}
+			.bf__steps strong {
+				font-size: 1.6rem;
+			}
+			.bf__rule {
+				margin-inline: auto;
+			}
+			.bf__steps {
+				margin-inline: auto;
+			}
+			.bf-ragioni__lista {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</Layout>

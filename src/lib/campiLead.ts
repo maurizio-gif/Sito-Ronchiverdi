@@ -43,6 +43,7 @@ export function tipoRichiesta(body: CampiLead): string {
 		return azione === "appuntamento" ? "Evento · tour prenotato" : "Evento · registrazione";
 	}
 	if (testo(body.origine) === "porta-un-amico") return "Porta un amico";
+	if (testo(body.origine) === "black-friday") return "Black Friday";
 	if (testo(body.origine) === "walk-in") {
 		return azione === "appuntamento" ? "Walk-in · tour prenotato" : "Walk-in · registrazione";
 	}
